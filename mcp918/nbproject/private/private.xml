@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/MineBot.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/Node.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/Path.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/PathFinder.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/Goal.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/GoalBlock.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/BlockPos.java</file>
+        </group>
+    </open-files>
+</project-private>

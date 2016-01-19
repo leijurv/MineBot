@@ -5,7 +5,8 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>MineBot</name>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.minecraft.dir"/>
+                <root id="src.minebot.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>
