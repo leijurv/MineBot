@@ -25,16 +25,8 @@ public class Node implements Comparable<Node> {
         this.estimatedCostToGoal = goal.heuristic(pos);
     }
     @Override
-<<<<<<< HEAD
-    public int compareTo(Object o) {
-        return new Integer(estimatedCostToGoal + cost).compareTo(((Node) o).estimatedCostToGoal + ((Node) o).cost);
-=======
-    public int compareTo(Node o) {
-        return new Integer(estimatedCostToGoal).compareTo(((Node) o).estimatedCostToGoal);
->>>>>>> 1565da0b321519e19e57cd59f4c87e489cd1237c
-    }
-    public boolean equals(Object o) {
-        return true;
+    public int compareTo(Node otherNode) {
+        return new Integer(estimatedCostToGoal + cost).compareTo(otherNode.estimatedCostToGoal + otherNode.cost);
     }
     @Override
     public int hashCode() {
@@ -42,5 +34,22 @@ public class Node implements Comparable<Node> {
         hash = 53 * hash + Objects.hashCode(this.pos);
         hash = 53 * hash + Objects.hashCode(this.goal);
         return hash;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Node other = (Node) obj;
+        if (!Objects.equals(this.pos, other.pos)) {
+            return false;
+        }
+        if (!Objects.equals(this.goal, other.goal)) {
+            return false;
+        }
+        return true;
     }
 }
