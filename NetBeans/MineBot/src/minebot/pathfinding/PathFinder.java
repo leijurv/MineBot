@@ -22,22 +22,37 @@ public class PathFinder {
         this.map = new HashMap<>();
     }
     public void calculatePath() {
-        final Node startNode = new Node(start, goal);
+        final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
         PriorityList openList = new PriorityList();
         LinkedList closedList = new LinkedList();
         openList.addComparable(startNode);
         while (!openList.isEmpty()) {
             Node node = (Node) openList.removeFirst();
+            BlockPos myPos = node.pos;
             if (goal.isInGoal(node.pos)) {
                 //done
                 return;
             }
             closedList.add(node);
             BlockPos[] connected = getConnectedPositions(node.pos);
-            for (BlockPos pos : connected) {
+            for (BlockPos neighborPos : connected) {
+                Node neighbor = getNodeAtPosition(neighborPos);
+                int tentativeCost = neighbor.cost + getCost(myPos, neighborPos);
+                if (!openList.contains(neighbor)) {
+                    openList.add(neighbor);
+                }
             }
         }
+    }
+    private Node getNodeAtPosition(BlockPos pos) {
+        if (map.get(pos) == null) {
+            map.put(pos, new Node(pos, goal));
+        }
+        return map.get(pos);
+    }
+    private int getCost(BlockPos from, BlockPos to) {
+        return 1;
     }
     public BlockPos[] getConnectedPositions(BlockPos pos) {
         BlockPos[] positions = new BlockPos[13];
