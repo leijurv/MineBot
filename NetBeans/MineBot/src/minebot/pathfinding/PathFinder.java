@@ -36,12 +36,11 @@ public class PathFinder {
             BlockPos[] connected = getConnectedPositions(me.pos);
             for (BlockPos neighborPos : connected) {
                 Node neighbor = getNodeAtPosition(neighborPos);
-                boolean isOpen = openList.contains(neighbor);
                 int tentativeCost = me.cost + getCost(myPos, neighborPos);
-                if (!isOpen || tentativeCost < neighbor.cost) {
+                if (tentativeCost < neighbor.cost) {
                     neighbor.previous = me;
                     neighbor.cost = tentativeCost;
-                    if (!isOpen) {
+                    if (!openList.contains(neighbor)) {
                         openList.addNode(neighbor);
                     }
                 }
