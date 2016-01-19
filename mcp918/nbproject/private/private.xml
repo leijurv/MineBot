@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/MineBot.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/Node.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/Path.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/PathFinder.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/Goal.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/GoalBlock.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/NetBeans/MineBot/src/minebot/pathfinding/BlockPos.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/util/RegistrySimple.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/block/Block.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/block/state/BlockPistonStructureHelper.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minebot/minebot/MineBot.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/block/BlockAnvil.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/crash/CrashReport.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/block/properties/PropertyBool.java</file>
         </group>
     </open-files>
 </project-private>
