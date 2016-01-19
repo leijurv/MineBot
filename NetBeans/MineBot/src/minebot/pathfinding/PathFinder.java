@@ -25,7 +25,6 @@ public class PathFinder {
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
         PriorityList openList = new PriorityList();
-        LinkedList<Node> closedList = new LinkedList<>();
         openList.addNode(startNode);
         while (!openList.isEmpty()) {
             Node me = openList.removeFirst();
@@ -34,22 +33,18 @@ public class PathFinder {
                 //done
                 return;
             }
-            closedList.add(me);
             BlockPos[] connected = getConnectedPositions(me.pos);
             for (BlockPos neighborPos : connected) {
                 Node neighbor = getNodeAtPosition(neighborPos);
-                if (closedList.contains(neighbor)) {
-                    continue;//ignore the neighbor which is already evaluated
-                }
+                boolean isOpen = openList.contains(neighbor);
                 int tentativeCost = me.cost + getCost(myPos, neighborPos);
-                if (!openList.contains(neighbor)) {
-                    openList.addNode(neighbor);
-                } else if (tentativeCost >= neighbor.cost) {
-                    continue;//this is not a better path
+                if (!isOpen || tentativeCost < neighbor.cost) {
+                    neighbor.previous = me;
+                    neighbor.cost = tentativeCost;
+                    if (!isOpen) {
+                        openList.addNode(neighbor);
+                    }
                 }
-                //this path is best until now. record it
-                neighbor.previous = me;
-                neighbor.cost = tentativeCost;
             }
         }
     }
