@@ -25,22 +25,27 @@ public class PathFinder {
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
         PriorityList openList = new PriorityList();
-        LinkedList closedList = new LinkedList();
-        openList.addComparable(startNode);
+        LinkedList<Node> closedList = new LinkedList<>();
+        openList.addNode(startNode);
         while (!openList.isEmpty()) {
-            Node node = (Node) openList.removeFirst();
-            BlockPos myPos = node.pos;
-            if (goal.isInGoal(node.pos)) {
+            Node me = openList.removeFirst();
+            BlockPos myPos = me.pos;
+            if (goal.isInGoal(me.pos)) {
                 //done
                 return;
             }
-            closedList.add(node);
-            BlockPos[] connected = getConnectedPositions(node.pos);
+            closedList.add(me);
+            BlockPos[] connected = getConnectedPositions(me.pos);
             for (BlockPos neighborPos : connected) {
                 Node neighbor = getNodeAtPosition(neighborPos);
-                int tentativeCost = neighbor.cost + getCost(myPos, neighborPos);
+                if (closedList.contains(neighbor)) {
+                    continue;//ignore the neighbor which is already evaluated
+                }
+                int tentativeCost = me.cost + getCost(myPos, neighborPos);
                 if (!openList.contains(neighbor)) {
-                    openList.add(neighbor);
+                    openList.addNode(neighbor);
+                } else if (tentativeCost >= neighbor.cost) {
+                    continue;//this is not a better path
                 }
             }
         }
@@ -72,8 +77,8 @@ public class PathFinder {
         return positions;
     }
 
-    public static class PriorityList<E extends Comparable> extends LinkedList<Comparable> {
-        public void addComparable(Comparable object) {
+    public static class PriorityList extends LinkedList<Node> {
+        public void addNode(Node object) {
             for (int i = 0; i < size(); i++) {
                 if (object.compareTo(get(i)) <= 0) {
                     add(i, object);
