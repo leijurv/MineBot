@@ -5,6 +5,8 @@
  */
 package minebot.pathfinding;
 
+import java.util.Objects;
+
 /**
  *
  * @author leijurv
@@ -25,5 +27,15 @@ public class Node implements Comparable {
     @Override
     public int compareTo(Object o) {
         return new Integer(estimatedCostToGoal).compareTo(((Node) o).estimatedCostToGoal);
+    }
+    public boolean equals(Object o) {
+        return true;
+    }
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.pos);
+        hash = 53 * hash + Objects.hashCode(this.goal);
+        return hash;
     }
 }
