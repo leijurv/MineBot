@@ -47,6 +47,9 @@ public class PathFinder {
                 } else if (tentativeCost >= neighbor.cost) {
                     continue;//this is not a better path
                 }
+                //this path is best until now. record it
+                neighbor.previous = me;
+                neighbor.cost = tentativeCost;
             }
         }
     }

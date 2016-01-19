@@ -26,7 +26,7 @@ public class Node implements Comparable {
     }
     @Override
     public int compareTo(Object o) {
-        return new Integer(estimatedCostToGoal).compareTo(((Node) o).estimatedCostToGoal);
+        return new Integer(estimatedCostToGoal + cost).compareTo(((Node) o).estimatedCostToGoal + ((Node) o).cost);
     }
     public boolean equals(Object o) {
         return true;
