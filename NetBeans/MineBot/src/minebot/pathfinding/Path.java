@@ -5,12 +5,27 @@
  */
 package minebot.pathfinding;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author leijurv
  */
 public class Path {
-    Node start;
-    Node end;
-    Goal goal;
+    final BlockPos start;
+    final BlockPos end;
+    final Goal goal;
+    final ArrayList<BlockPos> path;
+    Path(Node start, Node end, Goal goal) {
+        this.start = start.pos;
+        this.end = end.pos;
+        this.goal = goal;
+        path = new ArrayList<>();
+        Node current = end;
+        while (!current.equals(start)) {
+            path.add(0, current.pos);
+            current = current.previous;
+        }
+        path.add(0, start.pos);
+    }
 }

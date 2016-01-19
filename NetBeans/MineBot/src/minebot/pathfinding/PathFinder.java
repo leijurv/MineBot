@@ -21,7 +21,7 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<>();
     }
-    public void calculatePath() {
+    public Path calculatePath() {
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
         PriorityList openList = new PriorityList();
@@ -30,8 +30,7 @@ public class PathFinder {
             Node me = openList.removeFirst();
             BlockPos myPos = me.pos;
             if (goal.isInGoal(me.pos)) {
-                //done
-                return;
+                return new Path(startNode, me, goal);
             }
             BlockPos[] connected = getConnectedPositions(me.pos);
             for (BlockPos neighborPos : connected) {
@@ -46,6 +45,7 @@ public class PathFinder {
                 }
             }
         }
+        throw new IllegalStateException("bad");
     }
     private Node getNodeAtPosition(BlockPos pos) {
         if (map.get(pos) == null) {
