@@ -9,7 +9,7 @@ package minebot.pathfinding;
  *
  * @author leijurv
  */
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
     final BlockPos pos;
     int cost;
     Node previous;
@@ -23,7 +23,7 @@ public class Node implements Comparable {
         this.estimatedCostToGoal = goal.heuristic(pos);
     }
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(Node o) {
         return new Integer(estimatedCostToGoal).compareTo(((Node) o).estimatedCostToGoal);
     }
 }
