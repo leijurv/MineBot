@@ -57,7 +57,7 @@ public class PathFinder {
         return positions;
     }
 
-    public static class PriorityList extends LinkedList {
+    public static class PriorityList<E extends Comparable> extends LinkedList<Comparable> {
         public void addComparable(Comparable object) {
             for (int i = 0; i < size(); i++) {
                 if (object.compareTo(get(i)) <= 0) {
