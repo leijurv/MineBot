@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -14,9 +15,11 @@ import java.util.LinkedList;
 public class PathFinder {
     final BlockPos start;
     final Goal goal;
+    final HashMap<BlockPos, Node> map;
     public PathFinder(BlockPos start, Goal goal) {
         this.start = start;
         this.goal = goal;
+        this.map = new HashMap<>();
     }
     public void calculatePath() {
         final Node startNode = new Node(start, goal);
@@ -26,7 +29,32 @@ public class PathFinder {
         openList.addComparable(startNode);
         while (!openList.isEmpty()) {
             Node node = (Node) openList.removeFirst();
+            if (goal.isInGoal(node.pos)) {
+                //done
+                return;
+            }
+            closedList.add(node);
+            BlockPos[] connected = getConnectedPositions(node.pos);
+            for (BlockPos pos : connected) {
+            }
         }
+    }
+    public BlockPos[] getConnectedPositions(BlockPos pos) {
+        BlockPos[] positions = new BlockPos[13];
+        positions[0] = new BlockPos(pos.x, pos.y + 1, pos.z);//pillar
+        positions[1] = new BlockPos(pos.x + 1, pos.y, pos.z);//bridge
+        positions[2] = new BlockPos(pos.x - 1, pos.y, pos.z);//bridge
+        positions[3] = new BlockPos(pos.x, pos.y, pos.z + 1);//bridge
+        positions[4] = new BlockPos(pos.x, pos.y, pos.z - 1);//bridge
+        positions[5] = new BlockPos(pos.x + 1, pos.y + 1, pos.z);//climb
+        positions[6] = new BlockPos(pos.x - 1, pos.y + 1, pos.z);//climb
+        positions[7] = new BlockPos(pos.x, pos.y + 1, pos.z + 1);//climb
+        positions[8] = new BlockPos(pos.x, pos.y + 1, pos.z - 1);//climb
+        positions[9] = new BlockPos(pos.x + 1, pos.y - 1, pos.z);//fall
+        positions[10] = new BlockPos(pos.x - 1, pos.y - 1, pos.z);//fall
+        positions[11] = new BlockPos(pos.x, pos.y - 1, pos.z + 1);//fall
+        positions[12] = new BlockPos(pos.x, pos.y - 1, pos.z - 1);//fall
+        return positions;
     }
 
     public static class PriorityList extends LinkedList {
