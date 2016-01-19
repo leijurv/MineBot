@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author leijurv
  */
-public class Node implements Comparable {
+public class Node implements Comparable<Node> {
     final BlockPos pos;
     int cost;
     Node previous;
@@ -25,8 +25,13 @@ public class Node implements Comparable {
         this.estimatedCostToGoal = goal.heuristic(pos);
     }
     @Override
+<<<<<<< HEAD
     public int compareTo(Object o) {
         return new Integer(estimatedCostToGoal + cost).compareTo(((Node) o).estimatedCostToGoal + ((Node) o).cost);
+=======
+    public int compareTo(Node o) {
+        return new Integer(estimatedCostToGoal).compareTo(((Node) o).estimatedCostToGoal);
+>>>>>>> 1565da0b321519e19e57cd59f4c87e489cd1237c
     }
     public boolean equals(Object o) {
         return true;
