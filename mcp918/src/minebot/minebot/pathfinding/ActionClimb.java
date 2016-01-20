@@ -13,10 +13,13 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionClimb extends ActionPlaceOrBreak {
     public ActionClimb(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{new BlockPos(start.getX(), start.getY() + 2, start.getZ()), end, new BlockPos(end.getX(), end.getY() + 1, end.getZ())}, new BlockPos[0]);
+        super(start, end, new BlockPos[]{new BlockPos(start.getX(), start.getY() + 2, start.getZ()), end, new BlockPos(end.getX(), end.getY() + 1, end.getZ())}, new BlockPos[]{new BlockPos(end.getX(), end.getY() - 1, end.getZ())});
     }
     @Override
     protected double calculateCost() {
+        if (!canWalkOn(blocksToPlace[0])) {
+            return 10000;
+        }
         return 10 + getTotalHardnessOfBlocksToBreak() * 10;
     }
 }
