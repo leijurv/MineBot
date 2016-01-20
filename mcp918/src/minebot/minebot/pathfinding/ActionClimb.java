@@ -26,7 +26,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
         return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * 10;
     }
     @Override
-    protected boolean tick0() {
+    protected boolean tick0() {//basically just hold down W and space until we are where we want to be
         MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);
         MineBot.forward = true;
         MineBot.jumping = true;

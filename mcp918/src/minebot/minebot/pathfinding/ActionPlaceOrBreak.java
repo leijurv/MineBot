@@ -16,9 +16,9 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class ActionPlaceOrBreak extends Action {
-    public final BlockPos[] positionsToBreak;
-    public final BlockPos[] positionsToPlace;
-    public final Block[] blocksToBreak;
+    public final BlockPos[] positionsToBreak;//the positions that need to be broken before this action can ensue
+    public final BlockPos[] positionsToPlace;//the positions where we need to place a block before this aciton can ensue
+    public final Block[] blocksToBreak;//the blocks at those positions
     public final Block[] blocksToPlace;
     public ActionPlaceOrBreak(BlockPos start, BlockPos end, BlockPos[] toBreak, BlockPos[] toPlace) {
         super(start, end);
@@ -33,7 +33,7 @@ public abstract class ActionPlaceOrBreak extends Action {
             blocksToPlace[i] = Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock();
         }
     }
-    public double getTotalHardnessOfBlocksToBreak() {
+    public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
             sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
@@ -50,8 +50,8 @@ public abstract class ActionPlaceOrBreak extends Action {
         for (int i = 0; i < blocksToBreak.length; i++) {
             if (!canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
                 System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
-                MineBot.lookAtBlock(positionsToBreak[i], true);
-                MineBot.isLeftClick = true;
+                MineBot.lookAtBlock(positionsToBreak[i], true);//look at the block we are breaking
+                MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
                     MineBot.letGoOfLeftClick();
                     System.out.println("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
@@ -59,7 +59,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 return false;
             }
         }
-        MineBot.letGoOfLeftClick();
+        MineBot.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
         for (int i = 0; i < blocksToPlace.length; i++) {
             if (!canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock())) {
                 MineBot.lookAtBlock(positionsToPlace[i], true);

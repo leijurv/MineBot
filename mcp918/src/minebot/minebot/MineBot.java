@@ -21,6 +21,9 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
+    /**
+     * Called by minecraft.java
+     */
     public static void onTick() {
         System.out.println(isLeftClick + "," + pressTime);
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
@@ -52,7 +55,7 @@ public class MineBot {
     public static boolean isLeftClick = false;
     public static boolean jumping = false;
     /**
-     * Do not question the logic
+     * Do not question the logic. Called by Minecraft.java
      *
      * @return
      */
@@ -60,7 +63,7 @@ public class MineBot {
         return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime > -2;
     }
     /**
-     * Do not question the logic
+     * Do not question the logic. Called by Minecraft.java
      *
      * @return
      */
@@ -72,10 +75,19 @@ public class MineBot {
             return true;
         }
     }
+    /**
+     * Called by our code
+     */
     public static void letGoOfLeftClick() {
         pressTime = 0;
         isLeftClick = false;
     }
+    /**
+     * Called by GuiScreen.java
+     *
+     * @param message
+     * @return
+     */
     public static String therewasachatmessage(String message) {
         Minecraft mc = Minecraft.theMinecraft;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
@@ -125,6 +137,11 @@ public class MineBot {
         }
         return message;
     }
+    /**
+     * Give a block that's sorta close to the player, at foot level
+     *
+     * @return
+     */
     public static BlockPos closestBlock() {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
@@ -141,9 +158,20 @@ public class MineBot {
         return null;
     }
     public static boolean forward = false;
+    /**
+     * Called by minecraft.java
+     *
+     * @return
+     */
     public static boolean shouldIBeGoingForward() {
         return forward;
     }
+    /**
+     * Called by our code
+     *
+     * @param p
+     * @param alsoDoPitch
+     */
     public static void lookAtBlock(BlockPos p, boolean alsoDoPitch) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
@@ -171,6 +199,11 @@ public class MineBot {
             thePlayer.rotationPitch = (float) (pitch * 180 / Math.PI);
         }
     }
+    /**
+     * What block is the player looking at
+     *
+     * @return
+     */
     public static BlockPos whatAreYouLookingAt() {
         Minecraft mc = Minecraft.theMinecraft;
         if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {

@@ -35,15 +35,15 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {
-        MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);
-        MineBot.forward = true;
+        MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);//look at where we are walking
+        MineBot.forward = true;//we are going forward
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
-        if (whereAmI.equals(to)) {
+        if (whereAmI.equals(to)) {//if we are there
             System.out.println("Done walking to " + to);
-            MineBot.forward = false;
-            return true;
+            MineBot.forward = false;//stop walking forwards
+            return true;//and we are done
         }
-        return false;
+        return false;//not there yet
     }
 }

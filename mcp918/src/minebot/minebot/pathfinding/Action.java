@@ -26,13 +26,30 @@ public abstract class Action {
         this.to = to;
         this.cost = null;
     }
+    /**
+     * Get the cost. It's cached
+     *
+     * @return
+     */
     public double cost() {
         if (cost == null) {
             cost = calculateCost();
         }
         return cost;
     }
+    /**
+     * Do the cost calculation of how hard this action would be
+     *
+     * @return
+     */
     protected abstract double calculateCost();
+    /**
+     * What action would get you from the blockpos "from" to the blockpos "to"
+     *
+     * @param from
+     * @param to
+     * @return
+     */
     public static Action getAction(BlockPos from, BlockPos to) {
         int xDiff = to.getX() - from.getX();
         int yDiff = to.getY() - from.getY();
@@ -53,11 +70,29 @@ public abstract class Action {
         }
         return null;
     }
-    public static boolean canWalkThrough(Block block) {
+    /**
+     * Can I walk through this block
+     *
+     * @param block
+     * @return
+     */
+    public static boolean canWalkThrough(Block block) {//fix this. this assumes that air is the only block with no collisions, while actually there are others (e.g. torches)
         return block.equals(Block.getBlockById(0));
     }
-    public static boolean canWalkOn(Block block) {
+    /**
+     * Can I walk on this block without anything weird happening like me falling
+     * through
+     *
+     * @param block
+     * @return
+     */
+    public static boolean canWalkOn(Block block) {//eh
         return block.isBlockNormalCube();
     }
+    /**
+     * Tick this action
+     *
+     * @return is it done
+     */
     public abstract boolean tick();
 }

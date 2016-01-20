@@ -26,17 +26,17 @@ public class ActionPillar extends ActionPlaceOrBreak {
     protected boolean tick0() {
         MineBot.lookAtBlock(new BlockPos(from.getX(), from.getY() - 1, from.getZ()), true);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        if (thePlayer.posY >= to.getY()) {
+        if (thePlayer.posY >= to.getY()) {//if our Y coordinate is above our goal, stop jumping
             MineBot.jumping = false;
         } else {
-            MineBot.jumping = true;
+            MineBot.jumping = true;//otherwise jump
         }
-        Minecraft.theMinecraft.rightClickMouse();
+        Minecraft.theMinecraft.rightClickMouse();//constantly right click
         BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
-        if (whereAmI.equals(to) && canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock())) {
+        if (whereAmI.equals(to) && canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock())) {//if we are at our goal and the block below us is placed
             System.out.println("Done pillaring to " + to);
-            MineBot.jumping = false;
-            return true;
+            MineBot.jumping = false;//stop jumping
+            return true;//we are done
         }
         return false;
     }
