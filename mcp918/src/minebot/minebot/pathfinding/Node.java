@@ -18,12 +18,14 @@ public class Node implements Comparable<Node> {
     Node previous;
     final Goal goal;
     final int estimatedCostToGoal;
+    Action previousAction;
     public Node(BlockPos pos, Goal goal) {
         this.pos = pos;
         this.previous = null;
         this.cost = Short.MAX_VALUE;
         this.goal = goal;
         this.estimatedCostToGoal = goal.heuristic(pos);
+        this.previousAction = null;
     }
     @Override
     public int compareTo(Node otherNode) {

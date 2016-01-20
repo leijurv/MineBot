@@ -36,11 +36,12 @@ public class PathFinder {
                 return new Path(startNode, me, goal);
             }
             Action[] connected = getConnectedPositions(me.pos);
-            for (Action neighborPos : connected) {
-                Node neighbor = getNodeAtPosition(neighborPos.from);
-                int tentativeCost = me.cost + neighborPos.calculateCost();
+            for (Action actionToGetToNeighbor : connected) {
+                Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
+                int tentativeCost = me.cost + actionToGetToNeighbor.calculateCost();
                 if (tentativeCost < neighbor.cost) {
                     neighbor.previous = me;
+                    neighbor.previousAction = actionToGetToNeighbor;
                     neighbor.cost = tentativeCost;
                     if (!openList.contains(neighbor)) {
                         openList.addNode(neighbor);
@@ -82,6 +83,7 @@ public class PathFinder {
         Action[] actions = new Action[13];
         for (int i = 0; i < 13; i++) {
             actions[i] = Action.getAction(pos, positions[i]);
+            System.out.println(i + ":" + actions[i]);
         }
         return actions;
     }

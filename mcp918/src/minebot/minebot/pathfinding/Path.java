@@ -21,18 +21,22 @@ public class Path {
     final BlockPos end;
     final Goal goal;
     final ArrayList<BlockPos> path;
+    final ArrayList<Action> actions;
     Path(Node start, Node end, Goal goal) {
         this.start = start.pos;
         this.end = end.pos;
         this.goal = goal;
-        path = new ArrayList<>();
+        this.path = new ArrayList<>();
+        this.actions = new ArrayList<>();
         Node current = end;
         while (!current.equals(start)) {
             path.add(0, current.pos);
+            actions.add(0, current.previousAction);
             current = current.previous;
         }
         path.add(0, start.pos);
         System.out.println("Final path: " + path);
+        System.out.println("Final actions: " + actions);
         for (int i = 0; i < path.size() - 1; i++) {
             int oldX = path.get(i).getX();
             int oldY = path.get(i).getY();
@@ -43,7 +47,7 @@ public class Path {
             int xDiff = newX - oldX;
             int yDiff = newY - oldY;
             int zDiff = newZ - oldZ;
-            whatIsThis(xDiff, yDiff, zDiff);
+            System.out.println(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);
         }
         new Thread() {
             public void run() {
@@ -62,6 +66,5 @@ public class Path {
         }.start();
     }
     public static void whatIsThis(int xDiff, int yDiff, int zDiff) {
-        System.out.println(xDiff + "," + yDiff + "," + zDiff);
     }
 }

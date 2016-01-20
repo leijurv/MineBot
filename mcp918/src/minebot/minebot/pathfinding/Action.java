@@ -36,6 +36,17 @@ public abstract class Action {
         if (yDiff == 0) {
             return new ActionBridge(from, to);
         }
+        if (yDiff == 1) {
+            if (xDiff == 0 && zDiff == 0) {
+                //pillar
+            }
+            if (Math.abs(xDiff) + Math.abs(zDiff) == 1) {
+                //climb
+            }
+        }
+        if (yDiff == -1 && Math.abs(xDiff) + Math.abs(zDiff) == 1) {
+            //fall
+        }
         return null;
     }
     public static boolean canWalkThrough(Block block) {
