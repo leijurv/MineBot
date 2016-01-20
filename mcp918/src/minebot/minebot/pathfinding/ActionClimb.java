@@ -20,6 +20,6 @@ public class ActionClimb extends ActionPlaceOrBreak {
         if (!canWalkOn(blocksToPlace[0])) {
             return 10000;
         }
-        return 10 + getTotalHardnessOfBlocksToBreak() * 10;
+        return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * 10;
     }
 }

@@ -20,6 +20,6 @@ public class ActionFall extends ActionPlaceOrBreak {
         if (!canWalkOn(blocksToPlace[0])) {
             return 10000;
         }
-        return 1 + getTotalHardnessOfBlocksToBreak() * 10;
+        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * 10;
     }
 }
