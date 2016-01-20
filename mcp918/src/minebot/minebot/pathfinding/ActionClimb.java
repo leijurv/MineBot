@@ -33,7 +33,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
         if (whereAmI.equals(to)) {
-            System.out.println("Done walking to " + to);
+            System.out.println("Done climbing to " + to);
             MineBot.forward = false;
             MineBot.jumping = false;
             return true;

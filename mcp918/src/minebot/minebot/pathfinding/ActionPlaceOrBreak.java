@@ -59,6 +59,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 return false;
             }
         }
+        MineBot.letGoOfLeftClick();
         for (int i = 0; i < blocksToPlace.length; i++) {
             if (!canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock())) {
                 MineBot.lookAtBlock(positionsToPlace[i], true);
