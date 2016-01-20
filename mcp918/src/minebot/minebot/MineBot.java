@@ -28,6 +28,9 @@ public class MineBot {
         if (Minecraft.theMinecraft.currentScreen != null) {
             wasScreen = true;
         } else {
+            if (isLeftClick) {
+                pressTime++;
+            }
             if (wasScreen) {
                 wasScreen = false;
                 pressTime = -10;
@@ -81,6 +84,13 @@ public class MineBot {
         if (message.equals("look")) {
             lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
+        }
+        if (message.equals("cancel")) {
+            currentPath = null;
+            letGoOfLeftClick();
+            jumping = false;
+            forward = false;
+            return "unset";
         }
         if (message.equals("st")) {
             System.out.println(theWorld.getBlockState(playerFeet).getBlock());

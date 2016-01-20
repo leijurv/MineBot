@@ -48,19 +48,19 @@ public abstract class ActionPlaceOrBreak extends Action {
     public boolean tick() {
         //breaking first
         for (int i = 0; i < blocksToBreak.length; i++) {
-            if (!canWalkThrough(blocksToBreak[i])) {
+            if (!canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
                 System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 MineBot.lookAtBlock(positionsToBreak[i], true);
                 MineBot.isLeftClick = true;
                 if (canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
-                    MineBot.isLeftClick = false;
+                    MineBot.letGoOfLeftClick();
                     System.out.println("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 }
                 return false;
             }
         }
         for (int i = 0; i < blocksToPlace.length; i++) {
-            if (!canWalkOn(blocksToPlace[i])) {
+            if (!canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock())) {
                 MineBot.lookAtBlock(positionsToPlace[i], true);
                 System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
             }
