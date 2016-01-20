@@ -28,7 +28,7 @@ public abstract class Action {
         return cost;
     }
     protected abstract int calculateCost();
-    public static Action getAction(BlockPos to, BlockPos from) {
+    public static Action getAction(BlockPos from, BlockPos to) {
         System.out.println("Getting cost from " + from + " to " + to);
         int xDiff = to.getX() - from.getX();
         int yDiff = to.getY() - from.getY();
