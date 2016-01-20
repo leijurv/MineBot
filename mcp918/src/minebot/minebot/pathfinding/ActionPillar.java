@@ -5,6 +5,9 @@
  */
 package minebot.pathfinding;
 
+import minebot.MineBot;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -21,6 +24,16 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MineBot.lookAtBlock(new BlockPos(from.getX(), from.getY() - 1, from.getZ()), true);
+        MineBot.jumping = true;
+        Minecraft.theMinecraft.rightClickMouse();
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
+        if (whereAmI.equals(to)) {
+            System.out.println("Done walking to " + to);
+            MineBot.jumping = false;
+            return true;
+        }
+        return false;
     }
 }
