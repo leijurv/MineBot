@@ -57,7 +57,7 @@ public class MineBot {
      * @return
      */
     public static boolean getIsPressed() {
-        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime > 0;
+        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime > -2;
     }
     /**
      * Do not question the logic
