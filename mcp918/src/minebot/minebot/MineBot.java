@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 /**
@@ -92,5 +93,12 @@ public class MineBot {
         double pitch = Math.atan2(yDiff, dist);
         thePlayer.rotationYaw = (float) (yaw * 180 / Math.PI);
         thePlayer.rotationPitch = (float) (pitch * 180 / Math.PI);
+    }
+    public static BlockPos whatAreYouLookingAt() {
+        Minecraft mc = Minecraft.theMinecraft;
+        if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            return mc.objectMouseOver.getBlockPos();
+        }
+        return null;
     }
 }

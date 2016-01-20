@@ -38,7 +38,7 @@ public class PathFinder {
             Action[] connected = getConnectedPositions(me.pos);
             for (Action neighborPos : connected) {
                 Node neighbor = getNodeAtPosition(neighborPos.from);
-                int tentativeCost = me.cost + neighborPos.cost();
+                int tentativeCost = me.cost + neighborPos.calculateCost();
                 if (tentativeCost < neighbor.cost) {
                     neighbor.previous = me;
                     neighbor.cost = tentativeCost;

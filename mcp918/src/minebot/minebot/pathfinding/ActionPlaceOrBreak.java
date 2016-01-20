@@ -5,6 +5,8 @@
  */
 package minebot.pathfinding;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -12,11 +14,21 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class ActionPlaceOrBreak extends Action {
-    public BlockPos[] toBreak;
-    public BlockPos[] toPlace;
+    public final BlockPos[] positionsToBreak;
+    public final BlockPos[] positionsToPlace;
+    public final Block[] blocksToBreak;
+    public final Block[] blocksToPlace;
     public ActionPlaceOrBreak(BlockPos start, BlockPos end, BlockPos[] toBreak, BlockPos[] toPlace) {
         super(start, end);
-        this.toBreak = toBreak;
-        this.toPlace = toPlace;
+        this.positionsToBreak = toBreak;
+        this.positionsToPlace = toPlace;
+        blocksToBreak = new Block[positionsToBreak.length];
+        blocksToPlace = new Block[positionsToPlace.length];
+        for (int i = 0; i < blocksToBreak.length; i++) {
+            blocksToBreak[i] = Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock();
+        }
+        for (int i = 0; i < blocksToPlace.length; i++) {
+            blocksToPlace[i] = Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock();
+        }
     }
 }

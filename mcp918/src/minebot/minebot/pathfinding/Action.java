@@ -6,7 +6,6 @@
 package minebot.pathfinding;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -16,25 +15,33 @@ import net.minecraft.util.BlockPos;
 public abstract class Action {
     public final BlockPos from;
     public final BlockPos to;
+    private Integer cost;
     protected Action(BlockPos from, BlockPos to) {
         this.from = from;
         this.to = to;
+        this.cost = null;
     }
-    public abstract int cost();
+    public int cost() {
+        if (cost == null) {
+            cost = calculateCost();
+        }
+        return cost;
+    }
+    protected abstract int calculateCost();
     public static Action getAction(BlockPos to, BlockPos from) {
         System.out.println("Getting cost from " + from + " to " + to);
         int xDiff = to.getX() - from.getX();
         int yDiff = to.getY() - from.getY();
         int zDiff = to.getZ() - from.getZ();
         if (yDiff == 0) {
-            return new ActionPillar(from, to);
+            return new ActionBridge(from, to);
         }
         return null;
     }
-    public static boolean canWalkThrough(BlockPos pos) {
-        return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().equals(Block.getBlockById(0));
+    public static boolean canWalkThrough(Block block) {
+        return block.equals(Block.getBlockById(0));
     }
-    public static boolean canWalkOn(BlockPos pos) {
-        return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().isBlockNormalCube();
+    public static boolean canWalkOn(Block block) {
+        return block.isBlockNormalCube();
     }
 }
