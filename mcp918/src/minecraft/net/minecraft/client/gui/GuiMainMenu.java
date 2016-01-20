@@ -222,10 +222,10 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback {
         if (button.id == 5) {
             this.mc.displayGuiScreen(new GuiLanguage(this, this.mc.gameSettings, this.mc.getLanguageManager()));
         }
-        if (button.id == 2) {
+        if (button.id == 1) {
             this.mc.displayGuiScreen(new GuiSelectWorld(this));
         }
-        if (button.id == 1) {
+        if (button.id == 2) {
             this.mc.displayGuiScreen(new GuiMultiplayer(this));
         }
         if (button.id == 14 && this.realmsButton.visible) {

@@ -681,7 +681,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient {
         if (packetIn.getType() == 2) {
             this.gameController.ingameGUI.setRecordPlaying(packetIn.getChatComponent(), false);
         } else {
-            System.out.println("CHATT" + packetIn.getChatComponent());
             this.gameController.ingameGUI.getChatGUI().printChatMessage(packetIn.getChatComponent());
         }
     }
