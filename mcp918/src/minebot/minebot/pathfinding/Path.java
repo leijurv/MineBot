@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
@@ -51,16 +52,23 @@ public class Path {
         }
         new Thread() {
             public void run() {
+                IBlockState[] originalStates = new IBlockState[path.size()];
                 for (int i = 0; i < path.size(); i++) {
+                    originalStates[i] = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
                     Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), Block.getBlockById(1).getDefaultState());
-                    for (int j = 0; j < 20; j++) {
-                        //MineBot.lookAtBlock(path.get(i));
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(Path.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Path.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                }
+                try {
+                    Thread.sleep(2500);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Path.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                for (int i = 0; i < path.size(); i++) {
+                    Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalStates[i]);
                 }
             }
         }.start();

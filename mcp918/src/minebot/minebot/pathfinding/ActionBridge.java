@@ -5,7 +5,6 @@
  */
 package minebot.pathfinding;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -22,8 +21,8 @@ public class ActionBridge extends ActionPlaceOrBreak {
             if (canWalkThrough(blocksToBreak[0]) && canWalkThrough(blocksToBreak[1])) {
                 return WALK_ONE_BLOCK_COST;
             }
-            double hardness1 = blocksToBreak[0].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[0]);
-            double hardness2 = blocksToBreak[1].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[1]);
+            //double hardness1 = blocksToBreak[0].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[0]);
+            //double hardness2 = blocksToBreak[1].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[1]);
             //System.out.println("Can't walk through " + blocksToBreak[0] + " (hardness" + hardness1 + ") or " + blocksToBreak[1] + " (hardness " + hardness2 + ")");
             return WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * 10;
         } else {//this is a bridge, so we need to place a block
