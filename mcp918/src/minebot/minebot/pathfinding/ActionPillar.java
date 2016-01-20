@@ -20,7 +20,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost() {
-        return 1000000 + getTotalHardnessOfBlocksToBreak() * 10;
+        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * 100000;
     }
     @Override
     protected boolean tick0() {
