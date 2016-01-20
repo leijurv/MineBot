@@ -16,7 +16,7 @@ public class ActionFall extends ActionPlaceOrBreak {
         super(start, end, new BlockPos[]{new BlockPos(end.getX(), end.getY() + 1, end.getZ()), end, new BlockPos(end.getX(), end.getY() - 1, end.getZ())}, new BlockPos[0]);
     }
     @Override
-    protected int calculateCost() {
-        return 10;
+    protected double calculateCost() {
+        return 10 + getTotalHardnessOfBlocksToBreak();
     }
 }

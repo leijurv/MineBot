@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding;
 
+import java.util.Arrays;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
@@ -30,5 +31,15 @@ public abstract class ActionPlaceOrBreak extends Action {
         for (int i = 0; i < blocksToPlace.length; i++) {
             blocksToPlace[i] = Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock();
         }
+    }
+    public double getTotalHardnessOfBlocksToBreak() {
+        double sum = 0;
+        for (int i = 0; i < blocksToBreak.length; i++) {
+            sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
+        }
+        return sum;
+    }
+    public String toString() {
+        return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak);
     }
 }

@@ -14,7 +14,7 @@ import net.minecraft.util.BlockPos;
  */
 public class Node implements Comparable<Node> {
     final BlockPos pos;
-    int cost;
+    double cost;
     Node previous;
     final Goal goal;
     final int estimatedCostToGoal;
@@ -29,7 +29,7 @@ public class Node implements Comparable<Node> {
     }
     @Override
     public int compareTo(Node otherNode) {
-        return new Integer(estimatedCostToGoal + cost).compareTo(otherNode.estimatedCostToGoal + otherNode.cost);
+        return new Double(estimatedCostToGoal + cost).compareTo(otherNode.estimatedCostToGoal + otherNode.cost);
     }
     @Override
     public int hashCode() {

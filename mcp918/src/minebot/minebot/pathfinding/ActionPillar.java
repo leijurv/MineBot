@@ -16,7 +16,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
         super(start, end, new BlockPos[]{new BlockPos(end.getX(), end.getY() + 1, end.getZ())}, new BlockPos[]{start});
     }
     @Override
-    protected int calculateCost() {
-        return 10;
+    protected double calculateCost() {
+        return 10 + getTotalHardnessOfBlocksToBreak();
     }
 }
