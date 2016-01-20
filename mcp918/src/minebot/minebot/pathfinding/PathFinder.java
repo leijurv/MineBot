@@ -7,6 +7,7 @@ package minebot.pathfinding;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import net.minecraft.util.BlockPos;
 
 /**
  *
@@ -56,21 +57,24 @@ public class PathFinder {
     private int getCost(BlockPos from, BlockPos to) {
         return 1;
     }
-    public BlockPos[] getConnectedPositions(BlockPos pos) {
+    public static BlockPos[] getConnectedPositions(BlockPos pos) {
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
         BlockPos[] positions = new BlockPos[13];
-        positions[0] = new BlockPos(pos.x, pos.y + 1, pos.z);//pillar
-        positions[1] = new BlockPos(pos.x + 1, pos.y, pos.z);//bridge
-        positions[2] = new BlockPos(pos.x - 1, pos.y, pos.z);//bridge
-        positions[3] = new BlockPos(pos.x, pos.y, pos.z + 1);//bridge
-        positions[4] = new BlockPos(pos.x, pos.y, pos.z - 1);//bridge
-        positions[5] = new BlockPos(pos.x + 1, pos.y + 1, pos.z);//climb
-        positions[6] = new BlockPos(pos.x - 1, pos.y + 1, pos.z);//climb
-        positions[7] = new BlockPos(pos.x, pos.y + 1, pos.z + 1);//climb
-        positions[8] = new BlockPos(pos.x, pos.y + 1, pos.z - 1);//climb
-        positions[9] = new BlockPos(pos.x + 1, pos.y - 1, pos.z);//fall
-        positions[10] = new BlockPos(pos.x - 1, pos.y - 1, pos.z);//fall
-        positions[11] = new BlockPos(pos.x, pos.y - 1, pos.z + 1);//fall
-        positions[12] = new BlockPos(pos.x, pos.y - 1, pos.z - 1);//fall
+        positions[0] = new BlockPos(x, y + 1, z);//pillar
+        positions[1] = new BlockPos(x + 1, y, z);//bridge
+        positions[2] = new BlockPos(x - 1, y, z);//bridge
+        positions[3] = new BlockPos(x, y, z + 1);//bridge
+        positions[4] = new BlockPos(x, y, z - 1);//bridge
+        positions[5] = new BlockPos(x + 1, y + 1, z);//climb
+        positions[6] = new BlockPos(x - 1, y + 1, z);//climb
+        positions[7] = new BlockPos(x, y + 1, z + 1);//climb
+        positions[8] = new BlockPos(x, y + 1, z - 1);//climb
+        positions[9] = new BlockPos(x + 1, y - 1, z);//fall
+        positions[10] = new BlockPos(x - 1, y - 1, z);//fall
+        positions[11] = new BlockPos(x, y - 1, z + 1);//fall
+        positions[12] = new BlockPos(x, y - 1, z - 1);//fall
         return positions;
     }
 

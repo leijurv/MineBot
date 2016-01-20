@@ -5,6 +5,8 @@
  */
 package minebot.pathfinding;
 
+import net.minecraft.util.BlockPos;
+
 /**
  *
  * @author leijurv

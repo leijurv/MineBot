@@ -5,6 +5,8 @@
  */
 package minebot.pathfinding;
 
+import net.minecraft.util.BlockPos;
+
 /**
  *
  * @author leijurv
@@ -18,10 +20,10 @@ public class GoalBlock implements Goal {
     }
     @Override
     public boolean isInGoal(BlockPos pos) {
-        return pos.x == this.x && pos.y == this.y && pos.z == this.z;
+        return pos.getX() == this.x && pos.getY() == this.y && pos.getZ() == this.z;
     }
     @Override
     public int heuristic(BlockPos pos) {
-        return Math.abs(pos.x - this.x) + Math.abs(pos.y - this.y) + Math.abs(pos.z - this.z);
+        return Math.abs(pos.getX() - this.x) + Math.abs(pos.getY() - this.y) + Math.abs(pos.getZ() - this.z);
     }
 }
