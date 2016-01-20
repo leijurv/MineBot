@@ -38,14 +38,14 @@ public abstract class Action {
         }
         if (yDiff == 1) {
             if (xDiff == 0 && zDiff == 0) {
-                //pillar
+                return new ActionPillar(from, to);
             }
             if (Math.abs(xDiff) + Math.abs(zDiff) == 1) {
-                //climb
+                return new ActionClimb(from, to);
             }
         }
         if (yDiff == -1 && Math.abs(xDiff) + Math.abs(zDiff) == 1) {
-            //fall
+            return new ActionFall(from, to);
         }
         return null;
     }
