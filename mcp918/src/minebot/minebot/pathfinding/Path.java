@@ -94,7 +94,7 @@ public class Path {
         if (actions.get(pathPosition).tick()) {
             System.out.println("Action done, next path");
             pathPosition++;
-            System.out.println("At position " + pathPosition);
+            System.out.println("At position " + pathPosition + " in " + path + " and actions " + actions);
         }
         return false;
     }
