@@ -40,6 +40,6 @@ public abstract class ActionPlaceOrBreak extends Action {
         return sum;
     }
     public String toString() {
-        return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak);
+        return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak) + " cost " + cost() + " break cost " + getTotalHardnessOfBlocksToBreak();
     }
 }

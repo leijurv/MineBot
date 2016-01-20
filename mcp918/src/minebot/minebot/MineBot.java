@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -45,9 +46,14 @@ public class MineBot {
             return "Set goal to " + playerFeet;
         }
         if (message.equals("path")) {
-            PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
-            pf.calculatePath();
-            return "Found path from " + playerFeet + " to " + goal;
+            new Thread() {
+                public void run() {
+                    PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
+                    pf.calculatePath();
+                    GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
+                }
+            }.start();
+            return "Starting to search for path from " + playerFeet + " to " + goal;
         }
         return message;
     }

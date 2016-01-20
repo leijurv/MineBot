@@ -17,6 +17,6 @@ public class ActionClimb extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost() {
-        return 10 + getTotalHardnessOfBlocksToBreak();
+        return 10 + getTotalHardnessOfBlocksToBreak() * 10;
     }
 }

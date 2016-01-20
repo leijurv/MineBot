@@ -344,9 +344,9 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     public void sendChatMessage(String msg) {
         this.sendChatMessage(msg, true);
     }
-    public void sendChatMessage(String msg, boolean addToChat) {
+    public static void sendChatMessage(String msg, boolean addToChat) {
         if (addToChat) {
-            this.mc.ingameGUI.getChatGUI().addToSentMessages(msg);
+            Minecraft.theMinecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
         }
         String nm = MineBot.therewasachatmessage(msg);
         if (nm == null) {
@@ -356,7 +356,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         if (!nm.equals(msg)) {
             System.out.println("Sending " + nm + " instead of " + msg + " to server");
         }
-        this.mc.thePlayer.sendChatMessage(nm);
+        Minecraft.theMinecraft.thePlayer.sendChatMessage(nm);
     }
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
