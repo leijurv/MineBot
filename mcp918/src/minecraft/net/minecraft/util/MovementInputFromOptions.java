@@ -23,7 +23,7 @@ public class MovementInputFromOptions extends MovementInput {
         if (this.gameSettings.keyBindRight.isKeyDown()) {
             --this.moveStrafe;
         }
-        this.jump = this.gameSettings.keyBindJump.isKeyDown();
+        this.jump = this.gameSettings.keyBindJump.isKeyDown() || MineBot.jumping;
         this.sneak = this.gameSettings.keyBindSneak.isKeyDown();
         if (this.sneak) {
             this.moveStrafe = (float) ((double) this.moveStrafe * 0.3D);

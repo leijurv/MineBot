@@ -6,6 +6,7 @@
 package minebot.pathfinding;
 
 import java.util.Arrays;
+import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
@@ -39,7 +40,31 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return sum;
     }
+    @Override
     public String toString() {
         return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak) + " cost " + cost() + " break cost " + getTotalHardnessOfBlocksToBreak();
     }
+    @Override
+    public boolean tick() {
+        //breaking first
+        for (int i = 0; i < blocksToBreak.length; i++) {
+            if (!canWalkThrough(blocksToBreak[i])) {
+                System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
+                MineBot.lookAtBlock(positionsToBreak[i], true);
+                MineBot.isLeftClick = true;
+                if (canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
+                    System.out.println("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
+                }
+                return false;
+            }
+        }
+        for (int i = 0; i < blocksToPlace.length; i++) {
+            if (!canWalkOn(blocksToPlace[i])) {
+                MineBot.lookAtBlock(positionsToPlace[i], true);
+                System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
+            }
+        }
+        return tick0();
+    }
+    protected abstract boolean tick0();
 }

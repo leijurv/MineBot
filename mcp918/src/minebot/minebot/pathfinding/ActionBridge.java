@@ -5,6 +5,9 @@
  */
 package minebot.pathfinding;
 
+import minebot.MineBot;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -29,5 +32,18 @@ public class ActionBridge extends ActionPlaceOrBreak {
             //System.out.println("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         }
         return 1000;
+    }
+    @Override
+    protected boolean tick0() {
+        MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);
+        MineBot.forward = true;
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
+        if (whereAmI.equals(to)) {
+            System.out.println("Done walking to " + to);
+            MineBot.forward = false;
+            return true;
+        }
+        return false;
     }
 }

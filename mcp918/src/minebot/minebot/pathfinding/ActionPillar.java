@@ -19,4 +19,8 @@ public class ActionPillar extends ActionPlaceOrBreak {
     protected double calculateCost() {
         return 10 + getTotalHardnessOfBlocksToBreak() * 10;
     }
+    @Override
+    protected boolean tick0() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

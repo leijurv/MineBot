@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -50,29 +51,50 @@ public class Path {
             int zDiff = newZ - oldZ;
             System.out.println(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);
         }
-        new Thread() {
-            public void run() {
-                IBlockState[] originalStates = new IBlockState[path.size()];
-                for (int i = 0; i < path.size(); i++) {
-                    originalStates[i] = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
-                    Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), Block.getBlockById(1).getDefaultState());
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Path.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                try {
-                    Thread.sleep(2500);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Path.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                for (int i = 0; i < path.size(); i++) {
-                    Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalStates[i]);
-                }
-            }
-        }.start();
     }
-    public static void whatIsThis(int xDiff, int yDiff, int zDiff) {
+    public void showPathInStone() {
+        IBlockState[] originalStates = new IBlockState[path.size()];
+        for (int i = 0; i < path.size(); i++) {
+            originalStates[i] = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
+            Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), Block.getBlockById(1).getDefaultState());
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Path.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Path.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (int i = 0; i < path.size(); i++) {
+            Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalStates[i]);
+        }
+    }
+    int pathPosition = 0;
+    public boolean tick() {
+        if (pathPosition >= path.size()) {
+            return true;
+        }
+        BlockPos whereShouldIBe = path.get(pathPosition);
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
+        if (pathPosition == path.size() - 1) {
+            System.out.println("On last path position");
+            return true;
+        }
+        if (!whereShouldIBe.equals(whereAmI)) {
+            System.out.println("Should be at " + whereShouldIBe + " actually am at " + whereAmI);
+            /*if (path.get(pathPosition + 1).equals(whereAmI)) {
+             System.out.println("Hey I'm on the next one");
+             pathPosition++;
+             }*/
+        }
+        if (actions.get(pathPosition).tick()) {
+            System.out.println("Action done, next path");
+            pathPosition++;
+        }
+        return false;
     }
 }

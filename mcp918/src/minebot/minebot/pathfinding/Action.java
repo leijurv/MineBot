@@ -19,6 +19,7 @@ public abstract class Action {
     public final BlockPos from;
     public final BlockPos to;
     private Double cost;
+    public boolean finished = false;
     protected Action(BlockPos from, BlockPos to) {
         this.from = from;
         this.to = to;
@@ -57,4 +58,5 @@ public abstract class Action {
     public static boolean canWalkOn(Block block) {
         return block.isBlockNormalCube();
     }
+    public abstract boolean tick();
 }

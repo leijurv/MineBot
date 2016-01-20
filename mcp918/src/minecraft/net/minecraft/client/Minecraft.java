@@ -35,6 +35,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
+import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -1358,6 +1359,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         if (this.currentScreen != null) {
             this.leftClickCounter = 10000;
         }
+        MineBot.onTick();
         if (this.currentScreen != null) {
             try {
                 this.currentScreen.handleInput();
@@ -1564,7 +1566,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (!this.gameSettings.keyBindUseItem.isKeyDown()) {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
-                while (this.gameSettings.keyBindAttack.isPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
                     ;
                 }
                 while (this.gameSettings.keyBindUseItem.isPressed()) {
@@ -1574,7 +1576,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     ;
                 }
             } else {
-                while (this.gameSettings.keyBindAttack.isPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
                     this.clickMouse();
                 }
                 while (this.gameSettings.keyBindUseItem.isPressed()) {
@@ -1587,7 +1589,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             if (this.gameSettings.keyBindUseItem.isKeyDown() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
-            this.sendClickBlockToController(this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus);
+            this.sendClickBlockToController(this.currentScreen == null && (this.gameSettings.keyBindAttack.isKeyDown() || MineBot.getIsPressed()) && this.inGameHasFocus);
         }
         if (this.theWorld != null) {
             if (this.thePlayer != null) {

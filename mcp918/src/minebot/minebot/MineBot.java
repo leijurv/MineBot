@@ -6,6 +6,7 @@
 package minebot;
 
 import minebot.pathfinding.GoalBlock;
+import minebot.pathfinding.Path;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -20,7 +21,57 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
+    public static void onTick() {
+        if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
+            return;
+        }
+        if (Minecraft.theMinecraft.currentScreen != null) {
+            wasScreen = true;
+        } else {
+            if (wasScreen) {
+                wasScreen = false;
+                pressTime = -10;
+            }
+        }
+        if (currentPath != null) {
+            System.out.println("On a path");
+            if (currentPath.tick()) {
+                currentPath = null;
+                System.out.println("Path done");
+            }
+        }
+    }
+    public static boolean wasScreen = false;
+    static Path currentPath = null;
     static BlockPos goal = null;
+    public static int pressTime = 0;
+    public static boolean isLeftClick = false;
+    public static boolean jumping = false;
+    /**
+     * Do not question the logic
+     *
+     * @return
+     */
+    public static boolean getIsPressed() {
+        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime > -2;
+    }
+    /**
+     * Do not question the logic
+     *
+     * @return
+     */
+    public static boolean isPressed() {
+        if (pressTime <= 0) {
+            return false;
+        } else {
+            --pressTime;
+            return true;
+        }
+    }
+    public static void letGoOfLeftClick() {
+        pressTime = 0;
+        isLeftClick = false;
+    }
     public static String therewasachatmessage(String message) {
         Minecraft mc = Minecraft.theMinecraft;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
@@ -28,7 +79,7 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         if (message.equals("look")) {
-            lookAtBlock(new BlockPos(0, 0, 0));
+            lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
         }
         if (message.equals("st")) {
@@ -38,19 +89,25 @@ public class MineBot {
         }
         if (message.equals("lac")) {
             BlockPos pos = closestBlock();
-            lookAtBlock(pos);
+            lookAtBlock(pos, true);
             return "" + pos;
         }
         if (message.equals("setgoal")) {
             goal = playerFeet;
             return "Set goal to " + playerFeet;
         }
-        if (message.equals("path")) {
+        if (message.startsWith("path")) {
+            boolean stone = message.contains("stone");
             new Thread() {
                 public void run() {
                     PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
-                    pf.calculatePath();
+                    Path path = pf.calculatePath();
                     GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
+                    if (stone) {
+                        path.showPathInStone();
+                        return;
+                    }
+                    currentPath = path;
                 }
             }.start();
             return "Starting to search for path from " + playerFeet + " to " + goal;
@@ -72,10 +129,11 @@ public class MineBot {
         }
         return null;
     }
+    public static boolean forward = false;
     public static boolean shouldIBeGoingForward() {
-        return false;
+        return forward;
     }
-    public static void lookAtBlock(BlockPos p) {
+    public static void lookAtBlock(BlockPos p, boolean alsoDoPitch) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
@@ -98,7 +156,9 @@ public class MineBot {
         double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
         double pitch = Math.atan2(yDiff, dist);
         thePlayer.rotationYaw = (float) (yaw * 180 / Math.PI);
-        thePlayer.rotationPitch = (float) (pitch * 180 / Math.PI);
+        if (alsoDoPitch) {
+            thePlayer.rotationPitch = (float) (pitch * 180 / Math.PI);
+        }
     }
     public static BlockPos whatAreYouLookingAt() {
         Minecraft mc = Minecraft.theMinecraft;
