@@ -53,6 +53,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 MineBot.lookAtBlock(positionsToBreak[i], true);
                 MineBot.isLeftClick = true;
                 if (canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
+                    MineBot.isLeftClick = false;
                     System.out.println("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 }
                 return false;
