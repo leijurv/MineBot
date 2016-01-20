@@ -29,7 +29,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
         Minecraft.theMinecraft.rightClickMouse();
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
-        if (whereAmI.equals(to)) {
+        if (whereAmI.equals(to) && canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock())) {
             System.out.println("Done walking to " + to);
             MineBot.jumping = false;
             return true;
