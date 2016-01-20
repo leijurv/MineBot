@@ -31,7 +31,7 @@ public class MineBot {
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
         }
         if (message.equals("lac")) {
-            Block air = theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ)).getBlock();
+            Block air = Block.getBlockById(0);
             for (int x = (int) (thePlayer.posX - 5); x <= thePlayer.posX + 5; x++) {
                 for (int z = (int) (thePlayer.posZ - 5); z <= thePlayer.posZ + 5; z++) {
                     BlockPos pos = new BlockPos(x, thePlayer.posY, z);
@@ -50,6 +50,13 @@ public class MineBot {
     }
     public static void lookAtBlock(BlockPos p) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
+        System.out.println("min X: " + b.getBlockBoundsMinX());
+        System.out.println("max X: " + b.getBlockBoundsMaxX());
+        System.out.println("min Y: " + b.getBlockBoundsMinY());
+        System.out.println("max Y: " + b.getBlockBoundsMaxY());
+        System.out.println("min Z: " + b.getBlockBoundsMinZ());
+        System.out.println("max Z: " + b.getBlockBoundsMaxZ());
         double x = p.getX() + 0.5;
         double z = p.getZ() + 0.5;
         double y = p.getY() + 0.5;
