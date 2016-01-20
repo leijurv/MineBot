@@ -13,6 +13,9 @@ import net.minecraft.util.BlockPos;
  */
 public class GoalBlock implements Goal {
     final int x, y, z;
+    public GoalBlock(BlockPos pos) {
+        this(pos.getX(), pos.getY(), pos.getZ());
+    }
     public GoalBlock(int x, int y, int z) {
         this.x = x;
         this.y = y;
