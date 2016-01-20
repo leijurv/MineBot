@@ -30,7 +30,7 @@ public class MineBot {
             wasScreen = true;
         } else {
             if (isLeftClick) {
-                pressTime = 2;
+                pressTime = 5;
             }
             if (wasScreen) {
                 wasScreen = false;
