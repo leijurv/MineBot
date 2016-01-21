@@ -13,10 +13,10 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class Action {
-    public final double WALK_ONE_BLOCK_COST = 1;
-    public final double JUMP_ONE_BLOCK_COST = 1;
-    public final double FALL_ONE_BLOCK_COST = 0.5;
-    public final double PLACE_ONE_BLOCK_COST = 5;
+    public static final double WALK_ONE_BLOCK_COST = 1;
+    public static final double JUMP_ONE_BLOCK_COST = 1;
+    public static final double FALL_ONE_BLOCK_COST = 0.2;
+    public static final double PLACE_ONE_BLOCK_COST = 5;
     public final BlockPos from;
     public final BlockPos to;
     private Double cost;
