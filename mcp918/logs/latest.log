@@ -1,0 +1,14 @@
+[16:27:54] [Client thread/ERROR]: Can't find the resource index file: assets/indexes/1.8.json
+[16:27:55] [Client thread/INFO]: Setting user: Player726
+[16:27:55] [Client thread/INFO]: (Session ID is token:0:Player726)
+[16:28:00] [Client thread/INFO]: LWJGL Version: 2.9.2
+[16:28:00] [Client thread/INFO]: Reloading ResourceManager: Default
+[16:28:01] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[16:28:01] [Thread-5/INFO]: Initializing LWJGL OpenAL
+[16:28:01] [Thread-5/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[16:28:01] [Thread-5/INFO]: OpenAL initialized.
+[16:28:01] [Sound Library Loader/INFO]: Sound engine started
+[16:28:08] [Client thread/INFO]: Created: 512x512 textures-atlas
+[16:28:10] [Client thread/INFO]: Stopping!
+[16:28:10] [Client thread/INFO]: SoundSystem shutting down...
+[16:28:10] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
