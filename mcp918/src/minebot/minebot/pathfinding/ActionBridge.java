@@ -60,7 +60,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             BlockPos goalLook = new BlockPos(from.getX(), from.getY() - 1, from.getZ());
             if (whereAmI.equals(to)) {
                 System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
-                if (MineBot.whatAreYouLookingAt().equals(goalLook)) {
+                if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
                     MineBot.lookAtCoords(faceX, faceY, faceZ, true);
                     MineBot.forward = false;
                 } else {
