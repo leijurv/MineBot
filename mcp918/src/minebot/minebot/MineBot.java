@@ -5,6 +5,7 @@
  */
 package minebot;
 
+import java.io.IOException;
 import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.Path;
@@ -22,6 +23,15 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
+        if (s.contains("jar")) {
+            Autorun.start(args);
+            return;
+        }
+        Autorun.runprocess("/usr/local/bin/ant jar");
+        Autorun.runprocess("java -Djava.library.path=jars/versions/1.8.8/1.8.8-natives/ -jar dist/MineBot.jar");
+    }
     /**
      * Called by minecraft.java
      */
