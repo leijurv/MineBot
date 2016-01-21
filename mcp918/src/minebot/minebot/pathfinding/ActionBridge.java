@@ -52,19 +52,19 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return false;//not there yet
         } else {
             double faceX = (to.getX() + from.getX() + 1.0D) * 0.5D;
-            double faceY = (to.getY() + from.getY() + 1.0D) * 0.5D;
+            double faceY = (to.getY() + from.getY() - 1.0D) * 0.5D;
             double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
             //double faceX = to.getX();
             //double faceY = to.getY();
             //double faceZ = to.getZ();
-            System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ);
+            System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
             MineBot.lookAtCoords(faceX, faceY, faceZ, true);
             if (whereAmI.equals(to)) {
                 MineBot.forward = false;
                 System.out.println("Trying to look at " + from + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
-                MineBot.forward = true;
+                MineBot.forward = false;
                 //MineBot.lookAtBlock(to, false);//look at where we are walking
                 return false;
             }
