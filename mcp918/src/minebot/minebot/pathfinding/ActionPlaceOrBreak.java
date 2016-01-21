@@ -9,6 +9,9 @@ import java.util.Arrays;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -16,10 +19,12 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class ActionPlaceOrBreak extends Action {
+
     public final BlockPos[] positionsToBreak;//the positions that need to be broken before this action can ensue
     public final BlockPos[] positionsToPlace;//the positions where we need to place a block before this aciton can ensue
     public final Block[] blocksToBreak;//the blocks at those positions
     public final Block[] blocksToPlace;
+
     public ActionPlaceOrBreak(BlockPos start, BlockPos end, BlockPos[] toBreak, BlockPos[] toPlace) {
         super(start, end);
         this.positionsToBreak = toBreak;
@@ -33,6 +38,7 @@ public abstract class ActionPlaceOrBreak extends Action {
             blocksToPlace[i] = Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock();
         }
     }
+
     public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
@@ -43,10 +49,12 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return sum;
     }
+
     @Override
     public String toString() {
         return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak) + " cost " + cost() + " break cost " + getTotalHardnessOfBlocksToBreak();
     }
+
     @Override
     public boolean tick() {
         //breaking first
@@ -57,6 +65,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {
                     return false;
                 }
+                switchtotool(blocksToBreak[i]);
                 MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(positionsToBreak[i])) {
                     MineBot.letGoOfLeftClick();
@@ -76,5 +85,30 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return tick0();
     }
+
+    public void switchtotool(Block b) {
+        System.out.println("b: " + b);
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        System.out.println("inv: " + Arrays.toString(inv));
+        byte best = (byte) p.inventory.currentItem;
+        System.out.println("best: " + best);
+        float value = 0;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if(inv[i]==null)
+                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
+            System.out.println(inv[i]);
+            float v = item.getStrVsBlock(b);
+            System.out.println("v: " + v);
+            if (v > value) {
+                value = v;
+                best = i;
+            }
+        }
+        System.out.println("best: " + best);
+        p.inventory.currentItem = best;
+    }
+
     protected abstract boolean tick0();
 }
