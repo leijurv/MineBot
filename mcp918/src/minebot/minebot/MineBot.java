@@ -5,6 +5,7 @@
  */
 package minebot;
 
+import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.Path;
 import net.minecraft.block.Block;
@@ -43,7 +44,9 @@ public class MineBot {
         if (currentPath != null) {
             //System.out.println("On a path");
             if (currentPath.tick()) {
+                clear();
                 if (currentPath != null && currentPath.failed) {
+                    clear();
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
                     findPathInNewThread();
                 }
@@ -146,7 +149,12 @@ public class MineBot {
         }
         if (text.startsWith("hardness")) {
             BlockPos bp = MineBot.whatAreYouLookingAt();
-            return bp==null ? "0" : (1/theWorld.getBlockState(bp).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt())) + "";
+            return bp == null ? "0" : (1 / theWorld.getBlockState(bp).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt())) + "";
+        }
+        if (text.startsWith("info")) {
+            BlockPos bp = MineBot.whatAreYouLookingAt();
+            Block block = theWorld.getBlockState(bp).getBlock();
+            return block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube();
         }
         return message;
     }
