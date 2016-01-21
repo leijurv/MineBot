@@ -27,9 +27,9 @@ public class GoalBlock implements Goal {
     }
     @Override
     public double heuristic(BlockPos pos) {
-        int xDiff = pos.getX() - this.x;
-        int yDiff = pos.getY() - this.y;
-        int zDiff = pos.getZ() - this.z;
-        return (Math.abs(xDiff) + Math.abs(yDiff) + Math.abs(zDiff)) * 5 + Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+        double xDiff = pos.getX() - this.x;
+        double yDiff = pos.getY() - this.y;
+        double zDiff = pos.getZ() - this.z;
+        return ((Math.abs(xDiff) + Math.abs(yDiff) + Math.abs(zDiff)) + Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff) / 5) * Action.WALK_ONE_BLOCK_COST;
     }
 }
