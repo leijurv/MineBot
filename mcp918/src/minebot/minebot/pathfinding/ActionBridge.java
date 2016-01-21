@@ -37,6 +37,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
     @Override
     protected boolean tick0() {
         boolean isTheBridgeBlockThere = !canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
+        System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
@@ -50,17 +51,21 @@ public class ActionBridge extends ActionPlaceOrBreak {
             System.out.println("Trying to get to " + to + " currently at " + whereAmI);
             return false;//not there yet
         } else {
+            double faceX = (to.getX() + from.getX() + 1) / 2;
+            double faceY = (to.getY() + from.getY() + 1) / 2;
+            double faceZ = (to.getZ() + from.getZ() + 1) / 2;
+            //double faceX = to.getX();
+            //double faceY = to.getY();
+            //double faceZ = to.getZ();
+            System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ);
+            MineBot.lookAtCoords(faceX, faceY, faceZ, true);
             if (whereAmI.equals(to)) {
                 MineBot.forward = false;
-                double faceX = (to.getX() + from.getX()) / 2 + 0.5;
-                double faceY = (to.getY() + from.getY()) / 2 + 0.5;
-                double faceZ = (to.getZ() + from.getZ()) / 2 + 0.5;
-                MineBot.lookAtCoords(faceX, faceY, faceZ, true);
                 System.out.println("Trying to look at " + from + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
                 MineBot.forward = true;
-                MineBot.lookAtBlock(to, false);//look at where we are walking
+                //MineBot.lookAtBlock(to, false);//look at where we are walking
                 return false;
             }
         }
