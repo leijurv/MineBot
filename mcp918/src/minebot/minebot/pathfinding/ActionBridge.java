@@ -44,10 +44,13 @@ public class ActionBridge extends ActionPlaceOrBreak {
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
             MineBot.lookAtBlock(to, false);//look at where we are walking
             MineBot.sneak = false;
+            MineBot.backward = false;
             MineBot.forward = true;//we are going forward
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
                 MineBot.forward = false;//stop walking forwards
+                MineBot.backward = false;
+                MineBot.sneak = false;
                 return true;//and we are done
             }
             System.out.println("Trying to get to " + to + " currently at " + whereAmI);
