@@ -79,7 +79,7 @@ public class Path {
         }
         BlockPos whereShouldIBe = path.get(pathPosition);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
+        BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (pathPosition == path.size() - 1) {
             System.out.println("On last path position");
             return true;
