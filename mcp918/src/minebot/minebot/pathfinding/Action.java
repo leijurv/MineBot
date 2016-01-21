@@ -6,6 +6,7 @@
 package minebot.pathfinding;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -73,20 +74,22 @@ public abstract class Action {
     /**
      * Can I walk through this block
      *
-     * @param block
+     * @param pos
      * @return
      */
-    public static boolean canWalkThrough(Block block) {//fix this. this assumes that air is the only block with no collisions, while actually there are others (e.g. torches)
-        return block.equals(Block.getBlockById(0));
+    public static boolean canWalkThrough(BlockPos pos) {//fix this. this assumes that air is the only block with no collisions, while actually there are others (e.g. torches)
+        Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        return block.isPassable(Minecraft.theMinecraft.theWorld, pos);
     }
     /**
      * Can I walk on this block without anything weird happening like me falling
      * through
      *
-     * @param block
+     * @param pos
      * @return
      */
-    public static boolean canWalkOn(Block block) {//eh
+    public static boolean canWalkOn(BlockPos pos) {//eh
+        Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
         return block.isBlockNormalCube();
     }
     /**

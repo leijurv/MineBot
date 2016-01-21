@@ -51,11 +51,11 @@ public abstract class ActionPlaceOrBreak extends Action {
     public boolean tick() {
         //breaking first
         for (int i = 0; i < blocksToBreak.length; i++) {
-            if (!canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
+            if (!canWalkThrough(positionsToBreak[i])) {
                 //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 MineBot.lookAtBlock(positionsToBreak[i], true);//look at the block we are breaking
                 MineBot.isLeftClick = true;//hold down left click
-                if (canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
+                if (canWalkThrough(positionsToBreak[i])) {
                     MineBot.letGoOfLeftClick();
                     System.out.println("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 }
@@ -64,7 +64,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         MineBot.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
         for (int i = 0; i < blocksToPlace.length; i++) {
-            if (!canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock())) {
+            if (!canWalkOn(positionsToPlace[i])) {
                 MineBot.lookAtBlock(positionsToPlace[i], true);
                 //System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
                 //one of the blocks that needs to be there isn't there

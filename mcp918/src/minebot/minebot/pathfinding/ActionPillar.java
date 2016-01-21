@@ -31,7 +31,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
         } else {
             MineBot.jumping = true;//otherwise jump
         }
-        boolean blockIsThere = canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock());
+        boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
             System.out.println("Block not there yet");
             Minecraft.theMinecraft.rightClickMouse();//constantly right click

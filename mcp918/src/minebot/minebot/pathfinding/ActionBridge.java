@@ -21,8 +21,8 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost() {
-        if (canWalkOn(blocksToPlace[0])) {//this is a walk, not a bridge
-            if (canWalkThrough(blocksToBreak[0]) && canWalkThrough(blocksToBreak[1])) {
+        if (canWalkOn(positionsToPlace[0])) {//this is a walk, not a bridge
+            if (canWalkThrough(positionsToBreak[0]) && canWalkThrough(positionsToBreak[1])) {
                 return WALK_ONE_BLOCK_COST;
             }
             //double hardness1 = blocksToBreak[0].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[0]);
@@ -37,7 +37,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {
-        boolean isTheBridgeBlockThere = !canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
+        boolean isTheBridgeBlockThere = !canWalkThrough(positionsToPlace[0]);
         //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);

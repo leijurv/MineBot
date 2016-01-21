@@ -20,7 +20,7 @@ public class ActionFall extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost() {
-        if (!canWalkOn(blocksToPlace[0])) {
+        if (!canWalkOn(positionsToPlace[0])) {
             return 10000;
         }
         return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
