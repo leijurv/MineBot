@@ -1,14 +1,704 @@
-[17:21:58] [Client thread/ERROR]: Can't find the resource index file: assets/indexes/1.8.json
-[17:21:58] [Client thread/INFO]: Setting user: Player447
-[17:21:58] [Client thread/INFO]: (Session ID is token:0:Player447)
-[17:22:04] [Client thread/INFO]: LWJGL Version: 2.9.2
-[17:22:04] [Client thread/INFO]: Reloading ResourceManager: Default
-[17:22:04] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[17:22:05] [Thread-6/INFO]: Initializing LWJGL OpenAL
-[17:22:05] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[17:22:05] [Thread-6/INFO]: OpenAL initialized.
-[17:22:05] [Sound Library Loader/INFO]: Sound engine started
-[17:22:11] [Client thread/INFO]: Created: 512x512 textures-atlas
-[17:22:15] [Client thread/INFO]: Stopping!
-[17:22:15] [Client thread/INFO]: SoundSystem shutting down...
-[17:22:15] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[09:10:31] [Client thread/ERROR]: Can't find the resource index file: assets/indexes/1.8.json
+[09:10:31] [Client thread/INFO]: Setting user: Player927
+[09:10:31] [Client thread/INFO]: (Session ID is token:0:Player927)
+[09:10:36] [Client thread/INFO]: LWJGL Version: 2.9.2
+[09:10:36] [Client thread/INFO]: Reloading ResourceManager: Default
+[09:10:37] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[09:10:37] [Thread-6/INFO]: Initializing LWJGL OpenAL
+[09:10:37] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[09:10:37] [Thread-6/INFO]: OpenAL initialized.
+[09:10:37] [Sound Library Loader/INFO]: Sound engine started
+[09:10:44] [Client thread/INFO]: Created: 512x512 textures-atlas
+[09:10:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.menu
+[09:10:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.menu
+[09:11:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.menu
+[09:11:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.menu
+[09:11:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:11:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:11:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:11:44] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:11:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:11:46] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:11:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:11:48] [Server thread/INFO]: Starting integrated minecraft server version 1.8.8
+[09:11:48] [Server thread/INFO]: Generating keypair
+[09:11:48] [Server thread/INFO]: Converting map!
+[09:11:48] [Server thread/INFO]: Scanning folders...
+[09:11:48] [Server thread/INFO]: Total conversion count is 0
+[09:11:49] [Server thread/INFO]: Preparing start region for level 0
+[09:11:50] [Server thread/INFO]: Preparing spawn area: 4%
+[09:11:51] [Server thread/INFO]: Preparing spawn area: 5%
+[09:11:52] [Server thread/INFO]: Preparing spawn area: 8%
+[09:11:53] [Server thread/INFO]: Preparing spawn area: 11%
+[09:11:54] [Server thread/INFO]: Preparing spawn area: 13%
+[09:11:55] [Server thread/INFO]: Preparing spawn area: 17%
+[09:11:56] [Server thread/INFO]: Preparing spawn area: 22%
+[09:11:57] [Server thread/INFO]: Preparing spawn area: 25%
+[09:11:58] [Server thread/INFO]: Preparing spawn area: 29%
+[09:11:59] [Server thread/INFO]: Preparing spawn area: 32%
+[09:12:00] [Server thread/INFO]: Preparing spawn area: 35%
+[09:12:01] [Server thread/INFO]: Preparing spawn area: 40%
+[09:12:02] [Server thread/INFO]: Preparing spawn area: 45%
+[09:12:03] [Server thread/INFO]: Preparing spawn area: 49%
+[09:12:04] [Server thread/INFO]: Preparing spawn area: 52%
+[09:12:05] [Server thread/INFO]: Preparing spawn area: 57%
+[09:12:06] [Server thread/INFO]: Preparing spawn area: 62%
+[09:12:07] [Server thread/INFO]: Preparing spawn area: 67%
+[09:12:08] [Server thread/INFO]: Preparing spawn area: 72%
+[09:12:09] [Server thread/INFO]: Preparing spawn area: 77%
+[09:12:10] [Server thread/INFO]: Preparing spawn area: 82%
+[09:12:11] [Server thread/INFO]: Preparing spawn area: 91%
+[09:12:13] [Server thread/INFO]: Changing view distance to 12, from 10
+[09:12:13] [Server thread/INFO]: Player927[local:E:fa3f63de] logged in with entity id 234 at (249.5, 79.0, 93.5)
+[09:12:13] [Server thread/INFO]: Player927 joined the game
+[09:12:21] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 7922ms behind, skipping 158 tick(s)
+[09:12:25] [Server thread/INFO]: <Player927> Set goal to BlockPos{x=249, y=79, z=93}
+[09:12:25] [Client thread/INFO]: [CHAT] <Player927> Set goal to BlockPos{x=249, y=79, z=93}
+[09:12:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.game.creative
+[09:12:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:33] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=244, y=79, z=91} to BlockPos{x=249, y=79, z=93}
+[09:12:33] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=244, y=79, z=91} to BlockPos{x=249, y=79, z=93}
+[09:12:33] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=244, y=79, z=91} to BlockPos{x=249, y=79, z=93}
+[09:12:33] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=244, y=79, z=91} to BlockPos{x=249, y=79, z=93}
+[09:12:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:40] [Server thread/INFO]: <Player927> Set goal to BlockPos{x=249, y=79, z=93}
+[09:12:40] [Client thread/INFO]: [CHAT] <Player927> Set goal to BlockPos{x=249, y=79, z=93}
+[09:12:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:44] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=246, y=79, z=90} to BlockPos{x=249, y=79, z=93}
+[09:12:44] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=246, y=79, z=90} to BlockPos{x=249, y=79, z=93}
+[09:12:44] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=246, y=79, z=90} to BlockPos{x=249, y=79, z=93}
+[09:12:44] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=246, y=79, z=90} to BlockPos{x=249, y=79, z=93}
+[09:12:44] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:12:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:12:53] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 22697ms behind, skipping 453 tick(s)
+[09:12:56] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 2903ms behind, skipping 58 tick(s)
+[09:12:59] [Server thread/INFO]: <Player927> Set goal to BlockPos{x=249, y=79, z=93}
+[09:12:59] [Client thread/INFO]: [CHAT] <Player927> Set goal to BlockPos{x=249, y=79, z=93}
+[09:13:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:07] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=244, y=78, z=86} to BlockPos{x=249, y=79, z=93}
+[09:13:07] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=244, y=78, z=86} to BlockPos{x=249, y=79, z=93}
+[09:13:07] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=244, y=78, z=86} to BlockPos{x=249, y=79, z=93}
+[09:13:07] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=244, y=78, z=86} to BlockPos{x=249, y=79, z=93}
+[09:13:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:13:17] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=250, y=80, z=100} to BlockPos{x=249, y=79, z=93}
+[09:13:17] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=250, y=80, z=100} to BlockPos{x=249, y=79, z=93}
+[09:13:17] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=250, y=80, z=100} to BlockPos{x=249, y=79, z=93}
+[09:13:17] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=250, y=80, z=100} to BlockPos{x=249, y=79, z=93}
+[09:13:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:13:20] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 9174ms behind, skipping 183 tick(s)
+[09:13:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:30] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=242, y=78, z=83} to BlockPos{x=249, y=79, z=93}
+[09:13:30] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=242, y=78, z=83} to BlockPos{x=249, y=79, z=93}
+[09:13:30] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=242, y=78, z=83} to BlockPos{x=249, y=79, z=93}
+[09:13:30] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=242, y=78, z=83} to BlockPos{x=249, y=79, z=93}
+[09:13:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:13:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:13:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:36] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 3072ms behind, skipping 61 tick(s)
+[09:13:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:39] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:39] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:13:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:13:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:44] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:46] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:13:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:48] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=262, y=78, z=96} to BlockPos{x=249, y=79, z=93}
+[09:13:48] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=262, y=78, z=96} to BlockPos{x=249, y=79, z=93}
+[09:13:48] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=262, y=78, z=96} to BlockPos{x=249, y=79, z=93}
+[09:13:48] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=262, y=78, z=96} to BlockPos{x=249, y=79, z=93}
+[09:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:13:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:13:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:13:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:13:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:13:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:04] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:05] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:05] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:05] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:10] [Server thread/INFO]: <Player927> unset
+[09:14:10] [Client thread/INFO]: [CHAT] <Player927> unset
+[09:14:15] [Server thread/INFO]: Player927 has just earned the achievement [Taking Inventory]
+[09:14:15] [Client thread/INFO]: [CHAT] Player927 has just earned the achievement [Taking Inventory]
+[09:14:21] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:21] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:21] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:21] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=242, y=72, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:14:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:14:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.game.creative
+[09:14:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:14:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:14:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:14:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:14:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:14:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:14:28] [Server thread/INFO]: <Player927> unset
+[09:14:28] [Client thread/INFO]: [CHAT] <Player927> unset
+[09:14:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:14:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:14:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:35] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:47] [Server thread/INFO]: [Player927: Set own game mode to Survival Mode]
+[09:14:47] [Client thread/INFO]: [CHAT] Your game mode has been updated
+[09:14:49] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=242, y=73, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:49] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=242, y=73, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:49] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=242, y=73, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:49] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=242, y=73, z=87} to BlockPos{x=249, y=79, z=93}
+[09:14:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:14:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:14:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:14:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:14:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:14:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:14:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:14:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:14:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:14:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:14:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:14:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:14:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:14:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:14:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:15:03] [Server thread/INFO]: <Player927> unset
+[09:15:03] [Client thread/INFO]: [CHAT] <Player927> unset
+[09:15:05] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=243, y=77, z=89} to BlockPos{x=249, y=79, z=93}
+[09:15:05] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=243, y=77, z=89} to BlockPos{x=249, y=79, z=93}
+[09:15:05] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=243, y=77, z=89} to BlockPos{x=249, y=79, z=93}
+[09:15:05] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=243, y=77, z=89} to BlockPos{x=249, y=79, z=93}
+[09:15:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:15:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:15:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:15:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:15:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:15:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:15:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:15:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:15:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:15:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:15:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:15:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:15:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:15:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:34] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:35] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:36] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=258, y=73, z=81} to BlockPos{x=249, y=79, z=93}
+[09:15:36] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=258, y=73, z=81} to BlockPos{x=249, y=79, z=93}
+[09:15:36] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=258, y=73, z=81} to BlockPos{x=249, y=79, z=93}
+[09:15:36] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=258, y=73, z=81} to BlockPos{x=249, y=79, z=93}
+[09:15:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:37] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:37] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:37] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:15:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:39] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:15:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:15:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:15:44] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:45] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:15:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:15:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:15:56] [Server thread/INFO]: [Player927: Set own game mode to Creative Mode]
+[09:15:56] [Client thread/INFO]: [CHAT] Your game mode has been updated
+[09:15:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:15:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:15:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:15:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:15:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:15:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:15:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:16:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:16:01] [Server thread/INFO]: <Player927> Set goal to BlockPos{x=249, y=70, z=93}
+[09:16:01] [Client thread/INFO]: [CHAT] <Player927> Set goal to BlockPos{x=249, y=70, z=93}
+[09:16:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:16:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:16:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:16:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:16:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:16:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:16:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:16:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:16:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:16:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:16:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:16:17] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=246, y=79, z=89} to BlockPos{x=249, y=70, z=93}
+[09:16:17] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=246, y=79, z=89} to BlockPos{x=249, y=70, z=93}
+[09:16:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.game.creative
+[09:16:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:16:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:16:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:16:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:16:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:16:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:16:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:16:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:16:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:16:33] [Server thread/INFO]: <Player927> unset
+[09:16:33] [Client thread/INFO]: [CHAT] <Player927> unset
+[09:16:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:16:44] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:16:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:16:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:16:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:16:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:16:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:16:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:16:53] [Server thread/INFO]: <Player927> Set goal to BlockPos{x=249, y=74, z=93}
+[09:16:53] [Client thread/INFO]: [CHAT] <Player927> Set goal to BlockPos{x=249, y=74, z=93}
+[09:16:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.say
+[09:17:00] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=253, y=78, z=87} to BlockPos{x=249, y=74, z=93}
+[09:17:00] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=253, y=78, z=87} to BlockPos{x=249, y=74, z=93}
+[09:17:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:17:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:17:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:17:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.sheep.step
+[09:18:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:game.neutral.hurt.fall.small
+[09:18:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:18:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:18:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:18:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:18:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:18:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:18:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:18:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:18:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:18:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:18:27] [Server thread/INFO]: <Player927> Set goal to BlockPos{x=253, y=74, z=87}
+[09:18:27] [Client thread/INFO]: [CHAT] <Player927> Set goal to BlockPos{x=253, y=74, z=87}
+[09:18:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:18:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:18:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:18:31] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:18:32] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:18:32] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=249, y=78, z=85} to BlockPos{x=253, y=74, z=87}
+[09:18:32] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=249, y=78, z=85} to BlockPos{x=253, y=74, z=87}
+[09:18:40] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:18:47] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:18:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:18:57] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.game.creative
+[09:19:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:19:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:19:29] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=246, y=79, z=89} to BlockPos{x=253, y=74, z=87}
+[09:19:29] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=246, y=79, z=89} to BlockPos{x=253, y=74, z=87}
+[09:19:30] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:38] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:41] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:19:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:19:59] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:19:59] [Server thread/INFO]: <Player927> unset
+[09:19:59] [Client thread/INFO]: [CHAT] <Player927> unset
+[09:20:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:00] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:02] [Server thread/INFO]: <Player927> unset
+[09:20:02] [Client thread/INFO]: [CHAT] <Player927> unset
+[09:20:02] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:03] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:20:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:20:06] [Server thread/INFO]: Saving and pausing game...
+[09:20:06] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[09:20:06] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[09:20:06] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[09:20:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:20:08] [Server thread/INFO]: Stopping server
+[09:20:08] [Server thread/INFO]: Saving players
+[09:20:08] [Server thread/INFO]: Saving worlds
+[09:20:08] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[09:20:09] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[09:20:09] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[09:20:13] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:20:15] [Server thread/INFO]: Starting integrated minecraft server version 1.8.8
+[09:20:15] [Server thread/INFO]: Generating keypair
+[09:20:15] [Server thread/INFO]: Preparing start region for level 0
+[09:20:16] [Server thread/INFO]: Preparing spawn area: 65%
+[09:20:17] [Server thread/INFO]: Changing view distance to 12, from 10
+[09:20:17] [Server thread/INFO]: Player927[local:E:ddea8285] logged in with entity id 18884 at (249.35380199173315, 78.0, 85.31714135788273)
+[09:20:17] [Server thread/INFO]: Player927 joined the game
+[09:20:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:20:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:20:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:20:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:20:24] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.stone
+[09:20:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:27] [Server thread/INFO]: <Player927> Set goal to BlockPos{x=249, y=74, z=85}
+[09:20:27] [Client thread/INFO]: [CHAT] <Player927> Set goal to BlockPos{x=249, y=74, z=85}
+[09:20:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:20:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:20:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:20:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:20:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:20:29] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:20:32] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=249, y=78, z=85} to BlockPos{x=249, y=74, z=85}
+[09:20:32] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=249, y=78, z=85} to BlockPos{x=249, y=74, z=85}
+[09:20:33] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:20:36] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:37] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:20:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:20:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:50] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:51] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:20:58] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:21:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:21:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.game.creative
+[09:21:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:21:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:21:09] [Server thread/INFO]: Saving and pausing game...
+[09:21:09] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[09:21:09] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[09:21:09] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[09:21:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:21:19] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:21:23] [Server thread/INFO]: Saving and pausing game...
+[09:21:23] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[09:21:23] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[09:21:23] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[09:22:18] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=249, y=78, z=85} to BlockPos{x=249, y=74, z=85}
+[09:22:18] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=249, y=78, z=85} to BlockPos{x=249, y=74, z=85}
+[09:22:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:22:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:22:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:22:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:22:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:22:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:22:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:22:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:22:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:22:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.say
+[09:22:48] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:22:52] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:22:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:22:53] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=241, y=78, z=86} to BlockPos{x=249, y=74, z=85}
+[09:22:53] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=241, y=78, z=86} to BlockPos{x=249, y=74, z=85}
+[09:22:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:22:53] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=241, y=78, z=86} to BlockPos{x=249, y=74, z=85}
+[09:22:53] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=241, y=78, z=86} to BlockPos{x=249, y=74, z=85}
+[09:22:53] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.pig.step
+[09:22:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:22:54] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:22:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:22:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:22:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:22:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:22:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:22:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:22:56] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:01] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:23:04] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:ambient.cave.cave
+[09:23:04] [Server thread/INFO]: [Player927: Set own game mode to Survival Mode]
+[09:23:04] [Client thread/INFO]: [CHAT] Your game mode has been updated
+[09:23:05] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:06] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:07] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:08] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:09] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:23:10] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:11] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:23:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:23:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:random.pop
+[09:23:12] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:14] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=241, y=76, z=85} to BlockPos{x=249, y=74, z=85}
+[09:23:14] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=241, y=76, z=85} to BlockPos{x=249, y=74, z=85}
+[09:23:14] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=241, y=76, z=85} to BlockPos{x=249, y=74, z=85}
+[09:23:14] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=241, y=76, z=85} to BlockPos{x=249, y=74, z=85}
+[09:23:14] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:23:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:23:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:23:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:23:15] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:16] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:17] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:18] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:20] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.gravel
+[09:23:21] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.grass
+[09:23:22] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:23:23] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:dig.gravel
+[09:23:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:mob.bat.takeoff
+[09:23:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:25] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:26] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.grass
+[09:23:27] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:28] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:29] [Server thread/INFO]: <Player927> Starting to search for path from BlockPos{x=242, y=74, z=88} to BlockPos{x=249, y=74, z=85}
+[09:23:29] [Client thread/INFO]: [CHAT] <Player927> Starting to search for path from BlockPos{x=242, y=74, z=88} to BlockPos{x=249, y=74, z=85}
+[09:23:29] [Server thread/INFO]: <Player927> Finished finding a path from BlockPos{x=242, y=74, z=88} to BlockPos{x=249, y=74, z=85}
+[09:23:29] [Client thread/INFO]: [CHAT] <Player927> Finished finding a path from BlockPos{x=242, y=74, z=88} to BlockPos{x=249, y=74, z=85}
+[09:23:37] [Server thread/INFO]: <Player927> unset
+[09:23:37] [Client thread/INFO]: [CHAT] <Player927> unset
+[09:23:42] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:43] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:step.stone
+[09:23:49] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:music.game
+[09:23:51] [Server thread/INFO]: Saving and pausing game...
+[09:23:51] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[09:23:51] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[09:23:51] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[09:23:53] [Server thread/INFO]: Saving and pausing game...
+[09:23:53] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[09:23:53] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[09:23:53] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[09:23:55] [Client thread/WARN]: Unable to play unknown soundEvent: minecraft:gui.button.press
+[09:23:56] [Server thread/INFO]: Stopping server
+[09:23:56] [Server thread/INFO]: Saving players
+[09:23:56] [Server thread/INFO]: Saving worlds
+[09:23:56] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[09:23:56] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[09:23:56] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[09:23:57] [Client thread/INFO]: Stopping!
+[09:23:57] [Client thread/INFO]: SoundSystem shutting down...
+[09:23:57] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com

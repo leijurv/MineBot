@@ -94,32 +94,35 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
-        if (message.equals("look")) {
+        String text = message;
+        if(text.charAt(0)=='/')
+            text=text.substring(1);
+        if (text.equals("look")) {
             lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
         }
-        if (message.equals("cancel")) {
+        if (text.equals("cancel")) {
             currentPath = null;
             letGoOfLeftClick();
             jumping = false;
             forward = false;
             return "unset";
         }
-        if (message.equals("st")) {
+        if (text.equals("st")) {
             System.out.println(theWorld.getBlockState(playerFeet).getBlock());
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
         }
-        if (message.equals("lac")) {
+        if (text.equals("lac")) {
             BlockPos pos = closestBlock();
             lookAtBlock(pos, true);
             return "" + pos;
         }
-        if (message.equals("setgoal")) {
+        if (text.equals("setgoal")) {
             goal = playerFeet;
             return "Set goal to " + playerFeet;
         }
-        if (message.startsWith("path")) {
+        if (text.startsWith("path")) {
             boolean stone = message.contains("stone");
             new Thread() {
                 public void run() {
