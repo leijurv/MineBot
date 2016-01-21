@@ -57,11 +57,17 @@ public class ActionBridge extends ActionPlaceOrBreak {
             //double faceX = to.getX();
             //double faceY = to.getY();
             //double faceZ = to.getZ();
+            BlockPos goalLook = new BlockPos(from.getX(), from.getY() - 1, from.getZ());
             if (whereAmI.equals(to)) {
                 System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
-                MineBot.lookAtCoords(faceX, faceY, faceZ, true);
-                MineBot.forward = false;
-                System.out.println("Trying to look at " + from + ", actually looking at" + MineBot.whatAreYouLookingAt());
+                if (MineBot.whatAreYouLookingAt().equals(goalLook)) {
+                    MineBot.lookAtCoords(faceX, faceY, faceZ, true);
+                    MineBot.forward = false;
+                } else {
+                    MineBot.forward = true;
+                    MineBot.lookAtBlock(to, false);//look at where we are walking
+                }
+                System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
                 MineBot.forward = true;
