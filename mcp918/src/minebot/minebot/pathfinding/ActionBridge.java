@@ -42,10 +42,9 @@ public class ActionBridge extends ActionPlaceOrBreak {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
-            MineBot.lookAtBlock(to, false);//look at where we are walking
             MineBot.sneak = false;
             MineBot.backward = false;
-            MineBot.forward = true;//we are going forward
+            MineBot.forward = MineBot.lookAtBlock(to, false);//we are going forward
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
                 MineBot.forward = false;//stop walking forwards
@@ -75,8 +74,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
-                MineBot.forward = true;
-                MineBot.lookAtBlock(to, false);//look at where we are walking
+                MineBot.forward = MineBot.lookAtBlock(to, false);//look at where we are walking
                 return false;
             }
         }

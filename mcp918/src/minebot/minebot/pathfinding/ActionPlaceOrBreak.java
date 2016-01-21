@@ -54,6 +54,9 @@ public abstract class ActionPlaceOrBreak extends Action {
             if (!canWalkThrough(positionsToBreak[i])) {
                 //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 MineBot.lookAtBlock(positionsToBreak[i], true);//look at the block we are breaking
+                if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {
+                    return false;
+                }
                 MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(positionsToBreak[i])) {
                     MineBot.letGoOfLeftClick();

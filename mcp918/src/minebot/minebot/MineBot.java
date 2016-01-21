@@ -23,6 +23,7 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
+    static boolean looking = false;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -51,6 +52,7 @@ public class MineBot {
                 pressTime = -10;
             }
         }
+        looking = false;
         if (currentPath != null) {
             //System.out.println("On a path");
             if (currentPath.tick()) {
@@ -63,6 +65,43 @@ public class MineBot {
                 currentPath = null;
                 System.out.println("Path done");
             }
+        }
+        if (looking) {
+            float yawDistance = Minecraft.theMinecraft.thePlayer.rotationYaw - desiredYaw;
+            System.out.println();
+            System.out.println();
+            System.out.println(yawDistance);
+            if (yawDistance > 180) {
+                yawDistance = yawDistance - 360;
+            } else {
+                if (yawDistance < -180) {
+                    yawDistance = yawDistance + 360;
+                }
+            }
+            System.out.println(yawDistance);
+            if (Math.abs(yawDistance) > (360 / 20)) {
+                yawDistance = Math.signum(yawDistance) * 360 / 20;
+            }
+            System.out.println(yawDistance);
+            Minecraft.theMinecraft.thePlayer.rotationYaw -= yawDistance;
+            System.out.println();
+            float pitchDistance = Minecraft.theMinecraft.thePlayer.rotationPitch - desiredPitch;
+            System.out.println(pitchDistance);
+            if (pitchDistance > 180) {
+                pitchDistance = pitchDistance - 360;
+            } else {
+                if (pitchDistance < -180) {
+                    pitchDistance = pitchDistance + 360;
+                }
+            }
+            System.out.println(pitchDistance);
+            if (Math.abs(pitchDistance) > (360 / 20)) {
+                pitchDistance = Math.signum(pitchDistance) * 360 / 20;
+            }
+            System.out.println(pitchDistance);
+            Minecraft.theMinecraft.thePlayer.rotationPitch -= pitchDistance;
+            System.out.println();
+            System.out.println();
         }
     }
     public static boolean wasScreen = false;
@@ -214,13 +253,15 @@ public class MineBot {
         }
         return null;
     }
+    static float desiredYaw;
+    static float desiredPitch;
     /**
      * Called by our code
      *
      * @param p
      * @param alsoDoPitch
      */
-    public static void lookAtBlock(BlockPos p, boolean alsoDoPitch) {
+    public static boolean lookAtBlock(BlockPos p, boolean alsoDoPitch) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
@@ -238,18 +279,24 @@ public class MineBot {
         double y = p.getY() + yolo;
         double z = p.getZ() + zDiff;
         //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
-        lookAtCoords(x, y, z, alsoDoPitch);
+        return lookAtCoords(x, y, z, alsoDoPitch);
     }
-    public static void lookAtCoords(double x, double y, double z, boolean alsoDoPitch) {
+    public static boolean lookAtCoords(double x, double y, double z, boolean alsoDoPitch) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         double yDiff = (thePlayer.posY + 1.62) - y;
         double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
         double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
         double pitch = Math.atan2(yDiff, dist);
-        thePlayer.rotationYaw = (float) (yaw * 180 / Math.PI);
+        desiredYaw = (float) (yaw * 180 / Math.PI);
+        looking = true;
+        float yawDist = Math.abs(desiredYaw - thePlayer.rotationYaw);
+        boolean withinRange = yawDist < 7 || yawDist > 360 - 7;
         if (alsoDoPitch) {
-            thePlayer.rotationPitch = (float) (pitch * 180 / Math.PI);
+            desiredPitch = (float) (pitch * 180 / Math.PI);
+            float pitchDist = Math.abs(desiredPitch - thePlayer.rotationPitch);
+            withinRange = withinRange && (pitchDist < 7 || pitchDist > 360 - 7);
         }
+        return withinRange;
     }
     /**
      * What block is the player looking at

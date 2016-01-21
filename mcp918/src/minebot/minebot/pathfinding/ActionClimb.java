@@ -27,9 +27,9 @@ public class ActionClimb extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {//basically just hold down W and space until we are where we want to be
-        MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);
-        MineBot.forward = true;
-        MineBot.jumping = true;
+        boolean d = MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);
+        MineBot.forward = d;
+        MineBot.jumping = d;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {

@@ -27,8 +27,7 @@ public class ActionFall extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
-        MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);
-        MineBot.forward = true;
+        MineBot.forward = MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {
