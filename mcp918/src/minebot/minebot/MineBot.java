@@ -24,6 +24,7 @@ import net.minecraft.world.World;
  */
 public class MineBot {
     static boolean looking = false;
+    static boolean lookingPitch = false;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -53,6 +54,7 @@ public class MineBot {
             }
         }
         looking = false;
+        lookingPitch = false;
         if (currentPath != null) {
             //System.out.println("On a path");
             if (currentPath.tick()) {
@@ -84,6 +86,8 @@ public class MineBot {
             }
             System.out.println(yawDistance);
             Minecraft.theMinecraft.thePlayer.rotationYaw -= yawDistance;
+        }
+        if (lookingPitch) {
             System.out.println();
             float pitchDistance = Minecraft.theMinecraft.thePlayer.rotationPitch - desiredPitch;
             System.out.println(pitchDistance);
@@ -292,6 +296,7 @@ public class MineBot {
         float yawDist = Math.abs(desiredYaw - thePlayer.rotationYaw);
         boolean withinRange = yawDist < 7 || yawDist > 360 - 7;
         if (alsoDoPitch) {
+            lookingPitch = true;
             desiredPitch = (float) (pitch * 180 / Math.PI);
             float pitchDist = Math.abs(desiredPitch - thePlayer.rotationPitch);
             withinRange = withinRange && (pitchDist < 7 || pitchDist > 360 - 7);
