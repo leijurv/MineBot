@@ -145,7 +145,7 @@ public class MineBot {
             return null;
         }
         if (text.startsWith("hardness")) {
-            return theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt()) + "";
+            return (1/theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt())) + "";
         }
         return message;
     }
