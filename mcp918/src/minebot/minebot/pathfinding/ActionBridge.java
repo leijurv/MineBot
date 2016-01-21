@@ -7,6 +7,7 @@ package minebot.pathfinding;
 
 import java.util.Objects;
 import minebot.MineBot;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -31,7 +32,10 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
-            return WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+            if (blocksToPlace[0].equals(Block.getBlockById(0))) {
+                return WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+            }
+            return 100000000;
             //System.out.println("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         }
     }
