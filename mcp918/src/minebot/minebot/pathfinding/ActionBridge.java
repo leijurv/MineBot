@@ -38,7 +38,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
         MineBot.lookAtBlock(new BlockPos(to.getX(), to.getY() + 1, to.getZ()), false);//look at where we are walking
         MineBot.forward = true;//we are going forward
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
+        BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {//if we are there
             System.out.println("Done walking to " + to);
             MineBot.forward = false;//stop walking forwards

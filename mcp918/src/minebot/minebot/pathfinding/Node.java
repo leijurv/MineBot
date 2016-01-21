@@ -17,7 +17,7 @@ public class Node implements Comparable<Node> {
     double cost;
     Node previous;
     final Goal goal;
-    final int estimatedCostToGoal;
+    final double estimatedCostToGoal;
     Action previousAction;
     public Node(BlockPos pos, Goal goal) {
         this.pos = pos;

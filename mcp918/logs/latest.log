@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [09:10:31] [Client thread/ERROR]: Can't find the resource index file: assets/indexes/1.8.json
 [09:10:31] [Client thread/INFO]: Setting user: Player927
 [09:10:31] [Client thread/INFO]: (Session ID is token:0:Player927)
@@ -702,3 +703,19 @@
 [09:23:57] [Client thread/INFO]: Stopping!
 [09:23:57] [Client thread/INFO]: SoundSystem shutting down...
 [09:23:57] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+=======
+[09:05:57] [Client thread/ERROR]: Can't find the resource index file: assets/indexes/1.8.json
+[09:05:57] [Client thread/INFO]: Setting user: Player95
+[09:05:57] [Client thread/INFO]: (Session ID is token:0:Player95)
+[09:05:59] [Client thread/INFO]: LWJGL Version: 2.9.2
+[09:06:00] [Client thread/INFO]: Reloading ResourceManager: Default
+[09:06:01] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[09:06:01] [Thread-6/INFO]: Initializing LWJGL OpenAL
+[09:06:01] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[09:06:01] [Thread-6/INFO]: OpenAL initialized.
+[09:06:01] [Sound Library Loader/INFO]: Sound engine started
+[09:06:05] [Client thread/INFO]: Created: 512x512 textures-atlas
+[09:06:07] [Client thread/INFO]: Stopping!
+[09:06:07] [Client thread/INFO]: SoundSystem shutting down...
+[09:06:07] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+>>>>>>> 50f941529f3793849217e909db9114779cdd5229

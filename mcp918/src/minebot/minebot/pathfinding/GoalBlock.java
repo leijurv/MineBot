@@ -26,7 +26,10 @@ public class GoalBlock implements Goal {
         return pos.getX() == this.x && pos.getY() == this.y && pos.getZ() == this.z;
     }
     @Override
-    public int heuristic(BlockPos pos) {
-        return Math.abs(pos.getX() - this.x) + Math.abs(pos.getY() - this.y) + Math.abs(pos.getZ() - this.z);
+    public double heuristic(BlockPos pos) {
+        int xDiff = pos.getX() - this.x;
+        int yDiff = pos.getY() - this.y;
+        int zDiff = pos.getZ() - this.z;
+        return (Math.abs(xDiff) + Math.abs(yDiff) + Math.abs(zDiff)) + Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff) / 3;
     }
 }

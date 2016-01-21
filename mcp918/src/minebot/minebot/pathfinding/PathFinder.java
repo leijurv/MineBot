@@ -28,6 +28,8 @@ public class PathFinder {
         PriorityList openList = new PriorityList();
         openList.addNode(startNode);
         int numNodes = 0;
+        long startTime = System.currentTimeMillis();
+        long timeoutTime = startTime + 20000;
         while (!openList.isEmpty()) {
             Node me = openList.removeFirst();
             BlockPos myPos = me.pos;
@@ -49,7 +51,7 @@ public class PathFinder {
                 }
             }
             numNodes++;
-            if (numNodes > 5000) {
+            if (numNodes > 5000 || System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
                 return null;
             }

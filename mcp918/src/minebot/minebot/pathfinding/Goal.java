@@ -13,5 +13,5 @@ import net.minecraft.util.BlockPos;
  */
 public interface Goal {
     public boolean isInGoal(BlockPos pos);
-    public int heuristic(BlockPos pos);
+    public double heuristic(BlockPos pos);
 }
