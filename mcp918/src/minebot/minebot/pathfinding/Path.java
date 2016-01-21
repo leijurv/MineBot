@@ -98,7 +98,6 @@ public class Path {
             System.out.println("Action done, next path");
             pathPosition++;
             System.out.println("At position " + pathPosition + " in " + path + " and actions " + actions);
-            MineBot.clear();
         }
         return false;
     }
