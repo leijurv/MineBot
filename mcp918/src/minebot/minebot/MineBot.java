@@ -95,8 +95,9 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = message;
-        if(text.charAt(0)=='/')
-            text=text.substring(1);
+        if (text.charAt(0) == '/') {
+            text = text.substring(1);
+        }
         if (text.equals("look")) {
             lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
@@ -181,19 +182,19 @@ public class MineBot {
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
         double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
-        System.out.println("min X: " + b.getBlockBoundsMinX());
-        System.out.println("max X: " + b.getBlockBoundsMaxX());
-        System.out.println("xdiff: " + xDiff);
-        System.out.println("min Y: " + b.getBlockBoundsMinY());
-        System.out.println("max Y: " + b.getBlockBoundsMaxY());
-        System.out.println("ydiff: " + yolo);
-        System.out.println("min Z: " + b.getBlockBoundsMinZ());
-        System.out.println("max Z: " + b.getBlockBoundsMaxZ());
-        System.out.println("zdiff: " + zDiff);
+        /*System.out.println("min X: " + b.getBlockBoundsMinX());
+         System.out.println("max X: " + b.getBlockBoundsMaxX());
+         System.out.println("xdiff: " + xDiff);
+         System.out.println("min Y: " + b.getBlockBoundsMinY());
+         System.out.println("max Y: " + b.getBlockBoundsMaxY());
+         System.out.println("ydiff: " + yolo);
+         System.out.println("min Z: " + b.getBlockBoundsMinZ());
+         System.out.println("max Z: " + b.getBlockBoundsMaxZ());
+         System.out.println("zdiff: " + zDiff);*/
         double x = p.getX() + xDiff;
         double z = p.getZ() + zDiff;
         double y = p.getY() + yolo;
-        System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
+        //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
         double yDiff = (thePlayer.posY + 1.62) - y;
         double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
         double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
