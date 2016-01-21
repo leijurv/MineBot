@@ -30,6 +30,6 @@ public class GoalBlock implements Goal {
         int xDiff = pos.getX() - this.x;
         int yDiff = pos.getY() - this.y;
         int zDiff = pos.getZ() - this.z;
-        return (Math.abs(xDiff) + Math.abs(yDiff) + Math.abs(zDiff)) + Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff) / 3;
+        return (Math.abs(xDiff) + Math.abs(yDiff) + Math.abs(zDiff)) + Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff) / 5;
     }
 }
