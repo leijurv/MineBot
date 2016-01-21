@@ -25,7 +25,7 @@ public class MineBot {
      * Called by minecraft.java
      */
     public static void onTick() {
-        System.out.println(isLeftClick + "," + pressTime);
+        /////////*System.out.println(isLeftClick + "," + pressTime);*/
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             return;
         }
@@ -60,7 +60,7 @@ public class MineBot {
      * @return
      */
     public static boolean getIsPressed() {
-        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime > -2;
+        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime >= -1;
     }
     /**
      * Do not question the logic. Called by Minecraft.java
