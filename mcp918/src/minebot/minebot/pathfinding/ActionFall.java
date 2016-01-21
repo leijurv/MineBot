@@ -23,7 +23,7 @@ public class ActionFall extends ActionPlaceOrBreak {
         if (!canWalkOn(blocksToPlace[0])) {
             return 10000;
         }
-        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * HARDNESS_MULTIPLIER;
+        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
