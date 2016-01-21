@@ -44,6 +44,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             MineBot.forward = false;//stop walking forwards
             return true;//and we are done
         }
+        System.out.println("Trying to get to " + to + " currently at " + whereAmI);
         return false;//not there yet
     }
 }
