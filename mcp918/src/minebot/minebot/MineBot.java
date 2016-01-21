@@ -43,6 +43,10 @@ public class MineBot {
         if (currentPath != null) {
             //System.out.println("On a path");
             if (currentPath.tick()) {
+                if (currentPath != null && currentPath.failed) {
+                    GuiScreen.sendChatMessage("Recalculating because path failed", true);
+                    findPathInNewThread();
+                }
                 currentPath = null;
                 System.out.println("Path done");
             }
@@ -136,22 +140,37 @@ public class MineBot {
             return "Set goal to " + playerFeet;
         }
         if (text.startsWith("path")) {
-            boolean stone = message.contains("stone");
-            new Thread() {
-                public void run() {
-                    PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
-                    Path path = pf.calculatePath();
-                    GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
-                    if (stone) {
-                        path.showPathInStone();
-                        return;
-                    }
-                    currentPath = path;
-                }
-            }.start();
-            return "Starting to search for path from " + playerFeet + " to " + goal;
+            //boolean stone = message.contains("stone");
+            findPathInNewThread();
+            return "";
         }
         return message;
+    }
+    public static void findPathInNewThread() {
+        new Thread() {
+            @Override
+            public void run() {
+                findPath();
+            }
+        }.start();
+    }
+    public static void findPath() {
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        World theWorld = Minecraft.theMinecraft.theWorld;
+        BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        GuiScreen.sendChatMessage("Starting to search for path from " + playerFeet + " to " + goal, true);
+        PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
+        Path path = pf.calculatePath();
+        if (path == null) {
+            GuiScreen.sendChatMessage("Unable to find path from " + playerFeet + " to " + goal, true);
+            return;
+        }
+        GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
+        /* if (stone) {
+         path.showPathInStone();
+         return;
+         }*/
+        currentPath = path;
     }
     /**
      * Give a block that's sorta close to the player, at foot level

@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -93,6 +94,7 @@ public class Path {
     int ticksAway = 0;
     static final double MAX_DISTANCE_FROM_PATH = 2;
     static final int MAX_TICKS_AWAY = 20 * 5;
+    public boolean failed = false;
     public boolean tick() {
         if (pathPosition >= path.size()) {
             MineBot.clear();
@@ -118,9 +120,11 @@ public class Path {
             ticksAway++;
             System.out.println("FAR AWAY FROM PATH FOR " + ticksAway + " TICKS. Current distance: " + distanceFromPath + ". Threshold: " + MAX_DISTANCE_FROM_PATH);
             if (ticksAway > MAX_TICKS_AWAY) {
+                GuiScreen.sendChatMessage("Too far away from path for too long, cancelling path", true);
                 System.out.println("Too many ticks");
-                pathPosition = path.size();
-                return false;
+                pathPosition = path.size() + 3;
+                failed = true;
+                return true;
             }
         } else {
             ticksAway = 0;
