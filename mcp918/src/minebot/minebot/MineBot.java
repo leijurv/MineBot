@@ -71,9 +71,9 @@ public class MineBot {
         }
         if (looking) {
             float yawDistance = Minecraft.theMinecraft.thePlayer.rotationYaw - desiredYaw;
-            System.out.println();
-            System.out.println();
-            System.out.println(yawDistance);
+            //System.out.println();
+            //System.out.println();
+            //System.out.println(yawDistance);
             if (yawDistance > 180) {
                 yawDistance = yawDistance - 360;
             } else {
@@ -81,17 +81,17 @@ public class MineBot {
                     yawDistance = yawDistance + 360;
                 }
             }
-            System.out.println(yawDistance);
+            //System.out.println(yawDistance);
             if (Math.abs(yawDistance) > (360 / 20)) {
                 yawDistance = Math.signum(yawDistance) * 360 / 20;
             }
-            System.out.println(yawDistance);
+            //System.out.println(yawDistance);
             Minecraft.theMinecraft.thePlayer.rotationYaw -= yawDistance;
         }
         if (lookingPitch) {
-            System.out.println();
+            //System.out.println();
             float pitchDistance = Minecraft.theMinecraft.thePlayer.rotationPitch - desiredPitch;
-            System.out.println(pitchDistance);
+            //System.out.println(pitchDistance);
             if (pitchDistance > 180) {
                 pitchDistance = pitchDistance - 360;
             } else {
@@ -99,14 +99,14 @@ public class MineBot {
                     pitchDistance = pitchDistance + 360;
                 }
             }
-            System.out.println(pitchDistance);
+            //System.out.println(pitchDistance);
             if (Math.abs(pitchDistance) > (360 / 20)) {
                 pitchDistance = Math.signum(pitchDistance) * 360 / 20;
             }
-            System.out.println(pitchDistance);
+            //System.out.println(pitchDistance);
             Minecraft.theMinecraft.thePlayer.rotationPitch -= pitchDistance;
-            System.out.println();
-            System.out.println();
+            //System.out.println();
+            //System.out.println();
         }
     }
     public static boolean wasScreen = false;

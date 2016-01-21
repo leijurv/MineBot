@@ -78,6 +78,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
+                System.out.println("Not there yet m9");
                 MineBot.forward = MineBot.lookAtBlock(to, false);//look at where we are walking
                 return false;
             }

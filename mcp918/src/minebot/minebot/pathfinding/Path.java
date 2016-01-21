@@ -129,6 +129,7 @@ public class Path {
         } else {
             ticksAway = 0;
         }
+        System.out.println(actions.get(pathPosition));
         if (actions.get(pathPosition).tick()) {
             System.out.println("Action done, next path");
             pathPosition++;
