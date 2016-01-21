@@ -37,7 +37,9 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
-            sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
+            sum+=blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
+            System.out.println(blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]));
+            //sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
         }
         return sum;
     }
@@ -50,7 +52,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         //breaking first
         for (int i = 0; i < blocksToBreak.length; i++) {
             if (!canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {
-                System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
+                //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 MineBot.lookAtBlock(positionsToBreak[i], true);//look at the block we are breaking
                 MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock())) {

@@ -41,7 +41,7 @@ public class MineBot {
             }
         }
         if (currentPath != null) {
-            System.out.println("On a path");
+            //System.out.println("On a path");
             if (currentPath.tick()) {
                 currentPath = null;
                 System.out.println("Path done");

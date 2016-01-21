@@ -38,7 +38,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
     @Override
     protected boolean tick0() {
         boolean isTheBridgeBlockThere = !canWalkThrough(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
-        System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
+        //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
