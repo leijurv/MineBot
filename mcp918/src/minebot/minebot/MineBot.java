@@ -54,6 +54,11 @@ public class MineBot {
     public static int pressTime = 0;
     public static boolean isLeftClick = false;
     public static boolean jumping = false;
+    public static boolean forward = false;
+    public static boolean backward = false;
+    public static boolean left = false;
+    public static boolean right = false;
+    public static boolean sneak = false;
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -82,6 +87,16 @@ public class MineBot {
         pressTime = 0;
         isLeftClick = false;
     }
+    public static void clear() {
+        currentPath = null;
+        letGoOfLeftClick();
+        jumping = false;
+        forward = false;
+        left = false;
+        right = false;
+        backward = false;
+        sneak = false;
+    }
     /**
      * Called by GuiScreen.java
      *
@@ -103,10 +118,7 @@ public class MineBot {
             return null;
         }
         if (text.equals("cancel")) {
-            currentPath = null;
-            letGoOfLeftClick();
-            jumping = false;
-            forward = false;
+            clear();
             return "unset";
         }
         if (text.equals("st")) {
@@ -160,15 +172,6 @@ public class MineBot {
             }
         }
         return null;
-    }
-    public static boolean forward = false;
-    /**
-     * Called by minecraft.java
-     *
-     * @return
-     */
-    public static boolean shouldIBeGoingForward() {
-        return forward;
     }
     /**
      * Called by our code

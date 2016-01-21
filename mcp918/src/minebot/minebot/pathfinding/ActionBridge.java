@@ -43,6 +43,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
             MineBot.lookAtBlock(to, false);//look at where we are walking
+            MineBot.sneak = false;
             MineBot.forward = true;//we are going forward
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
@@ -52,6 +53,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             System.out.println("Trying to get to " + to + " currently at " + whereAmI);
             return false;//not there yet
         } else {
+            MineBot.sneak = true;
             double faceX = (to.getX() + from.getX() + 1.0D) * 0.5D;
             double faceY = (to.getY() + from.getY() - 1.0D) * 0.5D;
             double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
@@ -61,13 +63,12 @@ public class ActionBridge extends ActionPlaceOrBreak {
             BlockPos goalLook = new BlockPos(from.getX(), from.getY() - 1, from.getZ());
             if (whereAmI.equals(to)) {
                 System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
+                MineBot.lookAtCoords(faceX, faceY, faceZ, true);
                 if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
-                    MineBot.lookAtCoords(faceX, faceY, faceZ, true);
-                    MineBot.forward = false;
-                } else {
-                    MineBot.forward = true;
-                    MineBot.lookAtBlock(to, false);//look at where we are walking
+                    Minecraft.theMinecraft.rightClickMouse();
                 }
+                MineBot.forward = false;
+                MineBot.backward = true;
                 System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {

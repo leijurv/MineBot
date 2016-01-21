@@ -8,6 +8,7 @@ package minebot.pathfinding;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -75,6 +76,7 @@ public class Path {
     int pathPosition = 0;
     public boolean tick() {
         if (pathPosition >= path.size()) {
+            MineBot.clear();
             return true;
         }
         BlockPos whereShouldIBe = path.get(pathPosition);
@@ -82,6 +84,7 @@ public class Path {
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (pathPosition == path.size() - 1) {
             System.out.println("On last path position");
+            MineBot.clear();
             return true;
         }
         if (!whereShouldIBe.equals(whereAmI)) {
@@ -95,6 +98,7 @@ public class Path {
             System.out.println("Action done, next path");
             pathPosition++;
             System.out.println("At position " + pathPosition + " in " + path + " and actions " + actions);
+            MineBot.clear();
         }
         return false;
     }
