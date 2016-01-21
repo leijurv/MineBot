@@ -1,0 +1,74 @@
+---- Minecraft Crash Report ----
+// You're mean.
+
+Time: 1/21/16 12:45 PM
+Description: Unexpected error
+
+java.lang.NullPointerException: Unexpected error
+	at minebot.MineBot.onTick(MineBot.java:46)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1362)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:900)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:420)
+	at net.minecraft.client.main.Main.main(Main.java:113)
+	at minebot.Autorun.start(Autorun.java:36)
+	at minebot.Autorun.main(Autorun.java:23)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at minebot.MineBot.onTick(MineBot.java:46)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['Player40'/89, l='MpServer', x=292.32, y=16.00, z=-513.51]]
+	Chunk stats: MultiplayerChunkCache: 625, 625
+	Level seed: 0
+	Level generator: ID 01 - flat, ver 0. Features enabled: false
+	Level generator options: 
+	Level spawn location: 288.00,4.00,-586.00 - World: (288,4,-586), Chunk: (at 0,0,6 in 18,-37; contains blocks 288,0,-592 to 303,255,-577), Region: (0,-2; contains chunks 0,-64 to 31,-33, blocks 0,0,-1024 to 511,255,-513)
+	Level time: 31115 game time, 3285 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: true), thunder time: 0 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+	Forced entities: 50 total; [EntityRabbit['Rabbit'/13, l='MpServer', x=210.13, y=4.00, z=-573.69], EntityChicken['Chicken'/14, l='MpServer', x=224.34, y=4.00, z=-511.72], EntityVillager['Villager'/16, l='MpServer', x=223.50, y=5.00, z=-488.25], EntityVillager['Villager'/17, l='MpServer', x=223.53, y=5.00, z=-487.09], EntityChicken['Chicken'/19, l='MpServer', x=231.66, y=4.00, z=-586.56], EntitySheep['Sheep'/20, l='MpServer', x=233.91, y=4.00, z=-567.94], EntityChicken['Chicken'/21, l='MpServer', x=236.13, y=4.00, z=-503.75], EntityVillager['Villager'/23, l='MpServer', x=245.31, y=4.00, z=-496.44], EntityVillager['Villager'/24, l='MpServer', x=239.72, y=4.00, z=-487.28], EntityChicken['Chicken'/25, l='MpServer', x=239.72, y=4.00, z=-494.84], EntityVillager['Villager'/26, l='MpServer', x=237.50, y=5.00, z=-479.09], EntityChicken['Chicken'/27, l='MpServer', x=245.34, y=4.00, z=-572.47], EntityItem['item.item.egg'/28, l='MpServer', x=246.09, y=4.00, z=-573.25], EntityChicken['Chicken'/29, l='MpServer', x=251.53, y=4.00, z=-554.41], EntityItem['item.item.egg'/30, l='MpServer', x=254.00, y=4.00, z=-548.69], EntityVillager['Villager'/31, l='MpServer', x=251.78, y=5.00, z=-504.44], EntityVillager['Villager'/32, l='MpServer', x=245.38, y=4.00, z=-483.47], EntityVillager['Villager'/33, l='MpServer', x=241.56, y=4.00, z=-494.19], EntityVillager['Villager'/34, l='MpServer', x=254.63, y=4.00, z=-483.75], EntityVillager['Villager'/35, l='MpServer', x=247.50, y=5.00, z=-479.09], EntitySheep['Sheep'/39, l='MpServer', x=261.22, y=4.00, z=-587.28], EntityVillager['Villager'/40, l='MpServer', x=274.19, y=4.00, z=-475.69], EntityVillager['Villager'/41, l='MpServer', x=267.78, y=4.00, z=-491.53], EntityVillager['Villager'/42, l='MpServer', x=262.78, y=4.00, z=-476.34], EntityVillager['Villager'/43, l='MpServer', x=267.66, y=4.00, z=-489.00], EntityVillager['Villager'/44, l='MpServer', x=263.41, y=4.00, z=-479.16], EntityVillager['Villager'/45, l='MpServer', x=267.72, y=4.00, z=-445.47], EntityVillager['Villager'/51, l='MpServer', x=264.81, y=4.00, z=-479.63], EntityVillager['Villager'/52, l='MpServer', x=277.22, y=4.00, z=-498.38], EntityVillager['Villager'/53, l='MpServer', x=268.13, y=4.00, z=-490.47], EntityVillager['Villager'/54, l='MpServer', x=289.14, y=6.01, z=-491.88], EntityVillager['Villager'/55, l='MpServer', x=291.03, y=5.00, z=-495.50], EntityVillager['Villager'/56, l='MpServer', x=291.41, y=4.00, z=-488.97], EntityVillager['Villager'/57, l='MpServer', x=293.50, y=5.00, z=-496.84], EntityVillager['Villager'/58, l='MpServer', x=289.48, y=6.00, z=-491.02], EntitySheep['Sheep'/59, l='MpServer', x=275.19, y=5.00, z=-479.19], EntityPig['Pig'/60, l='MpServer', x=272.38, y=4.00, z=-447.19], EntitySheep['Sheep'/62, l='MpServer', x=302.78, y=4.00, z=-583.81], EntityItem['item.tile.dirt.default'/65, l='MpServer', x=290.25, y=4.00, z=-515.28], EntityVillager['Villager'/71, l='MpServer', x=285.78, y=4.00, z=-470.44], EntityVillager['Villager'/72, l='MpServer', x=297.25, y=5.00, z=-468.72], EntityVillager['Villager'/73, l='MpServer', x=297.69, y=5.00, z=-463.03], EntitySheep['Sheep'/76, l='MpServer', x=306.31, y=4.00, z=-577.25], EntityVillager['Villager'/77, l='MpServer', x=300.63, y=4.00, z=-473.75], EntityVillager['Villager'/78, l='MpServer', x=318.63, y=4.00, z=-480.25], EntitySheep['Sheep'/80, l='MpServer', x=327.84, y=4.00, z=-515.06], EntitySheep['Sheep'/81, l='MpServer', x=323.78, y=4.00, z=-517.69], EntitySheep['Sheep'/82, l='MpServer', x=317.06, y=4.00, z=-495.09], EntityPlayerSP['Player40'/89, l='MpServer', x=292.32, y=16.00, z=-513.51], EntityItem['item.item.egg'/279273, l='MpServer', x=239.66, y=4.00, z=-495.38]]
+	Retry entities: 0 total; []
+	Server brand: vanilla
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:380)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:1996)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:439)
+	at net.minecraft.client.main.Main.main(Main.java:113)
+	at minebot.Autorun.start(Autorun.java:36)
+	at minebot.Autorun.main(Autorun.java:23)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.5
+	Java Version: 1.8.0_45, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 274349816 bytes (261 MB) / 825753600 bytes (787 MB) up to 1908932608 bytes (1820 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	Launched Version: mcp
+	LWJGL: 2.9.2
+	OpenGL: Intel HD Graphics 4000 OpenGL Engine GL version 2.1 INTEL-10.6.33, Intel Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because ARB_framebuffer_object is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 4x Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz

@@ -43,7 +43,7 @@ public class MineBot {
         if (currentPath != null) {
             System.out.println("On a path");
             if (currentPath.tick()) {
-                if (currentPath.failed) {
+                if (currentPath != null && currentPath.failed) {
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
                     findPathInNewThread();
                 }
