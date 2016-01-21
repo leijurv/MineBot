@@ -23,7 +23,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
         if (!canWalkOn(blocksToPlace[0])) {
             return 10000;
         }
-        return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * 10;
+        return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak() * HARDNESS_MULTIPLIER;
     }
     @Override
     protected boolean tick0() {//basically just hold down W and space until we are where we want to be

@@ -16,6 +16,7 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class ActionPlaceOrBreak extends Action {
+    public final double HARDNESS_MULTIPLIER = 10;
     public final BlockPos[] positionsToBreak;//the positions that need to be broken before this action can ensue
     public final BlockPos[] positionsToPlace;//the positions where we need to place a block before this aciton can ensue
     public final Block[] blocksToBreak;//the blocks at those positions
