@@ -32,7 +32,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
             MineBot.jumping = true;//otherwise jump
         }
         Minecraft.theMinecraft.rightClickMouse();//constantly right click
-        BlockPos whereAmI = new BlockPos((int) thePlayer.posX, (int) thePlayer.posY, (int) thePlayer.posZ);
+        BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to) && canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock())) {//if we are at our goal and the block below us is placed
             System.out.println("Done pillaring to " + to);
             MineBot.jumping = false;//stop jumping
