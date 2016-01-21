@@ -177,7 +177,6 @@ public class MineBot {
      * @param alsoDoPitch
      */
     public static void lookAtBlock(BlockPos p, boolean alsoDoPitch) {
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
@@ -192,9 +191,13 @@ public class MineBot {
          System.out.println("max Z: " + b.getBlockBoundsMaxZ());
          System.out.println("zdiff: " + zDiff);*/
         double x = p.getX() + xDiff;
-        double z = p.getZ() + zDiff;
         double y = p.getY() + yolo;
+        double z = p.getZ() + zDiff;
         //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
+        lookAtCoords(x, y, z, alsoDoPitch);
+    }
+    public static void lookAtCoords(double x, double y, double z, boolean alsoDoPitch) {
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         double yDiff = (thePlayer.posY + 1.62) - y;
         double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
         double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
