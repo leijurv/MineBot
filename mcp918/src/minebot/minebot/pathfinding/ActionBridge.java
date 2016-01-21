@@ -51,9 +51,9 @@ public class ActionBridge extends ActionPlaceOrBreak {
             System.out.println("Trying to get to " + to + " currently at " + whereAmI);
             return false;//not there yet
         } else {
-            double faceX = (to.getX() + from.getX() + 1) / 2;
-            double faceY = (to.getY() + from.getY() + 1) / 2;
-            double faceZ = (to.getZ() + from.getZ() + 1) / 2;
+            double faceX = (to.getX() + from.getX() + 1.0D) * 0.5D;
+            double faceY = (to.getY() + from.getY() + 1.0D) * 0.5D;
+            double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
             //double faceX = to.getX();
             //double faceY = to.getY();
             //double faceZ = to.getZ();
