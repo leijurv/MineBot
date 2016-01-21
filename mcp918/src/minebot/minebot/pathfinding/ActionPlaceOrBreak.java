@@ -64,7 +64,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         for (int i = 0; i < blocksToPlace.length; i++) {
             if (!canWalkOn(Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock())) {
                 MineBot.lookAtBlock(positionsToPlace[i], true);
-                System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
+                //System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
                 //one of the blocks that needs to be there isn't there
                 //so basically someone mined out our path from under us
             }

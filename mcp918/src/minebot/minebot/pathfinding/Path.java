@@ -74,6 +74,25 @@ public class Path {
         }
     }
     int pathPosition = 0;
+    public double howFarAmIFromThePath(double x, double y, double z) {
+        double best = -1;
+        for (BlockPos pos : path) {
+            double dist = distance(x, y, z, pos);
+            if (dist < best || best == -1) {
+                best = dist;
+            }
+        }
+        return best;
+    }
+    public double distance(double x, double y, double z, BlockPos pos) {
+        double xdiff = x - (pos.getX() + 0.5D);
+        double ydiff = y - (pos.getY() + 0.5D);
+        double zdiff = z - (pos.getZ() + 0.5D);
+        return Math.sqrt(xdiff * xdiff + ydiff * ydiff + zdiff * zdiff);
+    }
+    int ticksAway = 0;
+    static final double MAX_DISTANCE_FROM_PATH = 2;
+    static final int MAX_TICKS_AWAY = 20 * 5;
     public boolean tick() {
         if (pathPosition >= path.size()) {
             MineBot.clear();
@@ -93,6 +112,18 @@ public class Path {
              System.out.println("Hey I'm on the next one");
              pathPosition++;
              }*/
+        }
+        double distanceFromPath = howFarAmIFromThePath(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        if (distanceFromPath > MAX_DISTANCE_FROM_PATH) {
+            ticksAway++;
+            System.out.println("FAR AWAY FROM PATH FOR " + ticksAway + " TICKS. Current distance: " + distanceFromPath + ". Threshold: " + MAX_DISTANCE_FROM_PATH);
+            if (ticksAway > MAX_TICKS_AWAY) {
+                System.out.println("Too many ticks");
+                pathPosition = path.size();
+                return false;
+            }
+        } else {
+            ticksAway = 0;
         }
         if (actions.get(pathPosition).tick()) {
             System.out.println("Action done, next path");
