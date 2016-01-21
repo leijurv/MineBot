@@ -16,7 +16,7 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class ActionPlaceOrBreak extends Action {
-    public static final double HARDNESS_MULTIPLIER = 10;
+    public static final double HARDNESS_MULTIPLIER = 50;
     public final BlockPos[] positionsToBreak;//the positions that need to be broken before this action can ensue
     public final BlockPos[] positionsToPlace;//the positions where we need to place a block before this aciton can ensue
     public final Block[] blocksToBreak;//the blocks at those positions
@@ -37,7 +37,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
-            sum+=blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
+            sum += blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
             System.out.println(blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]));
             //sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
         }
