@@ -24,7 +24,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {
-        MineBot.lookAtBlock(new BlockPos(from.getX(), from.getY() - 1, from.getZ()), true);
+        MineBot.lookAtBlock(positionsToPlace[0], true);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         if (thePlayer.posY >= to.getY()) {//if our Y coordinate is above our goal, stop jumping
             MineBot.jumping = false;
