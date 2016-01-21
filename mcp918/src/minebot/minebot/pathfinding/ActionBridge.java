@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding;
 
+import java.util.Objects;
 import minebot.MineBot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
