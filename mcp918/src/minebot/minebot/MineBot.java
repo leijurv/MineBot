@@ -145,7 +145,8 @@ public class MineBot {
             return null;
         }
         if (text.startsWith("hardness")) {
-            return (1/theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt())) + "";
+            BlockPos bp = MineBot.whatAreYouLookingAt();
+            return bp==null ? "0" : (1/theWorld.getBlockState(bp).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt())) + "";
         }
         return message;
     }
