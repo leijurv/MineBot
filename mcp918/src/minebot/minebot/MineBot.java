@@ -133,7 +133,7 @@ public class MineBot {
         if (text.equals("lac")) {
             BlockPos pos = closestBlock();
             lookAtBlock(pos, true);
-            return "" + pos;
+            return pos.toString();
         }
         if (text.equals("setgoal")) {
             goal = playerFeet;
@@ -142,7 +142,10 @@ public class MineBot {
         if (text.startsWith("path")) {
             //boolean stone = message.contains("stone");
             findPathInNewThread();
-            return "";
+            return null;
+        }
+        if (text.startsWith("hardness")) {
+            return theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt()) + "";
         }
         return message;
     }

@@ -37,7 +37,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
-            sum+=blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
+            sum+=1/(blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]));
             System.out.println(blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]));
             //sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
         }
