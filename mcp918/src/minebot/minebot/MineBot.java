@@ -283,6 +283,7 @@ public class MineBot {
      *
      * @param p
      * @param alsoDoPitch
+     * @return lookAtCoords(x, y, z, alsoDoPitch)
      */
     public static boolean lookAtBlock(BlockPos p, boolean alsoDoPitch) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();

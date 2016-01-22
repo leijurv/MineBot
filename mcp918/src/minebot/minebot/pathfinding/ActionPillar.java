@@ -28,11 +28,8 @@ public class ActionPillar extends ActionPlaceOrBreak {
             return false;
         }
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        if (thePlayer.posY >= to.getY()) {//if our Y coordinate is above our goal, stop jumping
-            MineBot.jumping = false;
-        } else {
-            MineBot.jumping = true;//otherwise jump
-        }
+        MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
+        //otherwise jump
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
             System.out.println("Block not there yet");
