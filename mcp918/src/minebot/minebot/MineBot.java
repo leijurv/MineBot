@@ -67,13 +67,14 @@ public class MineBot {
                 }
                 currentPath = null;
                 GuiScreen.sendChatMessage("Done", true);
-            }
-            EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-            World theWorld = Minecraft.theMinecraft.theWorld;
-            BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-            if (Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
-                System.out.println("Jumping because in water");
-                jumping = true;
+            } else {
+                EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+                World theWorld = Minecraft.theMinecraft.theWorld;
+                BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+                if (Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
+                    System.out.println("Jumping because in water");
+                    jumping = true;
+                }
             }
         }
         if (looking) {
