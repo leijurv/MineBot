@@ -64,15 +64,27 @@ public class MineBot {
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
-                    findPathInNewThread();
+                    findPathInNewThread(playerFeet);
                 } else {
                     clearPath();
                 }
                 currentPath = null;
-                GuiScreen.sendChatMessage("Done", true);
-                if (!new GoalBlock(goal).isInGoal(playerFeet)) {
-                    GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                    findPathInNewThread();
+                if (new GoalBlock(goal).isInGoal(playerFeet)) {
+                    GuiScreen.sendChatMessage("All done", true);
+                    nextPath = null;
+                } else {
+                    GuiScreen.sendChatMessage("Done with segment", true);
+                    if (nextPath != null) {
+                        currentPath = nextPath;
+                        nextPath = null;
+                        GuiScreen.sendChatMessage("Going onto next", true);
+                        if (!currentPath.goal.isInGoal(currentPath.end)) {
+                            planAhead();
+                        }
+                    } else {
+                        GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
+                        findPathInNewThread(playerFeet);
+                    }
                 }
             } else {
                 if (Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
@@ -126,6 +138,7 @@ public class MineBot {
     }
     public static boolean wasScreen = false;
     static Path currentPath = null;
+    static Path nextPath = null;
     static BlockPos goal = null;
     public static int pressTime = 0;
     public static boolean isLeftClick = false;
@@ -197,6 +210,7 @@ public class MineBot {
             return null;
         }
         if (text.equals("cancel")) {
+            nextPath = null;
             clearPath();
             return "unset";
         }
@@ -216,7 +230,7 @@ public class MineBot {
         }
         if (text.startsWith("path")) {
             //boolean stone = message.contains("stone");
-            findPathInNewThread();
+            findPathInNewThread(playerFeet);
             return null;
         }
         if (text.startsWith("hardness")) {
@@ -230,31 +244,38 @@ public class MineBot {
         }
         return message;
     }
-    public static void findPathInNewThread() {
+    public static void findPathInNewThread(BlockPos playerFeet) {
         new Thread() {
             @Override
             public void run() {
-                findPath();
+                currentPath = findPath(playerFeet);
+                if (!currentPath.goal.isInGoal(currentPath.end)) {
+                    GuiScreen.sendChatMessage("I couldn't find that path, but I'm going to get as close as I can", true);
+                    planAhead();
+                } else {
+                    GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
+                }
             }
         }.start();
     }
-    public static void findPath() {
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        World theWorld = Minecraft.theMinecraft.theWorld;
-        BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+    public static void planAhead() {
+        new Thread() {
+            @Override
+            public void run() {
+                GuiScreen.sendChatMessage("Planning ahead", true);
+                nextPath = findPath(currentPath.end);
+            }
+        }.start();
+    }
+    public static Path findPath(BlockPos playerFeet) {
         GuiScreen.sendChatMessage("Starting to search for path from " + playerFeet + " to " + goal, true);
         PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
         Path path = pf.calculatePath();
-        if (!path.goal.isInGoal(path.end)) {
-            GuiScreen.sendChatMessage("I couldn't find that path, but I'm going to get as close as I can", true);
-        } else {
-            GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
-        }
+        return path;
         /* if (stone) {
          path.showPathInStone();
          return;
          }*/
-        currentPath = path;
     }
     /**
      * Give a block that's sorta close to the player, at foot level
