@@ -118,6 +118,7 @@ public class MineBot {
                     } else {
                         desiredPitch--;
                     }
+                    lookingPitch = true;
                 }
             }
         }
