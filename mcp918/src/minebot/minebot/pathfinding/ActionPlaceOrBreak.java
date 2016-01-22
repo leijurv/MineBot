@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import minebot.MineBot;
@@ -21,10 +22,12 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class ActionPlaceOrBreak extends Action {
+
     public final BlockPos[] positionsToBreak;//the positions that need to be broken before this action can ensue
     public final BlockPos[] positionsToPlace;//the positions where we need to place a block before this aciton can ensue
     public final Block[] blocksToBreak;//the blocks at those positions
     public final Block[] blocksToPlace;
+
     public ActionPlaceOrBreak(BlockPos start, BlockPos end, BlockPos[] toBreak, BlockPos[] toPlace) {
         super(start, end);
         this.positionsToBreak = toBreak;
@@ -38,6 +41,7 @@ public abstract class ActionPlaceOrBreak extends Action {
             blocksToPlace[i] = Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock();
         }
     }
+
     public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
@@ -49,10 +53,16 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return sum;
     }
+
+    public double getTotalHardnessOfBlocksToBreak(ArrayList<Item> tools, ArrayList<Byte> slots) {
+        return getTotalHardnessOfBlocksToBreak();
+    }
+
     @Override
     public String toString() {
         return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak) + " cost " + cost() + " break cost " + getTotalHardnessOfBlocksToBreak();
     }
+
     @Override
     public boolean tick() {
         //breaking first
@@ -85,6 +95,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         return tick0();
     }
     final List<Item> acceptable = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
+
     public void switchtothrowaway() {
         //System.out.println("b: " + b);
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
@@ -104,21 +115,25 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
     }
+
     public void switchtotool(Block b) {
+        ToolSet ts = new ToolSet();
+        this.switchtotool(b, ts.tools, ts.slots);
+    }
+
+    public void switchtotool(Block b, ArrayList<Item> tools, ArrayList<Byte> slots) {
         //System.out.println("b: " + b);
-        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
-        ItemStack[] inv = p.inventory.mainInventory;
-        //System.out.println("inv: " + Arrays.toString(inv));
-        byte best = (byte) p.inventory.currentItem;
+
+        byte best = 0;
         //System.out.println("best: " + best);
         float value = 0;
-        for (byte i = 0; i < 9; i++) {
-            ItemStack item = inv[i];
-            if (inv[i] == null) {
-                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
+        for (byte i = 0; i < tools.size(); i++) {
+            Item item = tools.get(i);
+            if (item == null) {
+                item = Item.getByNameOrId("minecraft:apple");
             }
             //System.out.println(inv[i]);
-            float v = item.getStrVsBlock(b);
+            float v = item.getStrVsBlock(new ItemStack(item), b);
             //System.out.println("v: " + v);
             if (v > value) {
                 value = v;
@@ -126,7 +141,34 @@ public abstract class ActionPlaceOrBreak extends Action {
             }
         }
         //System.out.println("best: " + best);
-        p.inventory.currentItem = best;
+        Minecraft.theMinecraft.thePlayer.inventory.currentItem = slots.get(best);
+
     }
+
+    class ToolSet {
+        public ArrayList<Item> tools;
+        public ArrayList<Byte> slots;
+
+        ToolSet(ArrayList<Item> tools, ArrayList<Byte> slots) {
+            this.tools = tools;
+            this.slots = slots;
+        }
+        ToolSet() {
+            EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+            ItemStack[] inv = p.inventory.mainInventory;
+            tools = new ArrayList<Item>();
+            slots = new ArrayList<Byte>();
+            //System.out.println("inv: " + Arrays.toString(inv));
+            boolean fnull = false;
+            for (byte i = 0; i < 9; i++) {
+                if (!fnull || (inv[i] != null && inv[i].getItem().isItemTool(null))) {
+                    tools.add(inv[i] != null ? inv[i].getItem() : null);
+                    slots.add(i);
+                    fnull |= inv[i] == null || (!inv[i].getItem().isDamageable());
+                }
+            }
+        }
+    }
+
     protected abstract boolean tick0();
 }
