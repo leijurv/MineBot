@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 public class MineBot {
     static boolean looking = false;
     static boolean lookingPitch = false;
+    static boolean isThereAnythingInProgress = false;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -279,13 +280,19 @@ public class MineBot {
         new Thread() {
             @Override
             public void run() {
+                if (isThereAnythingInProgress) {
+                    return;
+                }
+                isThereAnythingInProgress = true;
                 GuiScreen.sendChatMessage("Starting to search for path from " + playerFeet + " to " + goal, true);
                 currentPath = findPath(playerFeet);
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
                     GuiScreen.sendChatMessage("I couldn't find that path, but I'm going to get as close as I can", true);
+                    isThereAnythingInProgress = false;
                     planAhead();
                 } else {
                     GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
+                    isThereAnythingInProgress = false;
                 }
             }
         }.start();
@@ -294,6 +301,10 @@ public class MineBot {
         new Thread() {
             @Override
             public void run() {
+                if (isThereAnythingInProgress) {
+                    return;
+                }
+                isThereAnythingInProgress = true;
                 GuiScreen.sendChatMessage("Planning ahead", true);
                 calculatingNext = true;
                 Path path = findPath(currentPath.end);
@@ -305,6 +316,7 @@ public class MineBot {
                     //planAhead();
                 }
                 calculatingNext = false;
+                isThereAnythingInProgress = false;
             }
         }.start();
     }
