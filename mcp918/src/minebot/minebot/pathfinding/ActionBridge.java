@@ -39,14 +39,24 @@ public class ActionBridge extends ActionPlaceOrBreak {
             //System.out.println("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         }
     }
+    boolean wasTheBridgeBlockAlwaysThere = true;
+    Boolean oneInTen = null;
     @Override
     protected boolean tick0() {
+        if (oneInTen == null) {
+            oneInTen = System.currentTimeMillis() % 10 == 0;
+        }
         boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]);
         //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
-            MineBot.moveTowardsBlock(to);
+            if (oneInTen && wasTheBridgeBlockAlwaysThere) {
+                MineBot.lookAtBlock(to, false);
+                MineBot.forward = true;
+            } else {
+                MineBot.moveTowardsBlock(to);
+            }
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
                 return true;//and we are done
@@ -54,6 +64,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             System.out.println("Trying to get to " + to + " currently at " + whereAmI);
             return false;//not there yet
         } else {
+            wasTheBridgeBlockAlwaysThere = false;
             MineBot.sneak = true;
             double faceX = (to.getX() + from.getX() + 1.0D) * 0.5D;
             double faceY = (to.getY() + from.getY() - 1.0D) * 0.5D;
