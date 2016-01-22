@@ -21,7 +21,7 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public class Path {
-    final BlockPos start;
+    public final BlockPos start;
     public final BlockPos end;
     public final Goal goal;
     final ArrayList<BlockPos> path;

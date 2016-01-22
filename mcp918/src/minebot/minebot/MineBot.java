@@ -71,12 +71,10 @@ public class MineBot {
             BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
             if (currentPath.tick()) {
                 if (currentPath != null && currentPath.failed) {
-                    GuiScreen.sendChatMessage("I think this path failed", true);
                     clearPath();
-                    if (nextPath == null && !calculatingNext) {
-                        GuiScreen.sendChatMessage("Recalculating because path failed", true);
-                        findPathInNewThread(playerFeet);
-                    }
+                    GuiScreen.sendChatMessage("Recalculating because path failed", true);
+                    nextPath = null;
+                    findPathInNewThread(playerFeet);
                 } else {
                     clearPath();
                 }
@@ -93,9 +91,15 @@ public class MineBot {
                         } else {
                             currentPath = nextPath;
                             nextPath = null;
-                            GuiScreen.sendChatMessage("Going onto next", true);
-                            if (!currentPath.goal.isInGoal(currentPath.end)) {
-                                planAhead();
+                            if (!currentPath.start.equals(playerFeet)) {
+                                GuiScreen.sendChatMessage("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
+                                currentPath = null;
+                                findPathInNewThread(playerFeet);
+                            } else {
+                                GuiScreen.sendChatMessage("Going onto next", true);
+                                if (!currentPath.goal.isInGoal(currentPath.end)) {
+                                    planAhead();
+                                }
                             }
                         }
                     } else {
