@@ -38,7 +38,10 @@ public class MineBot {
         long start = System.currentTimeMillis();
         onTick1();
         long end = System.currentTimeMillis();
-        System.out.println("Tick took " + (end - start) + "ms");
+        long time = end - start;
+        if (time > 3) {
+            System.out.println("Tick took " + time + "ms");
+        }
     }
     /**
      * Called by minecraft.java
@@ -68,8 +71,9 @@ public class MineBot {
             BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
             if (currentPath.tick()) {
                 if (currentPath != null && currentPath.failed) {
+                    GuiScreen.sendChatMessage("I think this path failed", true);
                     clearPath();
-                    if (nextPath == null) {
+                    if (nextPath == null && !calculatingNext) {
                         GuiScreen.sendChatMessage("Recalculating because path failed", true);
                         findPathInNewThread(playerFeet);
                     }
@@ -82,12 +86,17 @@ public class MineBot {
                     nextPath = null;
                 } else {
                     GuiScreen.sendChatMessage("Done with segment", true);
-                    if (nextPath != null) {
-                        currentPath = nextPath;
-                        nextPath = null;
-                        GuiScreen.sendChatMessage("Going onto next", true);
-                        if (!currentPath.goal.isInGoal(currentPath.end)) {
-                            planAhead();
+                    if (nextPath != null || calculatingNext) {
+                        if (calculatingNext) {
+                            calculatingNext = false;
+                            GuiScreen.sendChatMessage("Patiently waiting to finish", true);
+                        } else {
+                            currentPath = nextPath;
+                            nextPath = null;
+                            GuiScreen.sendChatMessage("Going onto next", true);
+                            if (!currentPath.goal.isInGoal(currentPath.end)) {
+                                planAhead();
+                            }
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
@@ -145,6 +154,7 @@ public class MineBot {
         }
     }
     public static boolean wasScreen = false;
+    public static boolean calculatingNext = false;
     static Path currentPath = null;
     static Path nextPath = null;
     static BlockPos goal = null;
@@ -256,6 +266,7 @@ public class MineBot {
         new Thread() {
             @Override
             public void run() {
+                GuiScreen.sendChatMessage("Starting to search for path from " + playerFeet + " to " + goal, true);
                 currentPath = findPath(playerFeet);
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
                     GuiScreen.sendChatMessage("I couldn't find that path, but I'm going to get as close as I can", true);
@@ -271,14 +282,23 @@ public class MineBot {
             @Override
             public void run() {
                 GuiScreen.sendChatMessage("Planning ahead", true);
-                nextPath = findPath(currentPath.end);
+                calculatingNext = true;
+                Path path = findPath(currentPath.end);
+                GuiScreen.sendChatMessage("Done planning ahead " + calculatingNext, true);
+                if (calculatingNext) {
+                    nextPath = path;
+                } else {
+                    currentPath = path;
+                    //planAhead();
+                }
+                calculatingNext = false;
             }
         }.start();
     }
     public static Path findPath(BlockPos playerFeet) {
-        GuiScreen.sendChatMessage("Starting to search for path from " + playerFeet + " to " + goal, true);
         PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
         Path path = pf.calculatePath();
+        GuiScreen.sendChatMessage(playerFeet + " to " + path.end, true);
         return path;
         /* if (stone) {
          path.showPathInStone();
