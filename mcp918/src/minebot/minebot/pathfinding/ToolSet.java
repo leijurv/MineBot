@@ -93,5 +93,8 @@ class ToolSet {
         cache.put(b, best);
         return slots.get(best);
     }
+    public double getStrVsBlock(Block b){
+        Item item = this.getBestTool(b);
+        return item.getStrVsBlock(new ItemStack(item), b);
+    }
 }
-
