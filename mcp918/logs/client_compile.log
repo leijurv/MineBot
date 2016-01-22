@@ -1,2 +1,67 @@
+src/minecraft/net/minecraft/client/Minecraft.java:38: error: package minebot does not exist
+import minebot.MineBot;
+              ^
+src/minecraft/net/minecraft/client/gui/GuiScreen.java:18: error: package minebot does not exist
+import minebot.MineBot;
+              ^
+src/minecraft/net/minecraft/util/MovementInputFromOptions.java:3: error: package minebot does not exist
+import minebot.MineBot;
+              ^
+src/minecraft/net/minecraft/client/Minecraft.java:1362: error: cannot find symbol
+        MineBot.onTick();
+        ^
+  symbol:   variable MineBot
+  location: class Minecraft
+src/minecraft/net/minecraft/client/Minecraft.java:1569: error: cannot find symbol
+                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
+                                                                      ^
+  symbol:   variable MineBot
+  location: class Minecraft
+src/minecraft/net/minecraft/client/Minecraft.java:1579: error: cannot find symbol
+                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
+                                                                      ^
+  symbol:   variable MineBot
+  location: class Minecraft
+src/minecraft/net/minecraft/client/Minecraft.java:1592: error: cannot find symbol
+            this.sendClickBlockToController(this.currentScreen == null && (this.gameSettings.keyBindAttack.isKeyDown() || MineBot.getIsPressed()) && this.inGameHasFocus);
+                                                                                                                          ^
+  symbol:   variable MineBot
+  location: class Minecraft
+src/minecraft/net/minecraft/client/gui/GuiScreen.java:351: error: cannot find symbol
+        String nm = MineBot.therewasachatmessage(msg);
+                    ^
+  symbol:   variable MineBot
+  location: class GuiScreen
+src/minecraft/net/minecraft/util/MovementInputFromOptions.java:14: error: cannot find symbol
+        if (this.gameSettings.keyBindForward.isKeyDown() || MineBot.forward) {
+                                                            ^
+  symbol:   variable MineBot
+  location: class MovementInputFromOptions
+src/minecraft/net/minecraft/util/MovementInputFromOptions.java:17: error: cannot find symbol
+        if (this.gameSettings.keyBindBack.isKeyDown() || MineBot.backward) {
+                                                         ^
+  symbol:   variable MineBot
+  location: class MovementInputFromOptions
+src/minecraft/net/minecraft/util/MovementInputFromOptions.java:20: error: cannot find symbol
+        if (this.gameSettings.keyBindLeft.isKeyDown() || MineBot.left) {
+                                                         ^
+  symbol:   variable MineBot
+  location: class MovementInputFromOptions
+src/minecraft/net/minecraft/util/MovementInputFromOptions.java:23: error: cannot find symbol
+        if (this.gameSettings.keyBindRight.isKeyDown() || MineBot.right) {
+                                                          ^
+  symbol:   variable MineBot
+  location: class MovementInputFromOptions
+src/minecraft/net/minecraft/util/MovementInputFromOptions.java:26: error: cannot find symbol
+        this.jump = this.gameSettings.keyBindJump.isKeyDown() || MineBot.jumping;
+                                                                 ^
+  symbol:   variable MineBot
+  location: class MovementInputFromOptions
+src/minecraft/net/minecraft/util/MovementInputFromOptions.java:27: error: cannot find symbol
+        this.sneak = this.gameSettings.keyBindSneak.isKeyDown() || MineBot.sneak;
+                                                                   ^
+  symbol:   variable MineBot
+  location: class MovementInputFromOptions
 Note: Some input files use unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
+14 errors

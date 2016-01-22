@@ -25,6 +25,8 @@ public class PathFinder {
     public Path calculatePath() {
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
+        Node bestSoFar = null;
+        double bestHeuristicSoFar = Double.MAX_VALUE;
         PriorityList openList = new PriorityList();
         openList.addNode(startNode);
         int numNodes = 0;
@@ -49,11 +51,16 @@ public class PathFinder {
                         openList.addNode(neighbor);
                     }
                 }
+                double sum = neighbor.estimatedCostToGoal + neighbor.cost;
+                if (sum < bestHeuristicSoFar) {
+                    bestHeuristicSoFar = sum;
+                    bestSoFar = neighbor;
+                }
             }
             numNodes++;
             if (numNodes > 5000 || System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
-                return null;
+                return new Path(startNode, bestSoFar, goal);
             }
         }
         throw new IllegalStateException("bad");

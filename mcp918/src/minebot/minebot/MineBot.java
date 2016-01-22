@@ -241,11 +241,11 @@ public class MineBot {
         GuiScreen.sendChatMessage("Starting to search for path from " + playerFeet + " to " + goal, true);
         PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
         Path path = pf.calculatePath();
-        if (path == null) {
-            GuiScreen.sendChatMessage("Unable to find path from " + playerFeet + " to " + goal, true);
-            return;
+        if (!path.goal.isInGoal(path.end)) {
+            GuiScreen.sendChatMessage("I couldn't find that path, but I'm going to get as close as I can", true);
+        } else {
+            GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
         }
-        GuiScreen.sendChatMessage("Finished finding a path from " + playerFeet + " to " + goal, true);
         /* if (stone) {
          path.showPathInStone();
          return;
