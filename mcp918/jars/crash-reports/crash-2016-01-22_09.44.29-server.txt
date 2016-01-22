@@ -1,0 +1,71 @@
+---- Minecraft Crash Report ----
+// This is a token for 1 free hug. Redeem at your nearest Mojangsta: [~~HUG~~]
+
+Time: 1/22/16 9:44 AM
+Description: Getting biome
+
+java.lang.ArrayIndexOutOfBoundsException: 3
+	at net.minecraft.world.chunk.Chunk.getBiome(Chunk.java:1386)
+	at net.minecraft.world.World.getBiomeGenForCoords(World.java:180)
+	at net.minecraft.world.World.canBlockFreeze(World.java:2696)
+	at net.minecraft.world.World.canBlockFreezeNoWater(World.java:2688)
+	at net.minecraft.world.WorldServer.updateBlocks(WorldServer.java:387)
+	at net.minecraft.world.WorldServer.tick(WorldServer.java:214)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:764)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:685)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:178)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:564)
+	at java.lang.Thread.run(Thread.java:745)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at net.minecraft.world.chunk.Chunk.getBiome(Chunk.java:1386)
+
+-- Coordinates of biome request --
+Details:
+	Location: World: (995,62,-160), Chunk: (at 3,3,0 in 62,-10; contains blocks 992,0,-160 to 1007,255,-145), Region: (1,-1; contains chunks 32,-32 to 63,-1, blocks 512,0,-512 to 1023,255,-1)
+Stacktrace:
+	at net.minecraft.world.World.getBiomeGenForCoords(World.java:180)
+	at net.minecraft.world.World.canBlockFreeze(World.java:2696)
+	at net.minecraft.world.World.canBlockFreezeNoWater(World.java:2688)
+	at net.minecraft.world.WorldServer.updateBlocks(WorldServer.java:387)
+	at net.minecraft.world.WorldServer.tick(WorldServer.java:214)
+
+-- Affected level --
+Details:
+	Level name: meow
+	All players: 1 total; [EntityPlayerMP['Player256'/151, l='meow', x=753.84, y=64.00, z=-14.99]]
+	Chunk stats: ServerChunkCache: 4522 Drop: 0
+	Level seed: -6723507957360773517
+	Level generator: ID 00 - default, ver 1. Features enabled: true
+	Level generator options: 
+	Level spawn location: 479.00,64.00,-48.00 - World: (479,64,-48), Chunk: (at 15,4,0 in 29,-3; contains blocks 464,0,-48 to 479,255,-33), Region: (0,-1; contains chunks 0,-32 to 31,-1, blocks 0,0,-512 to 511,255,-1)
+	Level time: 14121 game time, 14121 day time
+	Level dimension: 0
+	Level storage version: 0x04ABD - Anvil
+	Level weather: Rain time: 137586 (now: false), thunder time: 147333 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+Stacktrace:
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:764)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:685)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:178)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:564)
+	at java.lang.Thread.run(Thread.java:745)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.5
+	Java Version: 1.8.0_45, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 353004720 bytes (336 MB) / 1918894080 bytes (1830 MB) up to 1918894080 bytes (1830 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 13, tallocated: 95
+	Profiler Position: N/A (disabled)
+	Player Count: 1 / 8; [EntityPlayerMP['Player256'/151, l='meow', x=753.84, y=64.00, z=-14.99]]
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Very likely; Jar signature invalidated

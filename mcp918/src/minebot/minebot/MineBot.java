@@ -69,8 +69,10 @@ public class MineBot {
             if (currentPath.tick()) {
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
-                    GuiScreen.sendChatMessage("Recalculating because path failed", true);
-                    findPathInNewThread(playerFeet);
+                    if (nextPath == null) {
+                        GuiScreen.sendChatMessage("Recalculating because path failed", true);
+                        findPathInNewThread(playerFeet);
+                    }
                 } else {
                     clearPath();
                 }
