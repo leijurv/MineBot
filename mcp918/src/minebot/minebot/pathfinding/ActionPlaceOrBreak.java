@@ -6,10 +6,12 @@
 package minebot.pathfinding;
 
 import java.util.Arrays;
+import java.util.List;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -82,28 +84,48 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return tick0();
     }
-    public void switchtotool(Block b) {
-        System.out.println("b: " + b);
+    final List<Item> acceptable = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
+    public void switchtothrowaway() {
+        //System.out.println("b: " + b);
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
-        System.out.println("inv: " + Arrays.toString(inv));
-        byte best = (byte) p.inventory.currentItem;
-        System.out.println("best: " + best);
+        //System.out.println("inv: " + Arrays.toString(inv));
+        //System.out.println("best: " + best);
         float value = 0;
         for (byte i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
                 item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
             }
-            System.out.println(inv[i]);
+            if (acceptable.contains(item.getItem())) {
+                p.inventory.currentItem = i;
+                return;
+            }
+        }
+        GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
+    }
+    public void switchtotool(Block b) {
+        //System.out.println("b: " + b);
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        //System.out.println("inv: " + Arrays.toString(inv));
+        byte best = (byte) p.inventory.currentItem;
+        //System.out.println("best: " + best);
+        float value = 0;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
+            }
+            //System.out.println(inv[i]);
             float v = item.getStrVsBlock(b);
-            System.out.println("v: " + v);
+            //System.out.println("v: " + v);
             if (v > value) {
                 value = v;
                 best = i;
             }
         }
-        System.out.println("best: " + best);
+        //System.out.println("best: " + best);
         p.inventory.currentItem = best;
     }
     protected abstract boolean tick0();

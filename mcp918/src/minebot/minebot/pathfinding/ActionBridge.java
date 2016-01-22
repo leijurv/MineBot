@@ -63,13 +63,13 @@ public class ActionBridge extends ActionPlaceOrBreak {
             //double faceZ = to.getZ();
             BlockPos goalLook = new BlockPos(from.getX(), from.getY() - 1, from.getZ());
             if (whereAmI.equals(to)) {
-                System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
-                boolean look = MineBot.lookAtCoords(faceX, faceY, faceZ, true);
+                //System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
                 if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
+                    switchtothrowaway();
                     Minecraft.theMinecraft.rightClickMouse();
+                    return false;
                 }
-                MineBot.backward = look;
-                MineBot.forward = false;
+                MineBot.backward = MineBot.lookAtCoords(faceX, faceY, faceZ, true);
                 System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {

@@ -16,7 +16,7 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionClimb extends ActionPlaceOrBreak {
     public ActionClimb(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{new BlockPos(start.getX(), start.getY() + 2, start.getZ()), end, new BlockPos(end.getX(), end.getY() + 1, end.getZ())}, new BlockPos[]{new BlockPos(end.getX(), end.getY() - 1, end.getZ())});
+        super(start, end, new BlockPos[]{end, new BlockPos(start.getX(), start.getY() + 2, start.getZ()), new BlockPos(end.getX(), end.getY() + 1, end.getZ())}, new BlockPos[]{new BlockPos(end.getX(), end.getY() - 1, end.getZ())});
     }
     @Override
     protected double calculateCost() {

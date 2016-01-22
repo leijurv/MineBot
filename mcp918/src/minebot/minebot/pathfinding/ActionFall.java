@@ -16,7 +16,7 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionFall extends ActionPlaceOrBreak {
     public ActionFall(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{new BlockPos(end.getX(), end.getY() + 1, end.getZ()), end, new BlockPos(end.getX(), end.getY() + 2, end.getZ())}, new BlockPos[]{new BlockPos(end.getX(), end.getY() - 1, end.getZ())});
+        super(start, end, new BlockPos[]{new BlockPos(end.getX(), end.getY() + 2, end.getZ()), new BlockPos(end.getX(), end.getY() + 1, end.getZ()), end}, new BlockPos[]{new BlockPos(end.getX(), end.getY() - 1, end.getZ())});
     }
     @Override
     protected double calculateCost() {
