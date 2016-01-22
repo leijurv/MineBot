@@ -70,6 +70,7 @@ public class MineBot {
             }
         }
         if (looking) {
+            System.out.println("desired yaw: " + desiredYaw);
             desiredYaw += 360;
             desiredYaw %= 360;
             float yawDistance = Minecraft.theMinecraft.thePlayer.rotationYaw - desiredYaw;
@@ -338,30 +339,31 @@ public class MineBot {
         if (diff < 0) {
             diff += 360;
         }
-        float distanceToForward = Math.min(Math.abs(diff - 0), Math.abs(diff - 360));
-        float distanceToBackward = Math.abs(diff - 180);
-        float distanceToRight = Math.abs(diff - 90);
-        float distanceToLeft = Math.abs(diff - 270);
+        float distanceToForward = Math.min(Math.abs(diff - 0), Math.abs(diff - 360)) % 360;
+        float distanceToBackward = Math.abs(diff - 180) % 360;
+        float distanceToRight = Math.abs(diff - 90) % 360;
+        float distanceToLeft = Math.abs(diff - 270) % 360;
         float tmp = Math.round(diff / 90) * 90;
         if (tmp > 359) {
             tmp -= 360;
         }
         desiredYaw = yaw - tmp;
         System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
+        System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
         looking = true;
-        if (distanceToForward < ANGLE_THRESHOLD) {
+        if (distanceToForward < ANGLE_THRESHOLD || distanceToForward > 360 - ANGLE_THRESHOLD) {
             forward = true;
             return true;
         }
-        if (distanceToBackward < ANGLE_THRESHOLD) {
+        if (distanceToBackward < ANGLE_THRESHOLD || distanceToBackward > 360 - ANGLE_THRESHOLD) {
             backward = true;
             return true;
         }
-        if (distanceToLeft < ANGLE_THRESHOLD) {
+        if (distanceToLeft < ANGLE_THRESHOLD || distanceToLeft > 360 - ANGLE_THRESHOLD) {
             left = true;
             return true;
         }
-        if (distanceToRight < ANGLE_THRESHOLD) {
+        if (distanceToRight < ANGLE_THRESHOLD || distanceToRight > 360 - ANGLE_THRESHOLD) {
             right = true;
             return true;
         }

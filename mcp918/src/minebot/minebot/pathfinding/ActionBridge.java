@@ -47,7 +47,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
-            MineBot.moveTowardsBlock(to);
+            System.out.println(MineBot.moveTowardsBlock(to));
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
                 MineBot.forward = false;//stop walking forwards
