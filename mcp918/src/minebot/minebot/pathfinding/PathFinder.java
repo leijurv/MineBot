@@ -51,7 +51,7 @@ public class PathFinder {
                         openList.addNode(neighbor);
                     }
                 }
-                double sum = neighbor.estimatedCostToGoal + neighbor.cost;
+                double sum = neighbor.estimatedCostToGoal + neighbor.cost / 2;
                 if (sum < bestHeuristicSoFar) {
                     bestHeuristicSoFar = sum;
                     bestSoFar = neighbor;
