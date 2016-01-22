@@ -40,6 +40,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
             if (!blocksToBreak[i].equals(Block.getBlockById(0))) {
+                switchtotool(blocksToBreak[i]);
                 sum += 1 / (blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]));
             }
             //sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);

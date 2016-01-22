@@ -18,7 +18,7 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionBridge extends ActionPlaceOrBreak {
     public ActionBridge(BlockPos from, BlockPos to) {
-        super(from, to, new BlockPos[]{to, new BlockPos(to.getX(), to.getY() + 1, to.getZ())}, new BlockPos[]{new BlockPos(to.getX(), to.getY() - 1, to.getZ())});
+        super(from, to, new BlockPos[]{new BlockPos(to.getX(), to.getY() + 1, to.getZ()), to}, new BlockPos[]{new BlockPos(to.getX(), to.getY() - 1, to.getZ())});
     }
     @Override
     protected double calculateCost() {
