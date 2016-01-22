@@ -32,7 +32,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
-            if (blocksToPlace[0].equals(Block.getBlockById(0))) {
+            if (blocksToPlace[0].equals(Block.getBlockById(0)) || blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0])) {
                 return WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
             }
             return 100000000;

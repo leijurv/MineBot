@@ -71,6 +71,9 @@ public abstract class Action {
         }
         return null;
     }
+    public static boolean isWater(Block b) {
+        return b.equals(Block.getBlockById(8)) || b.equals(Block.getBlockById(9));
+    }
     /**
      * Can I walk through this block
      *
@@ -90,6 +93,9 @@ public abstract class Action {
      */
     public static boolean canWalkOn(BlockPos pos) {//eh
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        if (isWater(block)) {
+            return isWater(Minecraft.theMinecraft.theWorld.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock());
+        }
         return block.isBlockNormalCube();
     }
     /**

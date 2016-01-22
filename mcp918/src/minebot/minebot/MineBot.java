@@ -68,6 +68,13 @@ public class MineBot {
                 currentPath = null;
                 System.out.println("Path done");
             }
+            EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+            World theWorld = Minecraft.theMinecraft.theWorld;
+            BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+            if (Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
+                System.out.println("Jumping because in water");
+                jumping = true;
+            }
         }
         if (looking) {
             System.out.println("desired yaw: " + desiredYaw);
