@@ -22,18 +22,19 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
+        double WC = isWater(blocksToBreak[0]) ? WALK_ONE_IN_WATER_COST : WALK_ONE_BLOCK_COST;
         if (canWalkOn(positionsToPlace[0])) {//this is a walk, not a bridge
             if (canWalkThrough(positionsToBreak[0]) && canWalkThrough(positionsToBreak[1])) {
-                return WALK_ONE_BLOCK_COST;
+                return WC;
             }
             //double hardness1 = blocksToBreak[0].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[0]);
             //double hardness2 = blocksToBreak[1].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[1]);
             //System.out.println("Can't walk through " + blocksToBreak[0] + " (hardness" + hardness1 + ") or " + blocksToBreak[1] + " (hardness " + hardness2 + ")");
-            return WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
+            return WC + getTotalHardnessOfBlocksToBreak(ts);
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
             if (blocksToPlace[0].equals(Block.getBlockById(0)) || blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0])) {
-                return WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+                return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
             }
             return 100000000;
             //System.out.println("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());

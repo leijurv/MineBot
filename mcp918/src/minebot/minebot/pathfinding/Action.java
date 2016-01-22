@@ -14,6 +14,7 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class Action {
+    public static final double WALK_ONE_IN_WATER_COST = 40;
     public static final double WALK_ONE_BLOCK_COST = 5;
     public static final double JUMP_ONE_BLOCK_COST = 5;
     public static final double FALL_ONE_BLOCK_COST = 1;
@@ -43,7 +44,7 @@ public abstract class Action {
      *
      * @return
      */
-    protected final double calculateCost(){
+    protected final double calculateCost() {
         return calculateCost(new ToolSet());
     }
     protected abstract double calculateCost(ToolSet ts);
