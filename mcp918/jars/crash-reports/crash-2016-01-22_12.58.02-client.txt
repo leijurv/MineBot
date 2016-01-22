@@ -1,0 +1,90 @@
+---- Minecraft Crash Report ----
+// Would you like a cupcake?
+
+Time: 1/22/16 12:58 PM
+Description: Unexpected error
+
+java.lang.NullPointerException: Unexpected error
+	at minebot.pathfinding.ToolSet.getStrVsBlock(ToolSet.java:95)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:49)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:43)
+	at minebot.pathfinding.ActionPlaceOrBreak.toString(ActionPlaceOrBreak.java:56)
+	at java.lang.String.valueOf(String.java:2982)
+	at java.io.PrintStream.println(PrintStream.java:821)
+	at minebot.pathfinding.Path.tick(Path.java:133)
+	at minebot.MineBot.onTick1(MineBot.java:73)
+	at minebot.MineBot.onTick(MineBot.java:40)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1362)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:900)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:420)
+	at net.minecraft.client.main.Main.main(Main.java:113)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:32)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at minebot.pathfinding.ToolSet.getStrVsBlock(ToolSet.java:95)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:49)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:43)
+	at minebot.pathfinding.ActionPlaceOrBreak.toString(ActionPlaceOrBreak.java:56)
+	at java.lang.String.valueOf(String.java:2982)
+	at java.io.PrintStream.println(PrintStream.java:821)
+	at minebot.pathfinding.Path.tick(Path.java:133)
+	at minebot.MineBot.onTick1(MineBot.java:73)
+	at minebot.MineBot.onTick(MineBot.java:40)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['Player394'/140, l='MpServer', x=415.70, y=63.25, z=100.53]]
+	Chunk stats: MultiplayerChunkCache: 4225, 4225
+	Level seed: 0
+	Level generator: ID 00 - default, ver 1. Features enabled: false
+	Level generator options: 
+	Level spawn location: 248.00,64.00,104.00 - World: (248,64,104), Chunk: (at 8,4,8 in 15,6; contains blocks 240,0,96 to 255,255,111), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,0,0 to 511,255,511)
+	Level time: 21064 game time, 6398 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: true), thunder time: 0 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+	Forced entities: 69 total; [EntityBat['Bat'/128, l='MpServer', x=420.25, y=25.10, z=77.69], EntityBat['Bat'/129, l='MpServer', x=420.47, y=22.22, z=71.31], EntitySheep['Sheep'/257, l='MpServer', x=449.25, y=74.00, z=98.53], EntityBat['Bat'/130, l='MpServer', x=434.03, y=32.04, z=90.79], EntitySheep['Sheep'/258, l='MpServer', x=446.88, y=74.00, z=95.25], EntityBat['Bat'/131, l='MpServer', x=433.65, y=32.57, z=85.92], EntitySquid['Squid'/259, l='MpServer', x=447.63, y=59.97, z=137.75], EntityBat['Bat'/132, l='MpServer', x=434.48, y=33.02, z=90.52], EntitySheep['Sheep'/260, l='MpServer', x=468.44, y=82.00, z=78.19], EntityItem['item.tile.sapling.spruce'/261, l='MpServer', x=472.06, y=70.00, z=132.91], EntitySquid['Squid'/133, l='MpServer', x=425.88, y=59.72, z=157.09], EntityBat['Bat'/262, l='MpServer', x=476.75, y=52.10, z=75.72], EntityBat['Bat'/137, l='MpServer', x=432.47, y=54.10, z=44.81], EntityBat['Bat'/138, l='MpServer', x=435.25, y=25.10, z=49.22], EntityRabbit['Rabbit'/266, l='MpServer', x=491.50, y=79.00, z=118.50], EntitySheep['Sheep'/139, l='MpServer', x=445.03, y=72.00, z=110.94], EntityItem['item.tile.mushroom'/40983, l='MpServer', x=421.13, y=40.00, z=96.97], EntityBat['Bat'/45847, l='MpServer', x=424.56, y=22.39, z=65.59], EntitySquid['Squid'/40351, l='MpServer', x=431.09, y=48.25, z=163.38], EntityPlayerSP['Player394'/140, l='MpServer', x=415.70, y=63.25, z=100.53], EntitySquid['Squid'/40360, l='MpServer', x=474.38, y=52.88, z=159.69], EntitySquid['Squid'/40372, l='MpServer', x=479.06, y=55.94, z=144.47], EntitySquid['Squid'/40373, l='MpServer', x=479.34, y=56.06, z=148.88], EntitySquid['Squid'/40374, l='MpServer', x=476.59, y=53.06, z=151.31], EntitySquid['Squid'/40379, l='MpServer', x=437.38, y=51.31, z=151.25], EntitySquid['Squid'/40381, l='MpServer', x=440.56, y=52.50, z=160.22], EntitySquid['Squid'/40382, l='MpServer', x=453.66, y=48.75, z=160.16], EntitySquid['Squid'/40383, l='MpServer', x=443.09, y=50.06, z=163.44], EntitySquid['Squid'/40260, l='MpServer', x=369.63, y=57.19, z=147.19], EntitySquid['Squid'/40261, l='MpServer', x=360.69, y=51.81, z=137.69], EntitySquid['Squid'/40262, l='MpServer', x=371.16, y=53.91, z=146.09], EntitySquid['Squid'/40263, l='MpServer', x=366.66, y=55.81, z=139.78], EntitySquid['Squid'/40268, l='MpServer', x=352.75, y=55.59, z=150.44], EntitySquid['Squid'/40269, l='MpServer', x=360.03, y=53.88, z=147.88], EntitySquid['Squid'/40270, l='MpServer', x=356.88, y=53.09, z=155.75], EntitySquid['Squid'/40271, l='MpServer', x=365.34, y=52.69, z=144.50], EntitySquid['Squid'/40274, l='MpServer', x=356.44, y=55.28, z=158.53], EntitySquid['Squid'/40275, l='MpServer', x=356.69, y=52.47, z=158.59], EntitySquid['Squid'/40277, l='MpServer', x=361.03, y=53.03, z=153.97], EntitySquid['Squid'/40405, l='MpServer', x=356.44, y=53.34, z=101.94], EntitySquid['Squid'/40278, l='MpServer', x=363.50, y=52.28, z=162.84], EntitySquid['Squid'/40407, l='MpServer', x=364.53, y=54.00, z=98.50], EntitySquid['Squid'/40408, l='MpServer', x=362.19, y=54.38, z=93.47], EntitySquid['Squid'/40409, l='MpServer', x=357.41, y=57.19, z=99.19], EntitySquid['Squid'/40283, l='MpServer', x=393.91, y=62.00, z=124.44], EntitySquid['Squid'/40284, l='MpServer', x=387.72, y=57.71, z=114.37], EntitySquid['Squid'/40285, l='MpServer', x=390.25, y=62.38, z=120.94], EntitySquid['Squid'/40286, l='MpServer', x=384.88, y=58.22, z=111.44], EntityBat['Bat'/28641, l='MpServer', x=415.51, y=24.91, z=59.89], EntityChicken['Chicken'/101, l='MpServer', x=342.66, y=66.00, z=37.63], EntityChicken['Chicken'/102, l='MpServer', x=350.63, y=67.00, z=45.66], EntityBat['Bat'/104, l='MpServer', x=337.89, y=39.81, z=62.28], EntityChicken['Chicken'/105, l='MpServer', x=361.34, y=67.00, z=39.56], EntityItem['item.item.egg'/106, l='MpServer', x=362.06, y=67.00, z=38.91], EntityChicken['Chicken'/107, l='MpServer', x=355.44, y=67.00, z=48.28], EntityItem['item.item.egg'/108, l='MpServer', x=354.72, y=67.00, z=48.81], EntitySquid['Squid'/110, l='MpServer', x=365.50, y=62.50, z=119.53], EntitySquid['Squid'/40302, l='MpServer', x=390.91, y=50.19, z=141.00], EntitySquid['Squid'/40303, l='MpServer', x=386.03, y=50.91, z=143.38], EntitySquid['Squid'/112, l='MpServer', x=373.66, y=52.16, z=118.38], EntitySquid['Squid'/40304, l='MpServer', x=383.31, y=51.97, z=134.94], EntitySquid['Squid'/40305, l='MpServer', x=383.22, y=48.81, z=136.44], EntitySquid['Squid'/40306, l='MpServer', x=368.63, y=60.06, z=136.59], EntitySquid['Squid'/40307, l='MpServer', x=368.94, y=60.34, z=134.47], EntitySquid['Squid'/40308, l='MpServer', x=367.38, y=58.19, z=139.25], EntitySquid['Squid'/40309, l='MpServer', x=368.44, y=58.97, z=138.22], EntitySquid['Squid'/120, l='MpServer', x=392.06, y=49.00, z=129.31], EntityBat['Bat'/124, l='MpServer', x=413.75, y=52.10, z=28.38], EntityRabbit['Rabbit'/126, l='MpServer', x=416.44, y=64.00, z=23.28]]
+	Retry entities: 0 total; []
+	Server brand: vanilla
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:380)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:1996)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:439)
+	at net.minecraft.client.main.Main.main(Main.java:113)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:32)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.5
+	Java Version: 1.8.0_45, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 358248856 bytes (341 MB) / 1391460352 bytes (1327 MB) up to 1908932608 bytes (1820 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 12, tallocated: 94
+	Launched Version: mcp
+	LWJGL: 2.9.2
+	OpenGL: Intel HD Graphics 4000 OpenGL Engine GL version 2.1 INTEL-10.6.33, Intel Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because ARB_framebuffer_object is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 4x Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz

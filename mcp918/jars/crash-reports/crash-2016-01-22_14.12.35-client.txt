@@ -1,0 +1,90 @@
+---- Minecraft Crash Report ----
+// You're mean.
+
+Time: 1/22/16 2:12 PM
+Description: Unexpected error
+
+java.lang.NullPointerException: Unexpected error
+	at minebot.pathfinding.ToolSet.getStrVsBlock(ToolSet.java:95)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:49)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:43)
+	at minebot.pathfinding.ActionPlaceOrBreak.toString(ActionPlaceOrBreak.java:56)
+	at java.lang.String.valueOf(String.java:2982)
+	at java.io.PrintStream.println(PrintStream.java:821)
+	at minebot.pathfinding.Path.tick(Path.java:133)
+	at minebot.MineBot.onTick1(MineBot.java:73)
+	at minebot.MineBot.onTick(MineBot.java:40)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1362)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:900)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:420)
+	at net.minecraft.client.main.Main.main(Main.java:113)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:32)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at minebot.pathfinding.ToolSet.getStrVsBlock(ToolSet.java:95)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:49)
+	at minebot.pathfinding.ActionPlaceOrBreak.getTotalHardnessOfBlocksToBreak(ActionPlaceOrBreak.java:43)
+	at minebot.pathfinding.ActionPlaceOrBreak.toString(ActionPlaceOrBreak.java:56)
+	at java.lang.String.valueOf(String.java:2982)
+	at java.io.PrintStream.println(PrintStream.java:821)
+	at minebot.pathfinding.Path.tick(Path.java:133)
+	at minebot.MineBot.onTick1(MineBot.java:73)
+	at minebot.MineBot.onTick(MineBot.java:40)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['Player510'/140, l='MpServer', x=415.70, y=63.25, z=100.53]]
+	Chunk stats: MultiplayerChunkCache: 4225, 4225
+	Level seed: 0
+	Level generator: ID 00 - default, ver 1. Features enabled: false
+	Level generator options: 
+	Level spawn location: 248.00,64.00,104.00 - World: (248,64,104), Chunk: (at 8,4,8 in 15,6; contains blocks 240,0,96 to 255,255,111), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,0,0 to 511,255,511)
+	Level time: 23770 game time, 9104 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: true), thunder time: 0 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+	Forced entities: 34 total; [EntityBat['Bat'/128, l='MpServer', x=420.25, y=25.10, z=77.69], EntityBat['Bat'/129, l='MpServer', x=424.98, y=34.00, z=93.46], EntitySheep['Sheep'/257, l='MpServer', x=468.44, y=82.00, z=78.19], EntitySquid['Squid'/130, l='MpServer', x=426.91, y=57.03, z=161.81], EntityRabbit['Rabbit'/259, l='MpServer', x=491.50, y=79.00, z=118.50], EntityBat['Bat'/135, l='MpServer', x=432.53, y=33.10, z=87.75], EntityBat['Bat'/136, l='MpServer', x=431.38, y=33.10, z=86.75], EntitySheep['Sheep'/137, l='MpServer', x=446.88, y=74.00, z=95.25], EntitySheep['Sheep'/138, l='MpServer', x=445.03, y=73.00, z=104.13], EntitySquid['Squid'/72973, l='MpServer', x=401.09, y=61.16, z=136.50], EntityPlayerSP['Player510'/140, l='MpServer', x=415.70, y=63.25, z=100.53], EntitySquid['Squid'/72972, l='MpServer', x=391.66, y=61.31, z=133.13], EntitySquid['Squid'/72975, l='MpServer', x=401.63, y=61.63, z=133.25], EntitySquid['Squid'/72974, l='MpServer', x=395.34, y=62.25, z=137.78], EntitySquid['Squid'/73043, l='MpServer', x=364.53, y=61.00, z=84.94], EntitySquid['Squid'/39379, l='MpServer', x=392.63, y=50.22, z=152.22], EntitySquid['Squid'/73042, l='MpServer', x=352.75, y=62.00, z=81.47], EntitySquid['Squid'/73045, l='MpServer', x=356.56, y=61.63, z=82.81], EntitySquid['Squid'/73044, l='MpServer', x=359.13, y=61.31, z=89.41], EntityItem['item.tile.dirt.default'/74272, l='MpServer', x=421.13, y=42.00, z=98.19], EntityBat['Bat'/73637, l='MpServer', x=486.51, y=24.00, z=65.53], EntityBat['Bat'/73636, l='MpServer', x=492.51, y=27.92, z=61.50], EntityChicken['Chicken'/103, l='MpServer', x=352.38, y=64.00, z=28.59], EntityChicken['Chicken'/104, l='MpServer', x=350.63, y=67.00, z=45.66], EntityChicken['Chicken'/108, l='MpServer', x=361.34, y=67.00, z=39.56], EntityChicken['Chicken'/110, l='MpServer', x=355.44, y=67.00, z=48.28], EntityItem['item.item.egg'/111, l='MpServer', x=354.72, y=67.00, z=48.81], EntityBat['Bat'/55090, l='MpServer', x=402.68, y=19.56, z=53.80], EntitySquid['Squid'/39416, l='MpServer', x=372.31, y=49.50, z=155.47], EntityRabbit['Rabbit'/125, l='MpServer', x=416.44, y=64.00, z=23.28], EntityBat['Bat'/63997, l='MpServer', x=483.29, y=53.47, z=66.43], EntityBat['Bat'/126, l='MpServer', x=425.47, y=25.10, z=65.75], EntitySheep['Sheep'/255, l='MpServer', x=449.97, y=74.00, z=98.97], EntityItem['item.tile.dirt.default'/52799, l='MpServer', x=421.97, y=36.00, z=94.31]]
+	Retry entities: 0 total; []
+	Server brand: vanilla
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:380)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:1996)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:439)
+	at net.minecraft.client.main.Main.main(Main.java:113)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:32)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.5
+	Java Version: 1.8.0_45, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 466855120 bytes (445 MB) / 1386217472 bytes (1322 MB) up to 1908932608 bytes (1820 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 12, tallocated: 94
+	Launched Version: mcp
+	LWJGL: 2.9.2
+	OpenGL: Intel HD Graphics 4000 OpenGL Engine GL version 2.1 INTEL-10.6.33, Intel Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because ARB_framebuffer_object is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 4x Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz

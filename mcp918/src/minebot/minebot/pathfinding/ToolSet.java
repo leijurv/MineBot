@@ -91,6 +91,9 @@ public class ToolSet {
     }
     public double getStrVsBlock(Block b, BlockPos pos) {
         Item item = this.getBestTool(b);
+        if (item == null) {
+            item = Item.getByNameOrId("minecraft:apple");
+        }
         float f = b.getBlockHardness(Minecraft.theMinecraft.theWorld, pos);
         return f < 0.0F ? 0.0F : (!canHarvest(b, item) ? item.getStrVsBlock(new ItemStack(item), b) / f / 100.0F : item.getStrVsBlock(new ItemStack(item), b) / f / 30.0F);
     }
