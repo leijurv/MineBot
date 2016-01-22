@@ -6,6 +6,8 @@
 package minebot;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.Path;
@@ -13,7 +15,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
+import minebot.pathfinding.mining.Miner;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -23,9 +27,11 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
+
     static boolean looking = false;
     static boolean lookingPitch = false;
     static boolean isThereAnythingInProgress = false;
+
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -35,6 +41,7 @@ public class MineBot {
         Autorun.runprocess("/usr/local/bin/ant jar");
         Autorun.runprocess("java -Djava.library.path=jars/versions/1.8.8/1.8.8-natives/ -jar dist/MineBot.jar");
     }
+
     public static void onTick() {
         long start = System.currentTimeMillis();
         onTick1();
@@ -44,6 +51,7 @@ public class MineBot {
             System.out.println("Tick took " + time + "ms");
         }
     }
+
     /**
      * Called by minecraft.java
      */
@@ -116,10 +124,8 @@ public class MineBot {
                 if (!lookingPitch) {
                     if (thePlayer.rotationPitch < -20) {
                         thePlayer.rotationPitch++;
-                    } else {
-                        if (thePlayer.rotationPitch > 20) {
-                            thePlayer.rotationPitch--;
-                        }
+                    } else if (thePlayer.rotationPitch > 20) {
+                        thePlayer.rotationPitch--;
                     }
                 }
             }
@@ -134,10 +140,8 @@ public class MineBot {
             //System.out.println(yawDistance);
             if (yawDistance > 180) {
                 yawDistance = yawDistance - 360;
-            } else {
-                if (yawDistance < -180) {
-                    yawDistance = yawDistance + 360;
-                }
+            } else if (yawDistance < -180) {
+                yawDistance = yawDistance + 360;
             }
             //System.out.println(yawDistance);
             if (Math.abs(yawDistance) > (360 / 20)) {
@@ -152,10 +156,8 @@ public class MineBot {
             //System.out.println(pitchDistance);
             if (pitchDistance > 180) {
                 pitchDistance = pitchDistance - 360;
-            } else {
-                if (pitchDistance < -180) {
-                    pitchDistance = pitchDistance + 360;
-                }
+            } else if (pitchDistance < -180) {
+                pitchDistance = pitchDistance + 360;
             }
             //System.out.println(pitchDistance);
             if (Math.abs(pitchDistance) > (360 / 20)) {
@@ -169,9 +171,9 @@ public class MineBot {
     }
     public static boolean wasScreen = false;
     public static boolean calculatingNext = false;
-    static Path currentPath = null;
-    static Path nextPath = null;
-    static BlockPos goal = null;
+    public static Path currentPath = null;
+    public static Path nextPath = null;
+    public static BlockPos goal = null;
     public static int pressTime = 0;
     public static boolean isLeftClick = false;
     public static boolean jumping = false;
@@ -180,6 +182,7 @@ public class MineBot {
     public static boolean left = false;
     public static boolean right = false;
     public static boolean sneak = false;
+
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -188,6 +191,7 @@ public class MineBot {
     public static boolean getIsPressed() {
         return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime >= -1;
     }
+
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -201,6 +205,7 @@ public class MineBot {
             return true;
         }
     }
+
     /**
      * Called by our code
      */
@@ -208,6 +213,7 @@ public class MineBot {
         pressTime = 0;
         isLeftClick = false;
     }
+
     public static void clearMovement() {
         jumping = false;
         forward = false;
@@ -216,11 +222,13 @@ public class MineBot {
         backward = false;
         sneak = false;
     }
+
     public static void clearPath() {
         currentPath = null;
         letGoOfLeftClick();
         clearMovement();
     }
+
     /**
      * Called by GuiScreen.java
      *
@@ -242,9 +250,7 @@ public class MineBot {
             return null;
         }
         if (text.equals("cancel")) {
-            nextPath = null;
-            clearPath();
-            return "unset";
+            cancelPath();
         }
         if (text.equals("st")) {
             System.out.println(theWorld.getBlockState(playerFeet).getBlock());
@@ -274,8 +280,38 @@ public class MineBot {
             Block block = theWorld.getBlockState(bp).getBlock();
             return block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube();
         }
+        if (text.startsWith("mine")) {
+            getToY12();
+            Miner.goMining();
+            return null;
+        }
         return message;
     }
+
+    public static String cancelPath() {
+        nextPath = null;
+        clearPath();
+        Miner.stopMining();
+        return "unset";
+    }
+
+    public static String getToY12() {
+        if (isThereAnythingInProgress) {
+            cancelPath();
+        }
+        EntityPlayer p = Minecraft.theMinecraft.thePlayer;
+        MineBot.goal = new BlockPos(p.posX, 12, p.posZ);
+        MineBot.findPathInNewThread(new BlockPos(p.posX, p.posY, p.posZ));
+        try {
+            while (isThereAnythingInProgress) {
+                Thread.sleep(50);
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "At y=12";
+    }
+
     public static void findPathInNewThread(BlockPos playerFeet) {
         new Thread() {
             @Override
@@ -297,6 +333,7 @@ public class MineBot {
             }
         }.start();
     }
+
     public static void planAhead() {
         new Thread() {
             @Override
@@ -320,6 +357,7 @@ public class MineBot {
             }
         }.start();
     }
+
     public static Path findPath(BlockPos playerFeet) {
         PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
         Path path = pf.calculatePath();
@@ -330,6 +368,7 @@ public class MineBot {
          return;
          }*/
     }
+
     /**
      * Give a block that's sorta close to the player, at foot level
      *
@@ -352,6 +391,7 @@ public class MineBot {
     }
     static float desiredYaw;
     static float desiredPitch;
+
     /**
      * Called by our code
      *
@@ -380,6 +420,7 @@ public class MineBot {
         return lookAtCoords(x, y, z, alsoDoPitch);
     }
     public static final float ANGLE_THRESHOLD = 7;
+
     public static boolean lookAtCoords(double x, double y, double z, boolean alsoDoPitch) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         double yDiff = (thePlayer.posY + 1.62) - y;
@@ -398,6 +439,7 @@ public class MineBot {
         }
         return withinRange;
     }
+
     public static boolean moveTowardsBlock(BlockPos p) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
@@ -418,6 +460,7 @@ public class MineBot {
         //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
         return moveTowardsCoords(x, y, z);
     }
+
     public static boolean moveTowardsCoords(double x, double y, double z) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         float currentYaw = thePlayer.rotationYaw;
@@ -456,6 +499,7 @@ public class MineBot {
         }
         return false;
     }
+
     /**
      * What block is the player looking at
      *
