@@ -7,6 +7,7 @@ package minebot.pathfinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import minebot.MineBot;
 import net.minecraft.block.Block;
@@ -43,19 +44,20 @@ public abstract class ActionPlaceOrBreak extends Action {
     }
 
     public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
+        ToolSet ts = new ToolSet();
+        return this.getTotalHardnessOfBlocksToBreak(ts);
+    }
+
+    public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
             if (!blocksToBreak[i].equals(Block.getBlockById(0))) {
-                switchtotool(blocksToBreak[i]);
+                switchtotool(blocksToBreak[i], ts);
                 sum += 1 / (blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]));
             }
             //sum += blocksToBreak[i].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[i]);
         }
         return sum;
-    }
-
-    public double getTotalHardnessOfBlocksToBreak(ArrayList<Item> tools, ArrayList<Byte> slots) {
-        return getTotalHardnessOfBlocksToBreak();
     }
 
     @Override
@@ -117,57 +119,12 @@ public abstract class ActionPlaceOrBreak extends Action {
     }
 
     public void switchtotool(Block b) {
-        ToolSet ts = new ToolSet();
-        this.switchtotool(b, ts.tools, ts.slots);
+        this.switchtotool(b, new ToolSet());
     }
 
-    public void switchtotool(Block b, ArrayList<Item> tools, ArrayList<Byte> slots) {
-        //System.out.println("b: " + b);
+    public void switchtotool(Block b, ToolSet ts) {
+        Minecraft.theMinecraft.thePlayer.inventory.currentItem = ts.getBestSlot(b);
 
-        byte best = 0;
-        //System.out.println("best: " + best);
-        float value = 0;
-        for (byte i = 0; i < tools.size(); i++) {
-            Item item = tools.get(i);
-            if (item == null) {
-                item = Item.getByNameOrId("minecraft:apple");
-            }
-            //System.out.println(inv[i]);
-            float v = item.getStrVsBlock(new ItemStack(item), b);
-            //System.out.println("v: " + v);
-            if (v > value) {
-                value = v;
-                best = i;
-            }
-        }
-        //System.out.println("best: " + best);
-        Minecraft.theMinecraft.thePlayer.inventory.currentItem = slots.get(best);
-
-    }
-
-    class ToolSet {
-        public ArrayList<Item> tools;
-        public ArrayList<Byte> slots;
-
-        ToolSet(ArrayList<Item> tools, ArrayList<Byte> slots) {
-            this.tools = tools;
-            this.slots = slots;
-        }
-        ToolSet() {
-            EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
-            ItemStack[] inv = p.inventory.mainInventory;
-            tools = new ArrayList<Item>();
-            slots = new ArrayList<Byte>();
-            //System.out.println("inv: " + Arrays.toString(inv));
-            boolean fnull = false;
-            for (byte i = 0; i < 9; i++) {
-                if (!fnull || (inv[i] != null && inv[i].getItem().isItemTool(null))) {
-                    tools.add(inv[i] != null ? inv[i].getItem() : null);
-                    slots.add(i);
-                    fnull |= inv[i] == null || (!inv[i].getItem().isDamageable());
-                }
-            }
-        }
     }
 
     protected abstract boolean tick0();

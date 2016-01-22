@@ -19,11 +19,11 @@ public class ActionFall extends ActionPlaceOrBreak {
         super(start, end, new BlockPos[]{new BlockPos(end.getX(), end.getY() + 2, end.getZ()), new BlockPos(end.getX(), end.getY() + 1, end.getZ()), end}, new BlockPos[]{new BlockPos(end.getX(), end.getY() - 1, end.getZ())});
     }
     @Override
-    protected double calculateCost() {
+    protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
             return 10000;
         }
-        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be

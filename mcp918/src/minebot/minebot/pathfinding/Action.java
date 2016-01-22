@@ -43,7 +43,10 @@ public abstract class Action {
      *
      * @return
      */
-    protected abstract double calculateCost();
+    protected final double calculateCost(){
+        return calculateCost(new ToolSet());
+    }
+    protected abstract double calculateCost(ToolSet ts);
     /**
      * What action would get you from the blockpos "from" to the blockpos "to"
      *

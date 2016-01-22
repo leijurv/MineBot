@@ -93,7 +93,7 @@ public class Path {
     }
     int ticksAway = 0;
     static final double MAX_DISTANCE_FROM_PATH = 2;
-    static final int MAX_TICKS_AWAY = 20 * 5;
+    static final int MAX_TICKS_AWAY = 20 * 10;
     public boolean failed = false;
     public boolean tick() {
         if (pathPosition >= path.size()) {
