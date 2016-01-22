@@ -5,9 +5,7 @@
  */
 package minebot.pathfinding;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import minebot.MineBot;
 import net.minecraft.block.Block;
@@ -23,12 +21,10 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public abstract class ActionPlaceOrBreak extends Action {
-
     public final BlockPos[] positionsToBreak;//the positions that need to be broken before this action can ensue
     public final BlockPos[] positionsToPlace;//the positions where we need to place a block before this aciton can ensue
     public final Block[] blocksToBreak;//the blocks at those positions
     public final Block[] blocksToPlace;
-
     public ActionPlaceOrBreak(BlockPos start, BlockPos end, BlockPos[] toBreak, BlockPos[] toPlace) {
         super(start, end);
         this.positionsToBreak = toBreak;
@@ -42,18 +38,16 @@ public abstract class ActionPlaceOrBreak extends Action {
             blocksToPlace[i] = Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[i]).getBlock();
         }
     }
-
     public double getTotalHardnessOfBlocksToBreak() {//of all the blocks we need to break before starting this action, what's the sum of how hard they are (phrasing)
         ToolSet ts = new ToolSet();
         return this.getTotalHardnessOfBlocksToBreak(ts);
     }
-
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
         Item item;
         for (int i = 0; i < blocksToBreak.length; i++) {
             if (!blocksToBreak[i].equals(Block.getBlockById(0))) {
-                sum += 1 / ts.getStrVsBlock(blocksToBreak[i])
+                sum += 1 / ts.getStrVsBlock(blocksToBreak[i]);
                 switchtotool(blocksToBreak[i], ts);
                 sum += 1 / (blocksToBreak[i].getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, positionsToBreak[i]));
             }
@@ -61,12 +55,10 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return sum;
     }
-
     @Override
     public String toString() {
         return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak) + " cost " + cost() + " break cost " + getTotalHardnessOfBlocksToBreak();
     }
-
     @Override
     public boolean tick() {
         //breaking first
@@ -99,7 +91,6 @@ public abstract class ActionPlaceOrBreak extends Action {
         return tick0();
     }
     final List<Item> acceptable = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
-
     public void switchtothrowaway() {
         //System.out.println("b: " + b);
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
@@ -119,15 +110,11 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
     }
-
     public void switchtotool(Block b) {
         this.switchtotool(b, new ToolSet());
     }
-
     public void switchtotool(Block b, ToolSet ts) {
         Minecraft.theMinecraft.thePlayer.inventory.currentItem = ts.getBestSlot(b);
-
     }
-
     protected abstract boolean tick0();
 }
