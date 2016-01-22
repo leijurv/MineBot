@@ -112,6 +112,13 @@ public class MineBot {
                     System.out.println("Jumping because in water");
                     jumping = true;
                 }
+                if (!lookingPitch) {
+                    if (desiredPitch < 0) {
+                        desiredPitch++;
+                    } else {
+                        desiredPitch--;
+                    }
+                }
             }
         }
         if (looking) {
