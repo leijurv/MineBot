@@ -139,12 +139,12 @@ public class Path {
             //System.out.println("At position " + pathPosition + " in " + path + " and actions " + actions);
         } else {
             ticksOnCurrent++;
-        }
-        if (ticksOnCurrent > actions.get(pathPosition).cost() * 2 + 40) {
-            GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks). Cancelling.", true);
-            pathPosition = path.size() + 3;
-            failed = true;
-            return true;
+            if (ticksOnCurrent > actions.get(pathPosition).cost() * 2 + 40) {
+                GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks). Cancelling.", true);
+                pathPosition = path.size() + 3;
+                failed = true;
+                return true;
+            }
         }
         return false;
     }
