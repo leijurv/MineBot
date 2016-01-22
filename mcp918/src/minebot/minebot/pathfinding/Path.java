@@ -94,6 +94,7 @@ public class Path {
     int ticksAway = 0;
     static final double MAX_DISTANCE_FROM_PATH = 2;
     static final int MAX_TICKS_AWAY = 20 * 10;
+    int ticksOnCurrent = 0;
     public boolean failed = false;
     public boolean tick() {
         if (pathPosition >= path.size()) {
@@ -134,7 +135,16 @@ public class Path {
         if (actions.get(pathPosition).tick()) {
             System.out.println("Action done, next path");
             pathPosition++;
+            ticksOnCurrent = 0;
             //System.out.println("At position " + pathPosition + " in " + path + " and actions " + actions);
+        } else {
+            ticksOnCurrent++;
+        }
+        if (ticksOnCurrent > actions.get(pathPosition).cost() * 2 + 40) {
+            GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks). Cancelling.", true);
+            pathPosition = path.size() + 3;
+            failed = true;
+            return true;
         }
         return false;
     }
