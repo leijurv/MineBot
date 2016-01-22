@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.pathfinding.mining;
+package minebot.mining;
 
 import minebot.MineBot;
 import net.minecraft.client.Minecraft;
@@ -17,6 +17,9 @@ import net.minecraft.util.BlockPos;
 public class Miner {
     public static boolean isMining = false;
     public static void goMining(){
+        isMining = true;
+        MineBot.getToY(12);
+        
     }
 
     public static void stopMining() {

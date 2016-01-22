@@ -15,7 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
-import minebot.pathfinding.mining.Miner;
+import minebot.mining.Miner;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -281,8 +281,7 @@ public class MineBot {
             return block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube();
         }
         if (text.startsWith("mine")) {
-            getToY12();
-            Miner.goMining();
+            goMiningInNewThread();
             return null;
         }
         return message;
@@ -294,22 +293,34 @@ public class MineBot {
         Miner.stopMining();
         return "unset";
     }
+    
+    public static void goMiningInNewThread(){
+        new Thread() {
+            @Override
+            public void run() {
+                Miner.goMining();
+            }
+        }.start();
+    }
 
-    public static String getToY12() {
-        if (isThereAnythingInProgress) {
+    public static void getToY(int y) {
+        if (currentPath!=null) {
             cancelPath();
         }
+        if (isThereAnythingInProgress){
+            GuiScreen.sendChatMessage("Nope. I'm busy", true);
+            return;
+        }
         EntityPlayer p = Minecraft.theMinecraft.thePlayer;
-        MineBot.goal = new BlockPos(p.posX, 12, p.posZ);
+        MineBot.goal = new BlockPos(p.posX, y, p.posZ);
         MineBot.findPathInNewThread(new BlockPos(p.posX, p.posY, p.posZ));
         try {
-            while (isThereAnythingInProgress) {
+            do {
                 Thread.sleep(50);
-            }
+            } while (currentPath!=null) ;
         } catch (InterruptedException ex) {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "At y=12";
     }
 
     public static void findPathInNewThread(BlockPos playerFeet) {
