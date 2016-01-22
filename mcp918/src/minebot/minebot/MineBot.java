@@ -66,7 +66,7 @@ public class MineBot {
                     clearPath();
                 }
                 currentPath = null;
-                System.out.println("Path done");
+                GuiScreen.sendChatMessage("Done", true);
             }
             EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
             World theWorld = Minecraft.theMinecraft.theWorld;

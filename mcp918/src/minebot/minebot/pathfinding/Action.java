@@ -82,7 +82,7 @@ public abstract class Action {
      */
     public static boolean canWalkThrough(BlockPos pos) {//fix this. this assumes that air is the only block with no collisions, while actually there are others (e.g. torches)
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        return block.isPassable(Minecraft.theMinecraft.theWorld, pos);
+        return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isWater(Minecraft.theMinecraft.theWorld.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock());
     }
     /**
      * Can I walk on this block without anything weird happening like me falling

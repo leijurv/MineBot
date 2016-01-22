@@ -130,6 +130,7 @@ public class Path {
             ticksAway = 0;
         }
         System.out.println(actions.get(pathPosition));
+        MineBot.clearMovement();
         if (actions.get(pathPosition).tick()) {
             System.out.println("Action done, next path");
             pathPosition++;

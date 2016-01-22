@@ -41,18 +41,14 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {
-        MineBot.clearMovement();
         boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]);
         //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
-            System.out.println(MineBot.moveTowardsBlock(to));
+            MineBot.moveTowardsBlock(to);
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
-                MineBot.forward = false;//stop walking forwards
-                MineBot.backward = false;
-                MineBot.sneak = false;
                 return true;//and we are done
             }
             System.out.println("Trying to get to " + to + " currently at " + whereAmI);
