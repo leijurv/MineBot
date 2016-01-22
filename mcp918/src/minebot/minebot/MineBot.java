@@ -57,6 +57,9 @@ public class MineBot {
         lookingPitch = false;
         if (currentPath != null) {
             //System.out.println("On a path");
+            EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+            World theWorld = Minecraft.theMinecraft.theWorld;
+            BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
             if (currentPath.tick()) {
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
@@ -67,10 +70,11 @@ public class MineBot {
                 }
                 currentPath = null;
                 GuiScreen.sendChatMessage("Done", true);
+                if (!new GoalBlock(goal).isInGoal(playerFeet)) {
+                    GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
+                    findPathInNewThread();
+                }
             } else {
-                EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-                World theWorld = Minecraft.theMinecraft.theWorld;
-                BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
                 if (Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
                     System.out.println("Jumping because in water");
                     jumping = true;
