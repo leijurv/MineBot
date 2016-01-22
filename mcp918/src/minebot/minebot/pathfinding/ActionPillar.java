@@ -36,6 +36,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
             System.out.println("Block not there yet");
+            switchtothrowaway();
             Minecraft.theMinecraft.rightClickMouse();//constantly right click
         }
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
