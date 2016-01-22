@@ -41,14 +41,13 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {
+        MineBot.clearMovement();
         boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]);
         //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
-            MineBot.sneak = false;
-            MineBot.backward = false;
-            MineBot.forward = MineBot.lookAtBlock(to, false);//we are going forward
+            MineBot.moveTowardsBlock(to);
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
                 MineBot.forward = false;//stop walking forwards
@@ -73,13 +72,13 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
                     Minecraft.theMinecraft.rightClickMouse();
                 }
-                MineBot.forward = false;
                 MineBot.backward = look;
+                MineBot.forward = false;
                 System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
                 System.out.println("Not there yet m9");
-                MineBot.forward = MineBot.lookAtBlock(to, false);//look at where we are walking
+                MineBot.moveTowardsBlock(to);
                 return false;
             }
         }

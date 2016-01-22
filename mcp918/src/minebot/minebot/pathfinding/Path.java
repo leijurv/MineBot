@@ -97,7 +97,7 @@ public class Path {
     public boolean failed = false;
     public boolean tick() {
         if (pathPosition >= path.size()) {
-            MineBot.clear();
+            MineBot.clearPath();
             return true;
         }
         BlockPos whereShouldIBe = path.get(pathPosition);
@@ -105,7 +105,7 @@ public class Path {
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (pathPosition == path.size() - 1) {
             System.out.println("On last path position");
-            MineBot.clear();
+            MineBot.clearPath();
             return true;
         }
         if (!whereShouldIBe.equals(whereAmI)) {
