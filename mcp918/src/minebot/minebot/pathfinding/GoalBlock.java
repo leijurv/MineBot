@@ -30,15 +30,19 @@ public class GoalBlock implements Goal {
         double xDiff = pos.getX() - this.x;
         double yDiff = pos.getY() - this.y;
         double zDiff = pos.getZ() - this.z;
+        double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
+        double min = 50;
+        double max = 100;
+        double multiplier = pythaDist > max ? 0 : (pythaDist < min ? 1 : 1 - (pythaDist - min) / (max - min));
         double heuristic = 0;
         if (yDiff < 0) {//pos.getY()-this.y<0 therefore pos.getY()<this.y, so target is above current
             heuristic -= yDiff * (Action.PLACE_ONE_BLOCK_COST + Action.JUMP_ONE_BLOCK_COST + Action.WALK_ONE_BLOCK_COST);
         } else {
             heuristic += yDiff * (Action.PLACE_ONE_BLOCK_COST + Action.FALL_ONE_BLOCK_COST);
         }
+        heuristic *= multiplier;
         heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
         heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
-        double pythaDist = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
         heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
         return heuristic;
     }
