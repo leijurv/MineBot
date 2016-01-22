@@ -34,10 +34,16 @@ public class MineBot {
         Autorun.runprocess("/usr/local/bin/ant jar");
         Autorun.runprocess("java -Djava.library.path=jars/versions/1.8.8/1.8.8-natives/ -jar dist/MineBot.jar");
     }
+    public static void onTick() {
+        long start = System.currentTimeMillis();
+        onTick1();
+        long end = System.currentTimeMillis();
+        System.out.println("Tick took " + (end - start) + "ms");
+    }
     /**
      * Called by minecraft.java
      */
-    public static void onTick() {
+    public static void onTick1() {
         /////////*System.out.println(isLeftClick + "," + pressTime);*/
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             return;
