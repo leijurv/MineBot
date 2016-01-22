@@ -113,12 +113,11 @@ public class MineBot {
                     jumping = true;
                 }
                 if (!lookingPitch) {
-                    if (desiredPitch < 0) {
-                        desiredPitch++;
+                    if (thePlayer.rotationPitch < 0) {
+                        thePlayer.rotationPitch++;
                     } else {
-                        desiredPitch--;
+                        thePlayer.rotationPitch--;
                     }
-                    lookingPitch = true;
                 }
             }
         }
