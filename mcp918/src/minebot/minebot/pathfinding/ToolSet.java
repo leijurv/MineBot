@@ -12,22 +12,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 /**
  *
  * @author avecowa
  */
 public class ToolSet {
-
     public ArrayList<Item> tools;
     public ArrayList<Byte> slots;
     public HashMap<Block, Byte> cache = new HashMap<>();
-
     ToolSet(ArrayList<Item> tools, ArrayList<Byte> slots) {
         this.tools = tools;
         this.slots = slots;
     }
-
     ToolSet() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
@@ -43,7 +41,6 @@ public class ToolSet {
             }
         }
     }
-
     public Item getBestTool(Block b) {
         if (cache.get(b) != null) {
             return tools.get(cache.get(b));
@@ -68,7 +65,6 @@ public class ToolSet {
         cache.put(b, best);
         return tools.get(best);
     }
-
     public byte getBestSlot(Block b) {
         if (cache.get(b) != null) {
             return slots.get(cache.get(b));
@@ -93,8 +89,16 @@ public class ToolSet {
         cache.put(b, best);
         return slots.get(best);
     }
-    public double getStrVsBlock(Block b){
+    public double getStrVsBlock(Block b, BlockPos pos) {
         Item item = this.getBestTool(b);
-        return item.getStrVsBlock(new ItemStack(item), b);
+        float f = b.getBlockHardness(Minecraft.theMinecraft.theWorld, pos);
+        return f < 0.0F ? 0.0F : (!canHarvest(b, item) ? item.getStrVsBlock(new ItemStack(item), b) / f / 100.0F : item.getStrVsBlock(new ItemStack(item), b) / f / 30.0F);
+    }
+    public boolean canHarvest(Block blockIn, Item item) {
+        if (blockIn.getMaterial().isToolNotRequired()) {
+            return true;
+        } else {
+            return new ItemStack(item).canHarvestBlock(blockIn);
+        }
     }
 }
