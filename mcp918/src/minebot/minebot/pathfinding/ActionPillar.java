@@ -22,14 +22,19 @@ public class ActionPillar extends ActionPlaceOrBreak {
     protected double calculateCost(ToolSet ts) {
         return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts) * 100000;
     }
+    int numTicks = 0;
     @Override
     protected boolean tick0() {
         if (!MineBot.lookAtBlock(positionsToPlace[0], true)) {
             return false;
         }
+        numTicks++;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
         //otherwise jump
+        if (numTicks > 40) {
+            MineBot.forward = true;
+        }
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
             System.out.println("Block not there yet");
