@@ -6,9 +6,6 @@
 package minebot.mining;
 
 import minebot.MineBot;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
 
 /**
  *
@@ -16,15 +13,11 @@ import net.minecraft.util.BlockPos;
  */
 public class Miner {
     public static boolean isMining = false;
-    public static void goMining(){
+    public static void goMining() {
         isMining = true;
         MineBot.getToY(12);
-        
     }
-
     public static void stopMining() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 }
