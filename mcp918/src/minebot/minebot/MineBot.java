@@ -6,6 +6,8 @@
 package minebot;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.pathfinding.Action;
@@ -262,9 +264,16 @@ public class MineBot {
             lookAtBlock(pos, true);
             return pos.toString();
         }
-        if (text.equals("setgoal")) {
-            goal = playerFeet;
-            return "Set goal to " + playerFeet;
+        if (text.startsWith("setgoal")) {
+            String next = null;
+            Scanner t = new Scanner(text.substring("setgoal".length()).trim());
+            int[] coords = new int[3];
+            int c = 0;
+            while(t.hasNext() && c < 3){
+                coords[c++]=t.nextInt();
+            }
+            goal = c==3 ? new BlockPos(coords[0], coords[1], coords[2]) : playerFeet;
+            return "Set goal to " + goal;
         }
         if (text.startsWith("path")) {
             //boolean stone = message.contains("stone");
