@@ -48,4 +48,8 @@ public class GoalBlock implements Goal {
         heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
         return heuristic;
     }
+    @Override
+    public String toString() {
+        return "Goal{x=" + x + ",y=" + y + ",z=" + z + "}";
+    }
 }

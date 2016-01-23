@@ -18,6 +18,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
 import minebot.mining.Miner;
 import minebot.pathfinding.Goal;
+import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -267,7 +268,17 @@ public class MineBot {
             while (t.hasNext() && c < 3) {
                 coords[c++] = t.nextInt();
             }
-            goal = new GoalBlock(c == 3 ? new BlockPos(coords[0], coords[1], coords[2]) : playerFeet);
+            switch (c) {
+                case 3:
+                    goal = new GoalBlock(new BlockPos(coords[0], coords[1], coords[2]));
+                    break;
+                case 2:
+                    goal = new GoalXZ(coords[0], coords[1]);
+                    break;
+                default:
+                    goal = new GoalBlock(playerFeet);
+                    break;
+            }
             return "Set goal to " + goal;
         }
         if (text.startsWith("goaly")) {

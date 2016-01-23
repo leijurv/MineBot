@@ -24,4 +24,8 @@ public class GoalYLevel implements Goal {
     public double heuristic(BlockPos pos) {
         return 20 * Math.abs(pos.getY() - level);
     }
+    @Override
+    public String toString() {
+        return "Goal{y=" + level + "}";
+    }
 }
