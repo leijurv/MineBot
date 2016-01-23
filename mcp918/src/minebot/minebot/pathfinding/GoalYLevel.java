@@ -18,10 +18,10 @@ public class GoalYLevel implements Goal {
     }
     @Override
     public boolean isInGoal(BlockPos pos) {
-        return pos.getY() <= level;
+        return pos.getY() == level;
     }
     @Override
     public double heuristic(BlockPos pos) {
-        return 20 * Math.abs(pos.getY());
+        return 20 * Math.abs(pos.getY() - level);
     }
 }
