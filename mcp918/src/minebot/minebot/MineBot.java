@@ -385,7 +385,7 @@ public class MineBot {
     public static Path findPath(BlockPos playerFeet) {
         PathFinder pf = new PathFinder(playerFeet, goal);
         Path path = pf.calculatePath();
-        GuiScreen.sendChatMessage(playerFeet + " to " + path.end, true);
+        GuiScreen.sendChatMessage("calculated " + playerFeet + " to " + path.end, true);
         return path;
         /* if (stone) {
          path.showPathInStone();
