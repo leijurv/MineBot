@@ -72,11 +72,11 @@ public class MineBot {
         }
         looking = false;
         lookingPitch = false;
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        World theWorld = Minecraft.theMinecraft.theWorld;
+        BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (currentPath != null) {
             //System.out.println("On a path");
-            EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-            World theWorld = Minecraft.theMinecraft.theWorld;
-            BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
             if (currentPath.tick()) {
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
@@ -128,6 +128,10 @@ public class MineBot {
                     }
                 }
             }
+        }
+        if (isThereAnythingInProgress && Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
+            System.out.println("Jumping because in water and pathfinding");
+            jumping = true;
         }
         if (looking) {
             System.out.println("desired yaw: " + desiredYaw);
