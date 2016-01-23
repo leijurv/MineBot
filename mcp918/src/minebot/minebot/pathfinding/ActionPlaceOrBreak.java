@@ -66,7 +66,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                     System.out.println("Wrong");
                     return false;
                 }
-                switchtotool(blocksToBreak[i]);
+                switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock());
                 MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(positionsToBreak[i])) {
                     MineBot.letGoOfLeftClick();
