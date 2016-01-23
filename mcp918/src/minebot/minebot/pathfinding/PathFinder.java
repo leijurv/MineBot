@@ -6,7 +6,7 @@
 package minebot.pathfinding;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -27,19 +27,21 @@ public class PathFinder {
         startNode.cost = 0;
         Node bestSoFar = null;
         double bestHeuristicSoFar = Double.MAX_VALUE;
-        PriorityList openList = new PriorityList();
-        openList.addNode(startNode);
-        int numNodes = 0;
+        OpenSet openSet = new OpenSet();
+        openSet.insert(startNode);
+        HashSet<Node> hashSet = new HashSet<>();
+        hashSet.add(startNode);
         long startTime = System.currentTimeMillis();
-        long timeoutTime = startTime + 20000;
-        while (!openList.isEmpty()) {
-            Node me = openList.removeFirst();
+        long timeoutTime = startTime + 10000;
+        while (openSet.first != null) {
+            Node me = openSet.removeFirst();
+            hashSet.remove(me);
             BlockPos myPos = me.pos;
             System.out.println("searching... " + myPos);
-            if (goal.isInGoal(me.pos)) {
+            if (goal.isInGoal(myPos)) {
                 return new Path(startNode, me, goal);
             }
-            Action[] connected = getConnectedPositions(me.pos);
+            Action[] connected = getConnectedPositions(myPos);
             for (Action actionToGetToNeighbor : connected) {
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
                 double tentativeCost = me.cost + actionToGetToNeighbor.calculateCost();
@@ -47,8 +49,9 @@ public class PathFinder {
                     neighbor.previous = me;
                     neighbor.previousAction = actionToGetToNeighbor;
                     neighbor.cost = tentativeCost;
-                    if (!openList.contains(neighbor)) {
-                        openList.addNode(neighbor);
+                    if (!hashSet.contains(neighbor)) {
+                        openSet.insert(neighbor);
+                        hashSet.add(neighbor);
                     }
                 }
                 double sum = neighbor.estimatedCostToGoal + neighbor.cost / 2;
@@ -57,8 +60,7 @@ public class PathFinder {
                     bestSoFar = neighbor;
                 }
             }
-            numNodes++;
-            if (numNodes > 5000 || System.currentTimeMillis() > timeoutTime) {
+            if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
                 return new Path(startNode, bestSoFar, goal);
             }
@@ -96,15 +98,74 @@ public class PathFinder {
         return actions;
     }
 
-    public static class PriorityList extends LinkedList<Node> {
-        public void addNode(Node object) {
-            for (int i = 0; i < size(); i++) {
-                if (object.compareTo(get(i)) <= 0) {
-                    add(i, object);
-                    return;
-                }
+    public static class OpenSet {
+        ListNode first = null;
+        public Node removeFirst() {
+            if (first == null) {
+                return null;
             }
-            addLast(object);
+            if (first.next == null) {
+                return first.element;
+            }
+            ListNode current = first;
+            double bestValue = -5021;
+            Node bestNode = null;
+            while (current != null) {
+                Node e = current.element;
+                if (bestValue == -5021 || e.comparison() < bestValue) {
+                    bestValue = e.comparison();
+                    bestNode = e;
+                }
+                current = current.next;
+            }
+            return bestNode;
+        }
+        public void insert(Node node) {
+            ListNode n = new ListNode(node);
+            n.next = first;
+            first = n;
+        }
+        /*public String toString() {
+         ListNode current = first;
+         while (current != null) {
+         if (current.next != null) {
+         System.out.println(current.element.compareTo(current.next.element));
+         }
+         current = current.next;
+         }
+         return "";
+         }
+         public void insert(Node node) {
+         if (first == null) {
+         first = new ListNode(node);
+         return;
+         }
+         if (node.compareTo(first.element) <= 0) {
+         ListNode toInsert = new ListNode(node);
+         toInsert.next = first;
+         first = toInsert;
+         }
+         ListNode ln = first.next;
+         ListNode previous = first;
+         while (ln != null) {
+         if (node.compareTo(ln.element) <= 0) {
+         ListNode toInsert = new ListNode(node);
+         toInsert.next = ln;
+         previous.next = toInsert;
+         return;
+         }
+         previous = ln;
+         ln = ln.next;
+         }
+         previous.next = new ListNode(node);
+         }*/
+
+        public static class ListNode {
+            ListNode next = null;
+            Node element = null;
+            public ListNode(Node element) {
+                this.element = element;
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class Node implements Comparable<Node> {
+public class Node {
     final BlockPos pos;
     double cost;
     Node previous;
@@ -27,15 +27,16 @@ public class Node implements Comparable<Node> {
         this.estimatedCostToGoal = goal.heuristic(pos);
         this.previousAction = null;
     }
-    @Override
-    public int compareTo(Node otherNode) {
-        return new Double(estimatedCostToGoal + cost).compareTo(otherNode.estimatedCostToGoal + otherNode.cost);
+    public double comparison() {
+        return estimatedCostToGoal + cost;
     }
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.pos);
-        hash = 53 * hash + Objects.hashCode(this.goal);
+        int hash = 3241;
+        hash = 3457689 * hash + this.pos.getX();
+        hash = 8734625 * hash + this.pos.getY();
+        hash = 2873465 * hash + this.pos.getZ();
+        hash = 3241543 * hash + Objects.hashCode(this.goal);
         return hash;
     }
     @Override
