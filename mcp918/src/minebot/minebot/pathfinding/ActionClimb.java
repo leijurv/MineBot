@@ -27,8 +27,13 @@ public class ActionClimb extends ActionPlaceOrBreak {
     }
     @Override
     protected boolean tick0() {//basically just hold down W and space until we are where we want to be
-        MineBot.jumping = MineBot.moveTowardsBlock(to);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        double flatDistToNext = Math.abs((to.getX() + 0.5D) - thePlayer.posX) + Math.abs((to.getZ() + 0.5D) - thePlayer.posZ);
+        boolean pointingInCorrectDirection = MineBot.moveTowardsBlock(to);
+        MineBot.jumping = flatDistToNext < 1 && pointingInCorrectDirection;
+        //once we are pointing the right way and moving, start jumping
+        //this is slightly more efficient because otherwise we might start jumping before moving, and fall down without moving onto the block we want to jump onto
+        //also wait until we are close enough, because we might jump and hit our head on an adjacent block
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {
             System.out.println("Done climbing to " + to);
