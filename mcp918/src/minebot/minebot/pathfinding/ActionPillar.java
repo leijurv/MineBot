@@ -20,7 +20,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
-        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts) * 100000;
+        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts) * 1000000;//dont ever break the block above you, so multiply by a million
     }
     int numTicks = 0;
     @Override
@@ -33,7 +33,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
         MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
         //otherwise jump
         if (numTicks > 40) {
-            MineBot.forward = true;
+            MineBot.forward = true;//if it's been more than forty ticks of trying to jump and we aren't done yet, go forward, maybe we are stuck
         }
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {

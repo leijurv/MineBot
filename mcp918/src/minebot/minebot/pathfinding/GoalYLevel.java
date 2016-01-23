@@ -22,7 +22,8 @@ public class GoalYLevel implements Goal {
     }
     @Override
     public double heuristic(BlockPos pos) {
-        return 20 * Math.abs(pos.getY() - level);
+        return 20 * Math.abs(pos.getY() - level);//the number 20 was chosen somewhat randomly.
+        //TODO fix that
     }
     @Override
     public String toString() {

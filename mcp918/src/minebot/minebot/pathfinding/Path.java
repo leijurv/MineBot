@@ -33,7 +33,7 @@ public class Path {
         this.path = new ArrayList<>();
         this.actions = new ArrayList<>();
         Node current = end;
-        while (!current.equals(start)) {
+        while (!current.equals(start)) {//assemble the path
             path.add(0, current.pos);
             actions.add(0, current.previousAction);
             current = current.previous;
@@ -41,7 +41,7 @@ public class Path {
         path.add(0, start.pos);
         System.out.println("Final path: " + path);
         System.out.println("Final actions: " + actions);
-        for (int i = 0; i < path.size() - 1; i++) {
+        for (int i = 0; i < path.size() - 1; i++) {//print it all out
             int oldX = path.get(i).getX();
             int oldY = path.get(i).getY();
             int oldZ = path.get(i).getZ();
@@ -51,9 +51,12 @@ public class Path {
             int xDiff = newX - oldX;
             int yDiff = newY - oldY;
             int zDiff = newZ - oldZ;
-            System.out.println(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);
+            System.out.println(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);//print it all out
         }
     }
+    /**
+     * We don't really use this any more
+     */
     public void showPathInStone() {
         IBlockState[] originalStates = new IBlockState[path.size()];
         for (int i = 0; i < path.size(); i++) {
@@ -91,14 +94,32 @@ public class Path {
         double zdiff = z - (pos.getZ() + 0.5D);
         return Math.sqrt(xdiff * xdiff + ydiff * ydiff + zdiff * zdiff);
     }
+    /**
+     * How many ticks have I been more than MAX_DISTANCE_FROM_PATH away from the
+     * path
+     */
     int ticksAway = 0;
+    /**
+     * How far away from the path can I get and still be okay
+     */
     static final double MAX_DISTANCE_FROM_PATH = 2;
+    /**
+     * How many ticks can I be more than MAX_DISTANCE_FROM_PATH before we
+     * consider it a failure
+     */
     static final int MAX_TICKS_AWAY = 20 * 10;
+    /**
+     * How many ticks have elapsed on this action
+     */
     int ticksOnCurrent = 0;
+    /**
+     * Did I fail, either by being too far away for too long, or by having an
+     * action take too long
+     */
     public boolean failed = false;
     public boolean tick() {
         if (pathPosition >= path.size()) {
-            MineBot.clearPath();
+            MineBot.clearPath();//stop bugging me, I'm done
             return true;
         }
         BlockPos whereShouldIBe = path.get(pathPosition);
@@ -111,6 +132,7 @@ public class Path {
         }
         if (!whereShouldIBe.equals(whereAmI)) {
             System.out.println("Should be at " + whereShouldIBe + " actually am at " + whereAmI);
+            //it's the duty of the action to tell us when it's done, so ignore the commented code below
             /*if (path.get(pathPosition + 1).equals(whereAmI)) {
              System.out.println("Hey I'm on the next one");
              pathPosition++;

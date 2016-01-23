@@ -22,7 +22,14 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<>();
     }
+    /**
+     * Do the actual path calculation. The returned path might not actually go
+     * to goal, but it will get as close as I could get
+     *
+     * @return
+     */
     public Path calculatePath() {
+        //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
         Node bestSoFar = null;
@@ -33,11 +40,14 @@ public class PathFinder {
         hashSet.add(startNode);
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + 10000;
+        int numNodes = 0;
         while (openSet.first != null) {
-            Node me = openSet.removeFirst();
+            Node me = openSet.removeLowest();
             hashSet.remove(me);
             BlockPos myPos = me.pos;
-            System.out.println("searching... " + myPos);
+            if (numNodes % 1000 == 0) {
+                System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
+            }
             if (goal.isInGoal(myPos)) {
                 return new Path(startNode, me, goal);
             }
@@ -50,7 +60,7 @@ public class PathFinder {
                     neighbor.previousAction = actionToGetToNeighbor;
                     neighbor.cost = tentativeCost;
                     if (!hashSet.contains(neighbor)) {
-                        openSet.insert(neighbor);
+                        openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
                         hashSet.add(neighbor);
                     }
                 }
@@ -60,6 +70,7 @@ public class PathFinder {
                     bestSoFar = neighbor;
                 }
             }
+            numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
                 return new Path(startNode, bestSoFar, goal);
@@ -98,9 +109,12 @@ public class PathFinder {
         return actions;
     }
 
+    /**
+     * My own implementation of a singly linked list
+     */
     public static class OpenSet {
         ListNode first = null;
-        public Node removeFirst() {
+        public Node removeLowest() {
             if (first == null) {
                 return null;
             }
@@ -111,14 +125,15 @@ public class PathFinder {
             }
             ListNode current = first;
             ListNode previous = null;
-            double bestValue = -5021;
+            double bestValue = Double.MAX_VALUE;
             Node bestNode = null;
             ListNode beforeBest = null;
             while (current != null) {
-                Node e = current.element;
-                if (bestValue == -5021 || e.comparison() < bestValue) {
-                    bestValue = e.comparison();
-                    bestNode = e;
+                Node element = current.element;
+                double comp = element.comparison();
+                if (bestNode == null || comp < bestValue) {
+                    bestValue = comp;
+                    bestNode = element;
                     beforeBest = previous;
                 }
                 previous = current;
@@ -137,10 +152,10 @@ public class PathFinder {
             first = n;
         }
 
-        public static class ListNode {
+        private static class ListNode {
             ListNode next = null;
             Node element = null;
-            public ListNode(Node element) {
+            private ListNode(Node element) {
                 this.element = element;
             }
         }

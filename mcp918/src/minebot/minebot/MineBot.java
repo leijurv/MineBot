@@ -214,7 +214,8 @@ public class MineBot {
         sneak = false;
     }
     /**
-     * Clears movement, clears the current path, and lets go of left click
+     * Clears movement, clears the current path, and lets go of left click. It
+     * purposefully does NOT clear nextPath.
      */
     public static void clearPath() {
         currentPath = null;

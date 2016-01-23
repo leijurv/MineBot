@@ -12,6 +12,18 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public interface Goal {
+    /**
+     * Does this position satisfy the goal?
+     *
+     * @param pos
+     * @return
+     */
     public boolean isInGoal(BlockPos pos);
+    /**
+     * Estimate the number of ticks it will take to get to the goal
+     *
+     * @param pos
+     * @return
+     */
     public double heuristic(BlockPos pos);
 }

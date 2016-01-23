@@ -61,8 +61,13 @@ public abstract class ActionPlaceOrBreak extends Action {
         for (int i = 0; i < blocksToBreak.length; i++) {
             if (!canWalkThrough(positionsToBreak[i])) {
                 //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
-                MineBot.lookAtBlock(positionsToBreak[i], true);//look at the block we are breaking
-                if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {
+                if (!MineBot.lookAtBlock(positionsToBreak[i], true)) {
+                    return false;
+                    //look at the block we are breaking
+                }
+                if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {//hmmm, our crosshairs are looking at the wrong block
+                    //TODO add a timer here, and if we are stuck looking at the wrong block for more than 1 second, do something
+                    //(it cant take longer than twenty ticks, because the MineBot.MAX_YAW_CHANGE_PER_TICK=18, and 18*20 = 360°
                     System.out.println("Wrong");
                     return false;
                 }
@@ -82,24 +87,23 @@ public abstract class ActionPlaceOrBreak extends Action {
                 //System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
                 //one of the blocks that needs to be there isn't there
                 //so basically someone mined out our path from under us
+                //
+                //this doesn't really do anything, because all the cases for positionToPlace are handled in their respective action tick0s (e.g. pillar and bridge)
             }
         }
         return tick0();
     }
-    final List<Item> acceptable = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
+    //I dont want to make this static, because then it might be executed before Item gets initialized
+    final List<Item> ACCEPTABLE_THROWAWAY_ITEMS = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
     public void switchtothrowaway() {
-        //System.out.println("b: " + b);
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
-        //System.out.println("inv: " + Arrays.toString(inv));
-        //System.out.println("best: " + best);
-        float value = 0;
         for (byte i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
                 item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
             }
-            if (acceptable.contains(item.getItem())) {
+            if (ACCEPTABLE_THROWAWAY_ITEMS.contains(item.getItem())) {
                 p.inventory.currentItem = i;
                 return;
             }
@@ -112,5 +116,11 @@ public abstract class ActionPlaceOrBreak extends Action {
     public void switchtotool(Block b, ToolSet ts) {
         Minecraft.theMinecraft.thePlayer.inventory.currentItem = ts.getBestSlot(b);
     }
+    /**
+     * Do the actual tick. This function can assume that all blocks in
+     * positionsToBreak are now walk-through-able.
+     *
+     * @return
+     */
     protected abstract boolean tick0();
 }
