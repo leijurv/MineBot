@@ -105,19 +105,30 @@ public class PathFinder {
                 return null;
             }
             if (first.next == null) {
-                return first.element;
+                Node n = first.element;
+                first = null;
+                return n;
             }
             ListNode current = first;
+            ListNode previous = null;
             double bestValue = -5021;
             Node bestNode = null;
+            ListNode beforeBest = null;
             while (current != null) {
                 Node e = current.element;
                 if (bestValue == -5021 || e.comparison() < bestValue) {
                     bestValue = e.comparison();
                     bestNode = e;
+                    beforeBest = previous;
                 }
+                previous = current;
                 current = current.next;
             }
+            if (beforeBest == null) {
+                first = first.next;
+                return bestNode;
+            }
+            beforeBest.next = beforeBest.next.next;
             return bestNode;
         }
         public void insert(Node node) {
