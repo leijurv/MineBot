@@ -255,9 +255,9 @@ public class MineBot {
             lookAtBlock(pos, true);
             return pos.toString();
         }
-        if (text.startsWith("setgoal")) {
+        if (text.contains("goal")) {
             String next = null;
-            Scanner t = new Scanner(text.substring("setgoal".length()).trim());
+            Scanner t = new Scanner(text.substring(text.indexOf(' ')).trim());
             int[] coords = new int[3];
             int numCoords = 0;
             while (t.hasNext() && numCoords < coords.length) {
