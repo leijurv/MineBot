@@ -136,40 +136,6 @@ public class PathFinder {
             n.next = first;
             first = n;
         }
-        /*public String toString() {
-         ListNode current = first;
-         while (current != null) {
-         if (current.next != null) {
-         System.out.println(current.element.compareTo(current.next.element));
-         }
-         current = current.next;
-         }
-         return "";
-         }
-         public void insert(Node node) {
-         if (first == null) {
-         first = new ListNode(node);
-         return;
-         }
-         if (node.compareTo(first.element) <= 0) {
-         ListNode toInsert = new ListNode(node);
-         toInsert.next = first;
-         first = toInsert;
-         }
-         ListNode ln = first.next;
-         ListNode previous = first;
-         while (ln != null) {
-         if (node.compareTo(ln.element) <= 0) {
-         ListNode toInsert = new ListNode(node);
-         toInsert.next = ln;
-         previous.next = toInsert;
-         return;
-         }
-         previous = ln;
-         ln = ln.next;
-         }
-         previous.next = new ListNode(node);
-         }*/
 
         public static class ListNode {
             ListNode next = null;
