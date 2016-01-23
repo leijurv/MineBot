@@ -258,7 +258,11 @@ public class MineBot {
         }
         if (text.contains("goal")) {
             String next = null;
-            Scanner t = new Scanner(text.substring(text.indexOf(' ')).trim());
+            int ind = text.indexOf(' ');
+            if (ind == 0) {
+                ind = text.length();
+            }
+            Scanner t = new Scanner(text.substring(ind).trim());
             int[] coords = new int[3];
             int numCoords = 0;
             while (t.hasNext() && numCoords < coords.length) {
