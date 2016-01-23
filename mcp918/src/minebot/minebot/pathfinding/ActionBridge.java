@@ -40,8 +40,8 @@ public class ActionBridge extends ActionPlaceOrBreak {
             //System.out.println("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         }
     }
-    boolean wasTheBridgeBlockAlwaysThere = true;
-    Boolean oneInTen = null;
+    boolean wasTheBridgeBlockAlwaysThere = true;//did we have to place a bridge block or was it always there
+    Boolean oneInTen = null;//a one in ten chance
     @Override
     protected boolean tick0() {
         if (oneInTen == null) {
@@ -53,8 +53,9 @@ public class ActionBridge extends ActionPlaceOrBreak {
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
             if (oneInTen && wasTheBridgeBlockAlwaysThere) {
-                MineBot.lookAtBlock(to, false);
-                MineBot.forward = true;
+                //basically one in every ten blocks we walk forwards normally without sneaking and placing, rotate to look forwards.
+                //this way we tend towards looking forwards
+                MineBot.forward = MineBot.lookAtBlock(to, false);
             } else {
                 MineBot.moveTowardsBlock(to);
             }
@@ -67,26 +68,25 @@ public class ActionBridge extends ActionPlaceOrBreak {
         } else {
             wasTheBridgeBlockAlwaysThere = false;
             MineBot.sneak = true;
-            double faceX = (to.getX() + from.getX() + 1.0D) * 0.5D;
-            double faceY = (to.getY() + from.getY() - 1.0D) * 0.5D;
-            double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
-            //double faceX = to.getX();
-            //double faceY = to.getY();
-            //double faceZ = to.getZ();
-            BlockPos goalLook = new BlockPos(from.getX(), from.getY() - 1, from.getZ());
             if (whereAmI.equals(to)) {
+                //if we are in the block that we are trying to get to, we are sneaking over air and we need to place a block beneath us against the one we just walked off of
                 //System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
-                switchtothrowaway();
-                MineBot.backward = MineBot.lookAtCoords(faceX, faceY, faceZ, true);
+                switchtothrowaway();//get ready to place a throwaway block
+                double faceX = (to.getX() + from.getX() + 1.0D) * 0.5D;
+                double faceY = (to.getY() + from.getY() - 1.0D) * 0.5D;
+                double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
+                //faceX,faceY,faceZ is the middle of the face between from and to
+                BlockPos goalLook = new BlockPos(from.getX(), from.getY() - 1, from.getZ());//this is the block we were just standing on, and the one we want to place against
+                MineBot.backward = MineBot.lookAtCoords(faceX, faceY, faceZ, true);//if we are in the block, then we are off the edge of the previous looking backward, so we should be moving backward
                 if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
-                    Minecraft.theMinecraft.rightClickMouse();
+                    Minecraft.theMinecraft.rightClickMouse();//wait to right click until we are able to place
                     return false;
                 }
                 System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
                 System.out.println("Not there yet m9");
-                MineBot.moveTowardsBlock(to);
+                MineBot.moveTowardsBlock(to);//move towards not look at because if we are bridging for a couple blocks in a row, it is faster if we dont spin around and walk forwards then spin around and place backwards for every block
                 return false;
             }
         }
