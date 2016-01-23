@@ -266,6 +266,10 @@ public class MineBot {
             goal = new GoalBlock(c == 3 ? new BlockPos(coords[0], coords[1], coords[2]) : playerFeet);
             return "Set goal to " + goal;
         }
+        if (text.startsWith("goaly")) {
+            goal = new GoalYLevel(Integer.parseInt(text.substring("goaly".length()).trim()));
+            return "Set goal to " + goal;
+        }
         if (text.startsWith("path")) {
             //boolean stone = message.contains("stone");
             findPathInNewThread(playerFeet);
