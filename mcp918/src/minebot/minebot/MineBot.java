@@ -6,7 +6,6 @@
 package minebot;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +17,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
 import minebot.mining.Miner;
+import minebot.pathfinding.Goal;
+import minebot.pathfinding.GoalYLevel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -29,11 +30,9 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
-
     static boolean looking = false;
     static boolean lookingPitch = false;
     static boolean isThereAnythingInProgress = false;
-
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -43,7 +42,6 @@ public class MineBot {
         Autorun.runprocess("/usr/local/bin/ant jar");
         Autorun.runprocess("java -Djava.library.path=jars/versions/1.8.8/1.8.8-natives/ -jar dist/MineBot.jar");
     }
-
     public static void onTick() {
         long start = System.currentTimeMillis();
         onTick1();
@@ -53,7 +51,6 @@ public class MineBot {
             System.out.println("Tick took " + time + "ms");
         }
     }
-
     /**
      * Called by minecraft.java
      */
@@ -90,7 +87,7 @@ public class MineBot {
                     clearPath();
                 }
                 currentPath = null;
-                if (new GoalBlock(goal).isInGoal(playerFeet)) {
+                if (goal.isInGoal(playerFeet)) {
                     GuiScreen.sendChatMessage("All done", true);
                     nextPath = null;
                 } else {
@@ -175,7 +172,7 @@ public class MineBot {
     public static boolean calculatingNext = false;
     public static Path currentPath = null;
     public static Path nextPath = null;
-    public static BlockPos goal = null;
+    public static Goal goal = null;
     public static int pressTime = 0;
     public static boolean isLeftClick = false;
     public static boolean jumping = false;
@@ -184,7 +181,6 @@ public class MineBot {
     public static boolean left = false;
     public static boolean right = false;
     public static boolean sneak = false;
-
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -193,7 +189,6 @@ public class MineBot {
     public static boolean getIsPressed() {
         return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime >= -1;
     }
-
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -207,7 +202,6 @@ public class MineBot {
             return true;
         }
     }
-
     /**
      * Called by our code
      */
@@ -215,7 +209,6 @@ public class MineBot {
         pressTime = 0;
         isLeftClick = false;
     }
-
     public static void clearMovement() {
         jumping = false;
         forward = false;
@@ -224,13 +217,11 @@ public class MineBot {
         backward = false;
         sneak = false;
     }
-
     public static void clearPath() {
         currentPath = null;
         letGoOfLeftClick();
         clearMovement();
     }
-
     /**
      * Called by GuiScreen.java
      *
@@ -269,10 +260,10 @@ public class MineBot {
             Scanner t = new Scanner(text.substring("setgoal".length()).trim());
             int[] coords = new int[3];
             int c = 0;
-            while(t.hasNext() && c < 3){
-                coords[c++]=t.nextInt();
+            while (t.hasNext() && c < 3) {
+                coords[c++] = t.nextInt();
             }
-            goal = c==3 ? new BlockPos(coords[0], coords[1], coords[2]) : playerFeet;
+            goal = new GoalBlock(c == 3 ? new BlockPos(coords[0], coords[1], coords[2]) : playerFeet);
             return "Set goal to " + goal;
         }
         if (text.startsWith("path")) {
@@ -295,15 +286,13 @@ public class MineBot {
         }
         return message;
     }
-
     public static String cancelPath() {
         nextPath = null;
         clearPath();
         Miner.stopMining();
         return "unset";
     }
-    
-    public static void goMiningInNewThread(){
+    public static void goMiningInNewThread() {
         new Thread() {
             @Override
             public void run() {
@@ -311,27 +300,25 @@ public class MineBot {
             }
         }.start();
     }
-
     public static void getToY(int y) {
-        if (currentPath!=null) {
+        if (currentPath != null) {
             cancelPath();
         }
-        if (isThereAnythingInProgress){
+        if (isThereAnythingInProgress) {
             GuiScreen.sendChatMessage("Nope. I'm busy", true);
             return;
         }
         EntityPlayer p = Minecraft.theMinecraft.thePlayer;
-        MineBot.goal = new BlockPos(p.posX, y, p.posZ);
+        MineBot.goal = new GoalYLevel(y);
         MineBot.findPathInNewThread(new BlockPos(p.posX, p.posY, p.posZ));
         try {
             do {
                 Thread.sleep(50);
-            } while (currentPath!=null) ;
+            } while (currentPath != null);
         } catch (InterruptedException ex) {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     public static void findPathInNewThread(BlockPos playerFeet) {
         new Thread() {
             @Override
@@ -353,7 +340,6 @@ public class MineBot {
             }
         }.start();
     }
-
     public static void planAhead() {
         new Thread() {
             @Override
@@ -377,9 +363,8 @@ public class MineBot {
             }
         }.start();
     }
-
     public static Path findPath(BlockPos playerFeet) {
-        PathFinder pf = new PathFinder(playerFeet, new GoalBlock(goal));
+        PathFinder pf = new PathFinder(playerFeet, goal);
         Path path = pf.calculatePath();
         GuiScreen.sendChatMessage(playerFeet + " to " + path.end, true);
         return path;
@@ -388,7 +373,6 @@ public class MineBot {
          return;
          }*/
     }
-
     /**
      * Give a block that's sorta close to the player, at foot level
      *
@@ -411,7 +395,6 @@ public class MineBot {
     }
     static float desiredYaw;
     static float desiredPitch;
-
     /**
      * Called by our code
      *
@@ -440,7 +423,6 @@ public class MineBot {
         return lookAtCoords(x, y, z, alsoDoPitch);
     }
     public static final float ANGLE_THRESHOLD = 7;
-
     public static boolean lookAtCoords(double x, double y, double z, boolean alsoDoPitch) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         double yDiff = (thePlayer.posY + 1.62) - y;
@@ -459,7 +441,6 @@ public class MineBot {
         }
         return withinRange;
     }
-
     public static boolean moveTowardsBlock(BlockPos p) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
@@ -480,7 +461,6 @@ public class MineBot {
         //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
         return moveTowardsCoords(x, y, z);
     }
-
     public static boolean moveTowardsCoords(double x, double y, double z) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         float currentYaw = thePlayer.rotationYaw;
@@ -519,7 +499,6 @@ public class MineBot {
         }
         return false;
     }
-
     /**
      * What block is the player looking at
      *
