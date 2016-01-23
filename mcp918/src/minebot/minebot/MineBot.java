@@ -259,7 +259,7 @@ public class MineBot {
         if (text.contains("goal")) {
             String next = null;
             int ind = text.indexOf(' ');
-            if (ind == 0) {
+            if (ind == -1) {
                 ind = text.length();
             }
             Scanner t = new Scanner(text.substring(ind).trim());
