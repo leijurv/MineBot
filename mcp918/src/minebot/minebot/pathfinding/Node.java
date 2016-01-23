@@ -51,9 +51,6 @@ public class Node {
         if (!Objects.equals(this.pos, other.pos)) {
             return false;
         }
-        if (!Objects.equals(this.goal, other.goal)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.goal, other.goal);
     }
 }
