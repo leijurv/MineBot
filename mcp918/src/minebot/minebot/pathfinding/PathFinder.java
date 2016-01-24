@@ -32,8 +32,12 @@ public class PathFinder {
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
-        Node bestSoFar = null;
-        double bestHeuristicSoFar = Double.MAX_VALUE;
+        Node bestSoFar2 = null;
+        double bestHeuristicSoFar2 = Double.MAX_VALUE;
+        Node bestSoFar3 = null;
+        double bestHeuristicSoFar3 = Double.MAX_VALUE;
+        Node bestSoFar4 = null;
+        double bestHeuristicSoFar4 = Double.MAX_VALUE;
         OpenSet openSet = new OpenSet();
         openSet.insert(startNode);
         HashSet<Node> hashSet = new HashSet<>();
@@ -63,21 +67,41 @@ public class PathFinder {
                         openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
                         hashSet.add(neighbor);
                     }
-                    double sum = neighbor.estimatedCostToGoal + neighbor.cost / 2;
-                    if (sum < bestHeuristicSoFar) {
-                        bestHeuristicSoFar = sum;
-                        bestSoFar = neighbor;
+                    double sum2 = neighbor.estimatedCostToGoal + neighbor.cost / 2;
+                    if (sum2 < bestHeuristicSoFar2) {
+                        bestHeuristicSoFar2 = sum2;
+                        bestSoFar2 = neighbor;
+                    }
+                    double sum3 = neighbor.estimatedCostToGoal + neighbor.cost / 3;
+                    if (sum3 < bestHeuristicSoFar3) {
+                        bestHeuristicSoFar3 = sum3;
+                        bestSoFar3 = neighbor;
+                    }
+                    double sum4 = neighbor.estimatedCostToGoal + neighbor.cost / 3;
+                    if (sum4 < bestHeuristicSoFar4) {
+                        bestHeuristicSoFar4 = sum4;
+                        bestSoFar4 = neighbor;
                     }
                 }
             }
             numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
-                return new Path(startNode, bestSoFar, goal);
+                if (bestHeuristicSoFar2 > MIN_DIST_PATH) {
+                    return new Path(startNode, bestSoFar2, goal);
+                }
+                if (bestHeuristicSoFar3 > MIN_DIST_PATH) {
+                    return new Path(startNode, bestSoFar3, goal);
+                }
+                if (bestHeuristicSoFar4 > MIN_DIST_PATH) {
+                    return new Path(startNode, bestSoFar4, goal);
+                }
+                return new Path(startNode, bestSoFar4, goal);
             }
         }
         throw new IllegalStateException("bad");
     }
+    private final double MIN_DIST_PATH = 5;
     private Node getNodeAtPosition(BlockPos pos) {
         if (map.get(pos) == null) {
             map.put(pos, new Node(pos, goal));

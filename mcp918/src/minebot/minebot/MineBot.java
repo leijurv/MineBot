@@ -85,7 +85,7 @@ public class MineBot {
                 }
                 currentPath = null;
                 if (goal.isInGoal(playerFeet)) {
-                    GuiScreen.sendChatMessage("All done", true);
+                    GuiScreen.sendChatMessage("All done. At " + goal, true);
                     nextPath = null;
                 } else {
                     GuiScreen.sendChatMessage("Done with segment", true);
