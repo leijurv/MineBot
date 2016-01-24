@@ -7,6 +7,7 @@ package minebot.pathfinding;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -98,14 +99,18 @@ public class PathFinder {
                     return new Path(startNode, bestSoFar1, goal);
                 }
                 if (dist(bestSoFar2) > MIN_DIST_PATH) {
+                    GuiScreen.sendChatMessage("Choice 2", true);
                     return new Path(startNode, bestSoFar2, goal);
                 }
                 if (dist(bestSoFar3) > MIN_DIST_PATH) {
+                    GuiScreen.sendChatMessage("Choice 3", true);
                     return new Path(startNode, bestSoFar3, goal);
                 }
                 if (dist(bestSoFar4) > MIN_DIST_PATH) {
+                    GuiScreen.sendChatMessage("Choice 4", true);
                     return new Path(startNode, bestSoFar4, goal);
                 }
+                GuiScreen.sendChatMessage("Choice 4", true);
                 return new Path(startNode, bestSoFar4, goal);
             }
         }
