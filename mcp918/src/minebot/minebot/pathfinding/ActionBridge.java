@@ -51,6 +51,13 @@ public class ActionBridge extends ActionPlaceOrBreak {
         //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        if (whereAmI.getY() != to.getY()) {
+            System.out.println("Wrong Y coordinate");
+            if (whereAmI.getY() < to.getY()) {
+                MineBot.jumping = true;
+            }
+            return false;
+        }
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
             if (oneInTen && wasTheBridgeBlockAlwaysThere) {
                 //basically one in every ten blocks we walk forwards normally without sneaking and placing, rotate to look forwards.
