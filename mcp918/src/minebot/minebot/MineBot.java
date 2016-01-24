@@ -222,13 +222,20 @@ public class MineBot {
         letGoOfLeftClick();
         clearMovement();
     }
+    public static String therewasachatmessage(String message) {
+        try {
+            return therewasachatmessage1(message);
+        } catch (Exception e) {
+            return message;
+        }
+    }
     /**
      * Called by GuiScreen.java
      *
      * @param message the message that was sent in chat to trigger this
      * @return what message should actually be sent. can be null to send nothing
      */
-    public static String therewasachatmessage(String message) {
+    public static String therewasachatmessage1(String message) {
         Minecraft mc = Minecraft.theMinecraft;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
