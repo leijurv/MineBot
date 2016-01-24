@@ -59,6 +59,11 @@ public class ActionBridge extends ActionPlaceOrBreak {
             } else {
                 MineBot.moveTowardsBlock(to);
             }
+            if (wasTheBridgeBlockAlwaysThere) {
+                if (MineBot.forward && !MineBot.backward && !MineBot.left && !MineBot.right) {
+                    thePlayer.setSprinting(true);
+                }
+            }
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);
                 return true;//and we are done
