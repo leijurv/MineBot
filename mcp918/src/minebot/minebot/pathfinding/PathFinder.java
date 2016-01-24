@@ -123,24 +123,39 @@ public class PathFinder {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
-        BlockPos[] positions = new BlockPos[13];
-        positions[0] = new BlockPos(x, y + 1, z);//pillar
-        positions[1] = new BlockPos(x + 1, y, z);//bridge
-        positions[2] = new BlockPos(x - 1, y, z);//bridge
-        positions[3] = new BlockPos(x, y, z + 1);//bridge
-        positions[4] = new BlockPos(x, y, z - 1);//bridge
-        positions[5] = new BlockPos(x + 1, y + 1, z);//climb
-        positions[6] = new BlockPos(x - 1, y + 1, z);//climb
-        positions[7] = new BlockPos(x, y + 1, z + 1);//climb
-        positions[8] = new BlockPos(x, y + 1, z - 1);//climb
-        positions[9] = new BlockPos(x + 1, y - 1, z);//fall
-        positions[10] = new BlockPos(x - 1, y - 1, z);//fall
-        positions[11] = new BlockPos(x, y - 1, z + 1);//fall
-        positions[12] = new BlockPos(x, y - 1, z - 1);//fall
+        /*BlockPos[] positions = new BlockPos[13];
+         positions[0] = new BlockPos(x, y + 1, z);//pillar
+         positions[1] = new BlockPos(x + 1, y, z);//bridge
+         positions[2] = new BlockPos(x - 1, y, z);//bridge
+         positions[3] = new BlockPos(x, y, z + 1);//bridge
+         positions[4] = new BlockPos(x, y, z - 1);//bridge
+         positions[5] = new BlockPos(x + 1, y + 1, z);//climb
+         positions[6] = new BlockPos(x - 1, y + 1, z);//climb
+         positions[7] = new BlockPos(x, y + 1, z + 1);//climb
+         positions[8] = new BlockPos(x, y + 1, z - 1);//climb
+         positions[9] = new BlockPos(x + 1, y - 1, z);//fall
+         positions[10] = new BlockPos(x - 1, y - 1, z);//fall
+         positions[11] = new BlockPos(x, y - 1, z + 1);//fall
+         positions[12] = new BlockPos(x, y - 1, z - 1);//fall
+         Action[] actions = new Action[13];
+         for (int i = 0; i < 13; i++) {
+         actions[i] = Action.getAction(pos, positions[i]);
+         }*/
+        //new implementation should have exact same effect
         Action[] actions = new Action[13];
-        for (int i = 0; i < 13; i++) {
-            actions[i] = Action.getAction(pos, positions[i]);
-        }
+        actions[0] = new ActionPillar(pos, new BlockPos(x, y + 1, z));
+        actions[1] = new ActionBridge(pos, new BlockPos(x + 1, y, z));
+        actions[2] = new ActionBridge(pos, new BlockPos(x - 1, y, z));
+        actions[3] = new ActionBridge(pos, new BlockPos(x, y, z + 1));
+        actions[4] = new ActionBridge(pos, new BlockPos(x, y, z - 1));
+        actions[5] = new ActionClimb(pos, new BlockPos(x + 1, y + 1, z));
+        actions[6] = new ActionClimb(pos, new BlockPos(x - 1, y + 1, z));
+        actions[7] = new ActionClimb(pos, new BlockPos(x, y + 1, z + 1));
+        actions[8] = new ActionClimb(pos, new BlockPos(x, y + 1, z - 1));
+        actions[9] = new ActionFall(pos, new BlockPos(x + 1, y - 1, z));
+        actions[10] = new ActionFall(pos, new BlockPos(x - 1, y - 1, z));
+        actions[11] = new ActionFall(pos, new BlockPos(x, y - 1, z + 1));
+        actions[12] = new ActionFall(pos, new BlockPos(x, y - 1, z - 1));
         return actions;
     }
 
