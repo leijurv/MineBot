@@ -15,7 +15,7 @@ public class Miner {
     public static boolean isMining = false;
     public static void goMining() {
         isMining = true;
-        MineBot.getToY(12);
+        MineBot.getToY(13);//optimal for diamonds
     }
     public static void stopMining() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
