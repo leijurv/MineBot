@@ -15,8 +15,8 @@ import net.minecraft.util.BlockPos;
  */
 public abstract class Action {
     //These costs are measured roughly in ticks btw
-    public static final double WALK_ONE_IN_WATER_COST = 20;
     public static final double WALK_ONE_BLOCK_COST = 20 / 4.317;
+    public static final double WALK_ONE_IN_WATER_COST = WALK_ONE_BLOCK_COST * 2;
     public static final double JUMP_ONE_BLOCK_COST = 5;
     /**
      * Doesn't include walking forwards, just the falling
