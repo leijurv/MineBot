@@ -22,7 +22,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
-        double WC = isWater(blocksToBreak[0]) ? WALK_ONE_IN_WATER_COST : WALK_ONE_BLOCK_COST;
+        double WC = isWater(blocksToBreak[0]) || isWater(blocksToBreak[1]) ? WALK_ONE_IN_WATER_COST : WALK_ONE_BLOCK_COST;
         if (canWalkOn(positionsToPlace[0])) {//this is a walk, not a bridge
             if (canWalkThrough(positionsToBreak[0]) && canWalkThrough(positionsToBreak[1])) {
                 return WC;
