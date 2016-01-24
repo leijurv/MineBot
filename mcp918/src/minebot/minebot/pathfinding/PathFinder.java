@@ -23,6 +23,7 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<>();
     }
+    static final int NUM_HEURISTICS = 4;
     /**
      * Do the actual path calculation. The returned path might not actually go
      * to goal, but it will get as close as I could get
@@ -33,14 +34,11 @@ public class PathFinder {
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
-        Node bestSoFar1 = null;
-        double bestHeuristicSoFar1 = Double.MAX_VALUE;
-        Node bestSoFar2 = null;
-        double bestHeuristicSoFar2 = Double.MAX_VALUE;
-        Node bestSoFar3 = null;
-        double bestHeuristicSoFar3 = Double.MAX_VALUE;
-        Node bestSoFar4 = null;
-        double bestHeuristicSoFar4 = Double.MAX_VALUE;
+        Node[] bestSoFar = new Node[NUM_HEURISTICS];
+        double[] bestHeuristicSoFar = new double[bestSoFar.length];
+        for (int i = 0; i < bestHeuristicSoFar.length; i++) {
+            bestHeuristicSoFar[i] = Double.MAX_VALUE;
+        }
         OpenSet openSet = new OpenSet();
         openSet.insert(startNode);
         HashSet<Node> hashSet = new HashSet<>();
@@ -70,48 +68,27 @@ public class PathFinder {
                         openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
                         hashSet.add(neighbor);
                     }
-                    double sum1 = neighbor.estimatedCostToGoal + neighbor.cost / 1;
-                    if (sum1 < bestHeuristicSoFar1) {
-                        bestHeuristicSoFar1 = sum1;
-                        bestSoFar1 = neighbor;
-                    }
-                    double sum2 = neighbor.estimatedCostToGoal + neighbor.cost / 2;
-                    if (sum2 < bestHeuristicSoFar2) {
-                        bestHeuristicSoFar2 = sum2;
-                        bestSoFar2 = neighbor;
-                    }
-                    double sum3 = neighbor.estimatedCostToGoal + neighbor.cost / 3;
-                    if (sum3 < bestHeuristicSoFar3) {
-                        bestHeuristicSoFar3 = sum3;
-                        bestSoFar3 = neighbor;
-                    }
-                    double sum4 = neighbor.estimatedCostToGoal + neighbor.cost / 4;
-                    if (sum4 < bestHeuristicSoFar4) {
-                        bestHeuristicSoFar4 = sum4;
-                        bestSoFar4 = neighbor;
+                    for (int i = 0; i < bestSoFar.length; i++) {
+                        double sum = neighbor.estimatedCostToGoal + neighbor.cost / (i + 1);
+                        if (sum < bestHeuristicSoFar[i]) {
+                            bestHeuristicSoFar[i] = sum;
+                            bestSoFar[i] = neighbor;
+                        }
                     }
                 }
             }
             numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
-                if (dist(bestSoFar1) > MIN_DIST_PATH) {
-                    return new Path(startNode, bestSoFar1, goal);
+                for (int i = 0; i < bestSoFar.length; i++) {
+                    if (dist(bestSoFar[i]) > MIN_DIST_PATH) {
+                        if (i != 0) {
+                            GuiScreen.sendChatMessage("A* cost coefficient " + (i + 1), true);
+                        }
+                        return new Path(startNode, bestSoFar[i], goal);
+                    }
                 }
-                if (dist(bestSoFar2) > MIN_DIST_PATH) {
-                    GuiScreen.sendChatMessage("Choice 2", true);
-                    return new Path(startNode, bestSoFar2, goal);
-                }
-                if (dist(bestSoFar3) > MIN_DIST_PATH) {
-                    GuiScreen.sendChatMessage("Choice 3", true);
-                    return new Path(startNode, bestSoFar3, goal);
-                }
-                if (dist(bestSoFar4) > MIN_DIST_PATH) {
-                    GuiScreen.sendChatMessage("Choice 4", true);
-                    return new Path(startNode, bestSoFar4, goal);
-                }
-                GuiScreen.sendChatMessage("Choice 4", true);
-                return new Path(startNode, bestSoFar4, goal);
+                return null;
             }
         }
         throw new IllegalStateException("bad");

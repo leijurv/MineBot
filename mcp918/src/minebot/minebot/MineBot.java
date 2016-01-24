@@ -274,7 +274,7 @@ public class MineBot {
                     coords[i] = Integer.parseInt(strs[i]);
                 } catch (NumberFormatException nfe) {
                     goal = new GoalBlock(playerFeet);
-                    return strs[i] + ". yup. A+ coordinate";
+                    return strs[i] + ". yup. A+ coordinate";//A+? you might even say A*
                 }
             }
             switch (strs.length) {
