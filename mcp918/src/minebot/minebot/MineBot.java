@@ -55,6 +55,7 @@ public class MineBot {
      */
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
+            cancelPath();
             return;
         }
         if (Minecraft.theMinecraft.currentScreen != null) {
