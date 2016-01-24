@@ -32,6 +32,7 @@ import net.minecraft.world.World;
  */
 public class MineBot {
     static boolean isThereAnythingInProgress = false;
+    static boolean plsCancel = false;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -251,6 +252,7 @@ public class MineBot {
         }
         if (text.equals("cancel")) {
             cancelPath();
+            plsCancel = true;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
         }
         if (text.equals("st")) {
@@ -264,6 +266,7 @@ public class MineBot {
             return pos.toString();
         }
         if (text.contains("goal")) {
+            plsCancel = false;
             String next = null;
             int ind = text.indexOf(' ');
             if (ind == -1) {
@@ -293,6 +296,7 @@ public class MineBot {
             return "Set goal to " + goal;
         }
         if (text.startsWith("path")) {
+            plsCancel = false;
             findPathInNewThread(playerFeet);
             return null;
         }
@@ -306,6 +310,7 @@ public class MineBot {
             return block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube();
         }
         if (text.startsWith("mine")) {
+            plsCancel = false;
             goMiningInNewThread();
             return null;
         }
@@ -405,7 +410,9 @@ public class MineBot {
                     nextPath = path;
                 } else {
                     currentPath = path;
-                    //planAhead();
+                    if (!plsCancel) {
+                        planAhead();
+                    }
                 }
                 calculatingNext = false;
                 isThereAnythingInProgress = false;
