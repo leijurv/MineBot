@@ -92,6 +92,15 @@ public abstract class Action {
     public static boolean isWater(Block b) {
         return b.equals(Block.getBlockById(8)) || b.equals(Block.getBlockById(9));
     }
+    public static boolean isLiquid(Block b) {
+        return b != null && (b.equals(Block.getBlockById(8)) || b.equals(Block.getBlockById(9)) || b.equals(Block.getBlockById(10)) || b.equals(Block.getBlockById(11)));
+    }
+    public static boolean isLiquid(BlockPos p) {
+        return isLiquid(Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock());
+    }
+    public static boolean avoidBreaking(BlockPos pos) {
+        return isLiquid(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())) || isLiquid(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) || isLiquid(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)) || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)) || isLiquid(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()));
+    }
     /**
      * Can I walk through this block? e.g. air, saplings, torches, etc
      *
