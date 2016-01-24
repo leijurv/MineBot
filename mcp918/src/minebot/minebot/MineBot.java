@@ -242,10 +242,7 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
-        String text = message;
-        if (text.charAt(0) == '/') {
-            text = text.substring(1);
-        }
+        String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
         if (text.equals("look")) {
             lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
@@ -265,34 +262,44 @@ public class MineBot {
             lookAtBlock(pos, true);
             return pos.toString();
         }
-        if (text.contains("goal")) {
+        if (text.startsWith("goal") || text.startsWith("setgoal")) {
             plsCancel = false;
-            String next = null;
             int ind = text.indexOf(' ');
             if (ind == -1) {
                 ind = text.length();
             }
-            Scanner t = new Scanner(text.substring(ind).trim());
-            int[] coords = new int[3];
-            int numCoords = 0;
-            while (t.hasNext() && numCoords < coords.length) {
-                coords[numCoords] = t.nextInt();
-                numCoords++;
+            String[] strs = text.substring(ind).split(" ");
+            if(strs.length==0){
+                return "Set goal to " + (goal = new GoalBlock(playerFeet));
             }
-            switch (numCoords) {
+            int[] coords = new int[strs.length];
+            int i = 0;
+            try{
+            while(i < strs.length){
+                coords[i]=Integer.parseInt(strs[i]);
+                i++;
+            }
+            }catch(NumberFormatException nfe){
+                goal = new GoalBlock(playerFeet);
+                return strs[i] + ". yup. A+ coordinate";
+            }
+            switch (strs.length) {
                 case 3:
-                    goal = new GoalBlock(new BlockPos(coords[0], coords[1], coords[2]));
+                    goal = new GoalBlock(coords[0], coords[1], coords[2]);
                     break;
                 case 2:
                     goal = new GoalXZ(coords[0], coords[1]);
                     break;
                 case 1:
-                    goal = new GoalYLevel(coords[0]);
+                    goal = new GoalYLevel(Integer.parseInt(strs[0]));
                     break;
                 default:
                     goal = new GoalBlock(playerFeet);
+                    if(strs.length!=0)
+                        return strs.length + " coordinates. Nice.";
                     break;
             }
+            
             return "Set goal to " + goal;
         }
         if (text.startsWith("path")) {
