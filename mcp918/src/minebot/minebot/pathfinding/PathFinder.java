@@ -94,22 +94,28 @@ public class PathFinder {
             numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
-                if (bestHeuristicSoFar1 > MIN_DIST_PATH) {
+                if (dist(bestSoFar1) > MIN_DIST_PATH) {
                     return new Path(startNode, bestSoFar1, goal);
                 }
-                if (bestHeuristicSoFar2 > MIN_DIST_PATH) {
+                if (dist(bestSoFar2) > MIN_DIST_PATH) {
                     return new Path(startNode, bestSoFar2, goal);
                 }
-                if (bestHeuristicSoFar3 > MIN_DIST_PATH) {
+                if (dist(bestSoFar3) > MIN_DIST_PATH) {
                     return new Path(startNode, bestSoFar3, goal);
                 }
-                if (bestHeuristicSoFar4 > MIN_DIST_PATH) {
+                if (dist(bestSoFar4) > MIN_DIST_PATH) {
                     return new Path(startNode, bestSoFar4, goal);
                 }
                 return new Path(startNode, bestSoFar4, goal);
             }
         }
         throw new IllegalStateException("bad");
+    }
+    private double dist(Node n) {
+        int xDiff = n.pos.getX() - start.getX();
+        int yDiff = n.pos.getY() - start.getY();
+        int zDiff = n.pos.getZ() - start.getZ();
+        return Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
     }
     private final double MIN_DIST_PATH = 5;
     private Node getNodeAtPosition(BlockPos pos) {
