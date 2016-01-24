@@ -380,7 +380,7 @@ public class MineBot {
                 GuiScreen.sendChatMessage("Starting to search for path from " + target + " to " + goal, true);
                 currentPath = findPath(target);
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
-                    GuiScreen.sendChatMessage("I couldn't find that path, but I'm going to get as close as I can", true);
+                    GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can", true);
                     isThereAnythingInProgress = false;
                     planAhead();
                 } else {
