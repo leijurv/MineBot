@@ -32,6 +32,8 @@ public class PathFinder {
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
+        Node bestSoFar1 = null;
+        double bestHeuristicSoFar1 = Double.MAX_VALUE;
         Node bestSoFar2 = null;
         double bestHeuristicSoFar2 = Double.MAX_VALUE;
         Node bestSoFar3 = null;
@@ -67,6 +69,11 @@ public class PathFinder {
                         openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
                         hashSet.add(neighbor);
                     }
+                    double sum1 = neighbor.estimatedCostToGoal + neighbor.cost / 1;
+                    if (sum1 < bestHeuristicSoFar1) {
+                        bestHeuristicSoFar1 = sum1;
+                        bestSoFar1 = neighbor;
+                    }
                     double sum2 = neighbor.estimatedCostToGoal + neighbor.cost / 2;
                     if (sum2 < bestHeuristicSoFar2) {
                         bestHeuristicSoFar2 = sum2;
@@ -77,7 +84,7 @@ public class PathFinder {
                         bestHeuristicSoFar3 = sum3;
                         bestSoFar3 = neighbor;
                     }
-                    double sum4 = neighbor.estimatedCostToGoal + neighbor.cost / 3;
+                    double sum4 = neighbor.estimatedCostToGoal + neighbor.cost / 4;
                     if (sum4 < bestHeuristicSoFar4) {
                         bestHeuristicSoFar4 = sum4;
                         bestSoFar4 = neighbor;
@@ -87,6 +94,9 @@ public class PathFinder {
             numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
+                if (bestHeuristicSoFar1 > MIN_DIST_PATH) {
+                    return new Path(startNode, bestSoFar1, goal);
+                }
                 if (bestHeuristicSoFar2 > MIN_DIST_PATH) {
                     return new Path(startNode, bestSoFar2, goal);
                 }
