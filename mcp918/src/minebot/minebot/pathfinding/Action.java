@@ -26,7 +26,7 @@ public abstract class Action {
      * It doesn't actually take ten ticks to place a block, this cost is so high
      * because we want to generally conserve blocks which might be limited
      */
-    public static final double PLACE_ONE_BLOCK_COST = 10;
+    public static final double PLACE_ONE_BLOCK_COST = 20;
     public final BlockPos from;
     public final BlockPos to;
     private Double cost;
