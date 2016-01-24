@@ -63,11 +63,11 @@ public class PathFinder {
                         openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
                         hashSet.add(neighbor);
                     }
-                }
-                double sum = neighbor.estimatedCostToGoal + neighbor.cost / 2;
-                if (sum < bestHeuristicSoFar) {
-                    bestHeuristicSoFar = sum;
-                    bestSoFar = neighbor;
+                    double sum = neighbor.estimatedCostToGoal + neighbor.cost / 2;
+                    if (sum < bestHeuristicSoFar) {
+                        bestHeuristicSoFar = sum;
+                        bestSoFar = neighbor;
+                    }
                 }
             }
             numNodes++;
