@@ -80,14 +80,27 @@ public class PathFinder {
             numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
+                double bestDist = 0;
                 for (int i = 0; i < bestSoFar.length; i++) {
-                    if (dist(bestSoFar[i]) > MIN_DIST_PATH) {
+                    double dist = dist(bestSoFar[i]);
+                    if (dist > bestDist) {
+                        bestDist = dist;
+                    }
+                    if (dist > MIN_DIST_PATH) {
                         if (i != 0) {
                             GuiScreen.sendChatMessage("A* cost coefficient " + (i + 1), true);
+                            GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
+                            if (i > 2) {
+                                GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
+                                GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
+                                GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
+                            }
                         }
                         return new Path(startNode, bestSoFar[i], goal);
                     }
                 }
+                GuiScreen.sendChatMessage("Even with a cost coefficient of " + bestSoFar.length + ", I couldn't get more than " + bestDist + " blocks =(", true);
+                GuiScreen.sendChatMessage("No path found =(", true);
                 return null;
             }
         }
