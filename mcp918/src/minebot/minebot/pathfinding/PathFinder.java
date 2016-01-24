@@ -23,7 +23,7 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<>();
     }
-    static final int NUM_HEURISTICS = 4;
+    static final int NUM_HEURISTICS = 10;
     /**
      * Do the actual path calculation. The returned path might not actually go
      * to goal, but it will get as close as I could get

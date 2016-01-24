@@ -98,7 +98,7 @@ public abstract class Action {
      * @param pos
      * @return
      */
-    public static boolean canWalkThrough(BlockPos pos) {//fix this. this assumes that air is the only block with no collisions, while actually there are others (e.g. torches)
+    public static boolean canWalkThrough(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
         return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isWater(Minecraft.theMinecraft.theWorld.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock());
     }
