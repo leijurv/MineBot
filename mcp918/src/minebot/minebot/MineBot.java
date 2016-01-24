@@ -6,7 +6,6 @@
 package minebot;
 
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.pathfinding.Action;
@@ -264,24 +263,19 @@ public class MineBot {
         }
         if (text.startsWith("goal") || text.startsWith("setgoal")) {
             plsCancel = false;
-            int ind = text.indexOf(' ');
-            if (ind == -1) {
-                ind = text.length();
-            }
-            String[] strs = text.substring(ind).split(" ");
-            if(strs.length==0){
+            int ind = text.indexOf(' ') + 1;
+            if (ind == 0) {
                 return "Set goal to " + (goal = new GoalBlock(playerFeet));
             }
+            String[] strs = text.substring(ind).split(" ");
             int[] coords = new int[strs.length];
-            int i = 0;
-            try{
-            while(i < strs.length){
-                coords[i]=Integer.parseInt(strs[i]);
-                i++;
-            }
-            }catch(NumberFormatException nfe){
-                goal = new GoalBlock(playerFeet);
-                return strs[i] + ". yup. A+ coordinate";
+            for (int i = 0; i < strs.length; i++) {
+                try {
+                    coords[i] = Integer.parseInt(strs[i]);
+                } catch (NumberFormatException nfe) {
+                    goal = new GoalBlock(playerFeet);
+                    return strs[i] + ". yup. A+ coordinate";
+                }
             }
             switch (strs.length) {
                 case 3:
@@ -291,15 +285,15 @@ public class MineBot {
                     goal = new GoalXZ(coords[0], coords[1]);
                     break;
                 case 1:
-                    goal = new GoalYLevel(Integer.parseInt(strs[0]));
+                    goal = new GoalYLevel(coords[0]);
                     break;
                 default:
                     goal = new GoalBlock(playerFeet);
-                    if(strs.length!=0)
+                    if (strs.length != 0) {
                         return strs.length + " coordinates. Nice.";
+                    }
                     break;
             }
-            
             return "Set goal to " + goal;
         }
         if (text.startsWith("path")) {
