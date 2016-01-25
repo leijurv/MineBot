@@ -159,6 +159,9 @@ public class MineBot {
             Minecraft.theMinecraft.thePlayer.rotationPitch -= pitchDistance;
         }
     }
+    public static float getDesiredYaw() {
+        return desiredYaw;
+    }
     static final float MAX_YAW_CHANGE_PER_TICK = 360 / 20;
     static final float MAX_PITCH_CHANGE_PER_TICK = 360 / 20;
     public static boolean wasScreen = false;

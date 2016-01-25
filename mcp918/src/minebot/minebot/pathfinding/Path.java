@@ -158,7 +158,6 @@ public class Path {
             System.out.println("Action done, next path");
             pathPosition++;
             ticksOnCurrent = 0;
-            //System.out.println("At position " + pathPosition + " in " + path + " and actions " + actions);
         } else {
             ticksOnCurrent++;
             if (ticksOnCurrent > actions.get(pathPosition).cost() * 3 + 400) {
@@ -168,6 +167,22 @@ public class Path {
                 return true;
             }
         }
+        if (pathPosition < actions.size() - 1) {
+            if ((actions.get(pathPosition) instanceof ActionBridge) && (actions.get(pathPosition + 1) instanceof ActionBridge)) {
+                ActionBridge curr = (ActionBridge) actions.get(pathPosition);
+                ActionBridge next = (ActionBridge) actions.get(pathPosition + 1);
+                if (curr.dx() != next.dx() || curr.dz() != next.dz()) {//two actions are not parallel, so this is a right angle
+                    if (curr.amIGood() && next.amIGood()) {//nothing in the way
+                        double x = (next.from.getX() + next.to.getX() + 1.0D) * 0.5D;
+                        double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
+                        MineBot.clearMovement();
+                        MineBot.moveTowardsCoords(x, 0, z);
+                        return false;
+                    }
+                }
+            }
+        }
+        System.out.println("NOOOO");
         return false;
     }
 }

@@ -6,6 +6,7 @@
 package minebot.pathfinding;
 
 import java.util.Objects;
+import java.util.Random;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -42,10 +43,19 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     boolean wasTheBridgeBlockAlwaysThere = true;//did we have to place a bridge block or was it always there
     Boolean oneInTen = null;//a one in ten chance
+    public boolean amIGood() {
+        return canWalkThrough(positionsToBreak[0]) && canWalkThrough(positionsToBreak[1]) && canWalkOn(positionsToPlace[0]);
+    }
+    public int dx() {
+        return to.getX() - from.getX();
+    }
+    public int dz() {
+        return to.getZ() - from.getZ();
+    }
     @Override
     protected boolean tick0() {
         if (oneInTen == null) {
-            oneInTen = System.currentTimeMillis() % 10 == 0;
+            oneInTen = new Random().nextInt(10) == 0;
         }
         boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]);
         //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
