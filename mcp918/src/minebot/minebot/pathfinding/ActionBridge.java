@@ -77,7 +77,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 MineBot.moveTowardsBlock(to);
             }
             if (wasTheBridgeBlockAlwaysThere) {
-                if (MineBot.forward && !MineBot.backward && !MineBot.left && !MineBot.right) {
+                if (MineBot.forward && !MineBot.backward) {
                     thePlayer.setSprinting(true);
                 }
             }

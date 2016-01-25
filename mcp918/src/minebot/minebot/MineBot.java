@@ -592,10 +592,14 @@ public class MineBot {
             diff += 360;
         }
         float distanceToForward = Math.min(Math.abs(diff - 0), Math.abs(diff - 360)) % 360;
-        float distanceToBackward = Math.abs(diff - 180) % 360;
+        float distanceToForwardRight = Math.abs(diff - 45) % 360;
         float distanceToRight = Math.abs(diff - 90) % 360;
+        float distanceToBackwardRight = Math.abs(diff - 135) % 360;
+        float distanceToBackward = Math.abs(diff - 180) % 360;
+        float distanceToBackwardLeft = Math.abs(diff - 225) % 360;
         float distanceToLeft = Math.abs(diff - 270) % 360;
-        float tmp = Math.round(diff / 90) * 90;
+        float distanceToForwardLeft = Math.abs(diff - 315) % 360;
+        float tmp = Math.round(diff / 45) * 45;
         if (tmp > 359) {
             tmp -= 360;
         }
@@ -607,8 +611,28 @@ public class MineBot {
             forward = true;
             return true;
         }
+        if (distanceToForwardLeft < ANGLE_THRESHOLD || distanceToForwardLeft > 360 - ANGLE_THRESHOLD) {
+            forward = true;
+            left = true;
+            return true;
+        }
+        if (distanceToForwardRight < ANGLE_THRESHOLD || distanceToForwardRight > 360 - ANGLE_THRESHOLD) {
+            forward = true;
+            right = true;
+            return true;
+        }
         if (distanceToBackward < ANGLE_THRESHOLD || distanceToBackward > 360 - ANGLE_THRESHOLD) {
             backward = true;
+            return true;
+        }
+        if (distanceToBackwardLeft < ANGLE_THRESHOLD || distanceToBackwardLeft > 360 - ANGLE_THRESHOLD) {
+            backward = true;
+            left = true;
+            return true;
+        }
+        if (distanceToBackwardRight < ANGLE_THRESHOLD || distanceToBackwardRight > 360 - ANGLE_THRESHOLD) {
+            backward = true;
+            right = true;
             return true;
         }
         if (distanceToLeft < ANGLE_THRESHOLD || distanceToLeft > 360 - ANGLE_THRESHOLD) {
