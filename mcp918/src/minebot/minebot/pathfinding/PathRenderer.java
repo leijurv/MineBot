@@ -26,18 +26,22 @@ public class PathRenderer {
             double doubleX = Minecraft.theMinecraft.thePlayer.posX - 0.5;
             double doubleY = Minecraft.theMinecraft.thePlayer.posY + 0.1;
             double doubleZ = Minecraft.theMinecraft.thePlayer.posZ - 0.5;
+            GlStateManager.enableBlend();
+            GlStateManager.disableCull();
             GlStateManager.pushMatrix();
             //lStateManager.translate(-doubleX, -doubleY, -doubleZ);
             GlStateManager.color(0.937f, 0.016f, 0.424f);
             GL11.glLineWidth(10);
             System.out.println("a");
-            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glBegin(GL11.GL_LINES);
             System.out.println("b");
             GL11.glVertex3f((float) doubleX, (float) doubleY, (float) doubleZ);
             GL11.glVertex3f((float) doubleX + 10, (float) doubleY, (float) doubleZ);
             System.out.println("c");
             GL11.glEnd();
             GlStateManager.popMatrix();
+            GlStateManager.disableBlend();
+            GlStateManager.enableCull();
         }
     }
 }
