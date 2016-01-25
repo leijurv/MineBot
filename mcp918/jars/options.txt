@@ -16,7 +16,7 @@ ao:2
 renderClouds:true
 resourcePacks:[]
 incompatibleResourcePacks:[]
-lastServer:10.1.128.49:50255
+lastServer:jarvis.local:64817
 lang:en_US
 chatVisibility:0
 chatColors:true

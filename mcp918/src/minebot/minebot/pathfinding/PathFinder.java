@@ -6,7 +6,6 @@
 package minebot.pathfinding;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
@@ -23,7 +22,7 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<>();
     }
-    static final int NUM_HEURISTICS = 10;
+    static final int NUM_HEURISTICS = 5;
     /**
      * Do the actual path calculation. The returned path might not actually go
      * to goal, but it will get as close as I could get
@@ -41,14 +40,12 @@ public class PathFinder {
         }
         OpenSet openSet = new OpenSet();
         openSet.insert(startNode);
-        HashSet<Node> hashSet = new HashSet<>();
-        hashSet.add(startNode);
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + 10000;
         int numNodes = 0;
         while (openSet.first != null) {
             Node me = openSet.removeLowest();
-            hashSet.remove(me);
+            me.isOpen = false;
             BlockPos myPos = me.pos;
             if (numNodes % 1000 == 0) {
                 System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
@@ -64,9 +61,9 @@ public class PathFinder {
                     neighbor.previous = me;
                     neighbor.previousAction = actionToGetToNeighbor;
                     neighbor.cost = tentativeCost;
-                    if (!hashSet.contains(neighbor)) {
+                    if (!neighbor.isOpen) {
                         openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
-                        hashSet.add(neighbor);
+                        neighbor.isOpen = true;
                     }
                     for (int i = 0; i < bestSoFar.length; i++) {
                         double sum = neighbor.estimatedCostToGoal + neighbor.cost / (i + 1);
@@ -89,13 +86,13 @@ public class PathFinder {
                     if (dist > MIN_DIST_PATH) {
                         if (i != 0) {
                             GuiScreen.sendChatMessage("A* cost coefficient " + (i + 1), true);
-                            GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
                             if (i > 2) {
                                 GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
                                 GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
                                 GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
                             }
                         }
+                        GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
                         return new Path(startNode, bestSoFar[i], goal);
                     }
                 }

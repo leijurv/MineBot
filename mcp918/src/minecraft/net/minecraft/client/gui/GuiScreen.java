@@ -35,6 +35,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
@@ -348,6 +349,22 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         if (addToChat) {
             Minecraft.theMinecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
         }
+        if (!MineBot.actuallyPutMessagesInChat) {
+            try {
+                throw new RuntimeException();
+            } catch (RuntimeException e) {
+                for (StackTraceElement blah : e.getStackTrace()) {
+                    String cl = blah.getClassName();
+                    if (cl.contains("minebot.Autorun") || (cl.contains("minebot.MineBot") && blah.getMethodName().contains("main"))) {
+                        continue;
+                    }
+                    if (cl.contains("minebot")) {
+                        Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(msg));
+                        return;
+                    }
+                }
+            }
+        }
         String nm = MineBot.therewasachatmessage(msg);
         if (nm == null) {
             System.out.println("Not sending chat message to server: " + msg);
@@ -355,6 +372,10 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         }
         if (!nm.equals(msg)) {
             System.out.println("Sending " + nm + " instead of " + msg + " to server");
+            if (!MineBot.actuallyPutMessagesInChat) {
+                Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(nm));
+                return;
+            }
         }
         Minecraft.theMinecraft.thePlayer.sendChatMessage(nm);
     }
