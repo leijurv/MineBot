@@ -10,13 +10,13 @@ bobView:true
 anaglyph3d:false
 maxFps:120
 fboEnable:true
-difficulty:0
+difficulty:1
 fancyGraphics:true
 ao:2
 renderClouds:true
 resourcePacks:[]
 incompatibleResourcePacks:[]
-lastServer:10.1.128.49:50255
+lastServer:jarvis.local:64817
 lang:en_US
 chatVisibility:0
 chatColors:true

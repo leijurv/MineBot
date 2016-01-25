@@ -43,12 +43,16 @@ public class MineBot {
         Autorun.runprocess("java -Djava.library.path=jars/versions/1.8.8/1.8.8-natives/ -jar dist/MineBot.jar");
     }
     public static void onTick() {
-        long start = System.currentTimeMillis();
-        onTick1();
-        long end = System.currentTimeMillis();
-        long time = end - start;
-        if (time > 3) {
-            System.out.println("Tick took " + time + "ms");
+        try {
+            long start = System.currentTimeMillis();
+            onTick1();
+            long end = System.currentTimeMillis();
+            long time = end - start;
+            if (time > 3) {
+                System.out.println("Tick took " + time + "ms");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
