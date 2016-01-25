@@ -45,10 +45,10 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
-            if (avoidBreaking(positionsToBreak[i])) {
-                sum += 1000000;
-            }
             if (!blocksToBreak[i].equals(Block.getBlockById(0)) && !canWalkThrough(positionsToBreak[i])) {
+                if (avoidBreaking(positionsToBreak[i])) {
+                    sum += 1000000;
+                }
                 sum += 1 / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
             }
         }

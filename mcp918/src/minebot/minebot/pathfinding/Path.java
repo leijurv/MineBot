@@ -178,6 +178,7 @@ public class Path {
                         MineBot.clearMovement();
                         MineBot.moveTowardsCoords(x, 0, z);
                         if (!MineBot.forward && curr.oneInTen != null && curr.oneInTen) {
+                            GuiScreen.sendChatMessage("rotating m9", true);
                             MineBot.lookAtCoords(x, 0, z, false);
                         }
                         return false;
