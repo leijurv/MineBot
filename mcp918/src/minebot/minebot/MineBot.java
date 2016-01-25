@@ -31,7 +31,7 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
-    public static boolean actuallyPutMessagesInChat = true;
+    public static boolean actuallyPutMessagesInChat = false;
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -252,6 +252,10 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
+        if (text.startsWith("actuallyPutMessagesInChat")) {
+            actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
+            return "toggled to " + actuallyPutMessagesInChat;
+        }
         if (text.startsWith("random direction")) {
             double dist = Double.parseDouble(text.substring("random direction".length()).trim());
             double ang = new Random().nextDouble() * Math.PI * 2;
