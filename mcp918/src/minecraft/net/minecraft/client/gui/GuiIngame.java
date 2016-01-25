@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import minebot.pathfinding.PathRenderer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -164,6 +165,9 @@ public class GuiIngame extends Gui
             this.drawTexturedModalRect(i / 2 - 7, j / 2 - 7, 0, 0, 16, 16);
         }
 
+        PathRenderer.drawPath();
+        
+        
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         this.mc.mcProfiler.startSection("bossHealth");
         this.renderBossHealth();
@@ -296,7 +300,7 @@ public class GuiIngame extends Gui
                 GlStateManager.disableBlend();
                 GlStateManager.popMatrix();
             }
-
+              
             this.mc.mcProfiler.endSection();
         }
 

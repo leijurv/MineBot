@@ -24,7 +24,7 @@ public class Path {
     public final BlockPos start;
     public final BlockPos end;
     public final Goal goal;
-    final ArrayList<BlockPos> path;
+    public final ArrayList<BlockPos> path;
     final ArrayList<Action> actions;
     Path(Node start, Node end, Goal goal) {
         this.start = start.pos;
