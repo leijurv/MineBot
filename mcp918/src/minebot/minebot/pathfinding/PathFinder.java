@@ -86,13 +86,13 @@ public class PathFinder {
                     if (dist > MIN_DIST_PATH) {
                         if (i != 0) {
                             GuiScreen.sendChatMessage("A* cost coefficient " + (i + 1), true);
-                            GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
                             if (i > 2) {
                                 GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
                                 GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
                                 GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
                             }
                         }
+                        GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
                         return new Path(startNode, bestSoFar[i], goal);
                     }
                 }
