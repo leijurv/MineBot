@@ -6,6 +6,7 @@
 package minebot;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.pathfinding.Action;
@@ -246,6 +247,15 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
+        if (text.startsWith("random direction")) {
+            double dist = Double.parseDouble(text.substring("random direction".length()).trim());
+            double ang = new Random().nextDouble() * Math.PI * 2;
+            GuiScreen.sendChatMessage("Angle: " + ang, true);
+            int x = playerFeet.getX() + (int) (Math.sin(ang) * dist);
+            int z = playerFeet.getZ() + (int) (Math.cos(ang) * dist);
+            goal = new GoalXZ(x, z);
+            return "Set goal to " + goal;
+        }
         if (text.equals("look")) {
             lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
