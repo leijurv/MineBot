@@ -1075,13 +1075,14 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         }
         GlStateManager.matrixMode(5888);
         GlStateManager.popMatrix();
-        if (flag && this.mc.objectMouseOver != null && !entity.isInsideOfMaterial(Material.water)) {
-            EntityPlayer entityplayer1 = (EntityPlayer) entity;
-            GlStateManager.disableAlpha();
-            this.mc.mcProfiler.endStartSection("outline");
-            renderglobal.drawSelectionBox(entityplayer1, this.mc.objectMouseOver, 0, partialTicks);
-            GlStateManager.enableAlpha();
-        }
+        //if (flag && this.mc.objectMouseOver != null && !entity.isInsideOfMaterial(Material.water)) {
+        EntityPlayer entityplayer1 = (EntityPlayer) entity;
+        GlStateManager.disableAlpha();
+        this.mc.mcProfiler.endStartSection("outline");
+        PathRenderer.drawPath();
+        //renderglobal.drawSelectionBox(entityplayer1, this.mc.objectMouseOver, 0, partialTicks);
+        GlStateManager.enableAlpha();
+        // }
         this.mc.mcProfiler.endStartSection("destroyProgress");
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0);
@@ -1125,7 +1126,6 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             this.mc.mcProfiler.endStartSection("aboveClouds");
             this.renderCloudsCheck(renderglobal, partialTicks, pass);
         }
-        PathRenderer.drawPath();
         this.mc.mcProfiler.endStartSection("hand");
         if (this.renderHand) {
             GlStateManager.clear(256);

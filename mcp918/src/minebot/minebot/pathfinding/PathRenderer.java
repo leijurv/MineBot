@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 /**
  *
@@ -22,6 +23,36 @@ public class PathRenderer {
     public PathRenderer() {
     }
     public static void drawPath() {
+        //if (MineBot.currentPath != null) {
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(0.0F, 0.0F, 0.0F, 0.4F);
+        GL11.glLineWidth(2.0F);
+        GlStateManager.disableTexture2D();
+        GlStateManager.depthMask(false);
+        double doubleX = Minecraft.theMinecraft.thePlayer.posX - 0.5;
+        double doubleY = Minecraft.theMinecraft.thePlayer.posY + 0.1;
+        double doubleZ = Minecraft.theMinecraft.thePlayer.posZ - 0.5;
+        Tessellator tess = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tess.getWorldRenderer();
+        worldRenderer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        worldRenderer.pos(doubleX, doubleY, doubleZ).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        worldRenderer.pos(doubleX + 10, doubleY, doubleZ).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        worldRenderer.pos(doubleX + 10, doubleY, doubleZ + 10).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        worldRenderer.pos(doubleX, doubleY, doubleZ + 10).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        tess.draw();
+        worldRenderer.begin(1, DefaultVertexFormats.POSITION_COLOR);
+        worldRenderer.pos(doubleX, doubleY, doubleZ).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        worldRenderer.pos(doubleX + 10, doubleY, doubleZ).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        worldRenderer.pos(doubleX + 10, doubleY, doubleZ + 10).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        worldRenderer.pos(doubleX, doubleY, doubleZ + 10).color(0.937f, 0.016f, 0.424f, 0.5f).endVertex();
+        tess.draw();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        //}
+    }
+    public static void drawPath1() {
         //System.out.println("yolo swag 420 noscope");
         if (MineBot.currentPath != null) {
             ArrayList<BlockPos> toDraw = MineBot.currentPath.path;
@@ -31,6 +62,7 @@ public class PathRenderer {
             //GlStateManager.disableFog();
             GlStateManager.disableAlpha();
             GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0);
             GlStateManager.disableCull();
             Tessellator tess = Tessellator.getInstance();
             WorldRenderer worldRenderer = tess.getWorldRenderer();
@@ -45,6 +77,9 @@ public class PathRenderer {
             tess.draw();
             GlStateManager.popAttrib();
             GlStateManager.popMatrix();
+            GlStateManager.disableBlend();
+            GlStateManager.enableCull();
+            GlStateManager.enableAlpha();
             /*
              GlStateManager.enableBlend();
 
@@ -62,9 +97,6 @@ public class PathRenderer {
              GL11.glEnd();
              GlStateManager.popMatrix();
              */
-            GlStateManager.disableBlend();
-            GlStateManager.enableCull();
-            GlStateManager.enableAlpha();
             //GlStateManager.enableFog();
         }
     }
