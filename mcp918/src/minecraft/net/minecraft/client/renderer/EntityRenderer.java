@@ -1125,13 +1125,13 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             this.mc.mcProfiler.endStartSection("aboveClouds");
             this.renderCloudsCheck(renderglobal, partialTicks, pass);
         }
+        PathRenderer.drawPath();
         this.mc.mcProfiler.endStartSection("hand");
         if (this.renderHand) {
             GlStateManager.clear(256);
             this.renderHand(partialTicks, pass);
             this.renderWorldDirections(partialTicks);
         }
-        PathRenderer.drawPath();
     }
     private void renderCloudsCheck(RenderGlobal renderGlobalIn, float partialTicks, int pass) {
         if (this.mc.gameSettings.func_181147_e() != 0) {
