@@ -31,6 +31,7 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
+    public static boolean actuallyPutMessagesInChat = true;
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
     public static void main(String[] args) throws IOException, InterruptedException {

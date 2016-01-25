@@ -348,6 +348,21 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         if (addToChat) {
             Minecraft.theMinecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
         }
+        if (!MineBot.actuallyPutMessagesInChat) {
+            try {
+                throw new RuntimeException();
+            } catch (RuntimeException e) {
+                for (StackTraceElement blah : e.getStackTrace()) {
+                    String cl = blah.getClassName();
+                    if (cl.contains("minebot.Autorun") || (cl.contains("minebot.MineBot") && blah.getMethodName().contains("main"))) {
+                        continue;
+                    }
+                    if (cl.contains("minebot")) {
+                        return;
+                    }
+                }
+            }
+        }
         String nm = MineBot.therewasachatmessage(msg);
         if (nm == null) {
             System.out.println("Not sending chat message to server: " + msg);
@@ -355,6 +370,9 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         }
         if (!nm.equals(msg)) {
             System.out.println("Sending " + nm + " instead of " + msg + " to server");
+            if (!MineBot.actuallyPutMessagesInChat) {
+                return;
+            }
         }
         Minecraft.theMinecraft.thePlayer.sendChatMessage(nm);
     }
