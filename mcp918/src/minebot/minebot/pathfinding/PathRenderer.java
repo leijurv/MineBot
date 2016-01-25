@@ -29,7 +29,8 @@ public class PathRenderer {
             GlStateManager.pushMatrix();
             //lStateManager.translate(-doubleX, -doubleY, -doubleZ);
             GlStateManager.color(0.937f, 0.016f, 0.424f);
-            GL11.glBegin(GL11.GL_LINES);
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glLineWidth(10);
             GL11.glVertex3f((float) doubleX, (float) doubleY, (float) doubleZ);
             GL11.glVertex3f((float) doubleX + 10, (float) doubleY, (float) doubleZ);
             GL11.glEnd();
