@@ -6,7 +6,6 @@
 package minebot.pathfinding;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
@@ -41,14 +40,12 @@ public class PathFinder {
         }
         OpenSet openSet = new OpenSet();
         openSet.insert(startNode);
-        HashSet<Node> hashSet = new HashSet<>();
-        hashSet.add(startNode);
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + 10000;
         int numNodes = 0;
         while (openSet.first != null) {
             Node me = openSet.removeLowest();
-            hashSet.remove(me);
+            me.isOpen = false;
             BlockPos myPos = me.pos;
             if (numNodes % 1000 == 0) {
                 System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
@@ -64,9 +61,9 @@ public class PathFinder {
                     neighbor.previous = me;
                     neighbor.previousAction = actionToGetToNeighbor;
                     neighbor.cost = tentativeCost;
-                    if (!hashSet.contains(neighbor)) {
+                    if (!neighbor.isOpen) {
                         openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
-                        hashSet.add(neighbor);
+                        neighbor.isOpen = true;
                     }
                     for (int i = 0; i < bestSoFar.length; i++) {
                         double sum = neighbor.estimatedCostToGoal + neighbor.cost / (i + 1);
