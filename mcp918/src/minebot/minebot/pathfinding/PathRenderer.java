@@ -35,7 +35,7 @@ public class PathRenderer {
             System.out.println("a");
             GL11.glBegin(GL11.GL_LINES);
             System.out.println("b");
-            GL11.glVertex3f((float) doubleX, (float) doubleY, (float) doubleZ);
+            GL11.glVertex2d(0, 0);
             GL11.glVertex3f((float) doubleX + 10, (float) doubleY, (float) doubleZ);
             System.out.println("c");
             GL11.glEnd();
