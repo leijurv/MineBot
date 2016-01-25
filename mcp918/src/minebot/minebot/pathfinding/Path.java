@@ -177,7 +177,7 @@ public class Path {
                         double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
                         MineBot.clearMovement();
                         MineBot.moveTowardsCoords(x, 0, z);
-                        if (!MineBot.forward && curr.oneInTen) {
+                        if (!MineBot.forward && curr.oneInTen != null && curr.oneInTen) {
                             MineBot.lookAtCoords(x, 0, z, false);
                         }
                         return false;
