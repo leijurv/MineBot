@@ -566,7 +566,7 @@ public class MineBot {
             return false;
         }
         int foodNeeded = 20 - fs.getFoodLevel();
-        System.out.println("Needs food: " + foodNeeded);
+        //System.out.println("Needs food: " + foodNeeded);
         ItemStack[] inv = p.inventory.mainInventory;
         byte slotForFood = -1;
         for (byte i = 0; i < 9; i++) {
@@ -576,14 +576,14 @@ public class MineBot {
             }
             if (item.getItem() instanceof ItemFood) {
                 int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
-                System.out.println(item + " " + healing);
+                //System.out.println(item + " " + healing);
                 if (healing <= foodNeeded) {
                     slotForFood = i;
                 }
             }
         }
         if (slotForFood != -1) {
-            System.out.println("Switching to slot " + slotForFood + " and right clicking");
+            //System.out.println("Switching to slot " + slotForFood + " and right clicking");
             isRightClick = true;
             p.inventory.currentItem = slotForFood;
             return true;
