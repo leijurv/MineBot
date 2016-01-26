@@ -93,7 +93,7 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean tickPath = true;
-        boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() > 16;
+        boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12;
         if (mobKilling) {
             ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
@@ -162,7 +162,7 @@ public class MineBot {
                 tickPath = false;
             }
         }
-        if (currentPath == null && tickPath && Miner.isMining()) {
+        if (currentPath == null && tickPath) {
             Miner.tick();
             tickPath = false;
         }
@@ -658,9 +658,8 @@ public class MineBot {
         if (!fs.needFood()) {
             return false;
         }
-        System.out.println("H: " + Minecraft.theMinecraft.thePlayer.getHealth());
         int foodNeeded = 20 - fs.getFoodLevel();
-        boolean anything = foodNeeded >= 4 && Minecraft.theMinecraft.thePlayer.getHealth() < 20;
+        boolean anything = foodNeeded >= 3 && Minecraft.theMinecraft.thePlayer.getHealth() < 20;
         //System.out.println("Needs food: " + foodNeeded);
         ItemStack[] inv = p.inventory.mainInventory;
         byte slotForFood = -1;
