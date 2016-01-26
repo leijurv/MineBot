@@ -28,10 +28,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -90,6 +92,7 @@ public class MineBot {
         lookingYaw = false;
         lookingPitch = false;
         isLeftClick = false;
+        isRightClick = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
@@ -102,6 +105,11 @@ public class MineBot {
             switchtosword();
             if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
                 isLeftClick = true;
+                tickPath = false;
+            }
+        }
+        if (tickPath) {
+            if (dealWithFood()) {
                 tickPath = false;
             }
         }
@@ -334,10 +342,6 @@ public class MineBot {
             plsCancel = true;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
         }
-        if (text.equals("hdr")) {
-            isRightClick = true;
-            return "k";
-        }
         if (text.equals("st")) {
             System.out.println(theWorld.getBlockState(playerFeet).getBlock());
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
@@ -554,6 +558,37 @@ public class MineBot {
          path.showPathInStone();
          return;
          }*/
+    }
+    public static boolean dealWithFood() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        FoodStats fs = p.getFoodStats();
+        if (!fs.needFood()) {
+            return false;
+        }
+        int foodNeeded = 20 - fs.getFoodLevel();
+        System.out.println("Needs food: " + foodNeeded);
+        ItemStack[] inv = p.inventory.mainInventory;
+        byte slotForFood = -1;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (item.getItem() instanceof ItemFood) {
+                int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
+                System.out.println(item + " " + healing);
+                if (healing <= foodNeeded) {
+                    slotForFood = i;
+                }
+            }
+        }
+        if (slotForFood != -1) {
+            System.out.println("Switching to slot " + slotForFood + " and right clicking");
+            isRightClick = true;
+            p.inventory.currentItem = slotForFood;
+            return true;
+        }
+        return false;
     }
     public static void switchtosword() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
