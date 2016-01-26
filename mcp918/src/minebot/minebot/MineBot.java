@@ -319,6 +319,18 @@ public class MineBot {
             }
             return "Set goal to " + goal;
         }
+        if (text.startsWith("goto")) {
+            String name = text.substring(4).trim().toLowerCase();
+            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+                String blah = pl.getName().trim().toLowerCase();
+                if (blah.contains(name) || name.contains(blah)) {
+                    BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
+                    goal = new GoalBlock(pos);
+                    return "Pathing to " + pl.getName() + " at " + goal;
+                }
+            }
+            return "Couldn't find " + name;
+        }
         if (text.startsWith("player")) {
             String name = text.substring(6).trim();
             String resp = "";
