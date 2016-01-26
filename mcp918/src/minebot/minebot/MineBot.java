@@ -357,6 +357,7 @@ public class MineBot {
                 if (blah.contains(name) || name.contains(blah)) {
                     BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
                     goal = new GoalBlock(pos);
+                    findPathInNewThread(playerFeet);
                     return "Pathing to " + pl.getName() + " at " + goal;
                 }
             }
@@ -446,9 +447,9 @@ public class MineBot {
     /**
      * In a new thread, pathfind to target blockpos
      *
-     * @param target
+     * @param start
      */
-    public static void findPathInNewThread(BlockPos target) {
+    public static void findPathInNewThread(BlockPos start) {
         new Thread() {
             @Override
             public void run() {
@@ -456,14 +457,14 @@ public class MineBot {
                     return;
                 }
                 isThereAnythingInProgress = true;
-                GuiScreen.sendChatMessage("Starting to search for path from " + target + " to " + goal, true);
-                currentPath = findPath(target);
+                GuiScreen.sendChatMessage("Starting to search for path from " + start + " to " + goal, true);
+                currentPath = findPath(start);
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
                     GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can", true);
                     isThereAnythingInProgress = false;
                     planAhead();
                 } else {
-                    GuiScreen.sendChatMessage("Finished finding a path from " + target + " to " + goal, true);
+                    GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal, true);
                     isThereAnythingInProgress = false;
                 }
             }
