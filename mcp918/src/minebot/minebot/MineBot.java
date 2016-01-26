@@ -422,7 +422,7 @@ public class MineBot {
                         GuiScreen.sendChatMessage("Considering " + blah, true);
                         if (blah.contains(name) || name.contains(blah)) {
                             target = pl;
-                            BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
+                            BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
                             goal = new GoalBlock(pos);
                             findPathInNewThread(playerFeet);
                             return "Killing " + pl;
@@ -433,6 +433,9 @@ public class MineBot {
             Entity w = what();
             if (w != null) {
                 target = w;
+                BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
+                goal = new GoalBlock(pos);
+                findPathInNewThread(playerFeet);
                 return "Killing " + w;
             }
             return "Couldn't find " + name;
