@@ -92,10 +92,14 @@ public class MineBot {
         boolean tickPath = true;
         ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
         mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
-        Entity toKill = null;
         if (!mobs.isEmpty()) {
             EntityMob entity = mobs.get(0);
-            toKill = entity;
+            AxisAlignedBB lol = entity.getEntityBoundingBox();
+            switchtosword();
+            if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+                isLeftClick = true;
+                tickPath = false;
+            }
         }
         if (target != null && target.isDead) {
             GuiScreen.sendChatMessage(target + " is dead", true);
@@ -104,17 +108,16 @@ public class MineBot {
         if (target != null) {
             goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
             double dist = distFromMe(target);
+            boolean actuallyLookingAt = target.equals(what());
             if (dist > 5 && currentPath == null) {
                 findPathInNewThread(playerFeet);
             }
             if (dist <= 5) {
-                toKill = target;
+                AxisAlignedBB lol = target.getEntityBoundingBox();
+                switchtosword();
+                lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
             }
-        }
-        if (toKill != null) {
-            AxisAlignedBB lol = toKill.getEntityBoundingBox();
-            switchtosword();
-            if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+            if (actuallyLookingAt) {
                 isLeftClick = true;
                 tickPath = false;
             }
