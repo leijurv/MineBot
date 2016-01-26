@@ -415,14 +415,19 @@ public class MineBot {
         }
         if (text.startsWith("kill")) {
             String name = text.substring(4).trim().toLowerCase();
-            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
-                String blah = pl.getName().trim().toLowerCase();
-                if (blah.contains(name) || name.contains(blah)) {
-                    target = pl;
-                    BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
-                    goal = new GoalBlock(pos);
-                    findPathInNewThread(playerFeet);
-                    return "Killing " + pl;
+            if (name.length() > 2) {
+                for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+                    String blah = pl.getName().trim().toLowerCase();
+                    if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
+                        GuiScreen.sendChatMessage("Considering " + blah, true);
+                        if (blah.contains(name) || name.contains(blah)) {
+                            target = pl;
+                            BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
+                            goal = new GoalBlock(pos);
+                            findPathInNewThread(playerFeet);
+                            return "Killing " + pl;
+                        }
+                    }
                 }
             }
             Entity w = what();
