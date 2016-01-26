@@ -586,6 +586,7 @@ public class MineBot {
             System.out.println("Switching to slot " + slotForFood + " and right clicking");
             isRightClick = true;
             p.inventory.currentItem = slotForFood;
+            Minecraft.theMinecraft.rightClickMouse();
             return true;
         }
         return false;
