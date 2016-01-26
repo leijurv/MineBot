@@ -777,8 +777,8 @@ public class MineBot {
             tmp -= 360;
         }
         desiredYaw = yaw - tmp;
-        System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
-        System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
+        //System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
+        //System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
         lookingYaw = true;
         if (distanceToForward < ANGLE_THRESHOLD || distanceToForward > 360 - ANGLE_THRESHOLD) {
             forward = true;

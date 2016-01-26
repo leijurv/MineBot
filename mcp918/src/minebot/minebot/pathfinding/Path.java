@@ -185,7 +185,6 @@ public class Path {
                 }
             }
         }
-        System.out.println("NOOOO");
         return false;
     }
 }
