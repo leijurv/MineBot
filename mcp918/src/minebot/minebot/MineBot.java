@@ -108,6 +108,7 @@ public class MineBot {
                 tickPath = false;
             }
         }
+        System.out.println("Mob hunting: " + tickPath);
         if (tickPath) {
             if (dealWithFood()) {
                 tickPath = false;
