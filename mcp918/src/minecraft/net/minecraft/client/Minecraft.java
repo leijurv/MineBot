@@ -1589,7 +1589,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             if ((this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed()) && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
-            this.sendClickBlockToController(this.currentScreen == null && (this.gameSettings.keyBindAttack.isKeyDown() || MineBot.getLeftIsPressed()) && this.inGameHasFocus);
+            this.sendClickBlockToController((this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus) || MineBot.getLeftIsPressed());
         }
         if (this.theWorld != null) {
             if (this.thePlayer != null) {
