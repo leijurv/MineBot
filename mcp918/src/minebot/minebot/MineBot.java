@@ -24,6 +24,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -87,7 +88,8 @@ public class MineBot {
         for (Entity entity : theWorld.loadedEntityList) {
             if (entity instanceof EntityMob) {
                 if (distFromMe(entity) < 5) {
-                    if (lookAtCoords(entity.posX, entity.posY, entity.posZ, true)) {
+                    AxisAlignedBB lol = entity.getEntityBoundingBox();
+                    if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minX + lol.maxX) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
                         isLeftClick = true;
                         tickPath = false;
                     }
@@ -101,6 +103,7 @@ public class MineBot {
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
                     nextPath = null;
                     findPathInNewThread(playerFeet);
+                    return;
                 } else {
                     clearPath();
                 }
