@@ -114,7 +114,9 @@ public class MineBot {
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             if (!mobs.isEmpty()) {
                 EntityMob entity = mobs.get(0);
-                GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
+                if (!entity.equals(target)) {
+                    GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
+                }
                 target = entity;
                 wasTargetSetByMobHunt = true;
             }
