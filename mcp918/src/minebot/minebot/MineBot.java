@@ -6,9 +6,12 @@
 package minebot;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.Path;
@@ -88,16 +91,15 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean tickPath = true;
-        for (Entity entity : theWorld.loadedEntityList) {
-            if (entity instanceof EntityMob) {
-                if (distFromMe(entity) < 5) {
-                    AxisAlignedBB lol = entity.getEntityBoundingBox();
-                    switchtosword();
-                    if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
-                        isLeftClick = true;
-                        tickPath = false;
-                    }
-                }
+        ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+        mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+        if (!mobs.isEmpty()) {
+            EntityMob entity = mobs.get(0);
+            AxisAlignedBB lol = entity.getEntityBoundingBox();
+            switchtosword();
+            if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+                isLeftClick = true;
+                tickPath = false;
             }
         }
         if (currentPath != null && tickPath) {
