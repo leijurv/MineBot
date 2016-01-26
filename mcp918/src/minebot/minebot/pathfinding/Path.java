@@ -160,7 +160,7 @@ public class Path {
             ticksOnCurrent = 0;
         } else {
             ticksOnCurrent++;
-            if (ticksOnCurrent > actions.get(pathPosition).cost() * 3 + 400) {
+            if (ticksOnCurrent > actions.get(pathPosition).cost() + 40) {
                 GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks). Cancelling.", true);
                 pathPosition = path.size() + 3;
                 failed = true;
@@ -178,7 +178,6 @@ public class Path {
                         MineBot.clearMovement();
                         MineBot.moveTowardsCoords(x, 0, z);
                         if (!MineBot.forward && curr.oneInTen != null && curr.oneInTen) {
-                            GuiScreen.sendChatMessage("rotating m9", true);
                             MineBot.lookAtCoords(x, 0, z, false);
                         }
                         return false;

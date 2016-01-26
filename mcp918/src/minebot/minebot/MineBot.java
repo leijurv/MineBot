@@ -21,6 +21,8 @@ import minebot.pathfinding.Goal;
 import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
@@ -77,10 +79,22 @@ public class MineBot {
         }
         lookingYaw = false;
         lookingPitch = false;
+        isLeftClick = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        if (currentPath != null) {
+        boolean tickPath = true;
+        for (Entity entity : theWorld.loadedEntityList) {
+            if (entity instanceof EntityMob) {
+                if (distFromMe(entity) < 5) {
+                    if (lookAtCoords(entity.posX, entity.posY, entity.posZ, true)) {
+                        isLeftClick = true;
+                        tickPath = false;
+                    }
+                }
+            }
+        }
+        if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
@@ -164,6 +178,13 @@ public class MineBot {
             }
             Minecraft.theMinecraft.thePlayer.rotationPitch -= pitchDistance;
         }
+    }
+    public static double distFromMe(Entity a) {
+        EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
+        double diffX = player.posX - a.posX;
+        double diffY = player.posY + 1.62 - a.posY;
+        double diffZ = player.posZ - a.posZ;
+        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
     }
     public static float getDesiredYaw() {
         return desiredYaw;
