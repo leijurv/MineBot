@@ -32,7 +32,6 @@ public class PathFinder {
      * @return
      */
     public Path calculatePath() {
-        GuiScreen.sendChatMessage(Minecraft.theMinecraft.theWorld.getChunkProvider() + "", true);
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
