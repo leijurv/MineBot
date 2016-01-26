@@ -129,8 +129,9 @@ public class MineBot {
                 tickPath = false;
             }
         }
-        if(currentPath==null && tickPath){
+        if (currentPath == null && tickPath && Miner.isMining()) {
             Miner.tick();
+            tickPath = false;
         }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
@@ -882,7 +883,6 @@ public class MineBot {
         }
         return null;
     }
-    
     public static void switchtotool(Block b) {
         MineBot.switchtotool(b, new ToolSet());
     }
