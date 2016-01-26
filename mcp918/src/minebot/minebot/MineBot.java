@@ -97,6 +97,9 @@ public class MineBot {
             EntityMob entity = mobs.get(0);
             toKill = entity;
         }
+        if (target != null && target.isDead) {
+            target = null;
+        }
         if (target != null) {
             goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
             double dist = distFromMe(target);
