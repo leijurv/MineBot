@@ -288,7 +288,8 @@ public class MineBot {
             plsCancel = false;
             int ind = text.indexOf(' ') + 1;
             if (ind == 0) {
-                return "Set goal to " + (goal = new GoalBlock(playerFeet));
+                goal = new GoalBlock(playerFeet);
+                return "Set goal to " + goal;
             }
             String[] strs = text.substring(ind).split(" ");
             int[] coords = new int[strs.length];
