@@ -376,6 +376,11 @@ public class MineBot {
             }
             return resp;
         }
+        if (text.startsWith("thisway")) {
+            double dist = Double.parseDouble(text.substring(7).trim());
+            goal = fromAngleAndDirection(dist);
+            return "Set goal to " + goal;
+        }
         if (text.startsWith("path")) {
             plsCancel = false;
             findPathInNewThread(playerFeet);
@@ -609,6 +614,12 @@ public class MineBot {
      * The threshold for how close it tries to get to looking straight at things
      */
     public static final float ANGLE_THRESHOLD = 7;
+    public static GoalXZ fromAngleAndDirection(double distance) {
+        double theta = ((double) Minecraft.theMinecraft.thePlayer.rotationYaw) * Math.PI / 180D;
+        double x = Minecraft.theMinecraft.thePlayer.posX - Math.sin(theta) * distance;
+        double z = Minecraft.theMinecraft.thePlayer.posZ + Math.cos(theta) * distance;
+        return new GoalXZ((int) x, (int) z);
+    }
     /**
      * Look at coordinates
      *

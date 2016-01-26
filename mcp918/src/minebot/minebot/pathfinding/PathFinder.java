@@ -6,8 +6,10 @@
 package minebot.pathfinding;
 
 import java.util.HashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.chunk.EmptyChunk;
 
 /**
  *
@@ -30,6 +32,7 @@ public class PathFinder {
      * @return
      */
     public Path calculatePath() {
+        GuiScreen.sendChatMessage(Minecraft.theMinecraft.theWorld.getChunkProvider() + "", true);
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
@@ -55,6 +58,9 @@ public class PathFinder {
             }
             Action[] connected = getConnectedPositions(myPos);
             for (Action actionToGetToNeighbor : connected) {
+                if (Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
+                    continue;
+                }
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
                 double tentativeCost = me.cost + actionToGetToNeighbor.calculateCost();
                 if (tentativeCost < neighbor.cost) {
@@ -77,29 +83,29 @@ public class PathFinder {
             numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
-                double bestDist = 0;
-                for (int i = 0; i < bestSoFar.length; i++) {
-                    double dist = dist(bestSoFar[i]);
-                    if (dist > bestDist) {
-                        bestDist = dist;
-                    }
-                    if (dist > MIN_DIST_PATH) {
-                        GuiScreen.sendChatMessage("A* cost coefficient " + COEFFICIENTS[i], true);
-                        if (COEFFICIENTS[i] >= 3) {
-                            GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
-                            GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
-                            GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
-                        }
-                        GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
-                        return new Path(startNode, bestSoFar[i], goal);
-                    }
-                }
-                GuiScreen.sendChatMessage("Even with a cost coefficient of " + bestSoFar.length + ", I couldn't get more than " + bestDist + " blocks =(", true);
-                GuiScreen.sendChatMessage("No path found =(", true);
-                return null;
+                break;
             }
         }
-        throw new IllegalStateException("bad");
+        double bestDist = 0;
+        for (int i = 0; i < bestSoFar.length; i++) {
+            double dist = dist(bestSoFar[i]);
+            if (dist > bestDist) {
+                bestDist = dist;
+            }
+            if (dist > MIN_DIST_PATH) {
+                GuiScreen.sendChatMessage("A* cost coefficient " + COEFFICIENTS[i], true);
+                if (COEFFICIENTS[i] >= 3) {
+                    GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
+                    GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
+                    GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
+                }
+                GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
+                return new Path(startNode, bestSoFar[i], goal);
+            }
+        }
+        GuiScreen.sendChatMessage("Even with a cost coefficient of " + bestSoFar.length + ", I couldn't get more than " + bestDist + " blocks =(", true);
+        GuiScreen.sendChatMessage("No path found =(", true);
+        return null;
     }
     private double dist(Node n) {
         int xDiff = n.pos.getX() - start.getX();
