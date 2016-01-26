@@ -20,4 +20,8 @@ public class Miner {
     public static void stopMining() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public static void mineblocks(int howMany){
+        
+    }
 }

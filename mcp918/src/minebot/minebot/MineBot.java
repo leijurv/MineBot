@@ -266,20 +266,20 @@ public class MineBot {
             plsCancel = false;
             int ind = text.indexOf(' ');
             if (ind == -1) {
-                ind = text.length();
+                return "Set goal to " + (goal = new GoalBlock(playerFeet));
             }
-            String[] strs = text.substring(ind).split(" ");
+            String[] strs = text.substring(ind).trim().split(" ");
             if(strs.length==0){
                 return "Set goal to " + (goal = new GoalBlock(playerFeet));
             }
             int[] coords = new int[strs.length];
             int i = 0;
-            try{
-            while(i < strs.length){
-                coords[i]=Integer.parseInt(strs[i]);
-                i++;
-            }
-            }catch(NumberFormatException nfe){
+            try {
+                while (i < strs.length) {
+                    coords[i] = Integer.parseInt(strs[i]);
+                    i++;
+                }
+            } catch (NumberFormatException nfe) {
                 goal = new GoalBlock(playerFeet);
                 return strs[i] + ". yup. A+ coordinate";
             }
