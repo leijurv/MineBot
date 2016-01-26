@@ -109,6 +109,7 @@ public class MineBot {
         if (target != null && target.isDead) {
             GuiScreen.sendChatMessage(target + " is dead", true);
             target = null;
+            currentPath = null;
         }
         if (target != null) {
             goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
