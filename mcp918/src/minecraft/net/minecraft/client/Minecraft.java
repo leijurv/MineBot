@@ -1566,30 +1566,30 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (!this.gameSettings.keyBindUseItem.isKeyDown()) {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
-                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.leftIsPressed()) {
                     ;
                 }
-                while (this.gameSettings.keyBindUseItem.isPressed()) {
+                while (this.gameSettings.keyBindUseItem.isPressed() || MineBot.rightIsPressed()) {
                     ;
                 }
                 while (this.gameSettings.keyBindPickBlock.isPressed()) {
                     ;
                 }
             } else {
-                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.leftIsPressed()) {
                     this.clickMouse();
                 }
-                while (this.gameSettings.keyBindUseItem.isPressed()) {
+                while (this.gameSettings.keyBindUseItem.isPressed() || MineBot.rightIsPressed()) {
                     this.rightClickMouse();
                 }
                 while (this.gameSettings.keyBindPickBlock.isPressed()) {
                     this.middleClickMouse();
                 }
             }
-            if (this.gameSettings.keyBindUseItem.isKeyDown() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
+            if ((this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed()) && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
-            this.sendClickBlockToController(this.currentScreen == null && (this.gameSettings.keyBindAttack.isKeyDown() || MineBot.getIsPressed()) && this.inGameHasFocus);
+            this.sendClickBlockToController(this.currentScreen == null && (this.gameSettings.keyBindAttack.isKeyDown() || MineBot.getLeftIsPressed()) && this.inGameHasFocus);
         }
         if (this.theWorld != null) {
             if (this.thePlayer != null) {

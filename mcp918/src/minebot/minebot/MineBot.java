@@ -77,12 +77,15 @@ public class MineBot {
             wasScreen = true;
         } else {
             if (isLeftClick) {
-                pressTime = 5;
+                leftPressTime = 5;
             }
             if (wasScreen) {
                 wasScreen = false;
-                pressTime = -10;
+                leftPressTime = -10;
             }
+        }
+        if (isRightClick) {
+            rightPressTime = 5;
         }
         lookingYaw = false;
         lookingPitch = false;
@@ -205,8 +208,10 @@ public class MineBot {
     public static Path currentPath = null;
     public static Path nextPath = null;
     public static Goal goal = null;
-    public static int pressTime = 0;
+    public static int leftPressTime = 0;
+    public static int rightPressTime = 0;
     public static boolean isLeftClick = false;
+    public static boolean isRightClick = false;
     public static boolean jumping = false;
     public static boolean forward = false;
     public static boolean backward = false;
@@ -218,19 +223,40 @@ public class MineBot {
      *
      * @return
      */
-    public static boolean getIsPressed() {
-        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime >= -1;
+    public static boolean getLeftIsPressed() {
+        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && leftPressTime >= -1;
     }
     /**
      * Do not question the logic. Called by Minecraft.java
      *
      * @return
      */
-    public static boolean isPressed() {
-        if (pressTime <= 0) {
+    public static boolean leftIsPressed() {
+        if (leftPressTime <= 0) {
             return false;
         } else {
-            --pressTime;
+            --leftPressTime;
+            return true;
+        }
+    }
+    /**
+     * Do not question the logic. Called by Minecraft.java
+     *
+     * @return
+     */
+    public static boolean getRightIsPressed() {
+        return isRightClick && rightPressTime >= -1;
+    }
+    /**
+     * Do not question the logic. Called by Minecraft.java
+     *
+     * @return
+     */
+    public static boolean rightIsPressed() {
+        if (rightPressTime <= 0) {
+            return false;
+        } else {
+            --rightPressTime;
             return true;
         }
     }
@@ -238,7 +264,7 @@ public class MineBot {
      * Called by our code
      */
     public static void letGoOfLeftClick() {
-        pressTime = 0;
+        leftPressTime = 0;
         isLeftClick = false;
     }
     /**
@@ -252,6 +278,8 @@ public class MineBot {
         right = false;
         backward = false;
         sneak = false;
+        isRightClick = false;
+        rightPressTime = 0;
     }
     /**
      * Clears movement, clears the current path, and lets go of left click. It
@@ -260,6 +288,8 @@ public class MineBot {
     public static void clearPath() {
         currentPath = null;
         letGoOfLeftClick();
+        isRightClick = false;
+        rightPressTime = 0;
         clearMovement();
     }
     public static String therewasachatmessage(String message) {
@@ -303,6 +333,10 @@ public class MineBot {
             cancelPath();
             plsCancel = true;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
+        }
+        if (text.equals("hdr")) {
+            isRightClick = true;
+            return "k";
         }
         if (text.equals("st")) {
             System.out.println(theWorld.getBlockState(playerFeet).getBlock());
