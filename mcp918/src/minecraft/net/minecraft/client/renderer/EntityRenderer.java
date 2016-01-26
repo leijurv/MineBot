@@ -352,13 +352,16 @@ public class EntityRenderer implements IResourceManagerReloadListener {
      * tick time. Args: partialTickTime
      */
     public void getMouseOver(float partialTicks) {
+        //System.out.println("Calculating mouse over");
         Entity entity = this.mc.getRenderViewEntity();
+        //System.out.println("Entity: " + entity);
         if (entity != null) {
             if (this.mc.theWorld != null) {
                 this.mc.mcProfiler.startSection("pick");
                 this.mc.pointedEntity = null;
                 double d0 = (double) this.mc.playerController.getBlockReachDistance();
                 this.mc.objectMouseOver = entity.rayTrace(d0, partialTicks);
+                //System.out.println(this.mc.objectMouseOver);
                 double d1 = d0;
                 Vec3 vec3 = entity.getPositionEyes(partialTicks);
                 boolean flag = false;
@@ -384,12 +387,20 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                         return p_apply_1_.canBeCollidedWith();
                     }
                 }));
+                /*System.out.println("entities: " + list);
+                 System.out.println("vec3: " + vec3);
+                 System.out.println("vec32: " + vec32);
+                 System.out.println("vec31: " + vec31);
+                 System.out.println("d0: " + d0);
+                 System.out.println("d1: " + d1);*/
                 double d2 = d1;
                 for (int j = 0; j < list.size(); ++j) {
                     Entity entity1 = (Entity) list.get(j);
                     float f1 = entity1.getCollisionBorderSize();
                     AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expand((double) f1, (double) f1, (double) f1);
+                    //System.out.println(axisalignedbb);
                     MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
+                    //System.out.println(movingobjectposition);
                     if (axisalignedbb.isVecInside(vec3)) {
                         if (d2 >= 0.0D) {
                             this.pointedEntity = entity1;
@@ -398,13 +409,16 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                         }
                     } else if (movingobjectposition != null) {
                         double d3 = vec3.distanceTo(movingobjectposition.hitVec);
+                        //System.out.println("bb");
                         if (d3 < d2 || d2 == 0.0D) {
+                            //System.out.println("m9");
                             if (entity1 == entity.ridingEntity) {
                                 if (d2 == 0.0D) {
                                     this.pointedEntity = entity1;
                                     vec33 = movingobjectposition.hitVec;
                                 }
                             } else {
+                                //System.out.println(420);
                                 this.pointedEntity = entity1;
                                 vec33 = movingobjectposition.hitVec;
                                 d2 = d3;
@@ -412,6 +426,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                         }
                     }
                 }
+                //System.out.println("Point: " + pointedEntity);
                 if (this.pointedEntity != null && flag && vec3.distanceTo(vec33) > 3.0D) {
                     this.pointedEntity = null;
                     this.mc.objectMouseOver = new MovingObjectPosition(MovingObjectPosition.MovingObjectType.MISS, vec33, (EnumFacing) null, new BlockPos(vec33));
@@ -422,6 +437,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                         this.mc.pointedEntity = this.pointedEntity;
                     }
                 }
+                //System.out.println("Updated " + mc.objectMouseOver);
                 this.mc.mcProfiler.endSection();
             }
         }
