@@ -19,6 +19,7 @@ public class Node {
     final Goal goal;
     final double estimatedCostToGoal;
     Action previousAction;
+    boolean isOpen;
     public Node(BlockPos pos, Goal goal) {
         this.pos = pos;
         this.previous = null;
@@ -26,6 +27,7 @@ public class Node {
         this.goal = goal;
         this.estimatedCostToGoal = goal.heuristic(pos);
         this.previousAction = null;
+        this.isOpen = false;
     }
     public double comparison() {
         return estimatedCostToGoal + cost;

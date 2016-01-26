@@ -6,9 +6,10 @@
 package minebot.pathfinding;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.chunk.EmptyChunk;
 
 /**
  *
@@ -23,6 +24,7 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<>();
     }
+    static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5};
     /**
      * Do the actual path calculation. The returned path might not actually go
      * to goal, but it will get as close as I could get
@@ -30,27 +32,23 @@ public class PathFinder {
      * @return
      */
     public Path calculatePath() {
+        GuiScreen.sendChatMessage(Minecraft.theMinecraft.theWorld.getChunkProvider() + "", true);
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
-        Node bestSoFar1 = null;
-        double bestHeuristicSoFar1 = Double.MAX_VALUE;
-        Node bestSoFar2 = null;
-        double bestHeuristicSoFar2 = Double.MAX_VALUE;
-        Node bestSoFar3 = null;
-        double bestHeuristicSoFar3 = Double.MAX_VALUE;
-        Node bestSoFar4 = null;
-        double bestHeuristicSoFar4 = Double.MAX_VALUE;
+        Node[] bestSoFar = new Node[COEFFICIENTS.length];
+        double[] bestHeuristicSoFar = new double[COEFFICIENTS.length];
+        for (int i = 0; i < bestHeuristicSoFar.length; i++) {
+            bestHeuristicSoFar[i] = Double.MAX_VALUE;
+        }
         OpenSet openSet = new OpenSet();
         openSet.insert(startNode);
-        HashSet<Node> hashSet = new HashSet<>();
-        hashSet.add(startNode);
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + 10000;
         int numNodes = 0;
         while (openSet.first != null) {
             Node me = openSet.removeLowest();
-            hashSet.remove(me);
+            me.isOpen = false;
             BlockPos myPos = me.pos;
             if (numNodes % 1000 == 0) {
                 System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
@@ -60,61 +58,54 @@ public class PathFinder {
             }
             Action[] connected = getConnectedPositions(myPos);
             for (Action actionToGetToNeighbor : connected) {
+                if (Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
+                    continue;
+                }
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
                 double tentativeCost = me.cost + actionToGetToNeighbor.calculateCost();
                 if (tentativeCost < neighbor.cost) {
                     neighbor.previous = me;
                     neighbor.previousAction = actionToGetToNeighbor;
                     neighbor.cost = tentativeCost;
-                    if (!hashSet.contains(neighbor)) {
+                    if (!neighbor.isOpen) {
                         openSet.insert(neighbor);//dont double count, dont insert into open set if it's already there
-                        hashSet.add(neighbor);
+                        neighbor.isOpen = true;
                     }
-                    double sum1 = neighbor.estimatedCostToGoal + neighbor.cost / 1;
-                    if (sum1 < bestHeuristicSoFar1) {
-                        bestHeuristicSoFar1 = sum1;
-                        bestSoFar1 = neighbor;
-                    }
-                    double sum2 = neighbor.estimatedCostToGoal + neighbor.cost / 2;
-                    if (sum2 < bestHeuristicSoFar2) {
-                        bestHeuristicSoFar2 = sum2;
-                        bestSoFar2 = neighbor;
-                    }
-                    double sum3 = neighbor.estimatedCostToGoal + neighbor.cost / 3;
-                    if (sum3 < bestHeuristicSoFar3) {
-                        bestHeuristicSoFar3 = sum3;
-                        bestSoFar3 = neighbor;
-                    }
-                    double sum4 = neighbor.estimatedCostToGoal + neighbor.cost / 4;
-                    if (sum4 < bestHeuristicSoFar4) {
-                        bestHeuristicSoFar4 = sum4;
-                        bestSoFar4 = neighbor;
+                    for (int i = 0; i < bestSoFar.length; i++) {
+                        double sum = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
+                        if (sum < bestHeuristicSoFar[i]) {
+                            bestHeuristicSoFar[i] = sum;
+                            bestSoFar[i] = neighbor;
+                        }
                     }
                 }
             }
             numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
-                if (dist(bestSoFar1) > MIN_DIST_PATH) {
-                    return new Path(startNode, bestSoFar1, goal);
-                }
-                if (dist(bestSoFar2) > MIN_DIST_PATH) {
-                    GuiScreen.sendChatMessage("Choice 2", true);
-                    return new Path(startNode, bestSoFar2, goal);
-                }
-                if (dist(bestSoFar3) > MIN_DIST_PATH) {
-                    GuiScreen.sendChatMessage("Choice 3", true);
-                    return new Path(startNode, bestSoFar3, goal);
-                }
-                if (dist(bestSoFar4) > MIN_DIST_PATH) {
-                    GuiScreen.sendChatMessage("Choice 4", true);
-                    return new Path(startNode, bestSoFar4, goal);
-                }
-                GuiScreen.sendChatMessage("Choice 4", true);
-                return new Path(startNode, bestSoFar4, goal);
+                break;
             }
         }
-        throw new IllegalStateException("bad");
+        double bestDist = 0;
+        for (int i = 0; i < bestSoFar.length; i++) {
+            double dist = dist(bestSoFar[i]);
+            if (dist > bestDist) {
+                bestDist = dist;
+            }
+            if (dist > MIN_DIST_PATH) {
+                GuiScreen.sendChatMessage("A* cost coefficient " + COEFFICIENTS[i], true);
+                if (COEFFICIENTS[i] >= 3) {
+                    GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
+                    GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
+                    GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
+                }
+                GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
+                return new Path(startNode, bestSoFar[i], goal);
+            }
+        }
+        GuiScreen.sendChatMessage("Even with a cost coefficient of " + bestSoFar.length + ", I couldn't get more than " + bestDist + " blocks =(", true);
+        GuiScreen.sendChatMessage("No path found =(", true);
+        return null;
     }
     private double dist(Node n) {
         int xDiff = n.pos.getX() - start.getX();
@@ -133,24 +124,39 @@ public class PathFinder {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
-        BlockPos[] positions = new BlockPos[13];
-        positions[0] = new BlockPos(x, y + 1, z);//pillar
-        positions[1] = new BlockPos(x + 1, y, z);//bridge
-        positions[2] = new BlockPos(x - 1, y, z);//bridge
-        positions[3] = new BlockPos(x, y, z + 1);//bridge
-        positions[4] = new BlockPos(x, y, z - 1);//bridge
-        positions[5] = new BlockPos(x + 1, y + 1, z);//climb
-        positions[6] = new BlockPos(x - 1, y + 1, z);//climb
-        positions[7] = new BlockPos(x, y + 1, z + 1);//climb
-        positions[8] = new BlockPos(x, y + 1, z - 1);//climb
-        positions[9] = new BlockPos(x + 1, y - 1, z);//fall
-        positions[10] = new BlockPos(x - 1, y - 1, z);//fall
-        positions[11] = new BlockPos(x, y - 1, z + 1);//fall
-        positions[12] = new BlockPos(x, y - 1, z - 1);//fall
+        /*BlockPos[] positions = new BlockPos[13];
+         positions[0] = new BlockPos(x, y + 1, z);//pillar
+         positions[1] = new BlockPos(x + 1, y, z);//bridge
+         positions[2] = new BlockPos(x - 1, y, z);//bridge
+         positions[3] = new BlockPos(x, y, z + 1);//bridge
+         positions[4] = new BlockPos(x, y, z - 1);//bridge
+         positions[5] = new BlockPos(x + 1, y + 1, z);//climb
+         positions[6] = new BlockPos(x - 1, y + 1, z);//climb
+         positions[7] = new BlockPos(x, y + 1, z + 1);//climb
+         positions[8] = new BlockPos(x, y + 1, z - 1);//climb
+         positions[9] = new BlockPos(x + 1, y - 1, z);//fall
+         positions[10] = new BlockPos(x - 1, y - 1, z);//fall
+         positions[11] = new BlockPos(x, y - 1, z + 1);//fall
+         positions[12] = new BlockPos(x, y - 1, z - 1);//fall
+         Action[] actions = new Action[13];
+         for (int i = 0; i < 13; i++) {
+         actions[i] = Action.getAction(pos, positions[i]);
+         }*/
+        //new implementation should have exact same effect
         Action[] actions = new Action[13];
-        for (int i = 0; i < 13; i++) {
-            actions[i] = Action.getAction(pos, positions[i]);
-        }
+        actions[0] = new ActionPillar(pos, new BlockPos(x, y + 1, z));
+        actions[1] = new ActionBridge(pos, new BlockPos(x + 1, y, z));
+        actions[2] = new ActionBridge(pos, new BlockPos(x - 1, y, z));
+        actions[3] = new ActionBridge(pos, new BlockPos(x, y, z + 1));
+        actions[4] = new ActionBridge(pos, new BlockPos(x, y, z - 1));
+        actions[5] = new ActionClimb(pos, new BlockPos(x + 1, y + 1, z));
+        actions[6] = new ActionClimb(pos, new BlockPos(x - 1, y + 1, z));
+        actions[7] = new ActionClimb(pos, new BlockPos(x, y + 1, z + 1));
+        actions[8] = new ActionClimb(pos, new BlockPos(x, y + 1, z - 1));
+        actions[9] = new ActionFall(pos, new BlockPos(x + 1, y - 1, z));
+        actions[10] = new ActionFall(pos, new BlockPos(x - 1, y - 1, z));
+        actions[11] = new ActionFall(pos, new BlockPos(x, y - 1, z + 1));
+        actions[12] = new ActionFall(pos, new BlockPos(x, y - 1, z - 1));
         return actions;
     }
 

@@ -6,6 +6,7 @@
 package minebot.pathfinding;
 
 import java.util.Objects;
+import java.util.Random;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -33,7 +34,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return WC + getTotalHardnessOfBlocksToBreak(ts);
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
-            if (blocksToPlace[0].equals(Block.getBlockById(0)) || blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0])) {
+            if (blocksToPlace[0].equals(Block.getBlockById(0)) || (!isWater(blocksToPlace[0]) && blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0]))) {
                 return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
             }
             return 100000000;
@@ -42,15 +43,31 @@ public class ActionBridge extends ActionPlaceOrBreak {
     }
     boolean wasTheBridgeBlockAlwaysThere = true;//did we have to place a bridge block or was it always there
     Boolean oneInTen = null;//a one in ten chance
+    public boolean amIGood() {
+        return canWalkThrough(positionsToBreak[0]) && canWalkThrough(positionsToBreak[1]) && canWalkOn(positionsToPlace[0]);
+    }
+    public int dx() {
+        return to.getX() - from.getX();
+    }
+    public int dz() {
+        return to.getZ() - from.getZ();
+    }
     @Override
     protected boolean tick0() {
         if (oneInTen == null) {
-            oneInTen = System.currentTimeMillis() % 10 == 0;
+            oneInTen = new Random().nextInt(10) == 0;
         }
         boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]);
         //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        if (whereAmI.getY() != to.getY()) {
+            System.out.println("Wrong Y coordinate");
+            if (whereAmI.getY() < to.getY()) {
+                MineBot.jumping = true;
+            }
+            return false;
+        }
         if (isTheBridgeBlockThere) {//either the bridge block was there the whole time or we just placed it
             if (oneInTen && wasTheBridgeBlockAlwaysThere) {
                 //basically one in every ten blocks we walk forwards normally without sneaking and placing, rotate to look forwards.
@@ -58,6 +75,11 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 MineBot.forward = MineBot.lookAtBlock(to, false);
             } else {
                 MineBot.moveTowardsBlock(to);
+            }
+            if (wasTheBridgeBlockAlwaysThere) {
+                if (MineBot.forward && !MineBot.backward) {
+                    thePlayer.setSprinting(true);
+                }
             }
             if (whereAmI.equals(to)) {//if we are there
                 System.out.println("Done walking to " + to);

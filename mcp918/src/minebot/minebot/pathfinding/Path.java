@@ -24,7 +24,7 @@ public class Path {
     public final BlockPos start;
     public final BlockPos end;
     public final Goal goal;
-    final ArrayList<BlockPos> path;
+    public final ArrayList<BlockPos> path;
     final ArrayList<Action> actions;
     Path(Node start, Node end, Goal goal) {
         this.start = start.pos;
@@ -158,14 +158,31 @@ public class Path {
             System.out.println("Action done, next path");
             pathPosition++;
             ticksOnCurrent = 0;
-            //System.out.println("At position " + pathPosition + " in " + path + " and actions " + actions);
         } else {
             ticksOnCurrent++;
-            if (ticksOnCurrent > actions.get(pathPosition).cost() * 3 + 400) {
-                GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks). Cancelling.", true);
+            if (ticksOnCurrent > actions.get(pathPosition).cost() + 100) {
+                GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost() + "). Cancelling.", true);
                 pathPosition = path.size() + 3;
                 failed = true;
                 return true;
+            }
+        }
+        if (pathPosition < actions.size() - 1) {
+            if ((actions.get(pathPosition) instanceof ActionBridge) && (actions.get(pathPosition + 1) instanceof ActionBridge)) {
+                ActionBridge curr = (ActionBridge) actions.get(pathPosition);
+                ActionBridge next = (ActionBridge) actions.get(pathPosition + 1);
+                if (curr.dx() != next.dx() || curr.dz() != next.dz()) {//two actions are not parallel, so this is a right angle
+                    if (curr.amIGood() && next.amIGood()) {//nothing in the way
+                        double x = (next.from.getX() + next.to.getX() + 1.0D) * 0.5D;
+                        double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
+                        MineBot.clearMovement();
+                        MineBot.moveTowardsCoords(x, 0, z);
+                        if (!MineBot.forward && curr.oneInTen != null && curr.oneInTen) {
+                            MineBot.lookAtCoords(x, 0, z, false);
+                        }
+                        return false;
+                    }
+                }
             }
         }
         return false;

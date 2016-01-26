@@ -45,7 +45,10 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
-            if (!blocksToBreak[i].equals(Block.getBlockById(0))) {
+            if (!blocksToBreak[i].equals(Block.getBlockById(0)) && !canWalkThrough(positionsToBreak[i])) {
+                if (avoidBreaking(positionsToBreak[i])) {
+                    sum += 1000000;
+                }
                 sum += 1 / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
             }
         }
@@ -65,13 +68,15 @@ public abstract class ActionPlaceOrBreak extends Action {
                     return false;
                     //look at the block we are breaking
                 }
-                if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {//hmmm, our crosshairs are looking at the wrong block
-                    //TODO add a timer here, and if we are stuck looking at the wrong block for more than 1 second, do something
-                    //(it cant take longer than twenty ticks, because the MineBot.MAX_YAW_CHANGE_PER_TICK=18, and 18*20 = 360°
-                    System.out.println("Wrong");
-                    return false;
+                /*if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {//hmmm, our crosshairs are looking at the wrong block
+                 //TODO add a timer here, and if we are stuck looking at the wrong block for more than 1 second, do something
+                 //(it cant take longer than twenty ticks, because the MineBot.MAX_YAW_CHANGE_PER_TICK=18, and 18*20 = 360°
+                 System.out.println("Wrong");
+                 return false;
+                 }*/
+                if (MineBot.whatAreYouLookingAt() != null) {
+                    switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock());
                 }
-                switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(positionsToBreak[i]).getBlock());
                 MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(positionsToBreak[i])) {
                     MineBot.letGoOfLeftClick();

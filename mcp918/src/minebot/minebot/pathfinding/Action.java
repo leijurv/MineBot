@@ -26,7 +26,7 @@ public abstract class Action {
      * It doesn't actually take ten ticks to place a block, this cost is so high
      * because we want to generally conserve blocks which might be limited
      */
-    public static final double PLACE_ONE_BLOCK_COST = 10;
+    public static final double PLACE_ONE_BLOCK_COST = 20;
     public final BlockPos from;
     public final BlockPos to;
     private Double cost;
@@ -92,13 +92,22 @@ public abstract class Action {
     public static boolean isWater(Block b) {
         return b.equals(Block.getBlockById(8)) || b.equals(Block.getBlockById(9));
     }
+    public static boolean isLiquid(Block b) {
+        return b != null && (b.equals(Block.getBlockById(8)) || b.equals(Block.getBlockById(9)) || b.equals(Block.getBlockById(10)) || b.equals(Block.getBlockById(11)));
+    }
+    public static boolean isLiquid(BlockPos p) {
+        return isLiquid(Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock());
+    }
+    public static boolean avoidBreaking(BlockPos pos) {
+        return isLiquid(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())) || isLiquid(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) || isLiquid(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)) || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)) || isLiquid(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()));
+    }
     /**
      * Can I walk through this block? e.g. air, saplings, torches, etc
      *
      * @param pos
      * @return
      */
-    public static boolean canWalkThrough(BlockPos pos) {//fix this. this assumes that air is the only block with no collisions, while actually there are others (e.g. torches)
+    public static boolean canWalkThrough(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
         return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isWater(Minecraft.theMinecraft.theWorld.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock());
     }

@@ -6,9 +6,12 @@
 package minebot;
 
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.Path;
@@ -21,8 +24,16 @@ import minebot.pathfinding.Goal;
 import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -31,6 +42,7 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class MineBot {
+    public static boolean actuallyPutMessagesInChat = false;
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -43,12 +55,16 @@ public class MineBot {
         Autorun.runprocess("java -Djava.library.path=jars/versions/1.8.8/1.8.8-natives/ -jar dist/MineBot.jar");
     }
     public static void onTick() {
-        long start = System.currentTimeMillis();
-        onTick1();
-        long end = System.currentTimeMillis();
-        long time = end - start;
-        if (time > 3) {
-            System.out.println("Tick took " + time + "ms");
+        try {
+            long start = System.currentTimeMillis();
+            onTick1();
+            long end = System.currentTimeMillis();
+            long time = end - start;
+            if (time > 3) {
+                System.out.println("Tick took " + time + "ms");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
@@ -56,31 +72,55 @@ public class MineBot {
      */
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
+            cancelPath();
             return;
         }
         if (Minecraft.theMinecraft.currentScreen != null) {
             wasScreen = true;
         } else {
             if (isLeftClick) {
-                pressTime = 5;
+                leftPressTime = 5;
             }
             if (wasScreen) {
                 wasScreen = false;
-                pressTime = -10;
+                leftPressTime = -10;
             }
+        }
+        if (isRightClick) {
+            rightPressTime = 5;
         }
         lookingYaw = false;
         lookingPitch = false;
+        isLeftClick = false;
+        isRightClick = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        if (currentPath != null) {
+        boolean tickPath = true;
+        ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+        mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+        if (!mobs.isEmpty()) {
+            EntityMob entity = mobs.get(0);
+            AxisAlignedBB lol = entity.getEntityBoundingBox();
+            switchtosword();
+            if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+                isLeftClick = true;
+                tickPath = false;
+            }
+        }
+        if (tickPath) {
+            if (dealWithFood()) {
+                tickPath = false;
+            }
+        }
+        if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
                     nextPath = null;
                     findPathInNewThread(playerFeet);
+                    return;
                 } else {
                     clearPath();
                 }
@@ -159,6 +199,16 @@ public class MineBot {
             Minecraft.theMinecraft.thePlayer.rotationPitch -= pitchDistance;
         }
     }
+    public static double distFromMe(Entity a) {
+        EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
+        double diffX = player.posX - a.posX;
+        double diffY = player.posY + 1.62 - a.posY;
+        double diffZ = player.posZ - a.posZ;
+        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+    }
+    public static float getDesiredYaw() {
+        return desiredYaw;
+    }
     static final float MAX_YAW_CHANGE_PER_TICK = 360 / 20;
     static final float MAX_PITCH_CHANGE_PER_TICK = 360 / 20;
     public static boolean wasScreen = false;
@@ -166,8 +216,10 @@ public class MineBot {
     public static Path currentPath = null;
     public static Path nextPath = null;
     public static Goal goal = null;
-    public static int pressTime = 0;
+    public static int leftPressTime = 0;
+    public static int rightPressTime = 0;
     public static boolean isLeftClick = false;
+    public static boolean isRightClick = false;
     public static boolean jumping = false;
     public static boolean forward = false;
     public static boolean backward = false;
@@ -179,19 +231,40 @@ public class MineBot {
      *
      * @return
      */
-    public static boolean getIsPressed() {
-        return isLeftClick && Minecraft.theMinecraft.currentScreen == null && pressTime >= -1;
+    public static boolean getLeftIsPressed() {
+        return isLeftClick /*&& Minecraft.theMinecraft.currentScreen == null*/ && leftPressTime >= -2;
     }
     /**
      * Do not question the logic. Called by Minecraft.java
      *
      * @return
      */
-    public static boolean isPressed() {
-        if (pressTime <= 0) {
+    public static boolean leftIsPressed() {
+        if (leftPressTime <= 0) {
             return false;
         } else {
-            --pressTime;
+            --leftPressTime;
+            return true;
+        }
+    }
+    /**
+     * Do not question the logic. Called by Minecraft.java
+     *
+     * @return
+     */
+    public static boolean getRightIsPressed() {
+        return isRightClick && rightPressTime >= -2;
+    }
+    /**
+     * Do not question the logic. Called by Minecraft.java
+     *
+     * @return
+     */
+    public static boolean rightIsPressed() {
+        if (rightPressTime <= 0) {
+            return false;
+        } else {
+            --rightPressTime;
             return true;
         }
     }
@@ -199,7 +272,7 @@ public class MineBot {
      * Called by our code
      */
     public static void letGoOfLeftClick() {
-        pressTime = 0;
+        leftPressTime = 0;
         isLeftClick = false;
     }
     /**
@@ -213,6 +286,8 @@ public class MineBot {
         right = false;
         backward = false;
         sneak = false;
+        isRightClick = false;
+        rightPressTime = 0;
     }
     /**
      * Clears movement, clears the current path, and lets go of left click. It
@@ -221,6 +296,8 @@ public class MineBot {
     public static void clearPath() {
         currentPath = null;
         letGoOfLeftClick();
+        isRightClick = false;
+        rightPressTime = 0;
         clearMovement();
     }
     public static String therewasachatmessage(String message) {
@@ -243,6 +320,19 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
+        if (text.startsWith("actuallyPutMessagesInChat")) {
+            actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
+            return "toggled to " + actuallyPutMessagesInChat;
+        }
+        if (text.startsWith("random direction")) {
+            double dist = Double.parseDouble(text.substring("random direction".length()).trim());
+            double ang = new Random().nextDouble() * Math.PI * 2;
+            GuiScreen.sendChatMessage("Angle: " + ang, true);
+            int x = playerFeet.getX() + (int) (Math.sin(ang) * dist);
+            int z = playerFeet.getZ() + (int) (Math.cos(ang) * dist);
+            goal = new GoalXZ(x, z);
+            return "Set goal to " + goal;
+        }
         if (text.equals("look")) {
             lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
@@ -264,24 +354,20 @@ public class MineBot {
         }
         if (text.startsWith("goal") || text.startsWith("setgoal")) {
             plsCancel = false;
-            int ind = text.indexOf(' ');
-            if (ind == -1) {
-                return "Set goal to " + (goal = new GoalBlock(playerFeet));
-            }
-            String[] strs = text.substring(ind).trim().split(" ");
-            if(strs.length==0){
-                return "Set goal to " + (goal = new GoalBlock(playerFeet));
-            }
-            int[] coords = new int[strs.length];
-            int i = 0;
-            try {
-                while (i < strs.length) {
-                    coords[i] = Integer.parseInt(strs[i]);
-                    i++;
-                }
-            } catch (NumberFormatException nfe) {
+            int ind = text.indexOf(' ') + 1;
+            if (ind == 0) {
                 goal = new GoalBlock(playerFeet);
-                return strs[i] + ". yup. A+ coordinate";
+                return "Set goal to " + goal;
+            }
+            String[] strs = text.substring(ind).split(" ");
+            int[] coords = new int[strs.length];
+            for (int i = 0; i < strs.length; i++) {
+                try {
+                    coords[i] = Integer.parseInt(strs[i]);
+                } catch (NumberFormatException nfe) {
+                    goal = new GoalBlock(playerFeet);
+                    return strs[i] + ". yup. A+ coordinate";//A+? you might even say A*
+                }
             }
             switch (strs.length) {
                 case 3:
@@ -291,15 +377,46 @@ public class MineBot {
                     goal = new GoalXZ(coords[0], coords[1]);
                     break;
                 case 1:
-                    goal = new GoalYLevel(Integer.parseInt(strs[0]));
+                    goal = new GoalYLevel(coords[0]);
                     break;
                 default:
                     goal = new GoalBlock(playerFeet);
-                    if(strs.length!=0)
+                    if (strs.length != 0) {
                         return strs.length + " coordinates. Nice.";
+                    }
                     break;
             }
-            
+            return "Set goal to " + goal;
+        }
+        if (text.startsWith("goto")) {
+            String name = text.substring(4).trim().toLowerCase();
+            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+                String blah = pl.getName().trim().toLowerCase();
+                if (blah.contains(name) || name.contains(blah)) {
+                    BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
+                    goal = new GoalBlock(pos);
+                    findPathInNewThread(playerFeet);
+                    return "Pathing to " + pl.getName() + " at " + goal;
+                }
+            }
+            return "Couldn't find " + name;
+        }
+        if (text.startsWith("player")) {
+            String name = text.substring(6).trim();
+            String resp = "";
+            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+                resp += "(" + pl.getName() + "," + pl.posX + "," + pl.posY + "," + pl.posZ + ")";
+                if (pl.getName().equals(name)) {
+                    BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
+                    goal = new GoalBlock(pos);
+                    return "Set goal to " + goal;
+                }
+            }
+            return resp;
+        }
+        if (text.startsWith("thisway")) {
+            double dist = Double.parseDouble(text.substring(7).trim());
+            goal = fromAngleAndDirection(dist);
             return "Set goal to " + goal;
         }
         if (text.startsWith("path")) {
@@ -373,9 +490,9 @@ public class MineBot {
     /**
      * In a new thread, pathfind to target blockpos
      *
-     * @param target
+     * @param start
      */
-    public static void findPathInNewThread(BlockPos target) {
+    public static void findPathInNewThread(BlockPos start) {
         new Thread() {
             @Override
             public void run() {
@@ -383,14 +500,14 @@ public class MineBot {
                     return;
                 }
                 isThereAnythingInProgress = true;
-                GuiScreen.sendChatMessage("Starting to search for path from " + target + " to " + goal, true);
-                currentPath = findPath(target);
+                GuiScreen.sendChatMessage("Starting to search for path from " + start + " to " + goal, true);
+                currentPath = findPath(start);
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
-                    GuiScreen.sendChatMessage("I couldn't find that path, but I'm going to get as close as I can", true);
+                    GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can", true);
                     isThereAnythingInProgress = false;
                     planAhead();
                 } else {
-                    GuiScreen.sendChatMessage("Finished finding a path from " + target + " to " + goal, true);
+                    GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal, true);
                     isThereAnythingInProgress = false;
                 }
             }
@@ -441,6 +558,54 @@ public class MineBot {
          path.showPathInStone();
          return;
          }*/
+    }
+    public static boolean dealWithFood() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        FoodStats fs = p.getFoodStats();
+        if (!fs.needFood()) {
+            return false;
+        }
+        int foodNeeded = 20 - fs.getFoodLevel();
+        System.out.println("Needs food: " + foodNeeded);
+        ItemStack[] inv = p.inventory.mainInventory;
+        byte slotForFood = -1;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (item.getItem() instanceof ItemFood) {
+                int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
+                System.out.println(item + " " + healing);
+                if (healing <= foodNeeded) {
+                    slotForFood = i;
+                }
+            }
+        }
+        if (slotForFood != -1) {
+            System.out.println("Switching to slot " + slotForFood + " and right clicking");
+            isRightClick = true;
+            p.inventory.currentItem = slotForFood;
+            return true;
+        }
+        return false;
+    }
+    public static void switchtosword() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        float bestDamage = 0;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
+            }
+            if (item.getItem() instanceof ItemSword) {
+                float damage = ((ItemSword) (item.getItem())).getDamageVsEntity();
+                if (damage > bestDamage) {
+                    p.inventory.currentItem = i;
+                }
+            }
+        }
     }
     /**
      * Give a block that's sorta close to the player, at foot level
@@ -518,6 +683,12 @@ public class MineBot {
      * The threshold for how close it tries to get to looking straight at things
      */
     public static final float ANGLE_THRESHOLD = 7;
+    public static GoalXZ fromAngleAndDirection(double distance) {
+        double theta = ((double) Minecraft.theMinecraft.thePlayer.rotationYaw) * Math.PI / 180D;
+        double x = Minecraft.theMinecraft.thePlayer.posX - Math.sin(theta) * distance;
+        double z = Minecraft.theMinecraft.thePlayer.posZ + Math.cos(theta) * distance;
+        return new GoalXZ((int) x, (int) z);
+    }
     /**
      * Look at coordinates
      *
@@ -594,23 +765,47 @@ public class MineBot {
             diff += 360;
         }
         float distanceToForward = Math.min(Math.abs(diff - 0), Math.abs(diff - 360)) % 360;
-        float distanceToBackward = Math.abs(diff - 180) % 360;
+        float distanceToForwardRight = Math.abs(diff - 45) % 360;
         float distanceToRight = Math.abs(diff - 90) % 360;
+        float distanceToBackwardRight = Math.abs(diff - 135) % 360;
+        float distanceToBackward = Math.abs(diff - 180) % 360;
+        float distanceToBackwardLeft = Math.abs(diff - 225) % 360;
         float distanceToLeft = Math.abs(diff - 270) % 360;
-        float tmp = Math.round(diff / 90) * 90;
+        float distanceToForwardLeft = Math.abs(diff - 315) % 360;
+        float tmp = Math.round(diff / 45) * 45;
         if (tmp > 359) {
             tmp -= 360;
         }
         desiredYaw = yaw - tmp;
-        System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
-        System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
+        //System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
+        //System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
         lookingYaw = true;
         if (distanceToForward < ANGLE_THRESHOLD || distanceToForward > 360 - ANGLE_THRESHOLD) {
             forward = true;
             return true;
         }
+        if (distanceToForwardLeft < ANGLE_THRESHOLD || distanceToForwardLeft > 360 - ANGLE_THRESHOLD) {
+            forward = true;
+            left = true;
+            return true;
+        }
+        if (distanceToForwardRight < ANGLE_THRESHOLD || distanceToForwardRight > 360 - ANGLE_THRESHOLD) {
+            forward = true;
+            right = true;
+            return true;
+        }
         if (distanceToBackward < ANGLE_THRESHOLD || distanceToBackward > 360 - ANGLE_THRESHOLD) {
             backward = true;
+            return true;
+        }
+        if (distanceToBackwardLeft < ANGLE_THRESHOLD || distanceToBackwardLeft > 360 - ANGLE_THRESHOLD) {
+            backward = true;
+            left = true;
+            return true;
+        }
+        if (distanceToBackwardRight < ANGLE_THRESHOLD || distanceToBackwardRight > 360 - ANGLE_THRESHOLD) {
+            backward = true;
+            right = true;
             return true;
         }
         if (distanceToLeft < ANGLE_THRESHOLD || distanceToLeft > 360 - ANGLE_THRESHOLD) {
