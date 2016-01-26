@@ -1192,16 +1192,20 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
     }
     private void clickMouse() {
+        System.out.println("Click mouse called");
         if (this.leftClickCounter <= 0) {
             this.thePlayer.swingItem();
+            System.out.println(this.objectMouseOver);
             if (this.objectMouseOver == null) {
                 logger.error("Null returned as \'hitResult\', this shouldn\'t happen!");
                 if (this.playerController.isNotCreative()) {
                     this.leftClickCounter = 10;
                 }
             } else {
+                System.out.println("Type of hit: " + this.objectMouseOver.typeOfHit);
                 switch (this.objectMouseOver.typeOfHit) {
                     case ENTITY:
+                        System.out.println("Attacking entity");
                         this.playerController.attackEntity(this.thePlayer, this.objectMouseOver.entityHit);
                         break;
                     case BLOCK:
@@ -1602,8 +1606,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     leftClickCounter = 0;
                 }
                 //System.out.println("Counter: " + leftClickCounter);
+                //System.out.println("Using? " + this.thePlayer.isUsingItem());
                 if (this.thePlayer.isUsingItem()) {
+                    //System.out.println("lol");
                     if (!(MineBot.getRightIsPressed())) {
+                        //System.out.println("Not using item any more");
                         this.playerController.onStoppedUsingItem(this.thePlayer);
                     }
                     while (MineBot.leftIsPressed()) {
@@ -1613,6 +1620,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         ;
                     }
                 } else {
+                    //System.out.println("checking if pressed");
                     while (MineBot.leftIsPressed()) {
                         //System.out.println("Clck ");
                         this.clickMouse();
@@ -1624,7 +1632,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (MineBot.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                     this.rightClickMouse();
                 }
-                // System.out.println("Sending " + MineBot.isLeftClick);
+                //System.out.println("Sending " + MineBot.isLeftClick);
                 this.sendClickBlockToController(MineBot.getLeftIsPressed());
             }
         }

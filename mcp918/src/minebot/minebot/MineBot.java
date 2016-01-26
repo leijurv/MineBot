@@ -46,6 +46,7 @@ public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
+    static Entity target = null;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -76,16 +77,8 @@ public class MineBot {
             cancelPath();
             return;
         }
-        if (Minecraft.theMinecraft.currentScreen != null) {
-            wasScreen = true;
-        } else {
-            if (isLeftClick) {
-                leftPressTime = 5;
-            }
-            if (wasScreen) {
-                wasScreen = false;
-                leftPressTime = -10;
-            }
+        if (isLeftClick) {
+            leftPressTime = 5;
         }
         if (isRightClick) {
             rightPressTime = 5;
@@ -109,7 +102,28 @@ public class MineBot {
                 tickPath = false;
             }
         }
-        System.out.println("Mob hunting: " + tickPath);
+        if (target != null && target.isDead) {
+            GuiScreen.sendChatMessage(target + " is dead", true);
+            target = null;
+        }
+        if (target != null) {
+            goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
+            double dist = distFromMe(target);
+            boolean actuallyLookingAt = target.equals(what());
+            if (dist > 5 && currentPath == null) {
+                findPathInNewThread(playerFeet);
+            }
+            if (dist <= 5) {
+                AxisAlignedBB lol = target.getEntityBoundingBox();
+                switchtosword();
+                lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
+            }
+            if (actuallyLookingAt) {
+                isLeftClick = true;
+                tickPath = false;
+            }
+        }
+        System.out.println("Mob hunting: " + !tickPath);
         if (tickPath) {
             if (dealWithFood()) {
                 tickPath = false;
@@ -345,6 +359,7 @@ public class MineBot {
         if (text.equals("cancel")) {
             cancelPath();
             plsCancel = true;
+            target = null;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
         }
         if (text.equals("st")) {
@@ -403,6 +418,33 @@ public class MineBot {
                     findPathInNewThread(playerFeet);
                     return "Pathing to " + pl.getName() + " at " + goal;
                 }
+            }
+            return "Couldn't find " + name;
+        }
+        if (text.startsWith("kill")) {
+            String name = text.substring(4).trim().toLowerCase();
+            if (name.length() > 2) {
+                for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+                    String blah = pl.getName().trim().toLowerCase();
+                    if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
+                        GuiScreen.sendChatMessage("Considering " + blah, true);
+                        if (blah.contains(name) || name.contains(blah)) {
+                            target = pl;
+                            BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
+                            goal = new GoalBlock(pos);
+                            findPathInNewThread(playerFeet);
+                            return "Killing " + pl;
+                        }
+                    }
+                }
+            }
+            Entity w = what();
+            if (w != null) {
+                target = w;
+                BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
+                goal = new GoalBlock(pos);
+                findPathInNewThread(playerFeet);
+                return "Killing " + w;
             }
             return "Couldn't find " + name;
         }
@@ -835,10 +877,18 @@ public class MineBot {
         }
         return null;
     }
+    
     public static void switchtotool(Block b) {
         MineBot.switchtotool(b, new ToolSet());
     }
     public static void switchtotool(Block b, ToolSet ts) {
         Minecraft.theMinecraft.thePlayer.inventory.currentItem = ts.getBestSlot(b);
+    }
+    public static Entity what() {
+        Minecraft mc = Minecraft.theMinecraft;
+        if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+            return mc.objectMouseOver.entityHit;
+        }
+        return null;
     }
 }
