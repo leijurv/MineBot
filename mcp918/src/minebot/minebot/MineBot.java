@@ -130,8 +130,7 @@ public class MineBot {
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
             //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
-            if (dist > 4) {
-                currentPath = null;
+            if (dist > 4 && currentPath == null) {
                 findPathInNewThread(playerFeet);
             }
             if (dist <= 4) {
