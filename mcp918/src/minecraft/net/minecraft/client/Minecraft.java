@@ -1605,12 +1605,12 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (MineBot.isLeftClick && leftClickCounter > 20) {
                     leftClickCounter = 0;
                 }
-                System.out.println("Counter: " + leftClickCounter);
-                System.out.println("Using? " + this.thePlayer.isUsingItem());
+                //System.out.println("Counter: " + leftClickCounter);
+                //System.out.println("Using? " + this.thePlayer.isUsingItem());
                 if (this.thePlayer.isUsingItem()) {
-                    System.out.println("lol");
+                    //System.out.println("lol");
                     if (!(MineBot.getRightIsPressed())) {
-                        System.out.println("Not using item any more");
+                        //System.out.println("Not using item any more");
                         this.playerController.onStoppedUsingItem(this.thePlayer);
                     }
                     while (MineBot.leftIsPressed()) {
@@ -1620,9 +1620,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         ;
                     }
                 } else {
-                    System.out.println("checking if pressed");
+                    //System.out.println("checking if pressed");
                     while (MineBot.leftIsPressed()) {
-                        System.out.println("Clck ");
+                        //System.out.println("Clck ");
                         this.clickMouse();
                     }
                     while (MineBot.rightIsPressed()) {
@@ -1632,7 +1632,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (MineBot.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                     this.rightClickMouse();
                 }
-                System.out.println("Sending " + MineBot.isLeftClick);
+                //System.out.println("Sending " + MineBot.isLeftClick);
                 this.sendClickBlockToController(MineBot.getLeftIsPressed());
             }
         }
