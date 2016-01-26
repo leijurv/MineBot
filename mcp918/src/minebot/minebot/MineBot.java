@@ -110,7 +110,7 @@ public class MineBot {
             }
         }
         if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
-            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 30).filter(entity -> entity.posY < thePlayer.posY - 10).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 30).filter(entity -> entity.posY > thePlayer.posY - 6).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             if (!mobs.isEmpty()) {
                 EntityMob entity = mobs.get(0);
