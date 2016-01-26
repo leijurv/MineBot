@@ -93,6 +93,7 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean tickPath = true;
+        boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() > 16;
         if (mobKilling) {
             ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
@@ -109,7 +110,7 @@ public class MineBot {
                 }
             }
         }
-        if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
+        if (mobHunting && (target == null || wasTargetSetByMobHunt) && healthOkToHunt) {
             ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 30).filter(entity -> entity.posY > thePlayer.posY - 6).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             if (!mobs.isEmpty()) {
@@ -120,6 +121,12 @@ public class MineBot {
                 target = entity;
                 wasTargetSetByMobHunt = true;
             }
+        }
+        if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
+            GuiScreen.sendChatMessage("Health too low, cancelling hunt", true);
+            target = null;
+            currentPath = null;
+            clearMovement();
         }
         if (target != null && target.isDead) {
             GuiScreen.sendChatMessage(target + " is dead", true);
