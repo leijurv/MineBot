@@ -1147,7 +1147,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.inGameHasFocus = true;
                 this.mouseHelper.grabMouseCursor();
                 this.displayGuiScreen((GuiScreen) null);
-                this.leftClickCounter = 10000;
+                if (!MineBot.isLeftClick) {
+                    this.leftClickCounter = 10000;
+                }
             }
         }
     }
@@ -1356,7 +1358,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         } else if (this.currentScreen != null && this.currentScreen instanceof GuiSleepMP && !this.thePlayer.isPlayerSleeping()) {
             this.displayGuiScreen((GuiScreen) null);
         }
-        if (this.currentScreen != null) {
+        if (this.currentScreen != null && !MineBot.isLeftClick) {
             this.leftClickCounter = 10000;
         }
         MineBot.onTick();
