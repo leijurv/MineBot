@@ -5,8 +5,11 @@
  */
 package minebot.mining;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import minebot.MineBot;
 import static minebot.pathfinding.Action.canWalkOn;
 import static minebot.pathfinding.Action.canWalkThrough;
@@ -15,6 +18,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 /**
  *
@@ -22,6 +26,7 @@ import net.minecraft.util.EnumFacing;
  */
 public class Miner {
     private static Queue<BlockPos> blocks = new ConcurrentLinkedQueue<BlockPos>();
+    private static Deque<BlockPos> ores = new LinkedList<BlockPos>();
     private static boolean isMining = false;
     public static EnumFacing direction = EnumFacing.NORTH;
     public static void goMining() {
@@ -30,7 +35,7 @@ public class Miner {
     }
     
     public static void stopMining() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        isMining(false);
     }
     
     public static void mineblocks(int howMany, EnumFacing direction){
@@ -75,10 +80,13 @@ public class Miner {
             System.out.println("Not mining");
             return;
         }
+        MineBot.forward=true;
+        if(!ores.isEmpty())
+        tryToMine(ores.peek());
         if(blocks.size() < 10)
             mineblocks();
         if (canWalkThrough(blocks.peek())) {
-           blocks.poll();
+           justMined(blocks.poll());
            return;
         }
         if(!MineBot.lookAtBlock(blocks.peek(), true))
@@ -87,5 +95,17 @@ public class Miner {
                     MineBot.switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock());
         }
         MineBot.isLeftClick = true;
+    }
+    
+    public static void justMined(BlockPos block){
+        World world = Minecraft.theMinecraft.theWorld;
+        for(EnumFacing ef : EnumFacing.values()){
+            if(world.getBlockState(block.offset(ef)).getBlock().toString().contains("ore"))
+                ores.addFirst(block.offset(ef));
+        }
+    }
+    
+    public static void tryToMine(BlockPos block){
+        
     }
 }
