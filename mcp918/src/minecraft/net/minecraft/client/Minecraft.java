@@ -1588,10 +1588,45 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     this.middleClickMouse();
                 }
             }
+            System.out.println("Counter: " + this.leftClickCounter);
             if ((this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed()) && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
             this.sendClickBlockToController((this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus) || MineBot.getLeftIsPressed());
+        } else {
+            if (this.thePlayer != null && this.theWorld != null) {
+                if (this.leftClickCounter > 0) {
+                    --this.leftClickCounter;
+                }
+                if (MineBot.isLeftClick && leftClickCounter > 20) {
+                    leftClickCounter = 0;
+                }
+                System.out.println("Counter: " + leftClickCounter);
+                if (this.thePlayer.isUsingItem()) {
+                    if (!(MineBot.getRightIsPressed())) {
+                        this.playerController.onStoppedUsingItem(this.thePlayer);
+                    }
+                    while (MineBot.leftIsPressed()) {
+                        ;
+                    }
+                    while (MineBot.rightIsPressed()) {
+                        ;
+                    }
+                } else {
+                    while (MineBot.leftIsPressed()) {
+                        System.out.println("Clck ");
+                        this.clickMouse();
+                    }
+                    while (MineBot.rightIsPressed()) {
+                        this.rightClickMouse();
+                    }
+                }
+                if (MineBot.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
+                    this.rightClickMouse();
+                }
+                System.out.println("Sending " + MineBot.isLeftClick);
+                this.sendClickBlockToController(MineBot.getLeftIsPressed());
+            }
         }
         if (this.theWorld != null) {
             if (this.thePlayer != null) {

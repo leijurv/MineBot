@@ -232,7 +232,7 @@ public class MineBot {
      * @return
      */
     public static boolean getLeftIsPressed() {
-        return isLeftClick /*&& Minecraft.theMinecraft.currentScreen == null*/ && leftPressTime >= -1;
+        return isLeftClick /*&& Minecraft.theMinecraft.currentScreen == null*/ && leftPressTime >= -2;
     }
     /**
      * Do not question the logic. Called by Minecraft.java
@@ -253,7 +253,7 @@ public class MineBot {
      * @return
      */
     public static boolean getRightIsPressed() {
-        return isRightClick && rightPressTime >= -1;
+        return isRightClick && rightPressTime >= -2;
     }
     /**
      * Do not question the logic. Called by Minecraft.java
@@ -586,7 +586,6 @@ public class MineBot {
             System.out.println("Switching to slot " + slotForFood + " and right clicking");
             isRightClick = true;
             p.inventory.currentItem = slotForFood;
-            Minecraft.theMinecraft.rightClickMouse();
             return true;
         }
         return false;
