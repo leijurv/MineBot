@@ -1588,7 +1588,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     this.middleClickMouse();
                 }
             }
-            System.out.println("Counter: " + this.leftClickCounter);
+            //System.out.println("Counter: " + this.leftClickCounter);
             if ((this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed()) && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
@@ -1601,7 +1601,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (MineBot.isLeftClick && leftClickCounter > 20) {
                     leftClickCounter = 0;
                 }
-                System.out.println("Counter: " + leftClickCounter);
+                //System.out.println("Counter: " + leftClickCounter);
                 if (this.thePlayer.isUsingItem()) {
                     if (!(MineBot.getRightIsPressed())) {
                         this.playerController.onStoppedUsingItem(this.thePlayer);
@@ -1614,7 +1614,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     }
                 } else {
                     while (MineBot.leftIsPressed()) {
-                        System.out.println("Clck ");
+                        //System.out.println("Clck ");
                         this.clickMouse();
                     }
                     while (MineBot.rightIsPressed()) {
@@ -1624,7 +1624,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 if (MineBot.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                     this.rightClickMouse();
                 }
-                System.out.println("Sending " + MineBot.isLeftClick);
+                // System.out.println("Sending " + MineBot.isLeftClick);
                 this.sendClickBlockToController(MineBot.getLeftIsPressed());
             }
         }
