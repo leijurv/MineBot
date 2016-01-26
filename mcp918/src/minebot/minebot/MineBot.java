@@ -319,6 +319,19 @@ public class MineBot {
             }
             return "Set goal to " + goal;
         }
+        if (text.startsWith("player")) {
+            String name = text.substring(6).trim();
+            String resp = "";
+            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+                resp += "(" + pl.getName() + "," + pl.posX + "," + pl.posY + "," + pl.posZ + ")";
+                if (pl.getName().equals(name)) {
+                    BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
+                    goal = new GoalBlock(pos);
+                    return "Set goal to " + goal;
+                }
+            }
+            return resp;
+        }
         if (text.startsWith("path")) {
             plsCancel = false;
             findPathInNewThread(playerFeet);
