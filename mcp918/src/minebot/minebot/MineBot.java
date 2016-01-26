@@ -89,7 +89,7 @@ public class MineBot {
             if (entity instanceof EntityMob) {
                 if (distFromMe(entity) < 5) {
                     AxisAlignedBB lol = entity.getEntityBoundingBox();
-                    if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minX + lol.maxX) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+                    if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
                         isLeftClick = true;
                         tickPath = false;
                     }
