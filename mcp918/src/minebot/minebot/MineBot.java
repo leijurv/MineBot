@@ -87,19 +87,23 @@ public class MineBot {
         lookingPitch = false;
         isLeftClick = false;
         isRightClick = false;
+        jumping = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean tickPath = true;
         ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
         mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+        System.out.println(mobs);
         if (!mobs.isEmpty() && mobHunting) {
             EntityMob entity = mobs.get(0);
             AxisAlignedBB lol = entity.getEntityBoundingBox();
             switchtosword();
+            System.out.println("looking");
             if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
                 isLeftClick = true;
                 tickPath = false;
+                System.out.println("Doing it");
             }
         }
         if (target != null && target.isDead) {
@@ -110,13 +114,17 @@ public class MineBot {
             goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
-            if (dist > 5 && currentPath == null) {
+            GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
+            if (dist > 4 && currentPath == null) {
                 findPathInNewThread(playerFeet);
             }
-            if (dist <= 5) {
+            if (dist <= 4) {
                 AxisAlignedBB lol = target.getEntityBoundingBox();
                 switchtosword();
-                lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
+                boolean direction = lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
+                if (direction && !actuallyLookingAt) {
+                    findPathInNewThread(playerFeet);
+                }
             }
             if (actuallyLookingAt) {
                 isLeftClick = true;
@@ -618,10 +626,13 @@ public class MineBot {
         if (!fs.needFood()) {
             return false;
         }
+        System.out.println("H: " + Minecraft.theMinecraft.thePlayer.getHealth());
         int foodNeeded = 20 - fs.getFoodLevel();
+        boolean anything = foodNeeded >= 4 && Minecraft.theMinecraft.thePlayer.getHealth() < 20;
         //System.out.println("Needs food: " + foodNeeded);
         ItemStack[] inv = p.inventory.mainInventory;
         byte slotForFood = -1;
+        int worst = 10000;
         for (byte i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
@@ -631,6 +642,9 @@ public class MineBot {
                 int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
                 //System.out.println(item + " " + healing);
                 if (healing <= foodNeeded) {
+                    slotForFood = i;
+                }
+                if (anything && healing > foodNeeded && healing < worst) {
                     slotForFood = i;
                 }
             }
