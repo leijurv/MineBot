@@ -22,7 +22,7 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<>();
     }
-    static final int NUM_HEURISTICS = 5;
+    static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5};
     /**
      * Do the actual path calculation. The returned path might not actually go
      * to goal, but it will get as close as I could get
@@ -33,8 +33,8 @@ public class PathFinder {
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
-        Node[] bestSoFar = new Node[NUM_HEURISTICS];
-        double[] bestHeuristicSoFar = new double[bestSoFar.length];
+        Node[] bestSoFar = new Node[COEFFICIENTS.length];
+        double[] bestHeuristicSoFar = new double[COEFFICIENTS.length];
         for (int i = 0; i < bestHeuristicSoFar.length; i++) {
             bestHeuristicSoFar[i] = Double.MAX_VALUE;
         }
@@ -66,7 +66,7 @@ public class PathFinder {
                         neighbor.isOpen = true;
                     }
                     for (int i = 0; i < bestSoFar.length; i++) {
-                        double sum = neighbor.estimatedCostToGoal + neighbor.cost / (i + 1);
+                        double sum = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
                         if (sum < bestHeuristicSoFar[i]) {
                             bestHeuristicSoFar[i] = sum;
                             bestSoFar[i] = neighbor;
@@ -84,13 +84,11 @@ public class PathFinder {
                         bestDist = dist;
                     }
                     if (dist > MIN_DIST_PATH) {
-                        if (i != 0) {
-                            GuiScreen.sendChatMessage("A* cost coefficient " + (i + 1), true);
-                            if (i > 2) {
-                                GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
-                                GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
-                                GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
-                            }
+                        GuiScreen.sendChatMessage("A* cost coefficient " + COEFFICIENTS[i], true);
+                        if (COEFFICIENTS[i] >= 3) {
+                            GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
+                            GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
+                            GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
                         }
                         GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
                         return new Path(startNode, bestSoFar[i], goal);
