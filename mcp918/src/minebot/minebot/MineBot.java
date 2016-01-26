@@ -47,6 +47,7 @@ public class MineBot {
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
     static Entity target = null;
+    static boolean wasTargetSetByMobHunt = false;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -87,36 +88,58 @@ public class MineBot {
         lookingPitch = false;
         isLeftClick = false;
         isRightClick = false;
+        jumping = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean tickPath = true;
-        ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
-        mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
-        if (!mobs.isEmpty() && mobHunting) {
-            EntityMob entity = mobs.get(0);
-            AxisAlignedBB lol = entity.getEntityBoundingBox();
-            switchtosword();
-            if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
-                isLeftClick = true;
-                tickPath = false;
+        if (mobKilling) {
+            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+            System.out.println(mobs);
+            if (!mobs.isEmpty()) {
+                EntityMob entity = mobs.get(0);
+                AxisAlignedBB lol = entity.getEntityBoundingBox();
+                switchtosword();
+                System.out.println("looking");
+                if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+                    isLeftClick = true;
+                    tickPath = false;
+                    System.out.println("Doing it");
+                }
+            }
+        }
+        if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
+            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 30).filter(entity -> entity.posY > thePlayer.posY - 6).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+            if (!mobs.isEmpty()) {
+                EntityMob entity = mobs.get(0);
+                GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
+                target = entity;
+                wasTargetSetByMobHunt = true;
             }
         }
         if (target != null && target.isDead) {
             GuiScreen.sendChatMessage(target + " is dead", true);
             target = null;
+            currentPath = null;
+            clearMovement();
         }
         if (target != null) {
             goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
-            if (dist > 5 && currentPath == null) {
+            //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
+            if (dist > 4 && currentPath == null) {
                 findPathInNewThread(playerFeet);
             }
-            if (dist <= 5) {
+            if (dist <= 4) {
                 AxisAlignedBB lol = target.getEntityBoundingBox();
                 switchtosword();
-                lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
+                boolean direction = lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
+                if (direction && !actuallyLookingAt) {
+                    findPathInNewThread(playerFeet);
+                }
             }
             if (actuallyLookingAt) {
                 isLeftClick = true;
@@ -129,8 +152,9 @@ public class MineBot {
                 tickPath = false;
             }
         }
-        if(currentPath==null && tickPath){
+        if (currentPath == null && tickPath && Miner.isMining()) {
             Miner.tick();
+            tickPath = false;
         }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
@@ -326,7 +350,8 @@ public class MineBot {
             return message;
         }
     }
-    static boolean mobHunting = true;
+    static boolean mobHunting = false;
+    static boolean mobKilling = true;
     /**
      * Called by GuiScreen.java
      *
@@ -344,7 +369,11 @@ public class MineBot {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
             return "toggled to " + actuallyPutMessagesInChat;
         }
-        if (text.equals("hunt")) {
+        if (text.equals("mobkill")) {
+            mobKilling = !mobKilling;
+            return "Mob killing: " + mobKilling;
+        }
+        if (text.equals("mobhunt")) {
             mobHunting = !mobHunting;
             return "Mob hunting: " + mobHunting;
         }
@@ -436,6 +465,7 @@ public class MineBot {
                         GuiScreen.sendChatMessage("Considering " + blah, true);
                         if (blah.contains(name) || name.contains(blah)) {
                             target = pl;
+                            wasTargetSetByMobHunt = false;
                             BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
                             goal = new GoalBlock(pos);
                             findPathInNewThread(playerFeet);
@@ -449,6 +479,7 @@ public class MineBot {
                 target = w;
                 BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
                 goal = new GoalBlock(pos);
+                wasTargetSetByMobHunt = false;
                 findPathInNewThread(playerFeet);
                 return "Killing " + w;
             }
@@ -618,10 +649,13 @@ public class MineBot {
         if (!fs.needFood()) {
             return false;
         }
+        System.out.println("H: " + Minecraft.theMinecraft.thePlayer.getHealth());
         int foodNeeded = 20 - fs.getFoodLevel();
+        boolean anything = foodNeeded >= 4 && Minecraft.theMinecraft.thePlayer.getHealth() < 20;
         //System.out.println("Needs food: " + foodNeeded);
         ItemStack[] inv = p.inventory.mainInventory;
         byte slotForFood = -1;
+        int worst = 10000;
         for (byte i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
@@ -631,6 +665,9 @@ public class MineBot {
                 int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
                 //System.out.println(item + " " + healing);
                 if (healing <= foodNeeded) {
+                    slotForFood = i;
+                }
+                if (anything && healing > foodNeeded && healing < worst) {
                     slotForFood = i;
                 }
             }
@@ -883,7 +920,6 @@ public class MineBot {
         }
         return null;
     }
-    
     public static void switchtotool(Block b) {
         MineBot.switchtotool(b, new ToolSet());
     }
