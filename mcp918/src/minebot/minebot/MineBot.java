@@ -47,6 +47,7 @@ public class MineBot {
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
     static Entity target = null;
+    static boolean wasTargetSetByMobHunt = false;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -108,13 +109,14 @@ public class MineBot {
                 }
             }
         }
-        if (mobHunting && target == null && currentPath == null) {
+        if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
             ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 30).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             if (!mobs.isEmpty()) {
                 EntityMob entity = mobs.get(0);
                 GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
                 target = entity;
+                wasTargetSetByMobHunt = true;
             }
         }
         if (target != null && target.isDead) {
@@ -128,7 +130,8 @@ public class MineBot {
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
             //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
-            if (dist > 4 && currentPath == null) {
+            if (dist > 4) {
+                currentPath = null;
                 findPathInNewThread(playerFeet);
             }
             if (dist <= 4) {
@@ -462,6 +465,7 @@ public class MineBot {
                         GuiScreen.sendChatMessage("Considering " + blah, true);
                         if (blah.contains(name) || name.contains(blah)) {
                             target = pl;
+                            wasTargetSetByMobHunt = false;
                             BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
                             goal = new GoalBlock(pos);
                             findPathInNewThread(playerFeet);
@@ -475,6 +479,7 @@ public class MineBot {
                 target = w;
                 BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
                 goal = new GoalBlock(pos);
+                wasTargetSetByMobHunt = false;
                 findPathInNewThread(playerFeet);
                 return "Killing " + w;
             }
