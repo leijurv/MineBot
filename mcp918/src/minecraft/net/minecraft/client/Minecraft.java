@@ -1563,7 +1563,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.displayGuiScreen(new GuiChat("/"));
             }
             if (this.thePlayer.isUsingItem()) {
-                if (!this.gameSettings.keyBindUseItem.isKeyDown()) {
+                if (!(this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed())) {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
                 while (this.gameSettings.keyBindAttack.isPressed() || MineBot.leftIsPressed()) {
