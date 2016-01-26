@@ -98,6 +98,7 @@ public class MineBot {
             toKill = entity;
         }
         if (target != null && target.isDead) {
+            GuiScreen.sendChatMessage(target + " is dead", true);
             target = null;
         }
         if (target != null) {
