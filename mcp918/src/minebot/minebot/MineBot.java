@@ -120,12 +120,13 @@ public class MineBot {
             GuiScreen.sendChatMessage(target + " is dead", true);
             target = null;
             currentPath = null;
+            clearMovement();
         }
         if (target != null) {
             goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
-            GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
+            //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
             if (dist > 4 && currentPath == null) {
                 findPathInNewThread(playerFeet);
             }
@@ -367,7 +368,7 @@ public class MineBot {
         }
         if (text.equals("mobkill")) {
             mobKilling = !mobKilling;
-            return "Mob hunting: " + mobKilling;
+            return "Mob killing: " + mobKilling;
         }
         if (text.equals("mobhunt")) {
             mobHunting = !mobHunting;
