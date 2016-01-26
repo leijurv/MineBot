@@ -71,11 +71,13 @@ public class Miner {
     }
     
     public static void tick() {
-        if(!isMining())
+        if(!isMining()){
+            System.out.println("Not mining");
             return;
+        }
         if(blocks.size() < 10)
             mineblocks();
-        if (!canWalkThrough(blocks.peek())) {
+        if (canWalkThrough(blocks.peek())) {
            blocks.poll();
            return;
         }
