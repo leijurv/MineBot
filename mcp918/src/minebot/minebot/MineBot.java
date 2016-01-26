@@ -92,18 +92,28 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean tickPath = true;
-        ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
-        mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
-        System.out.println(mobs);
-        if (!mobs.isEmpty() && mobHunting) {
-            EntityMob entity = mobs.get(0);
-            AxisAlignedBB lol = entity.getEntityBoundingBox();
-            switchtosword();
-            System.out.println("looking");
-            if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
-                isLeftClick = true;
-                tickPath = false;
-                System.out.println("Doing it");
+        if (mobKilling) {
+            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+            System.out.println(mobs);
+            if (!mobs.isEmpty()) {
+                EntityMob entity = mobs.get(0);
+                AxisAlignedBB lol = entity.getEntityBoundingBox();
+                switchtosword();
+                System.out.println("looking");
+                if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+                    isLeftClick = true;
+                    tickPath = false;
+                    System.out.println("Doing it");
+                }
+            }
+        }
+        if (mobHunting && target == null) {
+            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 30).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+            if (!mobs.isEmpty()) {
+                EntityMob entity = mobs.get(0);
+                target = entity;
             }
         }
         if (target != null && target.isDead) {
@@ -336,7 +346,8 @@ public class MineBot {
             return message;
         }
     }
-    static boolean mobHunting = true;
+    static boolean mobHunting = false;
+    static boolean mobKilling = true;
     /**
      * Called by GuiScreen.java
      *
@@ -354,7 +365,11 @@ public class MineBot {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
             return "toggled to " + actuallyPutMessagesInChat;
         }
-        if (text.equals("hunt")) {
+        if (text.equals("mobkill")) {
+            mobKilling = !mobKilling;
+            return "Mob hunting: " + mobKilling;
+        }
+        if (text.equals("mobhunt")) {
             mobHunting = !mobHunting;
             return "Mob hunting: " + mobHunting;
         }
