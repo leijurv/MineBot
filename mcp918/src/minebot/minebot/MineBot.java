@@ -24,6 +24,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
@@ -89,6 +92,7 @@ public class MineBot {
             if (entity instanceof EntityMob) {
                 if (distFromMe(entity) < 5) {
                     AxisAlignedBB lol = entity.getEntityBoundingBox();
+                    switchtosword();
                     if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
                         isLeftClick = true;
                         tickPath = false;
@@ -508,6 +512,23 @@ public class MineBot {
          path.showPathInStone();
          return;
          }*/
+    }
+    public static void switchtosword() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        float bestDamage = 0;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
+            }
+            if (item.getItem() instanceof ItemSword) {
+                float damage = ((ItemSword) (item.getItem())).getDamageVsEntity();
+                if (damage > bestDamage) {
+                    p.inventory.currentItem = i;
+                }
+            }
+        }
     }
     /**
      * Give a block that's sorta close to the player, at foot level
