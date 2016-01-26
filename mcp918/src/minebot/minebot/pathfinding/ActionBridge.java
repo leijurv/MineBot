@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding;
 
+import minebot.util.ToolSet;
 import java.util.Objects;
 import java.util.Random;
 import minebot.MineBot;

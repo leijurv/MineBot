@@ -23,6 +23,7 @@ import minebot.mining.Miner;
 import minebot.pathfinding.Goal;
 import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
+import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
@@ -113,6 +114,9 @@ public class MineBot {
             if (dealWithFood()) {
                 tickPath = false;
             }
+        }
+        if(currentPath==null && tickPath){
+            Miner.tick();
         }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
@@ -830,5 +834,11 @@ public class MineBot {
             return mc.objectMouseOver.getBlockPos();
         }
         return null;
+    }
+    public static void switchtotool(Block b) {
+        MineBot.switchtotool(b, new ToolSet());
+    }
+    public static void switchtotool(Block b, ToolSet ts) {
+        Minecraft.theMinecraft.thePlayer.inventory.currentItem = ts.getBestSlot(b);
     }
 }

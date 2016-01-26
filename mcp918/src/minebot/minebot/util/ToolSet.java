@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.pathfinding;
+package minebot.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,11 +22,11 @@ public class ToolSet {
     public ArrayList<Item> tools;
     public ArrayList<Byte> slots;
     public HashMap<Block, Byte> cache = new HashMap<>();
-    ToolSet(ArrayList<Item> tools, ArrayList<Byte> slots) {
+    public ToolSet(ArrayList<Item> tools, ArrayList<Byte> slots) {
         this.tools = tools;
         this.slots = slots;
     }
-    ToolSet() {
+    public ToolSet() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
         tools = new ArrayList<>();

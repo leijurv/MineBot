@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding;
 
+import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;

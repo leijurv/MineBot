@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding;
 
+import minebot.util.ToolSet;
 import java.util.Arrays;
 import java.util.List;
 import minebot.MineBot;
@@ -75,7 +76,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                  return false;
                  }*/
                 if (MineBot.whatAreYouLookingAt() != null) {
-                    switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock());
+                    MineBot.switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock());
                 }
                 MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(positionsToBreak[i])) {
@@ -115,12 +116,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
     }
-    public void switchtotool(Block b) {
-        this.switchtotool(b, new ToolSet());
-    }
-    public void switchtotool(Block b, ToolSet ts) {
-        Minecraft.theMinecraft.thePlayer.inventory.currentItem = ts.getBestSlot(b);
-    }
+    
     /**
      * Do the actual tick. This function can assume that all blocks in
      * positionsToBreak are now walk-through-able.
