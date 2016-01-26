@@ -45,7 +45,7 @@ public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
-    static EntityPlayer target = null;
+    static Entity target = null;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -422,8 +422,13 @@ public class MineBot {
                     BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
                     goal = new GoalBlock(pos);
                     findPathInNewThread(playerFeet);
-                    return "Pathing to " + pl.getName() + " at " + goal;
+                    return "Killing " + pl;
                 }
+            }
+            Entity w = what();
+            if (w != null) {
+                target = w;
+                return "Killing " + w;
             }
             return "Couldn't find " + name;
         }
@@ -853,6 +858,13 @@ public class MineBot {
         Minecraft mc = Minecraft.theMinecraft;
         if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             return mc.objectMouseOver.getBlockPos();
+        }
+        return null;
+    }
+    public static Entity what() {
+        Minecraft mc = Minecraft.theMinecraft;
+        if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+            return mc.objectMouseOver.entityHit;
         }
         return null;
     }
