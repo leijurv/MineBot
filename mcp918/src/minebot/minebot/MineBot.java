@@ -93,7 +93,7 @@ public class MineBot {
         boolean tickPath = true;
         ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
         mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
-        if (!mobs.isEmpty()) {
+        if (!mobs.isEmpty() && mobHunting) {
             EntityMob entity = mobs.get(0);
             AxisAlignedBB lol = entity.getEntityBoundingBox();
             switchtosword();
@@ -326,6 +326,7 @@ public class MineBot {
             return message;
         }
     }
+    static boolean mobHunting = true;
     /**
      * Called by GuiScreen.java
      *
@@ -342,6 +343,10 @@ public class MineBot {
         if (text.startsWith("actuallyPutMessagesInChat")) {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
             return "toggled to " + actuallyPutMessagesInChat;
+        }
+        if (text.equals("hunt")) {
+            mobHunting = !mobHunting;
+            return "Mob hunting: " + mobHunting;
         }
         if (text.startsWith("random direction")) {
             double dist = Double.parseDouble(text.substring("random direction".length()).trim());
