@@ -100,7 +100,7 @@ public class MineBot {
         if (target != null) {
             goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
             double dist = distFromMe(target);
-            if (dist > 5 && currentPath != null) {
+            if (dist > 5 && currentPath == null) {
                 findPathInNewThread(playerFeet);
             }
             if (dist <= 5) {
@@ -348,6 +348,7 @@ public class MineBot {
         if (text.equals("cancel")) {
             cancelPath();
             plsCancel = true;
+            target = null;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
         }
         if (text.equals("st")) {
