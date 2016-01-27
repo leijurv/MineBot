@@ -129,6 +129,9 @@ public class Path {
         }
     }
     public void outlinePath() {
+        if (!MineBot.useCarpet) {
+            return;
+        }
         Block carpet = Block.getBlockById(171);
         IBlockState state = carpet.getStateFromMeta(14);
         Block air = Block.getBlockById(0);

@@ -46,6 +46,7 @@ public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
+    public static boolean useCarpet = false;
     static Entity target = null;
     static boolean wasTargetSetByMobHunt = false;
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -419,6 +420,10 @@ public class MineBot {
         if (text.equals("mobhunt")) {
             mobHunting = !mobHunting;
             return "Mob hunting: " + mobHunting;
+        }
+        if (text.equals("carpet")) {
+            useCarpet = !useCarpet;
+            return "Use carpet: " + useCarpet;
         }
         if (text.startsWith("random direction")) {
             double dist = Double.parseDouble(text.substring("random direction".length()).trim());
