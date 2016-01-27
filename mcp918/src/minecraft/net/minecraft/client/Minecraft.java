@@ -1192,20 +1192,20 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
     }
     private void clickMouse() {
-        System.out.println("Click mouse called");
+        //System.out.println("Click mouse called");
         if (this.leftClickCounter <= 0) {
             this.thePlayer.swingItem();
-            System.out.println(this.objectMouseOver);
+            //System.out.println(this.objectMouseOver);
             if (this.objectMouseOver == null) {
                 logger.error("Null returned as \'hitResult\', this shouldn\'t happen!");
                 if (this.playerController.isNotCreative()) {
                     this.leftClickCounter = 10;
                 }
             } else {
-                System.out.println("Type of hit: " + this.objectMouseOver.typeOfHit);
+                //System.out.println("Type of hit: " + this.objectMouseOver.typeOfHit);
                 switch (this.objectMouseOver.typeOfHit) {
                     case ENTITY:
-                        System.out.println("Attacking entity");
+                        //System.out.println("Attacking entity");
                         this.playerController.attackEntity(this.thePlayer, this.objectMouseOver.entityHit);
                         break;
                     case BLOCK:
