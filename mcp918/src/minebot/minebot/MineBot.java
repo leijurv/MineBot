@@ -166,7 +166,7 @@ public class MineBot {
             goal = new GoalBlock(targetPos);
             if (currentPath != null) {
                 double movementSince = dist(targetPos, currentPath.end);
-                if (movementSince > 6 && !isThereAnythingInProgress) {
+                if (movementSince > 4 && !isThereAnythingInProgress) {
                     GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
                     findPathInNewThread(playerFeet);
                 }
