@@ -120,7 +120,7 @@ public class Path {
      */
     public boolean failed = false;
     public void doTheTorches() {
-        Block torch = Block.getBlockFromName("minecraft:dandelion");
+        Block torch = Block.getBlockFromName("minecraft:torch");
         for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
             if (currentState.getBlock().equals(torch)) {
