@@ -19,8 +19,22 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public class ActionBridge extends ActionPlaceOrBreak {
+    BlockPos[] against = new BlockPos[3];
     public ActionBridge(BlockPos from, BlockPos to) {
         super(from, to, new BlockPos[]{new BlockPos(to.getX(), to.getY() + 1, to.getZ()), to}, new BlockPos[]{new BlockPos(to.getX(), to.getY() - 1, to.getZ())});
+        int i = 0;
+        if (!to.north().equals(from)) {
+            against[i++] = to.north().down();
+        }
+        if (!to.south().equals(from)) {
+            against[i++] = to.south().down();
+        }
+        if (!to.east().equals(from)) {
+            against[i++] = to.east().down();
+        }
+        if (!to.west().equals(from)) {
+            against[i++] = to.west().down();
+        }
     }
     @Override
     protected double calculateCost(ToolSet ts) {
@@ -90,6 +104,20 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return false;//not there yet
         } else {
             wasTheBridgeBlockAlwaysThere = false;
+            for (int i = 0; i < 3; i++) {
+                if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
+                    switchtothrowaway();//get ready to place a throwaway block
+                    double faceX = (to.getX() + against[i].getX() + 1.0D) * 0.5D;
+                    double faceY = (to.getY() + against[i].getY()) * 0.5D;
+                    double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
+                    MineBot.lookAtCoords(faceX, faceY, faceZ, true);
+                    if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i])) {
+                        Minecraft.theMinecraft.rightClickMouse();
+                    }
+                    System.out.println("Trying to look at " + against[i] + ", actually looking at" + MineBot.whatAreYouLookingAt());
+                    return false;
+                }
+            }
             MineBot.sneak = true;
             if (whereAmI.equals(to)) {
                 //if we are in the block that we are trying to get to, we are sneaking over air and we need to place a block beneath us against the one we just walked off of

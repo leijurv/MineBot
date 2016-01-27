@@ -112,10 +112,10 @@ public class MineBot {
             }
         }
         if (mobHunting && (target == null || wasTargetSetByMobHunt) && healthOkToHunt) {
-            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 30).filter(entity -> entity.posY > thePlayer.posY - 6).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<Entity> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> (entity instanceof EntityMob) || ((entity instanceof EntityPlayer) && !(entity.getName().equals(Minecraft.theMinecraft.thePlayer.getName())))).filter(entity -> distFromMe(entity) < 30).filter(entity -> entity.posY > thePlayer.posY - 6).collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             if (!mobs.isEmpty()) {
-                EntityMob entity = mobs.get(0);
+                Entity entity = mobs.get(0);
                 if (!entity.equals(target)) {
                     GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
                     if (currentPath != null) {
