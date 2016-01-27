@@ -20,6 +20,7 @@ public class Node {
     final double estimatedCostToGoal;
     Action previousAction;
     boolean isOpen;
+    Node nextOpen;
     public Node(BlockPos pos, Goal goal) {
         this.pos = pos;
         this.previous = null;

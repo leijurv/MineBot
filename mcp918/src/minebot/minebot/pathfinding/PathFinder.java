@@ -49,6 +49,7 @@ public class PathFinder {
         while (openSet.first != null) {
             Node me = openSet.removeLowest();
             me.isOpen = false;
+            me.nextOpen = null;
             BlockPos myPos = me.pos;
             if (numNodes % 1000 == 0) {
                 System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
@@ -175,51 +176,41 @@ public class PathFinder {
      * My own implementation of a singly linked list
      */
     public static class OpenSet {
-        ListNode first = null;
+        Node first = null;
         public Node removeLowest() {
             if (first == null) {
                 return null;
             }
-            if (first.next == null) {
-                Node n = first.element;
+            if (first.nextOpen == null) {
+                Node n = first;
                 first = null;
                 return n;
             }
-            ListNode current = first;
-            ListNode previous = null;
+            Node current = first;
+            Node previous = null;
             double bestValue = Double.MAX_VALUE;
             Node bestNode = null;
-            ListNode beforeBest = null;
+            Node beforeBest = null;
             while (current != null) {
-                Node element = current.element;
-                double comp = element.comparison();
+                double comp = current.comparison();
                 if (bestNode == null || comp < bestValue) {
                     bestValue = comp;
-                    bestNode = element;
+                    bestNode = current;
                     beforeBest = previous;
                 }
                 previous = current;
-                current = current.next;
+                current = current.nextOpen;
             }
             if (beforeBest == null) {
-                first = first.next;
+                first = first.nextOpen;
                 return bestNode;
             }
-            beforeBest.next = beforeBest.next.next;
+            beforeBest.nextOpen = beforeBest.nextOpen.nextOpen;
             return bestNode;
         }
         public void insert(Node node) {
-            ListNode n = new ListNode(node);
-            n.next = first;
-            first = n;
-        }
-
-        private static class ListNode {
-            ListNode next = null;
-            Node element = null;
-            private ListNode(Node element) {
-                this.element = element;
-            }
+            node.nextOpen = first;
+            first = node;
         }
     }
 }
