@@ -121,7 +121,7 @@ public class Path {
     public boolean failed = false;
     public void clearPath() {
         Block carpet = Block.getBlockById(171);
-        for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
+        for (int i = 0; i < path.size(); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
             if (currentState.getBlock().equals(carpet) && originalBlockStates[i] != null) {
                 Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
@@ -132,13 +132,13 @@ public class Path {
         Block carpet = Block.getBlockById(171);
         IBlockState state = carpet.getStateFromMeta(14);
         Block air = Block.getBlockById(0);
-        for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
+        for (int i = 0; i < pathPosition + 5 && i < path.size(); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
             if (currentState.getBlock().equals(carpet) && originalBlockStates[i] != null) {
                 Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
             }
         }
-        for (int i = pathPosition + 3; i < Math.min(path.size(), pathPosition + 10); i++) {
+        for (int i = pathPosition + 5; i < Math.min(path.size(), pathPosition + 10); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
             if (!currentState.getBlock().equals(carpet)) {
                 originalBlockStates[i] = currentState;
