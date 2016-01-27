@@ -295,6 +295,7 @@ public class MineBot {
     public static boolean left = false;
     public static boolean right = false;
     public static boolean sneak = false;
+    static HashMap<String, Goal> saved = new HashMap<>();
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -424,6 +425,16 @@ public class MineBot {
         if (text.equals("carpet")) {
             useCarpet = !useCarpet;
             return "Use carpet: " + useCarpet;
+        }
+        if (text.startsWith("save")) {
+            String t = text.substring(4).trim();
+            saved.put(t, goal);
+            return "Saved " + goal + " under " + t;
+        }
+        if (text.startsWith("load")) {
+            String t = text.substring(4).trim();
+            goal = saved.get(t);
+            return "Set goal to " + goal;
         }
         if (text.startsWith("random direction")) {
             double dist = Double.parseDouble(text.substring("random direction".length()).trim());
@@ -725,6 +736,7 @@ public class MineBot {
         if (slotForFood != -1) {
             //System.out.println("Switching to slot " + slotForFood + " and right clicking");
             isRightClick = true;
+            MineBot.clearMovement();
             p.inventory.currentItem = slotForFood;
             return true;
         }
