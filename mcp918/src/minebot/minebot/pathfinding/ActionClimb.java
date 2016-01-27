@@ -17,12 +17,12 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionClimb extends ActionPlaceOrBreak {
     public ActionClimb(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{end, end.up().up(), end.up()}, new BlockPos[]{end.down()});
+        super(start, end, new BlockPos[]{end, start.up().up(), end.up()}, new BlockPos[]{end.down()});
     }
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
-            return 10000;
+            return 1000000;
         }
         return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
     }
