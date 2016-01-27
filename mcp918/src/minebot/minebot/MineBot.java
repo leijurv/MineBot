@@ -653,6 +653,9 @@ public class MineBot {
     public static Path findPath(BlockPos start) {
         PathFinder pf = new PathFinder(start, goal);
         Path path = pf.calculatePath();
+        if (path == null) {
+            isThereAnythingInProgress = false;
+        }
         GuiScreen.sendChatMessage("calculated " + start + " to " + path.end, true);
         return path;
         /* if (stone) {
