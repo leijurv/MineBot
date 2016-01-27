@@ -125,6 +125,9 @@ public class MineBot {
         }
         if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
             GuiScreen.sendChatMessage("Health too low, cancelling hunt", true);
+            //at this point we know that while chasing/hunting a mob, our health dropped down too low
+            //so, obviously,
+            //TODO: run away from target here
             target = null;
             currentPath = null;
             clearMovement();
