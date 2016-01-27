@@ -21,7 +21,7 @@ import net.minecraft.util.BlockPos;
 public class ActionBridge extends ActionPlaceOrBreak {
     BlockPos[] against = new BlockPos[3];
     public ActionBridge(BlockPos from, BlockPos to) {
-        super(from, to, new BlockPos[]{new BlockPos(to.getX(), to.getY() + 1, to.getZ()), to}, new BlockPos[]{new BlockPos(to.getX(), to.getY() - 1, to.getZ())});
+        super(from, to, new BlockPos[]{to.up(), to}, new BlockPos[]{to.down()});
         int i = 0;
         if (!to.north().equals(from)) {
             against[i++] = to.north().down();
@@ -127,7 +127,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 double faceY = (to.getY() + from.getY() - 1.0D) * 0.5D;
                 double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
                 //faceX,faceY,faceZ is the middle of the face between from and to
-                BlockPos goalLook = new BlockPos(from.getX(), from.getY() - 1, from.getZ());//this is the block we were just standing on, and the one we want to place against
+                BlockPos goalLook = from.down();//this is the block we were just standing on, and the one we want to place against
                 MineBot.backward = MineBot.lookAtCoords(faceX, faceY, faceZ, true);//if we are in the block, then we are off the edge of the previous looking backward, so we should be moving backward
                 if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
                     Minecraft.theMinecraft.rightClickMouse();//wait to right click until we are able to place

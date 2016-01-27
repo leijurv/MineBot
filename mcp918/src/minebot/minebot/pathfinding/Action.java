@@ -123,7 +123,7 @@ public abstract class Action {
     public static boolean canWalkOn(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
         if (isWater(block)) {
-            return isWater(Minecraft.theMinecraft.theWorld.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock());
+            return isWater(Minecraft.theMinecraft.theWorld.getBlockState(pos.up()).getBlock());
         }
         return block.isBlockNormalCube();
     }
