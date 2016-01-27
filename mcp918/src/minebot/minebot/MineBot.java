@@ -105,7 +105,8 @@ public class MineBot {
                 AxisAlignedBB lol = entity.getEntityBoundingBox();
                 switchtosword();
                 System.out.println("looking");
-                if (lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true)) {
+                lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
+                if (entity.equals(what())) {
                     isLeftClick = true;
                     tickPath = false;
                     System.out.println("Doing it");
