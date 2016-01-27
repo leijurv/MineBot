@@ -124,7 +124,7 @@ public class Path {
         IBlockState state = carpet.getStateFromMeta(15);
         for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
-            if (currentState.getBlock().equals(carpet)) {
+            if (currentState.getBlock().equals(carpet) && originalBlockStates[i] != null) {
                 Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
             }
         }
