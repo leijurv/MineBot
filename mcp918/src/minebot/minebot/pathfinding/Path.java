@@ -122,6 +122,7 @@ public class Path {
     public void doTheTorches() {
         Block carpet = Block.getBlockById(171);
         IBlockState state = carpet.getStateFromMeta(14);
+        Block air = Block.getBlockById(0);
         for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
             if (currentState.getBlock().equals(carpet) && originalBlockStates[i] != null) {
@@ -137,7 +138,9 @@ public class Path {
                     originalBlockStates[i] = currentState;
                 }
             }
-            Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), state);
+            if (currentState.getBlock().equals(air)) {
+                Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), state);
+            }
         }
     }
     public boolean tick() {
