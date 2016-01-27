@@ -25,6 +25,7 @@ public class Path {
     public final BlockPos end;
     public final Goal goal;
     public final ArrayList<BlockPos> path;
+    final IBlockState[] originalBlockStates;
     final ArrayList<Action> actions;
     Path(Node start, Node end, Goal goal) {
         this.start = start.pos;
@@ -39,6 +40,7 @@ public class Path {
             current = current.previous;
         }
         path.add(0, start.pos);
+        this.originalBlockStates = new IBlockState[path.size()];
         System.out.println("Final path: " + path);
         System.out.println("Final actions: " + actions);
         for (int i = 0; i < path.size() - 1; i++) {//print it all out
@@ -117,6 +119,26 @@ public class Path {
      * action take too long
      */
     public boolean failed = false;
+    public void doTheTorches() {
+        Block torch = Block.getBlockFromName("minecraft:dandelion");
+        for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
+            IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
+            if (currentState.getBlock().equals(torch)) {
+                Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
+            }
+        }
+        for (int i = pathPosition + 3; i < Math.min(path.size(), pathPosition + 8); i++) {
+            IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
+            if (!currentState.getBlock().equals(torch)) {
+                originalBlockStates[i] = currentState;
+            } else {
+                if (originalBlockStates[i] == null) {
+                    originalBlockStates[i] = currentState;
+                }
+            }
+            Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), torch.getDefaultState());
+        }
+    }
     public boolean tick() {
         if (pathPosition >= path.size()) {
             MineBot.clearPath();//stop bugging me, I'm done
@@ -124,6 +146,7 @@ public class Path {
         }
         BlockPos whereShouldIBe = path.get(pathPosition);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        doTheTorches();
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (pathPosition == path.size() - 1) {
             System.out.println("On last path position");
