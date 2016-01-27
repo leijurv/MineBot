@@ -152,6 +152,11 @@ public class MineBot {
         if (target != null) {
             BlockPos targetPos = new BlockPos(target.posX, target.posY, target.posZ);
             goal = new GoalBlock(targetPos);
+            double movementSince = dist(targetPos, currentPath.end);
+            if (movementSince > 6 && !isThereAnythingInProgress) {
+                GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
+                findPathInNewThread(playerFeet);
+            }
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
             //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
@@ -273,8 +278,14 @@ public class MineBot {
     public static double distFromMe(Entity a) {
         EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
         double diffX = player.posX - a.posX;
-        double diffY = player.posY + 1.62 - a.posY;
+        double diffY = player.posY - a.posY;
         double diffZ = player.posZ - a.posZ;
+        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+    }
+    public static double dist(BlockPos a, BlockPos b) {
+        int diffX = a.getX() - b.getX();
+        int diffY = a.getY() - b.getY();
+        int diffZ = a.getZ() - b.getZ();
         return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
     }
     public static float getDesiredYaw() {
