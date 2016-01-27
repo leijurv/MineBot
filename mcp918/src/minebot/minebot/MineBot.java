@@ -375,6 +375,10 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
+        if (text.contains("wizard")) {
+            isThereAnythingInProgress = false;
+            return "YOURE A LIZARD HARRY";
+        }
         if (text.startsWith("actuallyPutMessagesInChat")) {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
             return "toggled to " + actuallyPutMessagesInChat;
