@@ -736,8 +736,8 @@ public class MineBot {
         }
         if (slotForFood != -1) {
             //System.out.println("Switching to slot " + slotForFood + " and right clicking");
-            isRightClick = true;
             MineBot.clearMovement();
+            isRightClick = true;
             p.inventory.currentItem = slotForFood;
             return true;
         }
