@@ -150,7 +150,8 @@ public class MineBot {
             clearMovement();
         }
         if (target != null) {
-            goal = new GoalBlock(new BlockPos(target.posX, target.posY, target.posZ));
+            BlockPos targetPos = new BlockPos(target.posX, target.posY, target.posZ);
+            goal = new GoalBlock(targetPos);
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
             //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
