@@ -125,19 +125,17 @@ public class MineBot {
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             if (!mobs.isEmpty()) {
                 Entity entity = mobs.get(0);
-                if (entity.equals(target)) {
-                    return;
+                if (!entity.equals(target)) {
+                    if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer))) {
+                        GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
+                        if (currentPath != null) {
+                            currentPath.clearPath();
+                        }
+                        currentPath = null;
+                        target = entity;
+                        wasTargetSetByMobHunt = true;
+                    }
                 }
-                if (!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer)) {
-                    return;
-                }
-                GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
-                if (currentPath != null) {
-                    currentPath.clearPath();
-                }
-                currentPath = null;
-                target = entity;
-                wasTargetSetByMobHunt = true;
             }
         }
         if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
@@ -190,6 +188,7 @@ public class MineBot {
                 tickPath = false;
             }
         }
+        System.out.println("Ticking: " + tickPath);
         //System.out.println("Mob hunting: " + !tickPath);
         if (tickPath) {
             if (dealWithFood()) {
