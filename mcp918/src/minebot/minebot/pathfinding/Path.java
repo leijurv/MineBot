@@ -120,23 +120,24 @@ public class Path {
      */
     public boolean failed = false;
     public void doTheTorches() {
-        Block torch = Block.getBlockFromName("minecraft:torch");
+        Block carpet = Block.getBlockById(171);
+        IBlockState state = carpet.getStateFromMeta(15);
         for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
-            if (currentState.getBlock().equals(torch)) {
+            if (currentState.getBlock().equals(carpet)) {
                 Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
             }
         }
-        for (int i = pathPosition + 3; i < Math.min(path.size(), pathPosition + 8); i++) {
+        for (int i = pathPosition + 3; i < Math.min(path.size(), pathPosition + 10); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
-            if (!currentState.getBlock().equals(torch)) {
+            if (!currentState.getBlock().equals(carpet)) {
                 originalBlockStates[i] = currentState;
             } else {
                 if (originalBlockStates[i] == null) {
                     originalBlockStates[i] = currentState;
                 }
             }
-            Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), torch.getDefaultState());
+            Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), state);
         }
     }
     public boolean tick() {
