@@ -6,6 +6,7 @@
 package minebot.pathfinding;
 
 import java.util.HashMap;
+import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
@@ -119,7 +120,7 @@ public class PathFinder {
         }
         return map.get(pos);
     }
-    public static Action[] getConnectedPositions(BlockPos pos) {
+    public Action[] getConnectedPositions(BlockPos pos) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -156,7 +157,18 @@ public class PathFinder {
         actions[10] = new ActionFall(pos, new BlockPos(x, y - 1, z + 1));
         actions[11] = new ActionFall(pos, new BlockPos(x - 1, y - 1, z));
         actions[12] = new ActionFall(pos, new BlockPos(x + 1, y - 1, z));
+        shuffle(actions);
         return actions;
+    }
+    Random random = new Random();
+    public <E> void shuffle(E[] list) {
+        int len = list.length;
+        for (int i = 0; i < len; i++) {
+            int j = random.nextInt(len);
+            E e = list[j];
+            list[j] = list[i];
+            list[i] = e;
+        }
     }
 
     /**
