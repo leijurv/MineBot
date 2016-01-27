@@ -119,7 +119,16 @@ public class Path {
      * action take too long
      */
     public boolean failed = false;
-    public void doTheTorches() {
+    public void clearPath() {
+        Block carpet = Block.getBlockById(171);
+        for (int i = 0; i < pathPosition + 3 && i < path.size(); i++) {
+            IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
+            if (currentState.getBlock().equals(carpet) && originalBlockStates[i] != null) {
+                Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
+            }
+        }
+    }
+    public void outlinePath() {
         Block carpet = Block.getBlockById(171);
         IBlockState state = carpet.getStateFromMeta(14);
         Block air = Block.getBlockById(0);
@@ -150,7 +159,7 @@ public class Path {
         }
         BlockPos whereShouldIBe = path.get(pathPosition);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        doTheTorches();
+        outlinePath();
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (pathPosition == path.size() - 1) {
             System.out.println("On last path position");

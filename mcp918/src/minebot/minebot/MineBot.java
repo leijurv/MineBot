@@ -117,6 +117,9 @@ public class MineBot {
                 EntityMob entity = mobs.get(0);
                 if (!entity.equals(target)) {
                     GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
+                    if (currentPath != null) {
+                        currentPath.clearPath();
+                    }
                     currentPath = null;
                 }
                 target = entity;
@@ -135,6 +138,9 @@ public class MineBot {
         if (target != null && target.isDead) {
             GuiScreen.sendChatMessage(target + " is dead", true);
             target = null;
+            if (currentPath != null) {
+                currentPath.clearPath();
+            }
             currentPath = null;
             clearMovement();
         }
@@ -171,6 +177,9 @@ public class MineBot {
         }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
+                if (currentPath != null) {
+                    currentPath.clearPath();
+                }
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
@@ -350,6 +359,9 @@ public class MineBot {
      * purposefully does NOT clear nextPath.
      */
     public static void clearPath() {
+        if (currentPath != null) {
+            currentPath.clearPath();
+        }
         currentPath = null;
         letGoOfLeftClick();
         isRightClick = false;
