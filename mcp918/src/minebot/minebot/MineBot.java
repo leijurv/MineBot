@@ -132,6 +132,9 @@ public class MineBot {
             //so, obviously,
             //TODO: run away from target here
             target = null;
+            if (currentPath != null) {
+                currentPath.clearPath();
+            }
             currentPath = null;
             clearMovement();
         }
@@ -360,7 +363,18 @@ public class MineBot {
      */
     public static void clearPath() {
         if (currentPath != null) {
-            currentPath.clearPath();
+            Path p = currentPath;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                        p.clearPath();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }.start();
         }
         currentPath = null;
         letGoOfLeftClick();
