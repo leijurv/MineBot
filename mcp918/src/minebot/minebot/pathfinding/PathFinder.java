@@ -152,10 +152,10 @@ public class PathFinder {
         actions[6] = new ActionClimb(pos, new BlockPos(x - 1, y + 1, z));
         actions[7] = new ActionClimb(pos, new BlockPos(x, y + 1, z + 1));
         actions[8] = new ActionClimb(pos, new BlockPos(x, y + 1, z - 1));
-        actions[9] = new ActionFall(pos, new BlockPos(x + 1, y - 1, z));
-        actions[10] = new ActionFall(pos, new BlockPos(x - 1, y - 1, z));
-        actions[11] = new ActionFall(pos, new BlockPos(x, y - 1, z + 1));
-        actions[12] = new ActionFall(pos, new BlockPos(x, y - 1, z - 1));
+        actions[9] = new ActionFall(pos, new BlockPos(x, y - 1, z - 1));
+        actions[10] = new ActionFall(pos, new BlockPos(x, y - 1, z + 1));
+        actions[11] = new ActionFall(pos, new BlockPos(x - 1, y - 1, z));
+        actions[12] = new ActionFall(pos, new BlockPos(x + 1, y - 1, z));
         return actions;
     }
 
