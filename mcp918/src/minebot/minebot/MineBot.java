@@ -152,10 +152,12 @@ public class MineBot {
         if (target != null) {
             BlockPos targetPos = new BlockPos(target.posX, target.posY, target.posZ);
             goal = new GoalBlock(targetPos);
-            double movementSince = dist(targetPos, currentPath.end);
-            if (movementSince > 6 && !isThereAnythingInProgress) {
-                GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
-                findPathInNewThread(playerFeet);
+            if (currentPath != null) {
+                double movementSince = dist(targetPos, currentPath.end);
+                if (movementSince > 6 && !isThereAnythingInProgress) {
+                    GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
+                    findPathInNewThread(playerFeet);
+                }
             }
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
