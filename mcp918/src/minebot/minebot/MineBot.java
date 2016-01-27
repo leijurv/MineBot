@@ -411,6 +411,7 @@ public class MineBot {
             cancelPath();
             plsCancel = true;
             target = null;
+            Miner.stopMining();
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
         }
         if (text.equals("st")) {
