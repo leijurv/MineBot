@@ -8,7 +8,7 @@ public class Start {
         System.out.println(System.getProperty("java.library.path"));
         //System.setProperty("java.library.path", System.getProperty("user.home") + "/Dropbox/MineBot/mcp918/jars/versions/1.8.8/1.8.8-natives/");
         //System.out.println(System.getProperty("java.library.path"));
-        Main.main(concat(new String[]{"--version", "mcp", "--accessToken", "0", "--assetsDir", "assets", "--assetIndex", "1.8", "--userProperties", "{}"}, args));
+        Main.main(concat(new String[]{"--version", "mcp", "--accessToken", "5f73eb89a2f74eadb4c85bcefde94960", "--assetsDir", "assets", "--assetIndex", "1.8", "--userProperties", "{}", "--username", "jurvetson5", "--uuid", "51dcd870d33b40e99fc1aecdcff96081"}, args));
     }
     public static <T> T[] concat(T[] first, T[] second) {
         T[] result = Arrays.copyOf(first, first.length + second.length);
