@@ -114,7 +114,7 @@ public class MineBot {
                 }
             }
         }
-        if (mobHunting && (target == null || wasTargetSetByMobHunt) && healthOkToHunt) {
+        if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
             ArrayList<Entity> mobs = theWorld.loadedEntityList
                     .stream()
                     .filter(entity -> entity.isEntityAlive())
@@ -140,12 +140,12 @@ public class MineBot {
             }
         }
         if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
-            GuiScreen.sendChatMessage("Health too low, cancelling hunt", true);
             //at this point we know that while chasing/hunting a mob, our health dropped down too low
             //so, obviously,
             //TODO: run away from target here
             if (currentPath != null) {
                 if (!(currentPath.goal instanceof GoalRunAway)) {
+                    GuiScreen.sendChatMessage("Health too low, cancelling hunt", true);
                     if (currentPath != null) {
                         currentPath.clearPath();
                     }
@@ -155,6 +155,7 @@ public class MineBot {
             clearMovement();
             goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);
             if (currentPath == null) {
+                GuiScreen.sendChatMessage("Running away", true);
                 findPathInNewThread(playerFeet);
             } else {
                 GoalRunAway g = (GoalRunAway) currentPath.goal;
@@ -162,6 +163,7 @@ public class MineBot {
                 int zDiff = (int) (target.posZ - g.z);
                 int d = xDiff * xDiff + zDiff * zDiff;
                 if (d > 5 * 5 && !isThereAnythingInProgress) {
+                    GuiScreen.sendChatMessage("Switching who I'm running away from", true);
                     findPathInNewThread(playerFeet);
                 }
             }
