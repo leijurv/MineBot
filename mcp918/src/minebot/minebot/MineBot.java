@@ -127,7 +127,7 @@ public class MineBot {
             if (!mobs.isEmpty()) {
                 Entity entity = mobs.get(0);
                 if (!entity.equals(target)) {
-                    if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer))) {
+                    if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {
                         GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
                         if (currentPath != null) {
                             currentPath.clearPath();
