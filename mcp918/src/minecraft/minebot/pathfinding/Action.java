@@ -96,6 +96,9 @@ public abstract class Action {
     public static boolean isLiquid(Block b) {
         return b != null && (b.equals(Block.getBlockById(8)) || b.equals(Block.getBlockById(9)) || b.equals(Block.getBlockById(10)) || b.equals(Block.getBlockById(11)));
     }
+    public static boolean isLava(Block b) {
+        return b.equals(Block.getBlockById(10)) || b.equals(Block.getBlockById(11));
+    }
     public static boolean isLiquid(BlockPos p) {
         return isLiquid(Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock());
     }
@@ -110,7 +113,7 @@ public abstract class Action {
      */
     public static boolean canWalkThrough(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isWater(Minecraft.theMinecraft.theWorld.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getBlock());
+        return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isLiquid(Minecraft.theMinecraft.theWorld.getBlockState(pos.up()).getBlock()) && !isLava(block);
     }
     /**
      * Can I walk on this block without anything weird happening like me falling
@@ -125,7 +128,7 @@ public abstract class Action {
         if (isWater(block)) {
             return isWater(Minecraft.theMinecraft.theWorld.getBlockState(pos.up()).getBlock());
         }
-        return block.isBlockNormalCube();
+        return block.isBlockNormalCube() && !isLava(block);
     }
     /**
      * Tick this action
