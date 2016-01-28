@@ -99,6 +99,7 @@ public class MineBot {
         float f3 = MathHelper.sin(-pitch * 0.017453292F);
         return new Vec3((double) (f1 * f2), (double) f3, (double) (f * f2));
     }
+    static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             cancelPath();
@@ -141,6 +142,9 @@ public class MineBot {
                     }
                 } else {
                     Minecraft.theMinecraft.thePlayer.closeScreen();
+                    BlockPos p = whatAreYouLookingAt();
+                    GuiScreen.sendChatMessage("Finished stealing from " + p, true);
+                    alreadyStolenFrom.add(p);
                 }
             }
         }
@@ -148,9 +152,15 @@ public class MineBot {
             for (int x = playerFeet.getX() - 5; x < playerFeet.getX() + 5; x++) {
                 for (int y = playerFeet.getY() - 5; y < playerFeet.getY() + 5; y++) {
                     for (int z = playerFeet.getZ() - 5; z < playerFeet.getZ() + 5; z++) {
-                        if (theWorld.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Block.getBlockFromName("minecraft:chest"))) {
-                            if (couldIReach(new BlockPos(x, y, z))) {
-                                lookAtBlock(new BlockPos(x, y, z), true);
+                        BlockPos pos = new BlockPos(x, y, z);
+                        if (alreadyStolenFrom.contains(pos)) {
+                            continue;
+                        }
+                        if (theWorld.getBlockState(pos).getBlock().equals(Block.getBlockFromName("minecraft:chest"))) {
+                            if (couldIReach(pos)) {
+                                if (lookAtBlock(pos, true)) {
+                                    Minecraft.theMinecraft.rightClickMouse();
+                                }
                             }
                         }
                     }
