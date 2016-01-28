@@ -780,13 +780,15 @@ public class MineBot {
      * @return
      */
     public static Path findPath(BlockPos start) {
-        PathFinder pf = new PathFinder(start, goal);
-        Path path = pf.calculatePath();
-        if (path == null) {
+        try {
+            PathFinder pf = new PathFinder(start, goal);
+            Path path = pf.calculatePath();
+            GuiScreen.sendChatMessage("calculated " + start + " to " + path.end, true);
+            return path;
+        } catch (Exception e) {
             isThereAnythingInProgress = false;
+            return null;
         }
-        GuiScreen.sendChatMessage("calculated " + start + " to " + path.end, true);
-        return path;
         /* if (stone) {
          path.showPathInStone();
          return;
