@@ -37,7 +37,9 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
@@ -78,30 +80,29 @@ public class MineBot {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public static boolean couldIReach(BlockPos pos) {
+        float[] pitchAndYaw = pitchAndYaw(pos);
+        float yaw = pitchAndYaw[0];
+        float pitch = pitchAndYaw[1];
+        double blockReachDistance = (double) Minecraft.theMinecraft.playerController.getBlockReachDistance();
+        Vec3 vec3 = Minecraft.theMinecraft.thePlayer.getPositionEyes(1.0F);
+        Vec3 vec31 = getVectorForRotation(pitch, yaw);
+        Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
+        MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
+        System.out.println(blah);
+        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
+    }
+    public static Vec3 getVectorForRotation(float pitch, float yaw) {//shamelessly copied from Entity.java
+        float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
+        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
+        float f2 = -MathHelper.cos(-pitch * 0.017453292F);
+        float f3 = MathHelper.sin(-pitch * 0.017453292F);
+        return new Vec3((double) (f1 * f2), (double) f3, (double) (f * f2));
+    }
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             cancelPath();
             return;
-        }
-        tickNumber++;
-        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiContainer) {
-            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-            if (sketchyStealer) {
-                if (contain.yoyoyo()) {
-                    if (tickNumber % 2 == 0) {
-                        try {
-                            contain.mouseClicked(0, 0, 0);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    if (tickNumber % 2 == 1) {
-                        contain.mouseReleased(0, 0, 0);
-                    }
-                } else {
-                    Minecraft.theMinecraft.thePlayer.closeScreen();
-                }
-            }
         }
         if (isLeftClick) {
             leftPressTime = 5;
@@ -123,6 +124,39 @@ public class MineBot {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        tickNumber++;
+        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiContainer) {
+            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+            if (sketchyStealer) {
+                if (contain.yoyoyo()) {
+                    if (tickNumber % 2 == 0) {
+                        try {
+                            contain.mouseClicked(0, 0, 0);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    if (tickNumber % 2 == 1) {
+                        contain.mouseReleased(0, 0, 0);
+                    }
+                } else {
+                    Minecraft.theMinecraft.thePlayer.closeScreen();
+                }
+            }
+        }
+        if (sketchyStealer && Minecraft.theMinecraft.currentScreen == null) {
+            for (int x = playerFeet.getX() - 5; x < playerFeet.getX() + 5; x++) {
+                for (int y = playerFeet.getY() - 5; y < playerFeet.getY() + 5; y++) {
+                    for (int z = playerFeet.getZ() - 5; z < playerFeet.getZ() + 5; z++) {
+                        if (theWorld.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Block.getBlockFromName("minecraft:chest"))) {
+                            if (couldIReach(new BlockPos(x, y, z))) {
+                                lookAtBlock(new BlockPos(x, y, z), true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         boolean tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
         if (mobKilling) {
@@ -981,6 +1015,21 @@ public class MineBot {
         double x = Minecraft.theMinecraft.thePlayer.posX - Math.sin(theta) * distance;
         double z = Minecraft.theMinecraft.thePlayer.posZ + Math.cos(theta) * distance;
         return new GoalXZ((int) x, (int) z);
+    }
+    public static float[] pitchAndYaw(BlockPos p) {
+        Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
+        double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
+        double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
+        double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
+        double x = p.getX() + xDiff;
+        double y = p.getY() + yolo;
+        double z = p.getZ() + zDiff;
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        double yDiff = (thePlayer.posY + 1.62) - y;
+        double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
+        double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
+        double pitch = Math.atan2(yDiff, dist);
+        return new float[]{(float) (yaw * 180 / Math.PI), (float) (pitch * 180 / Math.PI)};
     }
     /**
      * Look at coordinates
