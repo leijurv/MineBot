@@ -88,14 +88,14 @@ public class MineBot {
             GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             if (sketchyStealer) {
                 if (contain.yoyoyo()) {
-                    if (tickNumber % 20 == 0) {
+                    if (tickNumber % 2 == 0) {
                         try {
                             contain.mouseClicked(0, 0, 0);
                         } catch (IOException ex) {
                             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    if (tickNumber % 20 == 10) {
+                    if (tickNumber % 2 == 1) {
                         contain.mouseReleased(0, 0, 0);
                     }
                 }
