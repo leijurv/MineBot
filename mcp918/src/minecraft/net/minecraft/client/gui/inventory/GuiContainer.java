@@ -310,6 +310,9 @@ public abstract class GuiContainer extends GuiScreen {
             int j = this.guiLeft;
             int k = this.guiTop;
             boolean flag1 = mouseX < j || mouseY < k || mouseX >= j + this.xSize || mouseY >= k + this.ySize;
+            if (MineBot.sketchyStealer) {
+                flag1 = false;
+            }
             int l = -1;
             if (slot != null) {
                 l = slot.slotNumber;
@@ -408,6 +411,9 @@ public abstract class GuiContainer extends GuiScreen {
         int i = this.guiLeft;
         int j = this.guiTop;
         boolean flag = mouseX < i || mouseY < j || mouseX >= i + this.xSize || mouseY >= j + this.ySize;
+        if (MineBot.sketchyStealer) {
+            flag = false;
+        }
         int k = -1;
         if (slot != null) {
             k = slot.slotNumber;
