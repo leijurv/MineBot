@@ -156,6 +156,14 @@ public class MineBot {
             goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);
             if (currentPath == null) {
                 findPathInNewThread(playerFeet);
+            } else {
+                GoalRunAway g = (GoalRunAway) currentPath.goal;
+                int xDiff = (int) (target.posX - g.x);
+                int zDiff = (int) (target.posZ - g.z);
+                int d = xDiff * xDiff + zDiff * zDiff;
+                if (d > 5 * 5 && !isThereAnythingInProgress) {
+                    findPathInNewThread(playerFeet);
+                }
             }
         }
         if (target != null && target.isDead) {

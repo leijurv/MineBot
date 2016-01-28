@@ -12,8 +12,8 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public class GoalRunAway implements Goal {
-    final int x;
-    final int z;
+    public final int x;
+    public final int z;
     final double distanceSq;
     public GoalRunAway(int x, int z, double distance) {
         this.x = x;
