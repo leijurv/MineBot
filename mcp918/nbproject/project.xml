@@ -7,7 +7,6 @@
             <name>MineBot</name>
             <source-roots>
                 <root id="src.minecraft.dir"/>
-                <root id="src.minebot.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>
