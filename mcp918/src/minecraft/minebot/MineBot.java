@@ -47,6 +47,7 @@ public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
     static boolean isThereAnythingInProgress = false;
     static boolean plsCancel = false;
+    public static boolean sketchyStealer = false;
     public static boolean useCarpet = false;
     static Entity target = null;
     static boolean wasTargetSetByMobHunt = false;

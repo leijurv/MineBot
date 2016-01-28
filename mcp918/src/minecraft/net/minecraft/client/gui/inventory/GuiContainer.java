@@ -3,6 +3,7 @@ package net.minecraft.client.gui.inventory;
 import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Set;
+import minebot.MineBot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -280,7 +281,7 @@ public abstract class GuiContainer extends GuiScreen {
     private Slot getSlotAtPosition(int x, int y) {
         for (int i = 0; i < this.inventorySlots.inventorySlots.size(); ++i) {
             Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
-            if (slot != null && slot.getHasStack()) {
+            if (slot != null && slot.getHasStack() && MineBot.sketchyStealer) {
                 return slot;
             }
             if (this.isMouseOverSlot(slot, x, y)) {
@@ -328,7 +329,7 @@ public abstract class GuiContainer extends GuiScreen {
                         if (mouseButton == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100) {
                             this.handleMouseClick(slot, l, mouseButton, 3);
                         } else {
-                            boolean flag2 = l != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54) || true);
+                            boolean flag2 = l != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54) || MineBot.sketchyStealer);
                             int i1 = 0;
                             if (flag2) {
                                 this.shiftClickedSlot = slot != null && slot.getHasStack() ? slot.getStack() : null;
@@ -472,7 +473,7 @@ public abstract class GuiContainer extends GuiScreen {
                 if (state == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100) {
                     this.handleMouseClick(slot, k, state, 3);
                 } else {
-                    boolean flag1 = k != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54) || true);
+                    boolean flag1 = k != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54) || MineBot.sketchyStealer);
                     if (flag1) {
                         this.shiftClickedSlot = slot != null && slot.getHasStack() ? slot.getStack() : null;
                     }
