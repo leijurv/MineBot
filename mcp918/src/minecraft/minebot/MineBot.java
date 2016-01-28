@@ -26,6 +26,7 @@ import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
 import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,6 +52,7 @@ public class MineBot {
     public static boolean useCarpet = false;
     static Entity target = null;
     static boolean wasTargetSetByMobHunt = false;
+    static int tickNumber = 0;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -80,6 +82,24 @@ public class MineBot {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             cancelPath();
             return;
+        }
+        tickNumber++;
+        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiContainer) {
+            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+            if (sketchyStealer) {
+                if (contain.yoyoyo()) {
+                    if (tickNumber % 20 == 0) {
+                        try {
+                            contain.mouseClicked(0, 0, 0);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    if (tickNumber % 20 == 10) {
+                        contain.mouseReleased(0, 0, 0);
+                    }
+                }
+            }
         }
         if (isLeftClick) {
             leftPressTime = 5;

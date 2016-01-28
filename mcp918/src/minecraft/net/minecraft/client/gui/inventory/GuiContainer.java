@@ -275,6 +275,9 @@ public abstract class GuiContainer extends GuiScreen {
             }
         }
     }
+    public boolean yoyoyo() {
+        return getSlotAtPosition(0, 0) != null;
+    }
     /**
      * Returns the slot at the given coordinates or null if there is none.
      */
@@ -296,7 +299,7 @@ public abstract class GuiContainer extends GuiScreen {
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         boolean flag = mouseButton == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100;
         Slot slot = this.getSlotAtPosition(mouseX, mouseY);
@@ -400,7 +403,7 @@ public abstract class GuiContainer extends GuiScreen {
      * Called when a mouse button is released. Args : mouseX, mouseY,
      * releaseButton
      */
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
+    public void mouseReleased(int mouseX, int mouseY, int state) {
         Slot slot = this.getSlotAtPosition(mouseX, mouseY);
         int i = this.guiLeft;
         int j = this.guiTop;
