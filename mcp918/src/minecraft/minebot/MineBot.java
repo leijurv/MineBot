@@ -98,6 +98,8 @@ public class MineBot {
                     if (tickNumber % 2 == 1) {
                         contain.mouseReleased(0, 0, 0);
                     }
+                } else {
+                    Minecraft.theMinecraft.setIngameFocus();
                 }
             }
         }
