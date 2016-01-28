@@ -1,29 +1,9 @@
-src/minecraft/minebot/MineBot.java:107: error: lambda expressions are not supported in -source 1.6
-            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
-                                                                                         ^
+src/minecraft/minebot/MineBot.java:116: error: lambda expressions are not supported in -source 1.6
+            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+                                                        ^
   (use -source 8 or higher to enable lambda expressions)
-src/minecraft/minebot/MineBot.java:107: error: method references are not supported in -source 1.6
-            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
-                                                                                                                                                                                                                                                                                        ^
-  (use -source 8 or higher to enable method references)
-src/minecraft/minebot/MineBot.java:361: error: diamond operator is not supported in -source 1.6
-    static HashMap<String, Goal> saved = new HashMap<>();
-                                                     ^
-  (use -source 7 or higher to enable diamond operator)
-src/minecraft/minebot/mining/MickeyMine.java:34: error: diamond operator is not supported in -source 1.6
-    ArrayList<Chunk> foundChunks = new ArrayList<>();
-                                                 ^
-  (use -source 7 or higher to enable diamond operator)
-src/minecraft/minebot/pathfinding/Path.java:34: error: diamond operator is not supported in -source 1.6
-        this.path = new ArrayList<>();
-                                  ^
-  (use -source 7 or higher to enable diamond operator)
-src/minecraft/minebot/pathfinding/PathFinder.java:26: error: diamond operator is not supported in -source 1.6
-        this.map = new HashMap<>();
-                               ^
-  (use -source 7 or higher to enable diamond operator)
 src/minecraft/minebot/util/ToolSet.java:24: error: diamond operator is not supported in -source 1.6
     public HashMap<Block, Byte> cache = new HashMap<>();
                                                     ^
   (use -source 7 or higher to enable diamond operator)
-7 errors
+2 errors
