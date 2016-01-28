@@ -22,6 +22,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
 import minebot.mining.Miner;
 import minebot.pathfinding.Goal;
+import minebot.pathfinding.GoalRunAway;
 import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
 import minebot.util.ToolSet;
@@ -143,12 +144,19 @@ public class MineBot {
             //at this point we know that while chasing/hunting a mob, our health dropped down too low
             //so, obviously,
             //TODO: run away from target here
-            target = null;
             if (currentPath != null) {
-                currentPath.clearPath();
+                if (!(currentPath.goal instanceof GoalRunAway)) {
+                    if (currentPath != null) {
+                        currentPath.clearPath();
+                    }
+                    currentPath = null;
+                }
             }
-            currentPath = null;
             clearMovement();
+            goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);
+            if (currentPath == null) {
+                findPathInNewThread(playerFeet);
+            }
         }
         if (target != null && target.isDead) {
             GuiScreen.sendChatMessage(target + " is dead", true);
@@ -159,7 +167,7 @@ public class MineBot {
             currentPath = null;
             clearMovement();
         }
-        if (target != null) {
+        if (target != null && healthOkToHunt) {
             BlockPos targetPos = new BlockPos(target.posX, target.posY, target.posZ);
             goal = new GoalBlock(targetPos);
             if (currentPath != null) {
