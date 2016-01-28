@@ -137,7 +137,7 @@ public class MineBot {
             ArrayList<Entity> mobs = new ArrayList<Entity>();
             for (Entity entity : theWorld.loadedEntityList) {
                 if (entity.isEntityAlive()) {
-                    if ((entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
+                    if (!playerHunt && (entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
                         if (distFromMe(entity) < 30) {
                             mobs.add(entity);
                         }
@@ -342,7 +342,7 @@ public class MineBot {
     static float desiredNextYaw = 0;
     static float desiredNextPitch = 0;
     public static void frame(float partialTicks) {
-        System.out.println("Part: " + partialTicks);
+        //System.out.println("Part: " + partialTicks);
         if (lookingPitch) {
             Minecraft.theMinecraft.thePlayer.rotationPitch = (desiredNextPitch - previousPitch) * partialTicks + previousPitch;
         }
