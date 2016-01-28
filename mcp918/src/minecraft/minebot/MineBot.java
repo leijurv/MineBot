@@ -99,7 +99,7 @@ public class MineBot {
                         contain.mouseReleased(0, 0, 0);
                     }
                 } else {
-                    Minecraft.theMinecraft.setIngameFocus();
+                    Minecraft.theMinecraft.thePlayer.closeScreen();
                 }
             }
         }
