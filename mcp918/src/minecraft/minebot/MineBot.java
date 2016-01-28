@@ -480,7 +480,7 @@ public class MineBot {
         }
     }
     static boolean mobHunting = false;
-    static boolean mobKilling = true;
+    static boolean mobKilling = false;
     static boolean playerHunt = false;
     /**
      * Called by GuiScreen.java
