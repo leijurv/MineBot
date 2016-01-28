@@ -120,7 +120,7 @@ public class MineBot {
                     .filter(entity -> entity.isEntityAlive())
                     .filter(entity
                             -> ((entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6)
-                            || ((entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !((EntityPlayer) entity).capabilities.isCreativeMode))
+                            || ((entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))
                     .filter(entity -> distFromMe(entity) < 30)
                     .collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
@@ -566,8 +566,8 @@ public class MineBot {
                     String blah = pl.getName().trim().toLowerCase();
                     if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
                         GuiScreen.sendChatMessage("Considering " + blah, true);
-                        if (pl.capabilities.isCreativeMode) {
-                            GuiScreen.sendChatMessage("Creative. Not killing.", true);
+                        if (couldBeInCreative(pl)) {
+                            GuiScreen.sendChatMessage("No, creative", true);
                             continue;
                         }
                         if (blah.contains(name) || name.contains(blah)) {
@@ -651,6 +651,21 @@ public class MineBot {
                 Miner.goMining();
             }
         }.start();
+    }
+    public static boolean couldBeInCreative(EntityPlayer player) {
+        if (player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.capabilities.isFlying) {
+            return true;
+        }
+        BlockPos inFeet = new BlockPos(player.posX, player.posY, player.posZ);
+        BlockPos standingOn = inFeet.down();
+        if (isAir(standingOn) && isAir(standingOn.north()) && isAir(standingOn.south()) && isAir(standingOn.east()) && isAir(standingOn.west()) && isAir(standingOn.north().west()) && isAir(standingOn.north().east()) && isAir(standingOn.south().west()) && isAir(standingOn.south().east())) {
+            //if the block they are standing on, and every block touching it, are all air, they are probably flying
+            return true;
+        }
+        return false;
+    }
+    public static boolean isAir(BlockPos pos) {
+        return Minecraft.theMinecraft.theWorld.getBlockState(pos).equals(Block.getBlockById(0));
     }
     /**
      * Go to the specified Y coordinate. Methods blocks via Thread.sleep until
