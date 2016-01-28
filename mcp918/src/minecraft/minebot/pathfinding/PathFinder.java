@@ -23,7 +23,7 @@ public class PathFinder {
     public PathFinder(BlockPos start, Goal goal) {
         this.start = start;
         this.goal = goal;
-        this.map = new HashMap<>();
+        this.map = new HashMap<BlockPos, Node>();
     }
     static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5};
     /**

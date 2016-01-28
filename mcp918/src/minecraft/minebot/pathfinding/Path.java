@@ -31,8 +31,8 @@ public class Path {
         this.start = start.pos;
         this.end = end.pos;
         this.goal = goal;
-        this.path = new ArrayList<>();
-        this.actions = new ArrayList<>();
+        this.path = new ArrayList<BlockPos>();
+        this.actions = new ArrayList<Action>();
         Node current = end;
         while (!current.equals(start)) {//assemble the path
             path.add(0, current.pos);

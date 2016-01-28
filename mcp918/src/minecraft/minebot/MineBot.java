@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.Path;
@@ -104,7 +103,16 @@ public class MineBot {
         boolean tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12;
         if (mobKilling) {
-            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<EntityMob> mobs = new ArrayList<EntityMob>();
+            for (Entity entity : theWorld.loadedEntityList) {
+                if (entity.isEntityAlive()) {
+                    if (entity instanceof EntityMob) {
+                        if (distFromMe(entity) < 5) {
+                            mobs.add((EntityMob) entity);
+                        }
+                    }
+                }
+            }
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             //System.out.println(mobs);
             if (!mobs.isEmpty()) {
@@ -121,14 +129,21 @@ public class MineBot {
             }
         }
         if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
-            ArrayList<Entity> mobs = theWorld.loadedEntityList
-                    .stream()
-                    .filter(entity -> entity.isEntityAlive())
-                    .filter(entity
-                            -> ((entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6)
-                            || (playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))
-                    .filter(entity -> distFromMe(entity) < 30)
-                    .collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<Entity> mobs = new ArrayList<Entity>();
+            for (Entity entity : theWorld.loadedEntityList) {
+                if (entity.isEntityAlive()) {
+                    if ((entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
+                        if (distFromMe(entity) < 30) {
+                            mobs.add(entity);
+                        }
+                    }
+                    if ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity))) {
+                        if (distFromMe(entity) < 30) {
+                            mobs.add(entity);
+                        }
+                    }
+                }
+            }
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
             if (!mobs.isEmpty()) {
                 Entity entity = mobs.get(0);
@@ -358,7 +373,7 @@ public class MineBot {
     public static boolean left = false;
     public static boolean right = false;
     public static boolean sneak = false;
-    static HashMap<String, Goal> saved = new HashMap<>();
+    static HashMap<String, Goal> saved = new HashMap<String, Goal>();
     /**
      * Do not question the logic. Called by Minecraft.java
      *

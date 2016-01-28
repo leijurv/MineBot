@@ -1,67 +1,29 @@
-src/minecraft/net/minecraft/client/Minecraft.java:38: error: package minebot does not exist
-import minebot.MineBot;
-              ^
-src/minecraft/net/minecraft/client/gui/GuiScreen.java:18: error: package minebot does not exist
-import minebot.MineBot;
-              ^
-src/minecraft/net/minecraft/util/MovementInputFromOptions.java:3: error: package minebot does not exist
-import minebot.MineBot;
-              ^
-src/minecraft/net/minecraft/client/Minecraft.java:1362: error: cannot find symbol
-        MineBot.onTick();
-        ^
-  symbol:   variable MineBot
-  location: class Minecraft
-src/minecraft/net/minecraft/client/Minecraft.java:1569: error: cannot find symbol
-                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
-                                                                      ^
-  symbol:   variable MineBot
-  location: class Minecraft
-src/minecraft/net/minecraft/client/Minecraft.java:1579: error: cannot find symbol
-                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.isPressed()) {
-                                                                      ^
-  symbol:   variable MineBot
-  location: class Minecraft
-src/minecraft/net/minecraft/client/Minecraft.java:1592: error: cannot find symbol
-            this.sendClickBlockToController(this.currentScreen == null && (this.gameSettings.keyBindAttack.isKeyDown() || MineBot.getIsPressed()) && this.inGameHasFocus);
-                                                                                                                          ^
-  symbol:   variable MineBot
-  location: class Minecraft
-src/minecraft/net/minecraft/client/gui/GuiScreen.java:351: error: cannot find symbol
-        String nm = MineBot.therewasachatmessage(msg);
-                    ^
-  symbol:   variable MineBot
-  location: class GuiScreen
-src/minecraft/net/minecraft/util/MovementInputFromOptions.java:14: error: cannot find symbol
-        if (this.gameSettings.keyBindForward.isKeyDown() || MineBot.forward) {
-                                                            ^
-  symbol:   variable MineBot
-  location: class MovementInputFromOptions
-src/minecraft/net/minecraft/util/MovementInputFromOptions.java:17: error: cannot find symbol
-        if (this.gameSettings.keyBindBack.isKeyDown() || MineBot.backward) {
-                                                         ^
-  symbol:   variable MineBot
-  location: class MovementInputFromOptions
-src/minecraft/net/minecraft/util/MovementInputFromOptions.java:20: error: cannot find symbol
-        if (this.gameSettings.keyBindLeft.isKeyDown() || MineBot.left) {
-                                                         ^
-  symbol:   variable MineBot
-  location: class MovementInputFromOptions
-src/minecraft/net/minecraft/util/MovementInputFromOptions.java:23: error: cannot find symbol
-        if (this.gameSettings.keyBindRight.isKeyDown() || MineBot.right) {
-                                                          ^
-  symbol:   variable MineBot
-  location: class MovementInputFromOptions
-src/minecraft/net/minecraft/util/MovementInputFromOptions.java:26: error: cannot find symbol
-        this.jump = this.gameSettings.keyBindJump.isKeyDown() || MineBot.jumping;
-                                                                 ^
-  symbol:   variable MineBot
-  location: class MovementInputFromOptions
-src/minecraft/net/minecraft/util/MovementInputFromOptions.java:27: error: cannot find symbol
-        this.sneak = this.gameSettings.keyBindSneak.isKeyDown() || MineBot.sneak;
-                                                                   ^
-  symbol:   variable MineBot
-  location: class MovementInputFromOptions
-Note: Some input files use unchecked or unsafe operations.
-Note: Recompile with -Xlint:unchecked for details.
-14 errors
+src/minecraft/minebot/MineBot.java:107: error: lambda expressions are not supported in -source 1.6
+            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+                                                                                         ^
+  (use -source 8 or higher to enable lambda expressions)
+src/minecraft/minebot/MineBot.java:107: error: method references are not supported in -source 1.6
+            ArrayList<EntityMob> mobs = theWorld.loadedEntityList.stream().filter(entity -> entity.isEntityAlive()).filter(entity -> entity instanceof EntityMob).filter(entity -> distFromMe(entity) < 5).map(entity -> (EntityMob) entity).collect(Collectors.toCollection(ArrayList::new));
+                                                                                                                                                                                                                                                                                        ^
+  (use -source 8 or higher to enable method references)
+src/minecraft/minebot/MineBot.java:361: error: diamond operator is not supported in -source 1.6
+    static HashMap<String, Goal> saved = new HashMap<>();
+                                                     ^
+  (use -source 7 or higher to enable diamond operator)
+src/minecraft/minebot/mining/MickeyMine.java:34: error: diamond operator is not supported in -source 1.6
+    ArrayList<Chunk> foundChunks = new ArrayList<>();
+                                                 ^
+  (use -source 7 or higher to enable diamond operator)
+src/minecraft/minebot/pathfinding/Path.java:34: error: diamond operator is not supported in -source 1.6
+        this.path = new ArrayList<>();
+                                  ^
+  (use -source 7 or higher to enable diamond operator)
+src/minecraft/minebot/pathfinding/PathFinder.java:26: error: diamond operator is not supported in -source 1.6
+        this.map = new HashMap<>();
+                               ^
+  (use -source 7 or higher to enable diamond operator)
+src/minecraft/minebot/util/ToolSet.java:24: error: diamond operator is not supported in -source 1.6
+    public HashMap<Block, Byte> cache = new HashMap<>();
+                                                    ^
+  (use -source 7 or higher to enable diamond operator)
+7 errors
