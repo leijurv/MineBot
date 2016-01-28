@@ -566,6 +566,10 @@ public class MineBot {
                     String blah = pl.getName().trim().toLowerCase();
                     if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
                         GuiScreen.sendChatMessage("Considering " + blah, true);
+                        if (pl.capabilities.isCreativeMode) {
+                            GuiScreen.sendChatMessage("Creative. Not killing.", true);
+                            continue;
+                        }
                         if (blah.contains(name) || name.contains(blah)) {
                             target = pl;
                             wasTargetSetByMobHunt = false;
