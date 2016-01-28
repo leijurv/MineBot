@@ -60,6 +60,9 @@ public class MineBot {
         Autorun.runprocess("/usr/local/bin/ant jar");
         Autorun.runprocess("java -Djava.library.path=jars/versions/1.8.8/1.8.8-natives/ -jar dist/MineBot.jar");
     }
+    /**
+     * Called by minecraft.java
+     */
     public static void onTick() {
         try {
             long start = System.currentTimeMillis();
@@ -73,9 +76,6 @@ public class MineBot {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    /**
-     * Called by minecraft.java
-     */
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             cancelPath();

@@ -3,7 +3,7 @@ mouseSensitivity:0.5
 fov:0.0
 gamma:1.0
 saturation:0.0
-renderDistance:32
+renderDistance:15
 guiScale:3
 particles:0
 bobView:true
@@ -11,7 +11,7 @@ anaglyph3d:false
 maxFps:120
 fboEnable:true
 difficulty:1
-fancyGraphics:true
+fancyGraphics:false
 ao:2
 renderClouds:true
 resourcePacks:[]
