@@ -146,9 +146,6 @@ public class MineBot {
             }
         }
         if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
-            //at this point we know that while chasing/hunting a mob, our health dropped down too low
-            //so, obviously,
-            //TODO: run away from target here
             if (currentPath != null) {
                 if (!(currentPath.goal instanceof GoalRunAway)) {
                     GuiScreen.sendChatMessage("Health too low, cancelling hunt", true);
@@ -159,7 +156,7 @@ public class MineBot {
                 }
             }
             clearMovement();
-            goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);
+            goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);//TODO run away from more than one mob
             if (currentPath == null) {
                 GuiScreen.sendChatMessage("Running away", true);
                 findPathInNewThread(playerFeet);
