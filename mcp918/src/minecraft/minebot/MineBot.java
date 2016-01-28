@@ -235,7 +235,7 @@ public class MineBot {
                 tickPath = false;
             }
         }
-        System.out.println("Ticking: " + tickPath);
+        //System.out.println("Ticking: " + tickPath);
         //System.out.println("Mob hunting: " + !tickPath);
         if (tickPath) {
             if (dealWithFood()) {
