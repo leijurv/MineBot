@@ -284,6 +284,9 @@ public abstract class GuiContainer extends GuiScreen {
             if (slot != null && slot.getHasStack() && MineBot.sketchyStealer) {
                 return slot;
             }
+        }
+        for (int i = 0; i < this.inventorySlots.inventorySlots.size(); ++i) {
+            Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
             if (this.isMouseOverSlot(slot, x, y)) {
                 return slot;
             }
