@@ -1,9 +1,0 @@
-src/minecraft/minebot/MineBot.java:116: error: lambda expressions are not supported in -source 1.6
-            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
-                                                        ^
-  (use -source 8 or higher to enable lambda expressions)
-src/minecraft/minebot/util/ToolSet.java:24: error: diamond operator is not supported in -source 1.6
-    public HashMap<Block, Byte> cache = new HashMap<>();
-                                                    ^
-  (use -source 7 or higher to enable diamond operator)
-2 errors

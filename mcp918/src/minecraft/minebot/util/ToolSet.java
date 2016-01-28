@@ -21,7 +21,7 @@ import net.minecraft.util.BlockPos;
 public class ToolSet {
     public ArrayList<Item> tools;
     public ArrayList<Byte> slots;
-    public HashMap<Block, Byte> cache = new HashMap<>();
+    public HashMap<Block, Byte> cache = new HashMap<Block, Byte>();
     public ToolSet(ArrayList<Item> tools, ArrayList<Byte> slots) {
         this.tools = tools;
         this.slots = slots;
@@ -29,8 +29,8 @@ public class ToolSet {
     public ToolSet() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
-        tools = new ArrayList<>();
-        slots = new ArrayList<>();
+        tools = new ArrayList<Item>();
+        slots = new ArrayList<Byte>();
         //System.out.println("inv: " + Arrays.toString(inv));
         boolean fnull = false;
         for (byte i = 0; i < 9; i++) {

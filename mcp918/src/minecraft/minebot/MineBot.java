@@ -113,7 +113,12 @@ public class MineBot {
                     }
                 }
             }
-            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+            mobs.sort(new Comparator<Entity>() {
+                @Override
+                public int compare(Entity o1, Entity o2) {
+                    return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
+                }
+            });
             //System.out.println(mobs);
             if (!mobs.isEmpty()) {
                 EntityMob entity = mobs.get(0);
@@ -144,7 +149,12 @@ public class MineBot {
                     }
                 }
             }
-            mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
+            mobs.sort(new Comparator<Entity>() {
+                @Override
+                public int compare(Entity o1, Entity o2) {
+                    return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
+                }
+            });
             if (!mobs.isEmpty()) {
                 Entity entity = mobs.get(0);
                 if (!entity.equals(target)) {
@@ -443,7 +453,7 @@ public class MineBot {
      */
     public static void clearPath() {
         if (currentPath != null) {
-            Path p = currentPath;
+            final Path p = currentPath;
             new Thread() {
                 @Override
                 public void run() {
@@ -737,7 +747,7 @@ public class MineBot {
      *
      * @param start
      */
-    public static void findPathInNewThread(BlockPos start) {
+    public static void findPathInNewThread(final BlockPos start) {
         new Thread() {
             @Override
             public void run() {
