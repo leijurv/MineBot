@@ -504,6 +504,10 @@ public class MineBot {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
             return "toggled to " + actuallyPutMessagesInChat;
         }
+        if (text.equals("steal")) {
+            sketchyStealer = !sketchyStealer;
+            return "Sketchy stealer: " + sketchyStealer;
+        }
         if (text.equals("mobkill")) {
             mobKilling = !mobKilling;
             return "Mob killing: " + mobKilling;
