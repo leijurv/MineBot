@@ -120,7 +120,7 @@ public class MineBot {
                     .filter(entity -> entity.isEntityAlive())
                     .filter(entity
                             -> ((entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6)
-                            || ((entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))
+                            || (playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))
                     .filter(entity -> distFromMe(entity) < 30)
                     .collect(Collectors.toCollection(ArrayList::new));
             mobs.sort(Comparator.comparingDouble(entity -> distFromMe(entity)));
@@ -437,6 +437,7 @@ public class MineBot {
     }
     static boolean mobHunting = false;
     static boolean mobKilling = true;
+    static boolean playerHunt = false;
     /**
      * Called by GuiScreen.java
      *
@@ -461,6 +462,10 @@ public class MineBot {
         if (text.equals("mobkill")) {
             mobKilling = !mobKilling;
             return "Mob killing: " + mobKilling;
+        }
+        if (text.equals("playerhunt")) {
+            playerHunt = !playerHunt;
+            return "Also do players during mobhunt: " + playerHunt;
         }
         if (text.equals("mobhunt")) {
             mobHunting = !mobHunting;
@@ -665,7 +670,7 @@ public class MineBot {
         return false;
     }
     public static boolean isAir(BlockPos pos) {
-        return Minecraft.theMinecraft.theWorld.getBlockState(pos).equals(Block.getBlockById(0));
+        return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().equals(Block.getBlockById(0));
     }
     /**
      * Go to the specified Y coordinate. Methods blocks via Thread.sleep until
