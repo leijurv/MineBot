@@ -564,7 +564,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
      * Returns true if either shift key is down
      */
     public static boolean isShiftKeyDown() {
-        return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
+        return true;
+        //return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
     }
     /**
      * Returns true if either alt key is down
