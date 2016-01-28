@@ -101,7 +101,7 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean tickPath = true;
-        boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12;
+        boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
         if (mobKilling) {
             ArrayList<EntityMob> mobs = new ArrayList<EntityMob>();
             for (Entity entity : theWorld.loadedEntityList) {
