@@ -87,6 +87,12 @@ public class MineBot {
         if (isRightClick) {
             rightPressTime = 5;
         }
+        if (lookingYaw) {
+            Minecraft.theMinecraft.thePlayer.rotationYaw = desiredNextYaw;
+        }
+        if (lookingPitch) {
+            Minecraft.theMinecraft.thePlayer.rotationPitch = desiredNextPitch;
+        }
         lookingYaw = false;
         lookingPitch = false;
         isLeftClick = false;
@@ -279,7 +285,7 @@ public class MineBot {
             jumping = true;
         }
         if (lookingYaw) {
-            System.out.println("desired yaw: " + desiredYaw);
+            previousYaw = Minecraft.theMinecraft.thePlayer.rotationYaw;
             desiredYaw += 360;
             desiredYaw %= 360;
             float yawDistance = Minecraft.theMinecraft.thePlayer.rotationYaw - desiredYaw;
@@ -291,9 +297,12 @@ public class MineBot {
             if (Math.abs(yawDistance) > MAX_YAW_CHANGE_PER_TICK) {
                 yawDistance = Math.signum(yawDistance) * MAX_YAW_CHANGE_PER_TICK;
             }
-            Minecraft.theMinecraft.thePlayer.rotationYaw -= yawDistance;
+            desiredNextYaw = Minecraft.theMinecraft.thePlayer.rotationYaw - yawDistance;
         }
         if (lookingPitch) {
+            previousPitch = Minecraft.theMinecraft.thePlayer.rotationPitch;
+            desiredPitch += 360;
+            desiredPitch %= 360;
             float pitchDistance = Minecraft.theMinecraft.thePlayer.rotationPitch - desiredPitch;
             if (pitchDistance > 180) {
                 pitchDistance -= 360;
@@ -303,7 +312,20 @@ public class MineBot {
             if (Math.abs(pitchDistance) > MAX_PITCH_CHANGE_PER_TICK) {
                 pitchDistance = Math.signum(pitchDistance) * MAX_PITCH_CHANGE_PER_TICK;
             }
-            Minecraft.theMinecraft.thePlayer.rotationPitch -= pitchDistance;
+            desiredNextPitch = Minecraft.theMinecraft.thePlayer.rotationPitch - pitchDistance;
+        }
+    }
+    static float previousYaw = 0;
+    static float previousPitch = 0;
+    static float desiredNextYaw = 0;
+    static float desiredNextPitch = 0;
+    public static void frame(float partialTicks) {
+        System.out.println("Part: " + partialTicks);
+        if (lookingPitch) {
+            Minecraft.theMinecraft.thePlayer.rotationPitch = (desiredNextPitch - previousPitch) * partialTicks + previousPitch;
+        }
+        if (lookingYaw) {
+            Minecraft.theMinecraft.thePlayer.rotationYaw = (desiredNextYaw - previousYaw) * partialTicks + previousYaw;
         }
     }
     public static double distFromMe(Entity a) {
