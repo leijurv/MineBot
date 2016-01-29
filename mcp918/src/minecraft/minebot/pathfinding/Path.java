@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 
 /**
  *
@@ -121,7 +120,9 @@ public class Path {
      */
     public boolean failed = false;
     public void clearPath() {
-        EnumFacing e;
+        if (Minecraft.theMinecraft.theWorld == null) {
+            return;
+        }
         Block carpet = Block.getBlockById(171);
         for (int i = 0; i < path.size(); i++) {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
