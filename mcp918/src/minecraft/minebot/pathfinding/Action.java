@@ -80,7 +80,7 @@ public abstract class Action {
             }
         }
         if (yDiff == -1 && Math.abs(xDiff) + Math.abs(zDiff) == 1) {
-            return new ActionFall(from, to);
+            return new ActionDescend(from, to);
         }
         return null;
     }

@@ -5,8 +5,8 @@
  */
 package minebot.pathfinding;
 
-import minebot.MineBot;
 import minebot.util.ToolSet;
+import minebot.MineBot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -15,17 +15,20 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class ActionDig extends ActionPlaceOrBreak {
-    public ActionDig(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{end}, new BlockPos[0]);
+public class ActionDescend extends ActionPlaceOrBreak {
+    public ActionDescend(BlockPos start, BlockPos end) {
+        super(start, end, new BlockPos[]{end.up().up(), end.up(), end}, new BlockPos[]{end.down()});
     }
-    int numTicks = 0;
     @Override
-    protected boolean tick0() {
-        numTicks++;
-        if (numTicks > 10) {
-            MineBot.moveTowardsBlock(to);
+    protected double calculateCost(ToolSet ts) {
+        if (!canWalkOn(positionsToPlace[0])) {
+            return 1000000;
         }
+        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
+    }
+    @Override
+    protected boolean tick0() {//basically just hold down W until we are where we want to be
+        MineBot.moveTowardsBlock(to);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {
@@ -34,12 +37,5 @@ public class ActionDig extends ActionPlaceOrBreak {
             return true;
         }
         return false;
-    }
-    @Override
-    protected double calculateCost(ToolSet ts) {
-        if (!canWalkOn(to.down())) {
-            return 1000000;
-        }
-        return FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
     }
 }
