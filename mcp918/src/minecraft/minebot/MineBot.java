@@ -32,6 +32,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -939,6 +940,12 @@ public class MineBot {
             if (item.getItem() instanceof ItemSword) {
                 float damage = ((ItemSword) (item.getItem())).getDamageVsEntity();
                 if (damage > bestDamage) {
+                    p.inventory.currentItem = i;
+                    bestDamage = damage;
+                }
+            }
+            if (item.getItem() instanceof ItemAxe) {
+                if (bestDamage == 0) {
                     p.inventory.currentItem = i;
                 }
             }
