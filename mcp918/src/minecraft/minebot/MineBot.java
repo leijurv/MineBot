@@ -170,12 +170,12 @@ public class MineBot {
         boolean tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
         if (mobKilling) {
-            ArrayList<EntityMob> mobs = new ArrayList<EntityMob>();
+            ArrayList<Entity> mobs = new ArrayList<Entity>();
             for (Entity entity : theWorld.loadedEntityList) {
                 if (entity.isEntityAlive()) {
-                    if (entity instanceof EntityMob) {
+                    if (entity instanceof EntityMob || ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))) {
                         if (distFromMe(entity) < 5) {
-                            mobs.add((EntityMob) entity);
+                            mobs.add(entity);
                         }
                     }
                 }
@@ -188,7 +188,7 @@ public class MineBot {
             });
             //System.out.println(mobs);
             if (!mobs.isEmpty()) {
-                EntityMob entity = mobs.get(0);
+                Entity entity = mobs.get(0);
                 AxisAlignedBB lol = entity.getEntityBoundingBox();
                 switchtosword();
                 System.out.println("looking");
