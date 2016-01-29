@@ -26,6 +26,7 @@ import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
 import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
@@ -126,7 +127,7 @@ public class MineBot {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         tickNumber++;
-        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiContainer) {
+        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiChest) {
             GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             if (sketchyStealer) {
                 if (contain.yoyoyo()) {
