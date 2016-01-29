@@ -151,7 +151,7 @@ public class MineBot {
             }
         }
         if (sketchyStealer && Minecraft.theMinecraft.currentScreen == null) {
-            for (int x = playerFeet.getX() - 5; x < playerFeet.getX() + 5; x++) {
+            for (int x = playerFeet.getX() - 5; x < playerFeet.getX() + 5; x++) {//TODO increase the range, and make it actually pathfind to the chests
                 for (int y = playerFeet.getY() - 5; y < playerFeet.getY() + 5; y++) {
                     for (int z = playerFeet.getZ() - 5; z < playerFeet.getZ() + 5; z++) {
                         BlockPos pos = new BlockPos(x, y, z);
@@ -225,7 +225,7 @@ public class MineBot {
             if (!mobs1.isEmpty()) {
                 Entity entity = mobs1.get(0);
                 if (!entity.equals(target)) {
-                    if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {
+                    if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {//if playerhunt is true, dont overwrite a player target with a non player target
                         GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
                         if (currentPath != null) {
                             currentPath.clearPath();
@@ -279,7 +279,7 @@ public class MineBot {
                 double movementSince = dist(targetPos, currentPath.end);
                 if (movementSince > 4 && !isThereAnythingInProgress) {
                     GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
-                    findPathInNewThread(playerFeet);
+                    findPathInNewThread(playerFeet);//this will overwrite currentPath
                 }
             }
             double dist = distFromMe(target);
