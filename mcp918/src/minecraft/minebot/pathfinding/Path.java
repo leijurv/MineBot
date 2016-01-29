@@ -171,6 +171,20 @@ public class Path {
         }
         if (!whereShouldIBe.equals(whereAmI)) {
             System.out.println("Should be at " + whereShouldIBe + " actually am at " + whereAmI);
+            for (int i = 0; i < pathPosition - 2 && i < path.size(); i++) {
+                if (whereAmI.equals(path.get(i))) {
+                    GuiScreen.sendChatMessage("Skipping back " + (pathPosition - i) + " steps, to " + i, true);
+                    pathPosition = i;
+                    return false;
+                }
+            }
+            for (int i = pathPosition + 2; i < path.size(); i++) {//dont check pathPosition+1
+                if (whereAmI.equals(path.get(i))) {
+                    GuiScreen.sendChatMessage("Skipping forward " + (i - pathPosition) + " steps, to " + i, true);
+                    pathPosition = i;
+                    return false;
+                }
+            }
             //it's the duty of the action to tell us when it's done, so ignore the commented code below
             /*if (path.get(pathPosition + 1).equals(whereAmI)) {
              System.out.println("Hey I'm on the next one");

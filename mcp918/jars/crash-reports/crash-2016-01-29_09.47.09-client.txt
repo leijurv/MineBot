@@ -1,0 +1,44 @@
+---- Minecraft Crash Report ----
+// Hi. I'm Minecraft, and I'm a crashaholic.
+
+Time: 1/29/16 9:47 AM
+Description: Unexpected error
+
+java.lang.NullPointerException: Unexpected error
+	at minebot.MineBot.frame(MineBot.java:417)
+	at net.minecraft.client.renderer.EntityRenderer.func_181560_a(EntityRenderer.java:872)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:920)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:420)
+	at net.minecraft.client.main.Main.main(Main.java:96)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:63)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.5
+	Java Version: 1.8.0_45, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 687543096 bytes (655 MB) / 832569344 bytes (794 MB) up to 1908932608 bytes (1820 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 13, tallocated: 95
+	Launched Version: mcp
+	LWJGL: 2.9.2
+	OpenGL: Intel HD Graphics 4000 OpenGL Engine GL version 2.1 INTEL-10.6.33, Intel Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because ARB_framebuffer_object is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: ~~ERROR~~ NullPointerException: null
+	Profiler Position: N/A (disabled)
+	CPU: 4x Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz
