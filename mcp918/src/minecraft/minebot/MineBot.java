@@ -571,6 +571,7 @@ public class MineBot {
             return "toggled to " + actuallyPutMessagesInChat;
         }
         if (text.equals("steal")) {
+            alreadyStolenFrom.clear();
             sketchyStealer = !sketchyStealer;
             return "Sketchy stealer: " + sketchyStealer;
         }

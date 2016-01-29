@@ -1460,7 +1460,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         this.currentScreen.handleKeyboardInput();
                     } else {
                         if (k == 1) {
-                            this.displayInGameMenu();
+                            if (MineBot.sketchyStealer) {
+                                MineBot.sketchyStealer = false;
+                            } else {
+                                this.displayInGameMenu();
+                            }
                         }
                         if (k == 32 && Keyboard.isKeyDown(61) && this.ingameGUI != null) {
                             this.ingameGUI.getChatGUI().clearChatMessages();
