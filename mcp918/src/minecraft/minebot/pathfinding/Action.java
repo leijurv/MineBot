@@ -58,33 +58,6 @@ public abstract class Action {
     }
     protected abstract double calculateCost(ToolSet ts);
     /**
-     * What action would get you from the blockpos "from" to the blockpos "to"
-     *
-     * @param from
-     * @param to
-     * @return
-     */
-    public static Action getAction(BlockPos from, BlockPos to) {
-        int xDiff = to.getX() - from.getX();
-        int yDiff = to.getY() - from.getY();
-        int zDiff = to.getZ() - from.getZ();
-        if (yDiff == 0) {
-            return new ActionBridge(from, to);
-        }
-        if (yDiff == 1) {
-            if (xDiff == 0 && zDiff == 0) {
-                return new ActionPillar(from, to);
-            }
-            if (Math.abs(xDiff) + Math.abs(zDiff) == 1) {
-                return new ActionClimb(from, to);
-            }
-        }
-        if (yDiff == -1 && Math.abs(xDiff) + Math.abs(zDiff) == 1) {
-            return new ActionDescend(from, to);
-        }
-        return null;
-    }
-    /**
      * Is this block water? Includes both still and flowing
      *
      * @param b

@@ -16,8 +16,8 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public class ActionFall extends ActionPlaceOrBreak {
-    public ActionFall(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{end}, new BlockPos[0]);
+    public ActionFall(BlockPos start) {
+        super(start, start.down(), new BlockPos[]{start.down()}, new BlockPos[0]);
     }
     int numTicks = 0;
     @Override

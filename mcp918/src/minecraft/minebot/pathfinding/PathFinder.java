@@ -145,7 +145,7 @@ public class PathFinder {
          }*/
         //new implementation should have exact same effect
         Action[] actions = new Action[14];
-        actions[0] = new ActionPillar(pos, new BlockPos(x, y + 1, z));
+        actions[0] = new ActionPillar(pos);
         actions[1] = new ActionBridge(pos, new BlockPos(x + 1, y, z));
         actions[2] = new ActionBridge(pos, new BlockPos(x - 1, y, z));
         actions[3] = new ActionBridge(pos, new BlockPos(x, y, z + 1));
@@ -158,7 +158,7 @@ public class PathFinder {
         actions[10] = new ActionDescend(pos, new BlockPos(x, y - 1, z + 1));
         actions[11] = new ActionDescend(pos, new BlockPos(x - 1, y - 1, z));
         actions[12] = new ActionDescend(pos, new BlockPos(x + 1, y - 1, z));
-        actions[13] = new ActionFall(pos, new BlockPos(x, y - 1, z));
+        actions[13] = new ActionFall(pos);
         shuffle(actions);
         return actions;
     }
