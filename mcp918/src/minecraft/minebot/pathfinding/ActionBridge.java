@@ -50,6 +50,12 @@ public class ActionBridge extends ActionPlaceOrBreak {
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
             if (blocksToPlace[0].equals(Block.getBlockById(0)) || (!isWater(blocksToPlace[0]) && blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0]))) {
+                for (int i = 0; i < against.length; i++) {
+                    if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
+                        return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+                    }
+                }
+                //TODO this really should replace WC with the cost of sneaking
                 return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
             }
             return 100000000;
@@ -104,7 +110,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return false;//not there yet
         } else {
             wasTheBridgeBlockAlwaysThere = false;
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < against.length; i++) {
                 if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
                     switchtothrowaway();//get ready to place a throwaway block
                     double faceX = (to.getX() + against[i].getX() + 1.0D) * 0.5D;
