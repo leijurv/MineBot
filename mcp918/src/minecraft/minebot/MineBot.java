@@ -169,61 +169,59 @@ public class MineBot {
         }
         boolean tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
-        if (mobKilling) {
-            ArrayList<Entity> mobs = new ArrayList<Entity>();
-            for (Entity entity : theWorld.loadedEntityList) {
-                if (entity.isEntityAlive()) {
-                    if (entity instanceof EntityMob || ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))) {
-                        if (distFromMe(entity) < 5) {
-                            mobs.add(entity);
-                        }
+        ArrayList<Entity> mobs = new ArrayList<Entity>();
+        for (Entity entity : theWorld.loadedEntityList) {
+            if (entity.isEntityAlive()) {
+                if ((mobKilling && entity instanceof EntityMob) || ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))) {
+                    if (distFromMe(entity) < 5) {
+                        mobs.add(entity);
                     }
                 }
             }
-            mobs.sort(new Comparator<Entity>() {
-                @Override
-                public int compare(Entity o1, Entity o2) {
-                    return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
-                }
-            });
-            //System.out.println(mobs);
-            if (!mobs.isEmpty()) {
-                Entity entity = mobs.get(0);
-                AxisAlignedBB lol = entity.getEntityBoundingBox();
-                switchtosword();
-                System.out.println("looking");
-                lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
-                if (entity.equals(what())) {
-                    isLeftClick = true;
-                    tickPath = false;
-                    System.out.println("Doing it");
-                }
+        }
+        mobs.sort(new Comparator<Entity>() {
+            @Override
+            public int compare(Entity o1, Entity o2) {
+                return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
+            }
+        });
+        //System.out.println(mobs);
+        if (!mobs.isEmpty()) {
+            Entity entity = mobs.get(0);
+            AxisAlignedBB lol = entity.getEntityBoundingBox();
+            switchtosword();
+            System.out.println("looking");
+            lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
+            if (entity.equals(what())) {
+                isLeftClick = true;
+                tickPath = false;
+                System.out.println("Doing it");
             }
         }
         if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
-            ArrayList<Entity> mobs = new ArrayList<Entity>();
+            ArrayList<Entity> mobs1 = new ArrayList<Entity>();
             for (Entity entity : theWorld.loadedEntityList) {
                 if (entity.isEntityAlive()) {
                     if (!playerHunt && (entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
                         if (distFromMe(entity) < 30) {
-                            mobs.add(entity);
+                            mobs1.add(entity);
                         }
                     }
                     if ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity))) {
                         if (distFromMe(entity) < 30) {
-                            mobs.add(entity);
+                            mobs1.add(entity);
                         }
                     }
                 }
             }
-            mobs.sort(new Comparator<Entity>() {
+            mobs1.sort(new Comparator<Entity>() {
                 @Override
                 public int compare(Entity o1, Entity o2) {
                     return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
                 }
             });
-            if (!mobs.isEmpty()) {
-                Entity entity = mobs.get(0);
+            if (!mobs1.isEmpty()) {
+                Entity entity = mobs1.get(0);
                 if (!entity.equals(target)) {
                     if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {
                         GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
