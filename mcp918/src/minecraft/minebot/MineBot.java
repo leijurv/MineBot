@@ -903,8 +903,7 @@ public class MineBot {
             return false;
         }
         int foodNeeded = 20 - fs.getFoodLevel();
-        boolean anything = foodNeeded >= 3 && Minecraft.theMinecraft.thePlayer.getHealth() < 20;
-        //System.out.println("Needs food: " + foodNeeded);
+        boolean anything = foodNeeded >= 3 && Minecraft.theMinecraft.thePlayer.getHealth() < 20;//if this is true, we'll just eat anything to get our health up
         ItemStack[] inv = p.inventory.mainInventory;
         byte slotForFood = -1;
         int worst = 10000;
