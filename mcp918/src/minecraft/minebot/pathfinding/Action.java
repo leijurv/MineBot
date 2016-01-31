@@ -46,6 +46,9 @@ public abstract class Action {
         if (cost == null) {
             cost = calculateCost();
         }
+        if (cost < 1) {
+            System.out.println("Bad cost " + this + " " + cost);
+        }
         return cost;
     }
     /**

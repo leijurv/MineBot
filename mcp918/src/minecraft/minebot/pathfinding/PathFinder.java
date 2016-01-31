@@ -25,7 +25,7 @@ public class PathFinder {
         this.goal = goal;
         this.map = new HashMap<BlockPos, Node>();
     }
-    static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5};
+    static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5, 10};
     /**
      * Do the actual path calculation. The returned path might not actually go
      * to goal, but it will get as close as I could get
@@ -63,7 +63,7 @@ public class PathFinder {
                     continue;
                 }
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
-                double tentativeCost = me.cost + actionToGetToNeighbor.calculateCost();
+                double tentativeCost = me.cost + actionToGetToNeighbor.cost();
                 if (tentativeCost < neighbor.cost) {
                     neighbor.previous = me;
                     neighbor.previousAction = actionToGetToNeighbor;
@@ -104,7 +104,7 @@ public class PathFinder {
                 return new Path(startNode, bestSoFar[i], goal);
             }
         }
-        GuiScreen.sendChatMessage("Even with a cost coefficient of " + bestSoFar.length + ", I couldn't get more than " + bestDist + " blocks =(", true);
+        GuiScreen.sendChatMessage("Even with a cost coefficient of " + COEFFICIENTS[COEFFICIENTS.length - 1] + ", I couldn't get more than " + bestDist + " blocks =(", true);
         GuiScreen.sendChatMessage("No path found =(", true);
         return null;
     }
