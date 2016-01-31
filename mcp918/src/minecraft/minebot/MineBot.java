@@ -103,6 +103,8 @@ public class MineBot {
         return new Vec3((double) (f1 * f2), (double) f3, (double) (f * f2));
     }
     static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
+    static BlockPos death;
+    static long lastDeath = 0;
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             cancelPath();
@@ -128,6 +130,13 @@ public class MineBot {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        if (thePlayer.isDead && System.currentTimeMillis() > lastDeath + 10000) {
+            death = playerFeet;
+            lastDeath = System.currentTimeMillis();
+            GuiScreen.sendChatMessage("Saved death position (" + death + "). do /death to set goal.", true);
+            thePlayer.respawnPlayer();
+            Minecraft.theMinecraft.displayGuiScreen(null);
+        }
         tickNumber++;
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiChest) {
             GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
@@ -566,6 +575,10 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
+        if (text.startsWith("death")) {
+            goal = new GoalBlock(death);
+            return "Set goal to " + goal;
+        }
         if (text.contains("wizard")) {
             isThereAnythingInProgress = false;
             return "YOURE A LIZARD HARRY";
