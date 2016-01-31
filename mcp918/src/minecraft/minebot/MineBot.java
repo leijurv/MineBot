@@ -571,6 +571,10 @@ public class MineBot {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
             return "toggled to " + actuallyPutMessagesInChat;
         }
+        if (text.startsWith("allowBreakOrPlace")) {
+            allowBreakOrPlace = !allowBreakOrPlace;
+            return "allowBreakOrPlace: " + allowBreakOrPlace;
+        }
         if (text.equals("steal")) {
             alreadyStolenFrom.clear();
             sketchyStealer = !sketchyStealer;
