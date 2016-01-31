@@ -21,7 +21,10 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
-        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts) * 1000000;//dont ever break the block above you, so multiply by a million
+        if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
+            return 1000000;
+        }
+        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST;//dont ever break the block above you, so multiply by a million
     }
     int numTicks = 0;
     @Override

@@ -50,7 +50,17 @@ public abstract class ActionPlaceOrBreak extends Action {
                 if (avoidBreaking(positionsToBreak[i])) {
                     sum += 1000000;
                 }
+                if (!MineBot.allowBreakOrPlace) {
+                    sum += 1000000;
+                }
                 sum += 1 / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
+            }
+        }
+        if (!MineBot.allowBreakOrPlace) {
+            for (int i = 0; i < blocksToPlace.length; i++) {
+                if (!canWalkOn(positionsToPlace[i])) {
+                    sum += 1000000;
+                }
             }
         }
         return sum;
@@ -64,6 +74,10 @@ public abstract class ActionPlaceOrBreak extends Action {
         //breaking first
         for (int i = 0; i < blocksToBreak.length; i++) {
             if (!canWalkThrough(positionsToBreak[i])) {
+                if (!MineBot.allowBreakOrPlace) {
+                    GuiScreen.sendChatMessage("BB I can't break this =(((", true);
+                    return false;
+                }
                 //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 if (!MineBot.lookAtBlock(positionsToBreak[i], true)) {
                     return false;
@@ -89,6 +103,10 @@ public abstract class ActionPlaceOrBreak extends Action {
         MineBot.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
         for (int i = 0; i < blocksToPlace.length; i++) {
             if (!canWalkOn(positionsToPlace[i])) {
+                if (!MineBot.allowBreakOrPlace) {
+                    GuiScreen.sendChatMessage("BB I can't place this =(((", true);
+                    return false;
+                }
                 //MineBot.lookAtBlock(positionsToPlace[i], true);
                 //System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
                 //one of the blocks that needs to be there isn't there
@@ -116,7 +134,6 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
     }
-    
     /**
      * Do the actual tick. This function can assume that all blocks in
      * positionsToBreak are now walk-through-able.

@@ -57,6 +57,7 @@ public class MineBot {
     static Entity target = null;
     static boolean wasTargetSetByMobHunt = false;
     static int tickNumber = 0;
+    public static boolean allowBreakOrPlace = true;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
