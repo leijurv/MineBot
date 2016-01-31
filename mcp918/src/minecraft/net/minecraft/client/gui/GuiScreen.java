@@ -346,9 +346,6 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         this.sendChatMessage(msg, true);
     }
     public static void sendChatMessage(String msg, boolean addToChat) {
-        if (addToChat) {
-            Minecraft.theMinecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
-        }
         if (!MineBot.actuallyPutMessagesInChat) {
             try {
                 throw new RuntimeException();
@@ -364,6 +361,9 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
                     }
                 }
             }
+        }
+        if (addToChat) {
+            Minecraft.theMinecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
         }
         String nm = MineBot.therewasachatmessage(msg);
         if (nm == null) {

@@ -898,6 +898,10 @@ public class MineBot {
      * @return
      */
     public static Path findPath(BlockPos start) {
+        if (goal == null) {
+            GuiScreen.sendChatMessage("babe, please. there is no goal", true);
+            return null;
+        }
         try {
             PathFinder pf = new PathFinder(start, goal);
             Path path = pf.calculatePath();
