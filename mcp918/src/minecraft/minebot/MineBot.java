@@ -411,6 +411,9 @@ public class MineBot {
     static float desiredNextPitch = 0;
     public static void frame(float partialTicks) {
         //System.out.println("Part: " + partialTicks);
+        if (Minecraft.theMinecraft == null || Minecraft.theMinecraft.thePlayer == null) {
+            return;
+        }
         if (lookingPitch) {
             Minecraft.theMinecraft.thePlayer.rotationPitch = (desiredNextPitch - previousPitch) * partialTicks + previousPitch;
         }
