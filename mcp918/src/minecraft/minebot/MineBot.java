@@ -367,8 +367,11 @@ public class MineBot {
                 }
             } else {
                 if (Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
-                    System.out.println("Jumping because in water");
-                    jumping = true;
+                    if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
+                        //if water is deeper than one block, or we can't walk on what's below the water, or our head is in water, jump
+                        System.out.println("Jumping because in water");
+                        jumping = true;
+                    }
                 }
                 if (!lookingPitch) {
                     if (thePlayer.rotationPitch < -20) {
@@ -380,8 +383,11 @@ public class MineBot {
             }
         }
         if (isThereAnythingInProgress && Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
-            System.out.println("Jumping because in water and pathfinding");
-            jumping = true;
+            if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
+                //if water is deeper than one block, or we can't walk on what's below the water, or our head is in water, jump
+                System.out.println("Jumping because in water and pathfinding");
+                jumping = true;
+            }
         }
         if (lookingYaw) {
             previousYaw = Minecraft.theMinecraft.thePlayer.rotationYaw;
@@ -580,8 +586,8 @@ public class MineBot {
             return "Set goal to " + goal;
         }
         if (text.contains("wizard")) {
-            isThereAnythingInProgress = false;
-            return "YOURE A LIZARD HARRY";
+            isThereAnythingInProgress = !isThereAnythingInProgress;
+            return "YOURE A LIZARD HARRY " + isThereAnythingInProgress;
         }
         if (text.startsWith("actuallyPutMessagesInChat")) {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
