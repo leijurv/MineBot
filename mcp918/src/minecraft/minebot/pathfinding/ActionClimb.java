@@ -20,7 +20,7 @@ import net.minecraft.util.BlockPos;
 public class ActionClimb extends ActionPlaceOrBreak {
     BlockPos[] against = new BlockPos[3];
     public ActionClimb(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{end, start.up().up(), end.up()}, new BlockPos[]{end.down()});
+        super(start, end, new BlockPos[]{end, start.up(2), end.up()}, new BlockPos[]{end.down()});
         BlockPos placementLocation = positionsToPlace[0];//end.down()
         int i = 0;
         if (!placementLocation.north().equals(from)) {

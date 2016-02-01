@@ -17,7 +17,7 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionDescend extends ActionPlaceOrBreak {
     public ActionDescend(BlockPos start, BlockPos end) {
-        super(start, end, new BlockPos[]{end.up().up(), end.up(), end}, new BlockPos[]{end.down()});
+        super(start, end, new BlockPos[]{end.up(2), end.up(), end}, new BlockPos[]{end.down()});
     }
     @Override
     protected double calculateCost(ToolSet ts) {

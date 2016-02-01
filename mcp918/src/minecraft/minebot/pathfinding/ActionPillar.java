@@ -17,7 +17,7 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionPillar extends ActionPlaceOrBreak {
     public ActionPillar(BlockPos start) {
-        super(start, start.up(), new BlockPos[]{start.up().up()}, new BlockPos[]{start});
+        super(start, start.up(), new BlockPos[]{start.up(2)}, new BlockPos[]{start});
     }
     @Override
     protected double calculateCost(ToolSet ts) {

@@ -59,11 +59,12 @@ public class PathFinder {
             }
             Action[] connected = getConnectedPositions(myPos);
             for (Action actionToGetToNeighbor : connected) {
-                if (Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
+                double actionCost = actionToGetToNeighbor.cost();
+                if (actionCost >= 1000000 || Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
                     continue;
                 }
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
-                double tentativeCost = me.cost + actionToGetToNeighbor.cost();
+                double tentativeCost = me.cost + actionCost;
                 if (tentativeCost < neighbor.cost) {
                     neighbor.previous = me;
                     neighbor.previousAction = actionToGetToNeighbor;
