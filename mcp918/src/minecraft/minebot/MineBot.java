@@ -777,7 +777,7 @@ public class MineBot {
     }
     public static String info(BlockPos bp) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock();
-        return bp + " " + block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube() + " is liquid: " + Action.isLiquid(block);
+        return bp + " " + block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube() + " is liquid: " + Action.isLiquid(block) + " is flow: " + Action.isFlowing(bp);
     }
     /**
      * Cancel the path

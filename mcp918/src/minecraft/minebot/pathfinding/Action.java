@@ -7,6 +7,9 @@ package minebot.pathfinding;
 
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
@@ -74,7 +77,20 @@ public abstract class Action {
         return waterFlowing.equals(b) || waterStill.equals(b);
     }
     public static boolean isLiquid(Block b) {
-        return b != null && (waterFlowing.equals(b) || waterStill.equals(b) || lavaFlowing.equals(b) || lavaStill.equals(b));
+        return b instanceof BlockLiquid;
+        //return b != null && (waterFlowing.equals(b) || waterStill.equals(b) || lavaFlowing.equals(b) || lavaStill.equals(b));
+    }
+    public static boolean isFlowing(BlockPos pos) {
+        IBlockState state = Minecraft.theMinecraft.theWorld.getBlockState(pos);
+        Block b = state.getBlock();
+        Material m = b.getMaterial();
+        if (b instanceof BlockLiquid) {
+            BlockLiquid bl = (BlockLiquid) b;
+            if (BlockLiquid.getFlowDirection(Minecraft.theMinecraft.theWorld, pos, m) != -1000.0D) {
+                return true;
+            }
+        }
+        return false;
     }
     public static boolean isLava(Block b) {
         return lavaFlowing.equals(b) || lavaStill.equals(b);
@@ -93,7 +109,11 @@ public abstract class Action {
      */
     public static boolean canWalkThrough(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isLiquid(Minecraft.theMinecraft.theWorld.getBlockState(pos.up()).getBlock()) && !isLava(block);
+        boolean liquid = isLiquid(pos);
+        if (liquid && isFlowing(pos)) {
+            return false;
+        }
+        return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isLiquid(pos.up());
     }
     /**
      * Can I walk on this block without anything weird happening like me falling
