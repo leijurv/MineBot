@@ -643,6 +643,9 @@ public class MineBot {
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
         }
         if (text.equals("st")) {
+            GuiScreen.sendChatMessage(info(playerFeet), true);
+            GuiScreen.sendChatMessage(info(playerFeet.down()), true);
+            GuiScreen.sendChatMessage(info(playerFeet.up()), true);
             System.out.println(theWorld.getBlockState(playerFeet).getBlock());
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
@@ -763,8 +766,7 @@ public class MineBot {
         }
         if (text.startsWith("info")) {
             BlockPos bp = MineBot.whatAreYouLookingAt();
-            Block block = theWorld.getBlockState(bp).getBlock();
-            return block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube();
+            return info(bp);
         }
         if (text.startsWith("mine")) {
             plsCancel = false;
@@ -772,6 +774,10 @@ public class MineBot {
             return null;
         }
         return message;
+    }
+    public static String info(BlockPos bp) {
+        Block block = Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock();
+        return bp + " " + block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube() + " is liquid: " + Action.isLiquid(block);
     }
     /**
      * Cancel the path
@@ -946,8 +952,13 @@ public class MineBot {
         if (slotForFood != -1) {
             //System.out.println("Switching to slot " + slotForFood + " and right clicking");
             MineBot.clearMovement();
-            isRightClick = true;
-            p.inventory.currentItem = slotForFood;
+            if (whatAreYouLookingAt() != null) {
+                desiredPitch--;
+                lookingPitch = true;
+            } else {
+                isRightClick = true;
+                p.inventory.currentItem = slotForFood;
+            }
             return true;
         }
         return false;

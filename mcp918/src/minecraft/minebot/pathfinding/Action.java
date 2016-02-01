@@ -60,10 +60,10 @@ public abstract class Action {
         return calculateCost(new ToolSet());
     }
     protected abstract double calculateCost(ToolSet ts);
-    static Block water1 = Block.getBlockById(8);
-    static Block water2 = Block.getBlockById(9);
-    static Block lava1 = Block.getBlockById(10);
-    static Block lava2 = Block.getBlockById(11);
+    static Block waterFlowing = Block.getBlockById(8);
+    static Block waterStill = Block.getBlockById(9);
+    static Block lavaFlowing = Block.getBlockById(10);
+    static Block lavaStill = Block.getBlockById(11);
     /**
      * Is this block water? Includes both still and flowing
      *
@@ -71,13 +71,13 @@ public abstract class Action {
      * @return
      */
     public static boolean isWater(Block b) {
-        return water1.equals(b) || water2.equals(b);
+        return waterFlowing.equals(b) || waterStill.equals(b);
     }
     public static boolean isLiquid(Block b) {
-        return b != null && (water1.equals(b) || water2.equals(b) || lava1.equals(b) || lava2.equals(b));
+        return b != null && (waterFlowing.equals(b) || waterStill.equals(b) || lavaFlowing.equals(b) || lavaStill.equals(b));
     }
     public static boolean isLava(Block b) {
-        return lava1.equals(b) || lava2.equals(b);
+        return lavaFlowing.equals(b) || lavaStill.equals(b);
     }
     public static boolean isLiquid(BlockPos p) {
         return isLiquid(Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock());
