@@ -37,7 +37,12 @@ public class ActionPillar extends ActionPlaceOrBreak {
         MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
         //otherwise jump
         if (numTicks > 40) {
-            MineBot.forward = true;//if it's been more than forty ticks of trying to jump and we aren't done yet, go forward, maybe we are stuck
+            double diffX = thePlayer.posX - (to.getX() + 0.5);
+            double diffZ = thePlayer.posZ - (to.getZ() + 0.5);
+            double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
+            if (dist > 0.17) {//why 0.17? because it seemed like a good number, that's why
+                MineBot.forward = true;//if it's been more than forty ticks of trying to jump and we aren't done yet, go forward, maybe we are stuck
+            }
         }
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
