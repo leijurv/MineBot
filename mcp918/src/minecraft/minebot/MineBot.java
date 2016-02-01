@@ -127,6 +127,7 @@ public class MineBot {
         isLeftClick = false;
         isRightClick = false;
         jumping = false;
+        sneak = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
@@ -958,13 +959,10 @@ public class MineBot {
         if (slotForFood != -1) {
             //System.out.println("Switching to slot " + slotForFood + " and right clicking");
             MineBot.clearMovement();
-            if (whatAreYouLookingAt() != null) {
-                desiredPitch--;
-                lookingPitch = true;
-            } else {
-                isRightClick = true;
-                p.inventory.currentItem = slotForFood;
-            }
+            sneak = true;
+            p.setSneaking(true);
+            isRightClick = true;
+            p.inventory.currentItem = slotForFood;
             return true;
         }
         return false;
