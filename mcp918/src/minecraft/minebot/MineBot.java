@@ -959,9 +959,15 @@ public class MineBot {
         if (slotForFood != -1) {
             //System.out.println("Switching to slot " + slotForFood + " and right clicking");
             MineBot.clearMovement();
-            sneak = true;
-            isRightClick = true;
             p.inventory.currentItem = slotForFood;
+            if (whatAreYouLookingAt() == null) {
+                isRightClick = true;
+            } else {
+                sneak = true;
+                if (p.isSneaking()) {
+                    isRightClick = true;
+                }
+            }
             return true;
         }
         return false;

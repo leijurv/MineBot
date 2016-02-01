@@ -1,6 +1,5 @@
 package net.minecraft.client.entity;
 
-import minebot.MineBot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -503,7 +502,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
      * Returns if this entity is sneaking.
      */
     public boolean isSneaking() {
-        boolean flag = this.movementInput != null ? this.movementInput.sneak || MineBot.sneak : false;
+        boolean flag = this.movementInput != null ? this.movementInput.sneak : false;
         return flag && !this.sleeping;
     }
     public void updateEntityActionState() {
