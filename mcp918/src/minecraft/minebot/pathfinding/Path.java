@@ -27,7 +27,9 @@ public class Path {
     public final ArrayList<BlockPos> path;
     final IBlockState[] originalBlockStates;
     final ArrayList<Action> actions;
-    Path(Node start, Node end, Goal goal) {
+    public final int numNodes;
+    Path(Node start, Node end, Goal goal, int numNodes) {
+        this.numNodes = numNodes;
         this.start = start.pos;
         this.end = end.pos;
         this.goal = goal;

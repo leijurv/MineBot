@@ -918,7 +918,7 @@ public class MineBot {
         try {
             PathFinder pf = new PathFinder(start, goal);
             Path path = pf.calculatePath();
-            GuiScreen.sendChatMessage("calculated " + start + " to " + path.end, true);
+            GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + start + " to " + path.end, true);
             return path;
         } catch (Exception e) {
             isThereAnythingInProgress = false;

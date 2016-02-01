@@ -51,11 +51,12 @@ public class PathFinder {
             me.isOpen = false;
             me.nextOpen = null;
             BlockPos myPos = me.pos;
+            numNodes++;
             if (numNodes % 1000 == 0) {
                 System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
             }
             if (goal.isInGoal(myPos)) {
-                return new Path(startNode, me, goal);
+                return new Path(startNode, me, goal, numNodes);
             }
             Action[] connected = getConnectedPositions(myPos);
             for (Action actionToGetToNeighbor : connected) {
@@ -82,7 +83,6 @@ public class PathFinder {
                     }
                 }
             }
-            numNodes++;
             if (System.currentTimeMillis() > timeoutTime) {
                 System.out.println("Stopping");
                 break;
@@ -102,7 +102,7 @@ public class PathFinder {
                     GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
                 }
                 GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
-                return new Path(startNode, bestSoFar[i], goal);
+                return new Path(startNode, bestSoFar[i], goal, numNodes);
             }
         }
         GuiScreen.sendChatMessage("Even with a cost coefficient of " + COEFFICIENTS[COEFFICIENTS.length - 1] + ", I couldn't get more than " + bestDist + " blocks =(", true);
