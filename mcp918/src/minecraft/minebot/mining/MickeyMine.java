@@ -7,6 +7,7 @@ package minebot.mining;
 
 import java.util.ArrayList;
 import minebot.MineBot;
+import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.GoalYLevel;
 import net.minecraft.block.Block;
@@ -91,11 +92,18 @@ public class MickeyMine {
     public static void doNormalMine() {
         BlockPos toMine = needsToBeMined.get(0);
         if (MineBot.lookAtBlock(toMine, true)) {
-            MineBot.switchToBestTool();
-            MineBot.isLeftClick = true;
-            MineBot.forward = true;
+            if(Action.avoidBreaking(toMine)) {
+                miningFacing = miningFacing.rotateY();
+                needsToBeMined.clear();
+                priorityNeedsToBeMined.clear();
+            } else {
+                MineBot.switchToBestTool();
+                MineBot.isLeftClick = true;
+                MineBot.forward = true;
+            }
         }
     }
+        
     public static void updateBlocksMined() {
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : needsToBeMined) {
@@ -123,6 +131,9 @@ public class MickeyMine {
         }
     }
     public static void updateBlocks(BlockPos blockPos) {
+        for(int i = 0; i < 4; i++) {
+            System.out.println(blockPos.offset(miningFacing));
+        }
         if (isGoalBlock(blockPos.north())) {
             addPriorityBlock(blockPos.north());
         }
