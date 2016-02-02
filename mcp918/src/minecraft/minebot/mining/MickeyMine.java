@@ -21,7 +21,7 @@ import net.minecraft.world.chunk.Chunk;
  * @author galdara
  */
 public class MickeyMine {
-    static ArrayList<Block> goalBlocks;
+    static ArrayList<Block> goalBlocks = null;
     static boolean isGoingToMine = false;
     static boolean isMining = false;
     static boolean seesBlock = false;
@@ -33,10 +33,11 @@ public class MickeyMine {
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
     static Boolean branching = null;
     static BlockPos branchPosition = null;
-    public MickeyMine(ArrayList<Block> goalBlocks) {
-        this.goalBlocks = goalBlocks;
-    }
     public static void doMine() {
+        if (goalBlocks == null) {
+            goalBlocks = new ArrayList<Block>();
+            goalBlocks.add(Block.getBlockFromName("minecraft:diamond_ore"));
+        }
         System.out.println("Goal blocks: " + goalBlocks);
         System.out.println("priority: " + priorityNeedsToBeMined);
         System.out.println("needs to be mined: " + needsToBeMined);

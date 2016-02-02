@@ -7,7 +7,6 @@ package minebot;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
@@ -60,9 +59,6 @@ public class MineBot {
     static boolean wasTargetSetByMobHunt = false;
     static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
-    static {
-        new MickeyMine(new ArrayList<Block>(Arrays.asList(new Block[]{Block.getBlockFromName("minecraft:diamond_ore")})));
-    }
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
