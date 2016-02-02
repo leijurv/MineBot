@@ -35,7 +35,7 @@ public class MickeyMine {
     //static Boolean branching = null;
     static BlockPos branchPosition = null;
     static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore", "lit_redstone_ore"};
-    static final boolean[] enabled = {true, true, true, true, true, true, true};
+    static final boolean[] enabled = {true, true, false, true, true, true, true};
     static boolean mightNeedToGoBackToPath = false;
     public static void clear() {
         isGoingToMine = false;
