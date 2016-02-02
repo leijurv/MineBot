@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import minebot.MineBot;
 import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
+import minebot.pathfinding.GoalTwoBlocks;
 import minebot.pathfinding.GoalYLevel;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -103,7 +104,7 @@ public class MickeyMine {
     }
     public static void doPriorityMine() {
         BlockPos toMine = priorityNeedsToBeMined.get(0);
-        MineBot.goal = new GoalBlock(toMine);
+        MineBot.goal = new GoalTwoBlocks(toMine);
         if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
             MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0());
         }
