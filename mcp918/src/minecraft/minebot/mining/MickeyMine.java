@@ -88,7 +88,9 @@ public class MickeyMine {
         System.out.println("priority: " + priorityNeedsToBeMined);
         System.out.println("needs to be mined: " + needsToBeMined);
         updatePriorityBlocksMined();
+        System.out.println("420");
         updateBlocksMined();
+        System.out.println("69");
         if (priorityNeedsToBeMined.isEmpty() && needsToBeMined.isEmpty()) {
             doBranchMine();
         } else if (!priorityNeedsToBeMined.isEmpty()) {
