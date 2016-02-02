@@ -36,6 +36,8 @@ public class MickeyMine {
         this.goalBlocks = goalBlocks;
     }
     public static void doMine() {
+        System.out.println("priority: " + priorityNeedsToBeMined);
+        System.out.println("needs to be mined: " + needsToBeMined);
         updatePriorityBlocksMined();
         updateBlocksMined();
         if (priorityNeedsToBeMined.isEmpty() && needsToBeMined.isEmpty()) {
