@@ -29,12 +29,12 @@ public class MickeyMine {
     static boolean isMining = false;
     //static boolean seesBlock = false;
     static EnumFacing miningFacing = EnumFacing.EAST;
-    static ArrayList<Tuple<Integer,Integer>> diamondChunks = new ArrayList<Tuple<Integer,Integer>>();
+    static ArrayList<Tuple<Integer, Integer>> diamondChunks = new ArrayList<Tuple<Integer, Integer>>();
     //static BlockPos currentlyMining = null;
     static ArrayList<BlockPos> hasBeenMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> needsToBeMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
-    static ArrayList<Tuple<Integer,Integer>> chunkHasDiamonds = new ArrayList<Tuple<Integer,Integer>>();
+    static ArrayList<Tuple<Integer, Integer>> chunkHasDiamonds = new ArrayList<Tuple<Integer, Integer>>();
     static BlockPos branchPosition = null;
     static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore", "lit_redstone_ore"};
     static final boolean[] enabled = {true, true, false, true, true, true, true};
@@ -105,20 +105,18 @@ public class MickeyMine {
         for (i = 0; i < 6 || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
             addNormalBlock(branchPosition.offset(miningFacing, i).up());
             addNormalBlock(branchPosition.offset(miningFacing, i));
+            System.out.println("branche" + i);
         }
         i--;
-        GuiScreen.sendChatMessage("Branch distance "+i,true);
+        GuiScreen.sendChatMessage("Branch distance " + i, true);
         BlockPos futureBranchPosition = branchPosition.offset(miningFacing, i);
-
         System.out.println("player reach: " + Minecraft.theMinecraft.playerController.getBlockReachDistance());
-       
-            for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
-                addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up());
-            }
-            for (int j = 1; i <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
-                addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), j).up());
-            }
-        
+        for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
+            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up());
+        }
+        for (int j = 1; i <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
+            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), j).up());
+        }
         branchPosition = futureBranchPosition;
     }
     public static void doPriorityMine() {
@@ -204,7 +202,6 @@ public class MickeyMine {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
-                
             }
         }
         for (BlockPos needsRemoval : shouldBeRemoved) {
@@ -212,9 +209,9 @@ public class MickeyMine {
         }
         if (priorityNeedsToBeMined.isEmpty() && !wasEmpty) {
             mightNeedToGoBackToPath = true;
-            if(!chunkHasDiamonds.isEmpty()) {
-                for(Tuple<Integer, Integer> shouldAdd : chunkHasDiamonds) {
-                    if(!diamondChunks.contains(shouldAdd)) {
+            if (!chunkHasDiamonds.isEmpty()) {
+                for (Tuple<Integer, Integer> shouldAdd : chunkHasDiamonds) {
+                    if (!diamondChunks.contains(shouldAdd)) {
                         diamondChunks.add(shouldAdd);
                     }
                 }
@@ -245,7 +242,6 @@ public class MickeyMine {
         }
         return false;
     }
-    
     public static boolean addPriorityBlock(BlockPos blockPos) {
         if (!priorityNeedsToBeMined.contains(blockPos) && isGoalBlock(blockPos)) {
             if (Action.avoidBreaking(blockPos)) {
@@ -253,14 +249,13 @@ public class MickeyMine {
                 return false;
             }
             priorityNeedsToBeMined.add(blockPos);
-            if(Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock().equals(Block.getBlockFromName("minecraft:diamond_ore"))) {
+            if (Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock().equals(Block.getBlockFromName("minecraft:diamond_ore"))) {
                 chunkHasDiamonds.add(tupleFromBlockPos(blockPos));
             }
             return true;
         }
         return false;
     }
-    
     public static void tick() {
         System.out.println("mickey" + isGoingToMine + " " + isMining);
         if (!isGoingToMine && !isMining) {
@@ -318,15 +313,12 @@ public class MickeyMine {
             return true;
         }
     }
-    
     public static Chunk chunkFromTuple(Tuple<Integer, Integer> tuple) {
         return Minecraft.theMinecraft.theWorld.getChunkFromChunkCoords(tuple.getFirst(), tuple.getSecond());
     }
-    
     public static Tuple<Integer, Integer> tupleFromChunk(Chunk chunk) {
         return new Tuple(chunk.xPosition, chunk.zPosition);
     }
-    
     public static Tuple<Integer, Integer> tupleFromBlockPos(BlockPos blockPos) {
         return tupleFromChunk(Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(blockPos));
     }
