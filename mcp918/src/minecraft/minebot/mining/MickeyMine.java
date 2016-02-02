@@ -177,6 +177,10 @@ public class MickeyMine {
                 } else {
                     System.out.println("Going to position");
                     MineBot.moveTowardsBlock(branchPosition, false);
+                    if (Minecraft.theMinecraft.thePlayer.getPosition0().getY() != branchPosition.getY()) {
+                        GuiScreen.sendChatMessage("wrong Y coordinate", true);
+                        mightNeedToGoBackToPath = true;
+                    }
                 }
             }
         }
