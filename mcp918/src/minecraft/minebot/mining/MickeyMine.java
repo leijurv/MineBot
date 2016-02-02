@@ -33,10 +33,17 @@ public class MickeyMine {
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
     static Boolean branching = null;
     static BlockPos branchPosition = null;
+    static final String[] ores = {"minecraft:diamond_ore", "minecraft:iron_ore", "minecraft:coal_ore", "minecraft:gold_ore", "minecraft:redstone_ore", "minecraft:emerald_ore"};
     public static void doMine() {
         if (goalBlocks == null) {
             goalBlocks = new ArrayList<Block>();
-            goalBlocks.add(Block.getBlockFromName("minecraft:diamond_ore"));
+            for (String oreName : ores) {
+                Block block = Block.getBlockFromName("minecraft:" + oreName);
+                if (block == null) {
+                    throw new NullPointerException("minecraft:" + oreName + " doesn't exist bb");
+                }
+                goalBlocks.add(block);
+            }
         }
         System.out.println("Goal blocks: " + goalBlocks);
         System.out.println("priority: " + priorityNeedsToBeMined);
