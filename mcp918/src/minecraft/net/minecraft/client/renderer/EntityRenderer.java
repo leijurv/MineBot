@@ -760,7 +760,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                         f9 = 0.28F + f6 * 0.75F;
                         f10 = 0.25F + f7 * 0.75F;
                     }
-                    if (this.mc.thePlayer.isPotionActive(Potion.nightVision)) {
+                    if (this.mc.thePlayer.isPotionActive(Potion.nightVision) || MineBot.fullBright) {
                         float f15 = this.getNightVisionBrightness(this.mc.thePlayer, partialTicks);
                         float f12 = 1.0F / f8;
                         if (f12 > 1.0F / f9) {
@@ -827,7 +827,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
     }
     private float getNightVisionBrightness(EntityLivingBase entitylivingbaseIn, float partialTicks) {
         int i = entitylivingbaseIn.getActivePotionEffect(Potion.nightVision).getDuration();
-        return i > 200 ? 1.0F : 0.7F + MathHelper.sin(((float) i - partialTicks) * (float) Math.PI * 0.2F) * 0.3F;
+        return i > 200 || MineBot.fullBright ? 1.0F : 0.7F + MathHelper.sin(((float) i - partialTicks) * (float) Math.PI * 0.2F) * 0.3F;
     }
     public void func_181560_a(float p_181560_1_, long p_181560_2_) {
         boolean flag = Display.isActive();
@@ -1450,7 +1450,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             this.fogColorGreen = this.fogColorGreen * (1.0F - f14) + this.fogColorGreen * 0.6F * f14;
             this.fogColorBlue = this.fogColorBlue * (1.0F - f14) + this.fogColorBlue * 0.6F * f14;
         }
-        if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(Potion.nightVision)) {
+        if (entity instanceof EntityLivingBase && (((EntityLivingBase) entity).isPotionActive(Potion.nightVision) || MineBot.fullBright)) {
             float f15 = this.getNightVisionBrightness((EntityLivingBase) entity, partialTicks);
             float f6 = 1.0F / this.fogColorRed;
             if (f6 > 1.0F / this.fogColorGreen) {

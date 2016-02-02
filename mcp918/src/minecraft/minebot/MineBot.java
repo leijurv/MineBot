@@ -576,6 +576,7 @@ public class MineBot {
     static boolean mobKilling = false;
     static boolean playerHunt = false;
     static boolean mreowMine = false;
+    public static boolean fullBright = true;
     /**
      * Called by GuiScreen.java
      *
@@ -589,6 +590,10 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
+        if (text.startsWith("fullbright")) {
+            fullBright = !fullBright;
+            return "Full bright: " + fullBright;
+        }
         if (text.startsWith("death")) {
             goal = new GoalBlock(death);
             return "Set goal to " + goal;
