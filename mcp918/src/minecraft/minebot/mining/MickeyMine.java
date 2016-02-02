@@ -112,9 +112,9 @@ public class MickeyMine {
     }
     public static void addNearby() {
         BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
-        for (int x = playerFeet.getX() - 1; x <= playerFeet.getX() + 1; x++) {
+        for (int x = playerFeet.getX() - 2; x <= playerFeet.getX() + 2; x++) {
             for (int y = playerFeet.getY() - 1; y <= playerFeet.getY() + 2; y++) {
-                for (int z = playerFeet.getZ() - 1; z <= playerFeet.getZ() + 1; z++) {
+                for (int z = playerFeet.getZ() - 2; z <= playerFeet.getZ() + 2; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
                     if (isGoalBlock(pos)) {
                         if (MineBot.couldIReach(pos)) {
