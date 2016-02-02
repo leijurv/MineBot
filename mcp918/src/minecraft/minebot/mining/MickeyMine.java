@@ -115,7 +115,12 @@ public class MickeyMine {
         for (int x = playerFeet.getX() - 1; x <= playerFeet.getX() + 1; x++) {
             for (int y = playerFeet.getY() - 1; y <= playerFeet.getY() + 2; y++) {
                 for (int z = playerFeet.getZ() - 1; z <= playerFeet.getZ() + 1; z++) {
-                    addPriorityBlock(new BlockPos(x, y, z));
+                    BlockPos pos = new BlockPos(x, y, z);
+                    if (isGoalBlock(pos)) {
+                        if (MineBot.couldIReach(pos)) {
+                            addPriorityBlock(pos);
+                        }
+                    }
                 }
             }
         }
