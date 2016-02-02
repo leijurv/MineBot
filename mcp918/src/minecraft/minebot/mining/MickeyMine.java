@@ -50,6 +50,7 @@ public class MickeyMine {
         boolean m = false;
         for (int i = 0; i < ores.length; i++) {
             if (!ores[i].contains(lower)) {
+                GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i], true);
                 continue;
             }
             m = true;
