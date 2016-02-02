@@ -35,6 +35,15 @@ public class MickeyMine {
     static Boolean branching = null;
     static BlockPos branchPosition = null;
     static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore"};
+    static boolean mightNeedToGoBackToPath = false;
+    public static void clear() {
+        isGoingToMine = false;
+        isMining = false;
+        needsToBeMined.clear();
+        priorityNeedsToBeMined.clear();
+        branchPosition = null;
+        mightNeedToGoBackToPath = false;
+    }
     public static void doMine() {
         if (goalBlocks == null) {
             goalBlocks = new ArrayList<Block>();
@@ -100,6 +109,18 @@ public class MickeyMine {
         }
     }
     public static void doNormalMine() {
+        if (mightNeedToGoBackToPath) {
+            MineBot.goal = new GoalBlock(branchPosition);
+            if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
+                MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0());
+                GuiScreen.sendChatMessage("Pathing back to branch", true);
+            }
+            if (Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
+                mightNeedToGoBackToPath = false;
+                GuiScreen.sendChatMessage("I'm back", true);
+            }
+            return;
+        }
         BlockPos toMine = needsToBeMined.get(0);
         if (MineBot.lookAtBlock(toMine, true)) {
             if (Action.avoidBreaking(toMine)) {
@@ -128,6 +149,7 @@ public class MickeyMine {
         }
     }
     public static void updatePriorityBlocksMined() {
+        boolean wasEmpty = priorityNeedsToBeMined.isEmpty();
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : priorityNeedsToBeMined) {
             if (net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock().equals(Block.getBlockById(0))) {
@@ -138,6 +160,9 @@ public class MickeyMine {
         }
         for (BlockPos needsRemoval : shouldBeRemoved) {
             priorityNeedsToBeMined.remove(needsRemoval);
+        }
+        if (priorityNeedsToBeMined.isEmpty() && !wasEmpty) {
+            mightNeedToGoBackToPath = true;
         }
     }
     public static void updateBlocks(BlockPos blockPos) {
