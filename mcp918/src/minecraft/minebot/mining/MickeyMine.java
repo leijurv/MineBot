@@ -150,6 +150,7 @@ public class MickeyMine {
         return false;
     }
     public static void tick() {
+        System.out.println("mickey" + isGoingToMine + " " + isMining);
         if (!isGoingToMine && !isMining) {
             if (MineBot.currentPath == null) {
                 MineBot.goal = new GoalYLevel(6);
