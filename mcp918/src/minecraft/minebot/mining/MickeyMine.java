@@ -16,7 +16,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.chunk.Chunk;
 
 /**
  *
@@ -26,14 +25,14 @@ public class MickeyMine {
     static ArrayList<Block> goalBlocks = null;
     static boolean isGoingToMine = false;
     static boolean isMining = false;
-    static boolean seesBlock = false;
+    //static boolean seesBlock = false;
     static EnumFacing miningFacing = EnumFacing.EAST;
-    ArrayList<Chunk> foundChunks = new ArrayList<Chunk>();
-    static BlockPos currentlyMining = null;
+    //ArrayList<Chunk> foundChunks = new ArrayList<Chunk>();
+    //static BlockPos currentlyMining = null;
     static ArrayList<BlockPos> hasBeenMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> needsToBeMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
-    static Boolean branching = null;
+    //static Boolean branching = null;
     static BlockPos branchPosition = null;
     static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore"};
     static boolean mightNeedToGoBackToPath = false;
@@ -186,6 +185,10 @@ public class MickeyMine {
     }
     public static boolean addPriorityBlock(BlockPos blockPos) {
         if (!priorityNeedsToBeMined.contains(blockPos) && isGoalBlock(blockPos)) {
+            if (Action.avoidBreaking(blockPos)) {
+                GuiScreen.sendChatMessage("Can't break " + Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock() + " at " + blockPos + " because it's near lava", true);
+                return false;
+            }
             priorityNeedsToBeMined.add(blockPos);
             return true;
         }
