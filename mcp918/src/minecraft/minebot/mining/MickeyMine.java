@@ -83,10 +83,10 @@ public class MickeyMine {
             addNormalBlock(branchPosition.offset(miningFacing, i));
         }
         System.out.println("player reach: " + Minecraft.theMinecraft.playerController.getBlockReachDistance());
-        for (int i = 0; i < Minecraft.theMinecraft.playerController.getBlockReachDistance(); i++) {
+        for (int i = 0; i < Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); i++) {
             addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), i).up());
         }
-        for (int i = 0; i < Minecraft.theMinecraft.playerController.getBlockReachDistance(); i++) {
+        for (int i = 0; i < Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); i++) {
             addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), i).up());
         }
         branchPosition = branchPosition.offset(miningFacing, 6);
