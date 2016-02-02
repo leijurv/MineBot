@@ -272,6 +272,7 @@ public class MickeyMine {
         if (isMining) {
             doMine();
         }
+        System.out.println("mickey done");
     }
     public static boolean isGoalBlock(BlockPos blockPos) {
         return isGoalBlock(Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock());
