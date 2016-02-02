@@ -12,6 +12,7 @@ import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.GoalYLevel;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.chunk.Chunk;
@@ -103,6 +104,7 @@ public class MickeyMine {
         if (MineBot.lookAtBlock(toMine, true)) {
             if (Action.avoidBreaking(toMine)) {
                 miningFacing = miningFacing.rotateY();
+                GuiScreen.sendChatMessage("Since I need to avoid breaking " + toMine + ", I'm rotating to " + miningFacing, true);
                 needsToBeMined.clear();
                 priorityNeedsToBeMined.clear();
             } else {
