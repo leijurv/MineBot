@@ -116,7 +116,7 @@ public class MickeyMine {
         for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
             addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up());
         }
-        for (int j = 1; i <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
+        for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
             addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), j).up());
         }
         branchPosition = futureBranchPosition;
