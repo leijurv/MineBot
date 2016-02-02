@@ -58,23 +58,28 @@ public class MickeyMine {
             GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i], true);
         }
         if (m) {
-            goalBlocks = null;
+            goalBlocks = new ArrayList<Block>();
+            calculateGoal();
+        }
+    }
+    public static void calculateGoal() {
+        goalBlocks = new ArrayList<Block>();
+        for (int i = 0; i < ores.length; i++) {
+            if (!enabled[i]) {
+                continue;
+            }
+            String oreName = ores[i];
+            Block block = Block.getBlockFromName("minecraft:" + oreName);
+            if (block == null) {
+                GuiScreen.sendChatMessage("minecraft:" + oreName + " doesn't exist bb", true);
+                throw new NullPointerException("minecraft:" + oreName + " doesn't exist bb");
+            }
+            goalBlocks.add(block);
         }
     }
     public static void doMine() {
         if (goalBlocks == null) {
-            goalBlocks = new ArrayList<Block>();
-            for (int i = 0; i < ores.length; i++) {
-                if (!enabled[i]) {
-                    continue;
-                }
-                String oreName = ores[i];
-                Block block = Block.getBlockFromName("minecraft:" + oreName);
-                if (block == null) {
-                    throw new NullPointerException("minecraft:" + oreName + " doesn't exist bb");
-                }
-                goalBlocks.add(block);
-            }
+            calculateGoal();
         }
         System.out.println("Goal blocks: " + goalBlocks);
         System.out.println("priority: " + priorityNeedsToBeMined);
