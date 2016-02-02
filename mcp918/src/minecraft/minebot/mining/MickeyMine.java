@@ -144,24 +144,12 @@ public class MickeyMine {
         for (int i = 0; i < 4; i++) {
             System.out.println(blockPos.offset(miningFacing));
         }
-        if (isGoalBlock(blockPos.north())) {
-            addPriorityBlock(blockPos.north());
-        }
-        if (isGoalBlock(blockPos.south())) {
-            addPriorityBlock(blockPos.south());
-        }
-        if (isGoalBlock(blockPos.east())) {
-            addPriorityBlock(blockPos.east());
-        }
-        if (isGoalBlock(blockPos.west())) {
-            addPriorityBlock(blockPos.west());
-        }
-        if (isGoalBlock(blockPos.up())) {
-            addPriorityBlock(blockPos.up());
-        }
-        if (isGoalBlock(blockPos.down())) {
-            addPriorityBlock(blockPos.down());
-        }
+        addPriorityBlock(blockPos.north());
+        addPriorityBlock(blockPos.south());
+        addPriorityBlock(blockPos.east());
+        addPriorityBlock(blockPos.west());
+        addPriorityBlock(blockPos.up());
+        addPriorityBlock(blockPos.down());
     }
     public static boolean addNormalBlock(BlockPos blockPos) {
         if (!needsToBeMined.contains(blockPos)) {
@@ -171,7 +159,7 @@ public class MickeyMine {
         return false;
     }
     public static boolean addPriorityBlock(BlockPos blockPos) {
-        if (!priorityNeedsToBeMined.contains(blockPos)) {
+        if (!priorityNeedsToBeMined.contains(blockPos) && isGoalBlock(blockPos)) {
             priorityNeedsToBeMined.add(blockPos);
             return true;
         }
