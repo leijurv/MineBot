@@ -175,7 +175,11 @@ public class MickeyMine {
             } else {
                 MineBot.switchToBestTool();
                 MineBot.isLeftClick = true;
-                if (!Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
+                if (Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
+                    if (MineBot.whatAreYouLookingAt() == null) {
+                        MineBot.forward = true;
+                    }
+                } else {
                     MineBot.moveTowardsBlock(branchPosition);
                 }
             }
