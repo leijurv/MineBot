@@ -80,6 +80,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 }
                 //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 boolean lookingInCorrectDirection = MineBot.lookAtBlock(positionsToBreak[i], true);
+                //TODO decide if when actuallyLookingAtTheBlock==true then should it still keep moving the look direction to the exact center of the block
                 boolean actuallyLookingAtTheBlock = positionsToBreak[i].equals(MineBot.whatAreYouLookingAt());
                 if (!(lookingInCorrectDirection || actuallyLookingAtTheBlock)) {
                     return false;
