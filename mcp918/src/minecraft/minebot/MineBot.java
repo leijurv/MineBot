@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import minebot.mining.MickeyMine;
 import minebot.pathfinding.Action;
 import minebot.pathfinding.GoalBlock;
 import minebot.pathfinding.Path;
@@ -321,8 +322,8 @@ public class MineBot {
         }
         if (currentPath == null && tickPath) {
             Miner.tick();
-            tickPath = false;
         }
+        MickeyMine.tick();
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
                 if (currentPath != null) {
@@ -569,6 +570,7 @@ public class MineBot {
     static boolean mobHunting = false;
     static boolean mobKilling = false;
     static boolean playerHunt = false;
+    static boolean mreowMine = false;
     /**
      * Called by GuiScreen.java
      *
@@ -585,6 +587,10 @@ public class MineBot {
         if (text.startsWith("death")) {
             goal = new GoalBlock(death);
             return "Set goal to " + goal;
+        }
+        if (text.contains("mickey") && text.contains("mine")) {
+            mreowMine = !mreowMine;
+            return "Mreow mine: " + mreowMine;
         }
         if (text.contains("wizard")) {
             isThereAnythingInProgress = !isThereAnythingInProgress;
