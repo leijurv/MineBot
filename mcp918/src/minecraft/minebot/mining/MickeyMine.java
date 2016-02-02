@@ -35,6 +35,7 @@ public class MickeyMine {
     //static Boolean branching = null;
     static BlockPos branchPosition = null;
     static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore", "lit_redstone_ore"};
+    static final boolean[] enabled = {true, true, true, true, true, true, true};
     static boolean mightNeedToGoBackToPath = false;
     public static void clear() {
         isGoingToMine = false;
@@ -47,7 +48,11 @@ public class MickeyMine {
     public static void doMine() {
         if (goalBlocks == null) {
             goalBlocks = new ArrayList<Block>();
-            for (String oreName : ores) {
+            for (int i = 0; i < ores.length; i++) {
+                if (!enabled[i]) {
+                    continue;
+                }
+                String oreName = ores[i];
                 Block block = Block.getBlockFromName("minecraft:" + oreName);
                 if (block == null) {
                     throw new NullPointerException("minecraft:" + oreName + " doesn't exist bb");
