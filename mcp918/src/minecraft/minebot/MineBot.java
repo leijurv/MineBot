@@ -600,6 +600,9 @@ public class MineBot {
         }
         if (text.contains("mickey") && text.contains("mine")) {
             mreowMine = !mreowMine;
+            if (!mreowMine) {
+                MickeyMine.clear();
+            }
             return "Mreow mine: " + mreowMine;
         }
         if (text.contains("wizard")) {
