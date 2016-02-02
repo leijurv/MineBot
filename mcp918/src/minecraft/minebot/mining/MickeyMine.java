@@ -43,6 +43,9 @@ public class MickeyMine {
         if (priorityNeedsToBeMined.isEmpty() && needsToBeMined.isEmpty()) {
             doBranchMine();
         } else if (!priorityNeedsToBeMined.isEmpty()) {
+            doPriorityMine();
+        } else {
+            doNormalMine();
         }
 //        if(branching == null) {
 //                MineBot.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().offset(miningFacing).up(), seesBlock);
