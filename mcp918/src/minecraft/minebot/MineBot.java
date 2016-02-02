@@ -565,6 +565,7 @@ public class MineBot {
         try {
             return therewasachatmessage1(message);
         } catch (Exception e) {
+            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, e);
             return message;
         }
     }
@@ -923,6 +924,7 @@ public class MineBot {
             GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + start + " to " + path.end, true);
             return path;
         } catch (Exception e) {
+            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, e);
             isThereAnythingInProgress = false;
             return null;
         }
