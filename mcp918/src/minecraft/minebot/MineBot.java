@@ -80,6 +80,8 @@ public class MineBot {
                 System.out.println("Tick took " + time + "ms");
             }
         } catch (Exception ex) {
+            System.out.println("Exception");
+            ex.printStackTrace();
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
