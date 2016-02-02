@@ -45,6 +45,21 @@ public class MickeyMine {
         branchPosition = null;
         mightNeedToGoBackToPath = false;
     }
+    public static void toggleOre(String ore) {
+        String lower = ore.toLowerCase();
+        boolean m = false;
+        for (int i = 0; i < ores.length; i++) {
+            if (!ores[i].contains(lower)) {
+                continue;
+            }
+            m = true;
+            enabled[i] = !enabled[i];
+            GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i], true);
+        }
+        if (m) {
+            goalBlocks = null;
+        }
+    }
     public static void doMine() {
         if (goalBlocks == null) {
             goalBlocks = new ArrayList<Block>();

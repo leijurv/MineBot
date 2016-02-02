@@ -594,6 +594,10 @@ public class MineBot {
             goal = new GoalBlock(death);
             return "Set goal to " + goal;
         }
+        if (text.startsWith("ore")) {
+            MickeyMine.toggleOre(text.substring(3).trim());
+            return "k";
+        }
         if (text.equals("mine")) {
             mreowMine = !mreowMine;
             if (!mreowMine) {
