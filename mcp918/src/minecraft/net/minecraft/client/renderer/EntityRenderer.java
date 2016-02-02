@@ -826,8 +826,11 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         }
     }
     private float getNightVisionBrightness(EntityLivingBase entitylivingbaseIn, float partialTicks) {
+        if (MineBot.fullBright) {
+            return 1;
+        }
         int i = entitylivingbaseIn.getActivePotionEffect(Potion.nightVision).getDuration();
-        return i > 200 || MineBot.fullBright ? 1.0F : 0.7F + MathHelper.sin(((float) i - partialTicks) * (float) Math.PI * 0.2F) * 0.3F;
+        return i > 200 ? 1.0F : 0.7F + MathHelper.sin(((float) i - partialTicks) * (float) Math.PI * 0.2F) * 0.3F;
     }
     public void func_181560_a(float p_181560_1_, long p_181560_2_) {
         boolean flag = Display.isActive();
