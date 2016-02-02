@@ -100,7 +100,7 @@ public class Miner {
         if (ores.isEmpty() && ore) {
             wasMining(true);
             isMining(false);
-            MineBot.goMiningInNewThread();
+            //MineBot.goMiningInNewThread();
         }
     }
     public static void tryToMine(BlockPos block, boolean ore) {
