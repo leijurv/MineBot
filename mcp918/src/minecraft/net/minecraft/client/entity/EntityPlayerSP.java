@@ -420,6 +420,11 @@ public class EntityPlayerSP extends AbstractClientPlayer {
     public BlockPos getPosition() {
         return new BlockPos(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D);
     }
+    
+    public BlockPos getPosition0() {
+        return new BlockPos(this.posX + 0.5D - 0.5D, this.posY + 0.5D - 0.5D, this.posZ + 0.5D - 0.5D);
+    }
+    
     public void playSound(String name, float volume, float pitch) {
         this.worldObj.playSound(this.posX, this.posY, this.posZ, name, volume, pitch, false);
     }
