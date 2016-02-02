@@ -323,7 +323,9 @@ public class MineBot {
         if (currentPath == null && tickPath) {
             Miner.tick();
         }
-        MickeyMine.tick();
+        if (mreowMine) {
+            MickeyMine.tick();
+        }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
                 if (currentPath != null) {
