@@ -106,6 +106,18 @@ public class MickeyMine {
         MineBot.goal = new GoalTwoBlocks(toMine);
         if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
             MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0());
+        } else {
+            addNearby();
+        }
+    }
+    public static void addNearby() {
+        BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
+        for (int x = playerFeet.getX() - 1; x <= playerFeet.getX() + 1; x++) {
+            for (int y = playerFeet.getY() - 1; y <= playerFeet.getY() + 2; y++) {
+                for (int z = playerFeet.getZ() - 1; z <= playerFeet.getZ() + 1; z++) {
+                    addPriorityBlock(new BlockPos(x, y, z));
+                }
+            }
         }
     }
     public static void doNormalMine() {
@@ -121,6 +133,7 @@ public class MickeyMine {
             }
             return;
         }
+        addNearby();
         BlockPos toMine = needsToBeMined.get(0);
         if (MineBot.lookAtBlock(toMine, true)) {
             if (Action.avoidBreaking(toMine)) {
@@ -178,6 +191,11 @@ public class MickeyMine {
     }
     public static boolean addNormalBlock(BlockPos blockPos) {
         if (!needsToBeMined.contains(blockPos)) {
+            if (Action.avoidBreaking(blockPos)) {
+                GuiScreen.sendChatMessage("Uh oh, lava nearby", true);
+                miningFacing = miningFacing.rotateY();
+                return false;
+            }
             needsToBeMined.add(blockPos);
             return true;
         }
