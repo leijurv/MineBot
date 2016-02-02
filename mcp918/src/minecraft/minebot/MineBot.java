@@ -503,6 +503,9 @@ public class MineBot {
     public static boolean getRightIsPressed() {
         return isRightClick && rightPressTime >= -2;
     }
+    public static boolean isPathFinding() {
+        return isThereAnythingInProgress;
+    }
     /**
      * Do not question the logic. Called by Minecraft.java
      *
