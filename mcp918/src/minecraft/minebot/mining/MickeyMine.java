@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.chunk.Chunk;
 
 /**
  *
@@ -27,12 +28,12 @@ public class MickeyMine {
     static boolean isMining = false;
     //static boolean seesBlock = false;
     static EnumFacing miningFacing = EnumFacing.EAST;
-    //ArrayList<Chunk> foundChunks = new ArrayList<Chunk>();
+    static ArrayList<Chunk> diamondChunks = new ArrayList<Chunk>();
     //static BlockPos currentlyMining = null;
     static ArrayList<BlockPos> hasBeenMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> needsToBeMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
-    //static Boolean branching = null;
+    static boolean chunkHasDiamonds = false;
     static BlockPos branchPosition = null;
     static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore", "lit_redstone_ore"};
     static final boolean[] enabled = {true, true, false, true, true, true, true};
@@ -108,7 +109,6 @@ public class MickeyMine {
 //        if (Minecraft.theMinecraft.thePlayer.getPosition0().offset(miningFacing).up().equals(MineBot.whatAreYouLookingAt())) {
 //
 //        }
-        Minecraft.theMinecraft.theWorld.getChunkFromChunkCoords(Minecraft.theMinecraft.thePlayer.chunkCoordX, Minecraft.theMinecraft.thePlayer.chunkCoordZ);
     }
     public static void doBranchMine() {
         if (branchPosition == null) {
@@ -218,6 +218,9 @@ public class MickeyMine {
         }
         if (priorityNeedsToBeMined.isEmpty() && !wasEmpty) {
             mightNeedToGoBackToPath = true;
+            if(Boolean.TRUE.equals(chunkHasDiamonds)) {
+                diamondChunks.add(Minecraft.theMinecraft.theWorld.getChunkFromChunkCoords(Minecraft.theMinecraft.thePlayer.chunkCoordX, Minecraft.theMinecraft.thePlayer.chunkCoordZ));
+            }
         }
     }
     public static void updateBlocks(BlockPos blockPos) {
@@ -243,6 +246,7 @@ public class MickeyMine {
         }
         return false;
     }
+    
     public static boolean addPriorityBlock(BlockPos blockPos) {
         if (!priorityNeedsToBeMined.contains(blockPos) && isGoalBlock(blockPos)) {
             if (Action.avoidBreaking(blockPos)) {
@@ -250,10 +254,14 @@ public class MickeyMine {
                 return false;
             }
             priorityNeedsToBeMined.add(blockPos);
+            if(Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock().equals(Block.getBlockFromName("minecraft:diamond_ore"))) {
+                chunkHasDiamonds = true;
+            }
             return true;
         }
         return false;
     }
+    
     public static void tick() {
         System.out.println("mickey" + isGoingToMine + " " + isMining);
         if (!isGoingToMine && !isMining) {
