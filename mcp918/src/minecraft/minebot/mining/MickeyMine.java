@@ -81,6 +81,7 @@ public class MickeyMine {
         if (goalBlocks == null) {
             calculateGoal();
         }
+        MineBot.clearMovement();
         System.out.println("Goal blocks: " + goalBlocks);
         System.out.println("priority: " + priorityNeedsToBeMined);
         System.out.println("needs to be mined: " + needsToBeMined);
@@ -175,11 +176,15 @@ public class MickeyMine {
             } else {
                 MineBot.switchToBestTool();
                 MineBot.isLeftClick = true;
+                System.out.println("Looking");
                 if (Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
+                    System.out.println("IN position");
                     if (MineBot.whatAreYouLookingAt() == null) {
+                        System.out.println("Can't see, going");
                         MineBot.forward = true;
                     }
                 } else {
+                    System.out.println("Going to position");
                     MineBot.moveTowardsBlock(branchPosition, false);
                 }
             }
