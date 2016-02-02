@@ -265,7 +265,7 @@ public class MickeyMine {
                 isGoingToMine = true;
             }
         }
-        if (isGoingToMine && Minecraft.theMinecraft.thePlayer.getPosition0().getY() <= 6) {
+        if (isGoingToMine && Minecraft.theMinecraft.thePlayer.getPosition0().getY() == 6) {
             isGoingToMine = false;
             isMining = true;
         }
