@@ -37,6 +37,7 @@ public class MickeyMine {
         this.goalBlocks = goalBlocks;
     }
     public static void doMine() {
+        System.out.println("Goal blocks: " + goalBlocks);
         System.out.println("priority: " + priorityNeedsToBeMined);
         System.out.println("needs to be mined: " + needsToBeMined);
         updatePriorityBlocksMined();
@@ -92,7 +93,7 @@ public class MickeyMine {
     public static void doNormalMine() {
         BlockPos toMine = needsToBeMined.get(0);
         if (MineBot.lookAtBlock(toMine, true)) {
-            if(Action.avoidBreaking(toMine)) {
+            if (Action.avoidBreaking(toMine)) {
                 miningFacing = miningFacing.rotateY();
                 needsToBeMined.clear();
                 priorityNeedsToBeMined.clear();
@@ -103,7 +104,6 @@ public class MickeyMine {
             }
         }
     }
-        
     public static void updateBlocksMined() {
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : needsToBeMined) {
@@ -131,7 +131,7 @@ public class MickeyMine {
         }
     }
     public static void updateBlocks(BlockPos blockPos) {
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             System.out.println(blockPos.offset(miningFacing));
         }
         if (isGoalBlock(blockPos.north())) {
