@@ -1134,6 +1134,9 @@ public class MineBot {
      * @return am I moving, or am I still rotating
      */
     public static boolean moveTowardsBlock(BlockPos p) {
+        return moveTowardsBlock(p, true);
+    }
+    public static boolean moveTowardsBlock(BlockPos p, boolean rotate) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
@@ -1151,7 +1154,7 @@ public class MineBot {
         double y = p.getY() + yolo;
         double z = p.getZ() + zDiff;
         //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
-        return moveTowardsCoords(x, y, z);
+        return moveTowardsCoords(x, y, z, rotate);
     }
     /**
      * Move towards coordinates, not necesarily forwards. e.g. if coordinates
@@ -1165,7 +1168,7 @@ public class MineBot {
      * rotate until within ANGLE_THRESHOLD (currently 7°) of moving in correct
      * direction
      */
-    public static boolean moveTowardsCoords(double x, double y, double z) {
+    public static boolean moveTowardsCoords(double x, double y, double z, boolean rotate) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         float currentYaw = thePlayer.rotationYaw;
         float yaw = (float) (Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z) * 180 / Math.PI);
@@ -1185,43 +1188,46 @@ public class MineBot {
         if (tmp > 359) {
             tmp -= 360;
         }
-        desiredYaw = yaw - tmp;
+        if (rotate) {
+            desiredYaw = yaw - tmp;
+            lookingYaw = true;
+        }
+        double t = rotate ? ANGLE_THRESHOLD : 23;
         //System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
         //System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
-        lookingYaw = true;
-        if (distanceToForward < ANGLE_THRESHOLD || distanceToForward > 360 - ANGLE_THRESHOLD) {
+        if (distanceToForward < t || distanceToForward > 360 - t) {
             forward = true;
             return true;
         }
-        if (distanceToForwardLeft < ANGLE_THRESHOLD || distanceToForwardLeft > 360 - ANGLE_THRESHOLD) {
+        if (distanceToForwardLeft < t || distanceToForwardLeft > 360 - t) {
             forward = true;
             left = true;
             return true;
         }
-        if (distanceToForwardRight < ANGLE_THRESHOLD || distanceToForwardRight > 360 - ANGLE_THRESHOLD) {
+        if (distanceToForwardRight < t || distanceToForwardRight > 360 - t) {
             forward = true;
             right = true;
             return true;
         }
-        if (distanceToBackward < ANGLE_THRESHOLD || distanceToBackward > 360 - ANGLE_THRESHOLD) {
+        if (distanceToBackward < t || distanceToBackward > 360 - t) {
             backward = true;
             return true;
         }
-        if (distanceToBackwardLeft < ANGLE_THRESHOLD || distanceToBackwardLeft > 360 - ANGLE_THRESHOLD) {
+        if (distanceToBackwardLeft < t || distanceToBackwardLeft > 360 - t) {
             backward = true;
             left = true;
             return true;
         }
-        if (distanceToBackwardRight < ANGLE_THRESHOLD || distanceToBackwardRight > 360 - ANGLE_THRESHOLD) {
+        if (distanceToBackwardRight < t || distanceToBackwardRight > 360 - t) {
             backward = true;
             right = true;
             return true;
         }
-        if (distanceToLeft < ANGLE_THRESHOLD || distanceToLeft > 360 - ANGLE_THRESHOLD) {
+        if (distanceToLeft < t || distanceToLeft > 360 - t) {
             left = true;
             return true;
         }
-        if (distanceToRight < ANGLE_THRESHOLD || distanceToRight > 360 - ANGLE_THRESHOLD) {
+        if (distanceToRight < t || distanceToRight > 360 - t) {
             right = true;
             return true;
         }
