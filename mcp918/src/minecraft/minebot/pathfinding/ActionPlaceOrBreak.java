@@ -79,9 +79,10 @@ public abstract class ActionPlaceOrBreak extends Action {
                     return false;
                 }
                 //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
-                if (!MineBot.lookAtBlock(positionsToBreak[i], true)) {
+                boolean lookingInCorrectDirection = MineBot.lookAtBlock(positionsToBreak[i], true);
+                boolean actuallyLookingAtTheBlock = positionsToBreak[i].equals(MineBot.whatAreYouLookingAt());
+                if (!(lookingInCorrectDirection || actuallyLookingAtTheBlock)) {
                     return false;
-                    //look at the block we are breaking
                 }
                 /*if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {//hmmm, our crosshairs are looking at the wrong block
                  //TODO add a timer here, and if we are stuck looking at the wrong block for more than 1 second, do something
