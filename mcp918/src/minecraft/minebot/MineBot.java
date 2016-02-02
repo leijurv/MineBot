@@ -1233,6 +1233,9 @@ public class MineBot {
         }
         return null;
     }
+    public static void switchToBestTool() {
+        switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(whatAreYouLookingAt()).getBlock());
+    }
     public static void switchtotool(Block b) {
         MineBot.switchtotool(b, new ToolSet());
     }
