@@ -96,37 +96,29 @@ public class MickeyMine {
         } else {
             doNormalMine();
         }
-//        if(branching == null) {
-//                MineBot.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().offset(miningFacing).up(), seesBlock);
-//
-//        } else if(Boolean.TRUE.equals(branching)) {
-//
-//        } else if(Boolean.FALSE.equals(branching)) {
-//
-//        } else {
-//            throw new IllegalStateException("Branching must be null, true, or false.");
-//        }
-//        MineBot.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().offset(miningFacing).up(), seesBlock);
-//        if (Minecraft.theMinecraft.thePlayer.getPosition0().offset(miningFacing).up().equals(MineBot.whatAreYouLookingAt())) {
-//
-//        }
     }
     public static void doBranchMine() {
         if (branchPosition == null) {
             branchPosition = Minecraft.theMinecraft.thePlayer.getPosition0();
         }
-        BlockPos futureBranchPosition = branchPosition.offset(miningFacing, 5);
-        for (int i = 0; i < 6; i++) {
+        int i;
+        for (i = 0; i < 6 || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
             addNormalBlock(branchPosition.offset(miningFacing, i).up());
             addNormalBlock(branchPosition.offset(miningFacing, i));
         }
+        i--;
+        GuiScreen.sendChatMessage("Branch distance "+i,true);
+        BlockPos futureBranchPosition = branchPosition.offset(miningFacing, i);
+
         System.out.println("player reach: " + Minecraft.theMinecraft.playerController.getBlockReachDistance());
-        for (int i = 1; i <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); i++) {
-            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), i).up());
-        }
-        for (int i = 1; i <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); i++) {
-            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), i).up());
-        }
+       
+            for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
+                addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up());
+            }
+            for (int j = 1; i <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
+                addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), j).up());
+            }
+        
         branchPosition = futureBranchPosition;
     }
     public static void doPriorityMine() {
