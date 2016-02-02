@@ -1156,6 +1156,9 @@ public class MineBot {
         //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
         return moveTowardsCoords(x, y, z, rotate);
     }
+    public static boolean moveTowardsCoords(double x, double y, double z) {
+        return moveTowardsCoords(x, y, z, true);
+    }
     /**
      * Move towards coordinates, not necesarily forwards. e.g. if coordinates
      * are closest to being directly behind us, go backwards. This minimizes

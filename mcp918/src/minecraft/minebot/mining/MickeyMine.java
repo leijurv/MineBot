@@ -180,7 +180,7 @@ public class MickeyMine {
                         MineBot.forward = true;
                     }
                 } else {
-                    MineBot.moveTowardsBlock(branchPosition);
+                    MineBot.moveTowardsBlock(branchPosition, false);
                 }
             }
         }
