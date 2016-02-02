@@ -1240,7 +1240,15 @@ public class MineBot {
         return null;
     }
     public static void switchToBestTool() {
-        switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(whatAreYouLookingAt()).getBlock());
+        BlockPos pos = whatAreYouLookingAt();
+        if (pos == null) {
+            return;
+        }
+        Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        if (block.equals(Block.getBlockById(0))) {
+            return;
+        }
+        switchtotool(block);
     }
     public static void switchtotool(Block b) {
         MineBot.switchtotool(b, new ToolSet());
