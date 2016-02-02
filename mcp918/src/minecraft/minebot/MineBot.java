@@ -20,7 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
-import minebot.mining.Miner;
 import minebot.pathfinding.Goal;
 import minebot.pathfinding.GoalRunAway;
 import minebot.pathfinding.GoalXZ;
@@ -320,9 +319,6 @@ public class MineBot {
                 tickPath = false;
             }
         }
-        if (currentPath == null && tickPath) {
-            Miner.tick();
-        }
         if (mreowMine) {
             MickeyMine.tick();
         }
@@ -598,7 +594,7 @@ public class MineBot {
             goal = new GoalBlock(death);
             return "Set goal to " + goal;
         }
-        if (text.contains("mickey") && text.contains("mine")) {
+        if (text.equals("mine")) {
             mreowMine = !mreowMine;
             if (!mreowMine) {
                 MickeyMine.clear();
@@ -665,7 +661,8 @@ public class MineBot {
             cancelPath();
             plsCancel = true;
             target = null;
-            Miner.stopMining();
+            MickeyMine.clear();
+            mreowMine = false;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
         }
         if (text.equals("st")) {
@@ -794,11 +791,6 @@ public class MineBot {
             BlockPos bp = MineBot.whatAreYouLookingAt();
             return info(bp);
         }
-        if (text.startsWith("mine")) {
-            plsCancel = false;
-            goMiningInNewThread();
-            return null;
-        }
         return message;
     }
     public static String info(BlockPos bp) {
@@ -812,19 +804,6 @@ public class MineBot {
     public static void cancelPath() {
         nextPath = null;
         clearPath();
-        Miner.stopMining();
-    }
-    /**
-     * Go mining in a new thread. Literally starts a new thread that calls
-     * Miner.goMining()
-     */
-    public static void goMiningInNewThread() {
-        new Thread() {
-            @Override
-            public void run() {
-                Miner.goMining();
-            }
-        }.start();
     }
     public static boolean couldBeInCreative(EntityPlayer player) {
         if (player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.capabilities.isFlying) {
