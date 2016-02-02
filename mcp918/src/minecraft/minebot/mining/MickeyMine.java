@@ -33,7 +33,7 @@ public class MickeyMine {
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
     static Boolean branching = null;
     static BlockPos branchPosition = null;
-    static final String[] ores = {"minecraft:diamond_ore", "minecraft:iron_ore", "minecraft:coal_ore", "minecraft:gold_ore", "minecraft:redstone_ore", "minecraft:emerald_ore"};
+    static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore"};
     public static void doMine() {
         if (goalBlocks == null) {
             goalBlocks = new ArrayList<Block>();
