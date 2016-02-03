@@ -69,9 +69,13 @@ public class SmeltingTask {
             Item item = in.getItem();
             int ind = burnableItems.indexOf(item);
             if (ind == -1) {
+                int time = TileEntityFurnace.getItemBurnTime(in);
+                if (time <= 0) {
+                    GuiScreen.sendChatMessage(in + " isn't fuel, lol", true);
+                    continue;
+                }
                 burnableItems.add(in.getItem());
                 amountWeHave.add(in.stackSize);
-                int time = TileEntityFurnace.getItemBurnTime(in);
                 burnTimes.add(time);
                 int numRequired = (int) Math.ceil(((double) burnTicks) / ((double) time));
                 amtNeeded.add(numRequired);
@@ -102,7 +106,7 @@ public class SmeltingTask {
         int bestExtra = Integer.MAX_VALUE;
         for (int i = 0; i < burnableItems.size(); i++) {
             int amt = amtNeeded.get(i);
-            int extra = burnTicks - burnTimes.get(i) * amtNeeded.get(i);
+            int extra = burnTimes.get(i) * amtNeeded.get(i) - burnTicks;
             if (extra < bestExtra || (extra == bestExtra && amt < bestAmt)) {
                 bestAmt = amt;
                 bestExtra = extra;
