@@ -5,6 +5,7 @@
  */
 package minebot.util;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 import minebot.MineBot;
@@ -12,8 +13,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -48,6 +51,31 @@ public class SmeltingTask {
         if (currentSize(contain) == -1) {
             GuiScreen.sendChatMessage("Furnace already in use", true);
             return;
+        }
+        int burnTicks = desired * 200;
+        ArrayList<Item> burnableItems = new ArrayList<Item>();
+        ArrayList<Integer> amountWeHave = new ArrayList<Integer>();
+        ArrayList<Integer> amountNeeded = new ArrayList<Integer>();
+        for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
+            Slot slot = contain.inventorySlots.inventorySlots.get(i);
+            if (!slot.getHasStack()) {
+                continue;
+            }
+            ItemStack in = slot.getStack();
+            if (in == null) {
+                continue;
+            }
+            Item item = in.getItem();
+            int ind = burnableItems.indexOf(item);
+            if (ind == -1) {
+                burnableItems.add(in.getItem());
+                amountWeHave.add(in.stackSize);
+                int time = TileEntityFurnace.getItemBurnTime(in);
+                int numRequired = (int) Math.ceil(((double) burnTicks) / ((double) time));
+                amountNeeded.add(numRequired);
+            } else {
+                amountWeHave.set(ind, amountWeHave.get(ind) + in.stackSize);
+            }
         }
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
