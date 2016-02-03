@@ -30,6 +30,8 @@ import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiFurnace;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +40,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.FoodStats;
@@ -60,6 +63,7 @@ public class MineBot {
     static boolean wasTargetSetByMobHunt = false;
     static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
+    static SmeltingTask currentSmeltingTask = null;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -143,6 +147,9 @@ public class MineBot {
             Minecraft.theMinecraft.displayGuiScreen(null);
         }
         tickNumber++;
+        if (currentSmeltingTask != null && Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
+            currentSmeltingTask.heyPleaseActuallyPutItInTheFurnaceNowOkay();
+        }
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiChest) {
             GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             if (sketchyStealer) {
@@ -424,6 +431,10 @@ public class MineBot {
             desiredNextPitch = Minecraft.theMinecraft.thePlayer.rotationPitch - pitchDistance;
         }
     }
+    public static void openInventory() {
+        Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+        Minecraft.theMinecraft.displayGuiScreen(new GuiInventory(Minecraft.theMinecraft.thePlayer));
+    }
     static float previousYaw = 0;
     static float previousPitch = 0;
     static float desiredNextYaw = 0;
@@ -600,7 +611,7 @@ public class MineBot {
             return "Set goal to " + goal;
         }
         if (text.startsWith("smelt")) {
-            new SmeltingTask(thePlayer.getCurrentEquippedItem());
+            currentSmeltingTask = new SmeltingTask(thePlayer.getCurrentEquippedItem());
             return "k";
         }
         if (text.startsWith("containeritem")) {
