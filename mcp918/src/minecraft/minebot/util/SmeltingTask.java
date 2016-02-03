@@ -47,6 +47,7 @@ public class SmeltingTask {
         if (furnace == null) {
             furnace = MineBot.whatAreYouLookingAt();
         }
+        System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
         if (!didIPutItInAlreadyPhrasing) {
             if (realPutItIn_PHRASING(contain)) {
                 didIPutItInAlreadyPhrasing = true;
