@@ -110,8 +110,9 @@ public class CraftingTask {
         stackSize += amount;
     }
     
-    public static ArrayList<ItemStack> calculateAlreadyHasItems(IRecipe recipe) throws ClassNotFoundException {
-        ArrayList<ItemStack> alreadyItems = new ArrayList<ItemStack>();
+    public static HashMap<Item,ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) throws ClassNotFoundException {
+        HashMap<Item,ArrayList<Tuple<Integer, Integer>>> amountHasAndWhere = new HashMap();
+        
         ArrayList<ItemStack> needsItemStacks = null;
         if(recipe instanceof ShapedRecipes) {
             ShapedRecipes shapedRecipe = (ShapedRecipes) recipe;
@@ -122,19 +123,22 @@ public class CraftingTask {
         } else {
             throw new IllegalStateException("recipe was not shaped or shapeless");
         }
-        for(ItemStack st : needsItemStacks){
-            alreadyItems.add(new ItemStack(st.getItem(),0));
-        }
-        //HashMap<Item,ArrayList<Tuple<Integer, Integer>>> amountNeededAndWhere = new HashMap();
         
         for(int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {
-            for(int j=0; j<alreadyItems.size(); i++) {
-                if(alreadyItems.get(j).getItem().equals(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem())) {
-                    alreadyItems.get(j).stackSize += Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).stackSize;
+            for(int j = 0; j < needsItemStacks.size(); j++) {
+                if(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(needsItemStacks.get(j).getItem())) {
+                    if(!amountHasAndWhere.containsKey(needsItemStacks.get(j).getItem())) {
+                        ArrayList<Tuple<Integer, Integer>> positionAmountArr = new ArrayList<Tuple<Integer, Integer>>();
+                        positionAmountArr.add(new Tuple(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).stackSize, i));
+                        amountHasAndWhere.put(needsItemStacks.get(j).getItem(), positionAmountArr);
+                    } else {
+                        amountHasAndWhere.get(needsItemStacks.get(j).getItem()).add(new Tuple(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).stackSize, i));
+                    }
                 }
             }
         }
-        return alreadyItems;
+        
+        return amountHasAndWhere;
     }
     
     public void calculateAlreadyHasAmmount() {
