@@ -54,6 +54,7 @@ public class SmeltingTask {
         }
         int burnTicks = desired * 200;
         ArrayList<Item> burnableItems = new ArrayList<Item>();
+        ArrayList<Integer> burnTimes = new ArrayList<Integer>();
         ArrayList<Integer> amountWeHave = new ArrayList<Integer>();
         ArrayList<Integer> amtNeeded = new ArrayList<Integer>();
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
@@ -71,6 +72,7 @@ public class SmeltingTask {
                 burnableItems.add(in.getItem());
                 amountWeHave.add(in.stackSize);
                 int time = TileEntityFurnace.getItemBurnTime(in);
+                burnTimes.add(time);
                 int numRequired = (int) Math.ceil(((double) burnTicks) / ((double) time));
                 amtNeeded.add(numRequired);
             } else {
@@ -79,13 +81,35 @@ public class SmeltingTask {
         }
         for (int i = 0; i < burnableItems.size(); i++) {
             if (amountWeHave.get(i) < amtNeeded.get(i)) {
-                GuiScreen.sendChatMessage("Not enough " + burnableItems.get(i) + " (have " + amountWeHave.get(i) + ", need " + amtNeeded.get(i) + ")", true);
+                GuiScreen.sendChatMessage("Not using fuel " + burnableItems.get(i) + " because not enough (have " + amountWeHave.get(i) + ", need " + amtNeeded.get(i) + ")", true);
                 burnableItems.remove(i);
                 amountWeHave.remove(i);
                 amtNeeded.remove(i);
+                burnTimes.remove(i);
                 i--;
             }
         }
+        if (burnableItems.isEmpty()) {
+            GuiScreen.sendChatMessage("lol no fuel", true);
+            return;
+        }
+        System.out.println(burnableItems);
+        System.out.println(amountWeHave);
+        System.out.println(amtNeeded);
+        System.out.println(burnTimes);
+        Item bestFuel = null;
+        int bestAmt = Integer.MAX_VALUE;
+        int bestExtra = Integer.MAX_VALUE;
+        for (int i = 0; i < burnableItems.size(); i++) {
+            int amt = amtNeeded.get(i);
+            int extra = burnTicks - burnTimes.get(i) * amtNeeded.get(i);
+            if (extra < bestExtra || (extra == bestExtra && amt < bestAmt)) {
+                bestAmt = amt;
+                bestExtra = extra;
+                bestFuel = burnableItems.get(i);
+            }
+        }
+        GuiScreen.sendChatMessage("Using " + bestAmt + " items of " + bestFuel + ", which wastes " + bestExtra + " ticks of fuel.", true);
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
