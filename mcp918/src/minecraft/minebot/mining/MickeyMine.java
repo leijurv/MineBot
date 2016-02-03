@@ -163,7 +163,7 @@ public class MickeyMine {
                 miningFacing = miningFacing.rotateY();
                 GuiScreen.sendChatMessage("Since I need to avoid breaking " + toMine + ", I'm rotating to " + miningFacing, true);
                 needsToBeMined.clear();
-                //priorityNeedsToBeMined.clear();
+                //.priorityNeedsToBeMined.clear();
             } else {
                 MineBot.switchToBestTool();
                 MineBot.isLeftClick = true;
