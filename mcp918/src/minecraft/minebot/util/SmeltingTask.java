@@ -44,10 +44,6 @@ public class SmeltingTask {
         GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
         furnace = MineBot.whatAreYouLookingAt();
         int desired = toPutInTheFurnace.stackSize;
-        if (currentSize(contain) >= desired) {
-            GuiScreen.sendChatMessage("done", true);
-            return;
-        }
         if (currentSize(contain) == -1) {
             GuiScreen.sendChatMessage("Furnace already in use", true);
             return;
@@ -102,18 +98,54 @@ public class SmeltingTask {
         System.out.println(amtNeeded);
         System.out.println(burnTimes);
         Item bestFuel = null;
-        int bestAmt = Integer.MAX_VALUE;
+        int fuelAmt = Integer.MAX_VALUE;
         int bestExtra = Integer.MAX_VALUE;
         for (int i = 0; i < burnableItems.size(); i++) {
             int amt = amtNeeded.get(i);
             int extra = burnTimes.get(i) * amtNeeded.get(i) - burnTicks;
-            if (extra < bestExtra || (extra == bestExtra && amt < bestAmt)) {
-                bestAmt = amt;
+            if (extra < bestExtra || (extra == bestExtra && amt < fuelAmt)) {
+                fuelAmt = amt;
                 bestExtra = extra;
                 bestFuel = burnableItems.get(i);
             }
         }
-        GuiScreen.sendChatMessage("Using " + bestAmt + " items of " + bestFuel + ", which wastes " + bestExtra + " ticks of fuel.", true);
+        GuiScreen.sendChatMessage("Using " + fuelAmt + " items of " + bestFuel + ", which wastes " + bestExtra + " ticks of fuel.", true);
+        for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
+            Slot slot = contain.inventorySlots.inventorySlots.get(i);
+            if (!slot.getHasStack()) {
+                continue;
+            }
+            ItemStack in = slot.getStack();
+            if (in == null) {
+                continue;
+            }
+            if (in.getItem().equals(bestFuel)) {
+                int currentSize = currentSize(contain, 1, bestFuel);
+                int amountHere = in.stackSize;
+                int amountNeeded = fuelAmt - currentSize;
+                if (currentSize == -1) {
+                    GuiScreen.sendChatMessage("Furnace already in use", true);
+                    return;
+                }
+                contain.sketchyMouseClick(i, 0, 0);
+                if (amountNeeded >= amountHere) {
+                    contain.sketchyMouseClick(1, 0, 0);
+                } else {
+                    for (int j = 0; j < amountNeeded; j++) {
+                        contain.sketchyMouseClick(1, 1, 0);
+                    }
+                }
+                contain.sketchyMouseClick(i, 0, 0);
+                if (currentSize(contain, 1, bestFuel) >= fuelAmt) {
+                    GuiScreen.sendChatMessage("done", true);
+                    break;
+                }
+            }
+        }
+        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
+            GuiScreen.sendChatMessage("done", true);
+            return;
+        }
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -124,7 +156,7 @@ public class SmeltingTask {
                 continue;
             }
             if (in.getItem().equals(toPutInTheFurnace.getItem())) {
-                int currentSize = currentSize(contain);
+                int currentSize = currentSize(contain, 0, toPutInTheFurnace.getItem());
                 int amountHere = in.stackSize;
                 int amountNeeded = desired - currentSize;
                 if (currentSize == -1) {
@@ -140,20 +172,20 @@ public class SmeltingTask {
                     }
                 }
                 contain.sketchyMouseClick(i, 0, 0);
-                if (currentSize(contain) >= desired) {
+                if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
                     GuiScreen.sendChatMessage("done", true);
                     return;
                 }
             }
         }
-        if (currentSize(contain) >= desired) {
+        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
             GuiScreen.sendChatMessage("done", true);
             return;
         }
-        GuiScreen.sendChatMessage("Still need " + (desired - currentSize(contain)) + " items", true);
+        GuiScreen.sendChatMessage("Still need " + (desired - currentSize(contain, 0, toPutInTheFurnace.getItem())) + " items", true);
     }
-    private int currentSize(GuiFurnace contain) {
-        Slot slot = contain.inventorySlots.inventorySlots.get(0);
+    private int currentSize(GuiFurnace contain, int id, Item item) {
+        Slot slot = contain.inventorySlots.inventorySlots.get(id);
         if (!slot.getHasStack()) {
             return 0;
         }
@@ -161,7 +193,7 @@ public class SmeltingTask {
         if (in == null) {
             return 0;
         }
-        if (!in.getItem().equals(toPutInTheFurnace.getItem())) {
+        if (!in.getItem().equals(item)) {
             return -1;
         }
         return in.stackSize;
