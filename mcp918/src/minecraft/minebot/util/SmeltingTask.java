@@ -137,7 +137,7 @@ public class SmeltingTask {
                 }
                 contain.sketchyMouseClick(i, 0, 0);
                 if (currentSize(contain, 1, bestFuel) >= fuelAmt) {
-                    GuiScreen.sendChatMessage("done", true);
+                    GuiScreen.sendChatMessage("done with fuel", true);
                     break;
                 }
             }
