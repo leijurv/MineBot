@@ -613,8 +613,8 @@ public class MineBot {
         if (text.startsWith("smelt")) {
             String spec = text.substring(5).trim();
             if (spec.length() > 0) {
-                String item = text.split(" ")[0];
-                String amt = text.split(" ")[1];
+                String item = spec.split(" ")[0];
+                String amt = spec.split(" ")[1];
                 ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
                 currentSmeltingTask = new SmeltingTask(stack);
             } else {
