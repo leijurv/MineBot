@@ -26,8 +26,11 @@ import net.minecraft.util.BlockPos;
 public class SmeltingTask {
     private final Map<ItemStack, ItemStack> recipes = getRecipes();
     private final ItemStack toPutInTheFurnace;
+    private final ItemStack desired;
     private BlockPos furnace = null;
     private boolean didIPutItInAlreadyPhrasing = false;
+    private boolean isItDone = false;
+    public final int burnTicks;
     public SmeltingTask(ItemStack desired) {
         toPutInTheFurnace = recipe(desired);
         if (toPutInTheFurnace == null) {
@@ -35,8 +38,10 @@ public class SmeltingTask {
             GuiScreen.sendChatMessage(m, true);
             throw new IllegalArgumentException(m);
         }
+        burnTicks = toPutInTheFurnace.stackSize * 200;
+        this.desired = desired;
     }
-    int numTicks = 0;
+    int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     public void heyPleaseActuallyPutItInTheFurnaceNowOkay() {
         GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
         if (furnace == null) {
@@ -47,9 +52,13 @@ public class SmeltingTask {
                 didIPutItInAlreadyPhrasing = true;
             }
         }
-        if (didIPutItInAlreadyPhrasing) {
+        if (didIPutItInAlreadyPhrasing && !isItDone) {
             numTicks++;
-            //todo: when numTicks > burnTime, path back to the furnace and take the stuff out
+            if (numTicks >= burnTicks) {
+                isItDone = true;
+                GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
+                //todo: pathfind to furnace and take result out
+            }
         }
     }
     private boolean realPutItIn_PHRASING(GuiFurnace contain) {
@@ -58,7 +67,6 @@ public class SmeltingTask {
             GuiScreen.sendChatMessage("Furnace already in use", true);
             return false;
         }
-        int burnTicks = desired * 200;
         ArrayList<Item> burnableItems = new ArrayList<Item>();
         ArrayList<Integer> burnTimes = new ArrayList<Integer>();
         ArrayList<Integer> amountWeHave = new ArrayList<Integer>();
