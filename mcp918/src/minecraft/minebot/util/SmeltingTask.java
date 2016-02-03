@@ -24,7 +24,8 @@ public class SmeltingTask {
                 int desiredQuantity = desired.stackSize;
                 int outputQuantity = output.stackSize;
                 int totalQuantity = (int) Math.ceil(((double) desiredQuantity) / ((double) outputQuantity));
-                System.out.println("Recipe from " + input + " to " + output);
+                int inputQuantity = input.stackSize * totalQuantity;
+                System.out.println("Recipe from " + input + " to " + output + " " + desiredQuantity + " " + outputQuantity + " " + totalQuantity + " " + inputQuantity);
             }
         }
     }
