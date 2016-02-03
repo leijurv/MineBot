@@ -103,8 +103,8 @@ public class MickeyMine {
         }
         int i;
         for (i = 0; i < 6 || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
-            addNormalBlock(branchPosition.offset(miningFacing, i).up());
-            addNormalBlock(branchPosition.offset(miningFacing, i));
+            addNormalBlock(branchPosition.offset(miningFacing, i).up(), true);
+            addNormalBlock(branchPosition.offset(miningFacing, i), true);
             System.out.println("branche" + i);
         }
         i--;
@@ -112,10 +112,10 @@ public class MickeyMine {
         BlockPos futureBranchPosition = branchPosition.offset(miningFacing, i);
         System.out.println("player reach: " + Minecraft.theMinecraft.playerController.getBlockReachDistance());
         for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
-            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up());
+            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up(), false);
         }
         for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
-            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), j).up());
+            addNormalBlock(futureBranchPosition.offset(miningFacing.rotateYCCW(), j).up(), false);
         }
         branchPosition = futureBranchPosition;
     }
@@ -163,7 +163,7 @@ public class MickeyMine {
                 miningFacing = miningFacing.rotateY();
                 GuiScreen.sendChatMessage("Since I need to avoid breaking " + toMine + ", I'm rotating to " + miningFacing, true);
                 needsToBeMined.clear();
-                priorityNeedsToBeMined.clear();
+                //priorityNeedsToBeMined.clear();
             } else {
                 MineBot.switchToBestTool();
                 MineBot.isLeftClick = true;
@@ -234,9 +234,9 @@ public class MickeyMine {
         addPriorityBlock(blockPos.up());
         addPriorityBlock(blockPos.down());
     }
-    public static boolean addNormalBlock(BlockPos blockPos) {
+    public static boolean addNormalBlock(BlockPos blockPos, boolean mainBranch) {
         if (!needsToBeMined.contains(blockPos)) {
-            if (Action.avoidBreaking(blockPos)) {
+            if (Action.avoidBreaking(blockPos) && mainBranch) {//who gives a crap if a side branch will hit lava? lol
                 GuiScreen.sendChatMessage("Uh oh, lava nearby", true);
                 miningFacing = miningFacing.rotateY();
                 return false;
