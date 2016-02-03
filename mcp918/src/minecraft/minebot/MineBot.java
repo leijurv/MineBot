@@ -30,6 +30,7 @@ import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -60,6 +61,7 @@ public class MineBot {
     static boolean wasTargetSetByMobHunt = false;
     static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
+    static SmeltingTask currentSmeltingTask = null;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -143,6 +145,9 @@ public class MineBot {
             Minecraft.theMinecraft.displayGuiScreen(null);
         }
         tickNumber++;
+        if (currentSmeltingTask != null && Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
+            currentSmeltingTask.heyPleaseActuallyPutItInTheFurnaceNowOkay();
+        }
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiChest) {
             GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             if (sketchyStealer) {
@@ -600,7 +605,7 @@ public class MineBot {
             return "Set goal to " + goal;
         }
         if (text.startsWith("smelt")) {
-            new SmeltingTask(thePlayer.getCurrentEquippedItem());
+            currentSmeltingTask = new SmeltingTask(thePlayer.getCurrentEquippedItem());
             return "k";
         }
         if (text.startsWith("containeritem")) {
