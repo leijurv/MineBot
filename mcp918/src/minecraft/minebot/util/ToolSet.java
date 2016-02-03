@@ -104,4 +104,8 @@ public class ToolSet {
             return new ItemStack(item).canHarvestBlock(blockIn);
         }
     }
+    
+    public boolean getItem(Item i) {
+        return false;
+    }
 }
