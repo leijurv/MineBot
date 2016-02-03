@@ -14,7 +14,7 @@ public class ShapedRecipes implements IRecipe
     private final int recipeHeight;
 
     /** Is a array of ItemStack that composes the recipe. */
-    private final ItemStack[] recipeItems;
+    public final ItemStack[] recipeItems;
 
     /** Is the ItemStack that you get when craft the recipe. */
     private final ItemStack recipeOutput;
