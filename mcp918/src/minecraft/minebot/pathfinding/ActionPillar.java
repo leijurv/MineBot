@@ -24,6 +24,9 @@ public class ActionPillar extends ActionPlaceOrBreak {
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
             return 1000000;
         }
+        if (isLiquid(from) || isLiquid(from.down())) {//can't pillar on water or in water
+            return 1000000;
+        }
         return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST;//dont ever break the block above you, so multiply by a million
     }
     int numTicks = 0;
