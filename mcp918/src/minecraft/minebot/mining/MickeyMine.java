@@ -284,32 +284,6 @@ public class MickeyMine {
     public static boolean isGoalBlock(Block block) {
         return goalBlocks.contains(block);
     }
-    public static void buildOreVein(ArrayList<BlockPos> vein, BlockPos foundBlock) {
-        int startLength = vein.size();
-        if (!vein.contains(foundBlock.north()) && isGoalBlock(foundBlock.north())) {
-            vein.add(foundBlock.north());
-        }
-        if (!vein.contains(foundBlock.south()) && isGoalBlock(foundBlock.north())) {
-            vein.add(foundBlock.south());
-            buildOreVein(vein, foundBlock.south());
-        }
-        if (!vein.contains(foundBlock.east()) && isGoalBlock(foundBlock.north())) {
-            vein.add(foundBlock.east());
-            buildOreVein(vein, foundBlock.east());
-        }
-        if (!vein.contains(foundBlock.west()) && isGoalBlock(foundBlock.north())) {
-            vein.add(foundBlock.west());
-            buildOreVein(vein, foundBlock.west());
-        }
-        if (!vein.contains(foundBlock.up()) && isGoalBlock(foundBlock.north())) {
-            vein.add(foundBlock.up());
-            buildOreVein(vein, foundBlock.up());
-        }
-        if (!vein.contains(foundBlock.down()) && isGoalBlock(foundBlock.north())) {
-            vein.add(foundBlock.down());
-            buildOreVein(vein, foundBlock.down());
-        }
-    }
     public static boolean isNull(Object object) {
         try {
             object.toString();

@@ -6,6 +6,8 @@
 package minebot.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
@@ -14,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.Tuple;
 
 /**
  *
@@ -24,13 +27,12 @@ public class CraftingTask {
     static ArrayList<CraftingTask> overallCraftingTasks = new ArrayList<CraftingTask>();
     ArrayList<CraftingTask> subCraftingTasks = new ArrayList<CraftingTask>();
     private ItemStack currentlyCrafting = null;
-    int stackSize;
-    int alreadyHas;
+    private int stackSize;
+    private int alreadyHas;
     
     private CraftingTask(ItemStack craftStack) {
         this.currentlyCrafting = craftStack;
         this.stackSize = craftStack.stackSize;
-        this.execute();
     }
     
     /**
@@ -66,14 +68,23 @@ public class CraftingTask {
                 for(ItemStack input : shapedRecipe.recipeItems) {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if(!(inputRecipe == null)) {
-                        CraftingTask.findOrCreateCraftingTask(input);
+                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
+                        subCraftingTasks.add(newTask);
+                        newTask.execute();
                     }
                 }
             } else if(currentRecipe instanceof ShapelessRecipes) {
                 ShapelessRecipes shapelessRecipe = (ShapelessRecipes) currentRecipe;
-                
+                for(ItemStack input : shapelessRecipe.recipeItems) {
+                    IRecipe inputRecipe = getRecipeFromItem(input.getItem());
+                    if(!(inputRecipe == null)) {
+                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
+                        subCraftingTasks.add(newTask);
+                        newTask.execute();
+                    }
+                }
             } else {
-                
+                throw new IllegalStateException("Current recipe isn't shapeless or shaped");
             }
         } else {
              
@@ -96,13 +107,40 @@ public class CraftingTask {
     }
     
     public void addNeededAmount(int amount) {
-         stackSize += amount;
+        stackSize += amount;
     }
     
-    public void calculateAlreadyHas() {
+    public static ArrayList<ItemStack> calculateAlreadyHasItems(IRecipe recipe) throws ClassNotFoundException {
+        ArrayList<ItemStack> alreadyItems = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> needsItemStacks = null;
+        if(recipe instanceof ShapedRecipes) {
+            ShapedRecipes shapedRecipe = (ShapedRecipes) recipe;
+            needsItemStacks = new ArrayList<ItemStack>(Arrays.asList(shapedRecipe.recipeItems));
+        } else if(recipe instanceof ShapelessRecipes) {
+            ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
+            needsItemStacks = new ArrayList<ItemStack>(shapelessRecipe.recipeItems);
+        } else {
+            throw new IllegalStateException("recipe was not shaped or shapeless");
+        }
+        for(ItemStack st : needsItemStacks){
+            alreadyItems.add(new ItemStack(st.getItem(),0));
+        }
+        //HashMap<Item,ArrayList<Tuple<Integer, Integer>>> amountNeededAndWhere = new HashMap();
+        
+        for(int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {
+            for(int j=0; j<alreadyItems.size(); i++) {
+                if(alreadyItems.get(j).getItem().equals(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem())) {
+                    alreadyItems.get(j).stackSize += Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).stackSize;
+                }
+            }
+        }
+        return alreadyItems;
+    }
+    
+    public void calculateAlreadyHasAmmount() {
         ItemStack targetItem = null;
         for(int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++){
-            if(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).equals(currentlyCrafting)) {
+            if(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(currentlyCrafting.getItem())) {
                 targetItem = Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i);
             }
         }
@@ -115,6 +153,11 @@ public class CraftingTask {
     
     public int stillToCraft() {
         return alreadyHas;
+    }
+    
+    public boolean isDone() {
+        calculateAlreadyHasAmmount();
+        return 0 <= alreadyHas;
     }
     
 }

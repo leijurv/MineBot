@@ -1228,6 +1228,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      * Called when user clicked he's mouse right button (place)
      */
     public void rightClickMouse() {
+        System.out.println("Player right clicked!");
         if (!this.playerController.func_181040_m()) {
             this.rightClickDelayTimer = 4;
             boolean flag = true;
@@ -1237,6 +1238,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             } else {
                 switch (this.objectMouseOver.typeOfHit) {
                     case ENTITY:
+                        System.out.println("Player right clicked on entity!");
                         if (this.playerController.func_178894_a(this.thePlayer, this.objectMouseOver.entityHit, this.objectMouseOver)) {
                             flag = false;
                         } else if (this.playerController.interactWithEntitySendPacket(this.thePlayer, this.objectMouseOver.entityHit)) {
@@ -1245,11 +1247,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         break;
                     case BLOCK:
                         BlockPos blockpos = this.objectMouseOver.getBlockPos();
+                       
                         if (this.theWorld.getBlockState(blockpos).getBlock().getMaterial() != Material.air) {
                             int i = itemstack != null ? itemstack.stackSize : 0;
                             if (this.playerController.onPlayerRightClick(this.thePlayer, this.theWorld, itemstack, blockpos, this.objectMouseOver.sideHit, this.objectMouseOver.hitVec)) {
                                 flag = false;
                                 this.thePlayer.swingItem();
+                                System.out.println("Player right clicked on block @ " + blockpos.offset(this.objectMouseOver.sideHit) + "");
+                                MineBot.onPlacedBlock(itemstack, blockpos.offset(this.objectMouseOver.sideHit));
                             }
                             if (itemstack == null) {
                                 return;
@@ -1266,6 +1271,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 ItemStack itemstack1 = this.thePlayer.inventory.getCurrentItem();
                 if (itemstack1 != null && this.playerController.sendUseItem(this.thePlayer, this.theWorld, itemstack1)) {
                     this.entityRenderer.itemRenderer.resetEquippedProgress2();
+                    System.out.println("Player right clicked with: " + itemstack1 + " at " + this.objectMouseOver.getBlockPos());
                 }
             }
         }

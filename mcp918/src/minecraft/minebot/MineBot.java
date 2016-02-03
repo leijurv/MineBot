@@ -485,6 +485,8 @@ public class MineBot {
     public static boolean right = false;
     public static boolean sneak = false;
     static HashMap<String, Goal> saved = new HashMap<String, Goal>();
+    private static BlockPos craftingTable = null;
+    private static BlockPos furnace = null;
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -621,6 +623,14 @@ public class MineBot {
                 currentSmeltingTask = new SmeltingTask(thePlayer.getCurrentEquippedItem());
             }
             return "k";
+        }
+        if (text.startsWith("clearbh")) {
+            String substr = text.substring(7).trim();
+            if(substr == "crafting_table") {
+                setCraftingHome(null);
+            } else if(substr == "furnace") {
+                setFurnaceHome(null);
+            }
         }
         if (text.startsWith("containeritem")) {
             CraftingTask.getRecipeFromItem(thePlayer.getCurrentEquippedItem().getItem());
@@ -1300,5 +1310,32 @@ public class MineBot {
             return mc.objectMouseOver.entityHit;
         }
         return null;
+    }
+    
+    public static void onPlacedBlock(ItemStack itemStack, BlockPos blockPos) {
+        Item item = itemStack.getItem();
+        if(craftingTable == null || furnace == null) {
+            if(item.equals(Item.getByNameOrId("minecraft:crafting_table"))) {
+                setCraftingHome(blockPos);
+            } else if(item.equals(Item.getByNameOrId("minecraft:furnace"))) {
+                setFurnaceHome(blockPos);
+            }
+        }
+    }
+        
+    public static void setCraftingHome(BlockPos craftingHome) {
+        craftingTable = craftingHome;
+    }
+    
+    public static BlockPos getCraftingHome() {
+        return craftingTable;
+    }
+    
+    public static void setFurnaceHome(BlockPos furnaceHome) {
+        furnace = furnaceHome;
+    }
+    
+    public static BlockPos getFurnaceHome() {
+        return furnace;
     }
 }
