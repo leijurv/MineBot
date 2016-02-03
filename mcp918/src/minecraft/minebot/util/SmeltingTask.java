@@ -36,19 +36,27 @@ public class SmeltingTask {
             throw new IllegalArgumentException(m);
         }
     }
+    int numTicks = 0;
     public void heyPleaseActuallyPutItInTheFurnaceNowOkay() {
         GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
-        if (!didIPutItInAlreadyPhrasing) {
-            realPutItIn_PHRASING(contain);
+        if (furnace == null) {
+            furnace = MineBot.whatAreYouLookingAt();
         }
-        furnace = MineBot.whatAreYouLookingAt();
+        if (!didIPutItInAlreadyPhrasing) {
+            if (realPutItIn_PHRASING(contain)) {
+                didIPutItInAlreadyPhrasing = true;
+            }
+        }
+        if (didIPutItInAlreadyPhrasing) {
+            numTicks++;
+            //todo: when numTicks > burnTime, path back to the furnace and take the stuff out
+        }
     }
-    private void realPutItIn_PHRASING(GuiFurnace contain) {
-        didIPutItInAlreadyPhrasing = true;
+    private boolean realPutItIn_PHRASING(GuiFurnace contain) {
         int desired = toPutInTheFurnace.stackSize;
         if (currentSize(contain, 0, toPutInTheFurnace.getItem()) == -1) {
             GuiScreen.sendChatMessage("Furnace already in use", true);
-            return;
+            return false;
         }
         int burnTicks = desired * 200;
         ArrayList<Item> burnableItems = new ArrayList<Item>();
@@ -93,7 +101,7 @@ public class SmeltingTask {
         }
         if (burnableItems.isEmpty()) {
             GuiScreen.sendChatMessage("lol no fuel", true);
-            return;
+            return false;
         }
         System.out.println(burnableItems);
         System.out.println(amountWeHave);
@@ -127,7 +135,7 @@ public class SmeltingTask {
                 int amountNeeded = fuelAmt - currentSize;
                 if (currentSize == -1) {
                     GuiScreen.sendChatMessage("Furnace already in use", true);
-                    return;
+                    return false;
                 }
                 contain.sketchyMouseClick(i, 0, 0);
                 if (amountNeeded >= amountHere) {
@@ -146,7 +154,7 @@ public class SmeltingTask {
         }
         if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
             GuiScreen.sendChatMessage("done", true);
-            return;
+            return true;
         }
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
@@ -163,7 +171,7 @@ public class SmeltingTask {
                 int amountNeeded = desired - currentSize;
                 if (currentSize == -1) {
                     GuiScreen.sendChatMessage("Furnace already in use", true);
-                    return;
+                    return false;
                 }
                 contain.sketchyMouseClick(i, 0, 0);
                 if (amountNeeded >= amountHere) {
@@ -176,15 +184,16 @@ public class SmeltingTask {
                 contain.sketchyMouseClick(i, 0, 0);
                 if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
                     GuiScreen.sendChatMessage("done", true);
-                    return;
+                    return true;
                 }
             }
         }
         if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
             GuiScreen.sendChatMessage("done", true);
-            return;
+            return true;
         }
         GuiScreen.sendChatMessage("Still need " + (desired - currentSize(contain, 0, toPutInTheFurnace.getItem())) + " items", true);
+        return false;
     }
     private int currentSize(GuiFurnace contain, int id, Item item) {
         Slot slot = contain.inventorySlots.inventorySlots.get(id);
