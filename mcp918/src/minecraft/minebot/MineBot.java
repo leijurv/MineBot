@@ -24,6 +24,7 @@ import minebot.pathfinding.Goal;
 import minebot.pathfinding.GoalRunAway;
 import minebot.pathfinding.GoalXZ;
 import minebot.pathfinding.GoalYLevel;
+import minebot.util.CraftingTask;
 import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -596,6 +597,9 @@ public class MineBot {
         if (text.startsWith("death")) {
             goal = new GoalBlock(death);
             return "Set goal to " + goal;
+        }
+        if (text.startsWith("containeritem")) {
+            CraftingTask.getRecipeFromItem(thePlayer.getCurrentEquippedItem().getItem());
         }
         if (text.startsWith("ore")) {
             MickeyMine.toggleOre(text.substring(3).trim());
