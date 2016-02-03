@@ -42,7 +42,10 @@ public class SmeltingTask {
         }
         didIPutItInAlreadyPhrasing = true;
         GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
+        realPutItIn_PHRASING(contain);
         furnace = MineBot.whatAreYouLookingAt();
+    }
+    private void realPutItIn_PHRASING(GuiFurnace contain) {
         int desired = toPutInTheFurnace.stackSize;
         if (currentSize(contain, 0, toPutInTheFurnace.getItem()) == -1) {
             GuiScreen.sendChatMessage("Furnace already in use", true);
