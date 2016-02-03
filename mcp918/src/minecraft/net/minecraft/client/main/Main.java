@@ -4,13 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.properties.PropertyMap.Serializer;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.Authenticator;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -84,8 +89,28 @@ public class Main {
         String s5 = optionset.has(optionspec17) ? (String) optionspec17.value(optionset) : null;
         String s6 = (String) optionset.valueOf(optionspec);
         Integer integer = (Integer) optionset.valueOf(optionspec1);
-        Session session = new Session("jurvetson5", "51dcd870d33b40e99fc1aecdcff96081", "5f73eb89a2f74eadb4c85bcefde94960", (String) optionspec18.value(optionset));
-        Session session1 = new Session((String) optionspec9.value(optionset), s4, (String) optionspec11.value(optionset), (String) optionspec18.value(optionset));
+        String logFileWithToken = System.getProperty("user.home")+"/Library/Application Support/minecraft/logs/latest.log";
+        String lineWithToken = null;
+        String uuid=null;
+        String lineWithUser = null;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(logFileWithToken));
+            lineWithUser = br.readLine();
+            lineWithUser = lineWithUser.substring(lineWithUser.indexOf(": ") + 2);
+            lineWithUser = lineWithUser.substring(lineWithUser.indexOf(": ") + 2);
+            lineWithToken= br.readLine();
+            lineWithToken = lineWithToken.substring(lineWithToken.indexOf("token:") + 6,lineWithToken.length()-1);
+            uuid = lineWithToken.substring(0, lineWithToken.indexOf(":"));
+            lineWithToken = lineWithToken.substring(lineWithToken.indexOf(":")+1);
+            br.close();
+        }   catch (IOException ex) {
+            lineWithToken = "THISDIDNTWORK";
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        lineWithUser=lineWithUser.trim();
+        System.out.println(lineWithUser+" "+lineWithUser.length());
+        Session session = new Session(lineWithUser, lineWithToken,uuid, (String) optionspec18.value(optionset));
+        //Session session1 = new Session((String) optionspec9.value(optionset), s4, (String) optionspec11.value(option  set), (String) optionspec18.value(optionset));
         GameConfiguration gameconfiguration = new GameConfiguration(new GameConfiguration.UserInformation(session, propertymap, propertymap1, proxy), new GameConfiguration.DisplayInformation(i, j, flag, flag1), new GameConfiguration.FolderInformation(file1, file3, file2, s5), new GameConfiguration.GameInformation(flag2, s3), new GameConfiguration.ServerInformation(s6, integer.intValue()));
         Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {
             public void run() {
