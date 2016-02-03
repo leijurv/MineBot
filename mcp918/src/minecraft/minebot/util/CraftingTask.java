@@ -24,9 +24,12 @@ public class CraftingTask {
     static ArrayList<CraftingTask> overallCraftingTasks = new ArrayList<CraftingTask>();
     ArrayList<CraftingTask> subCraftingTasks = new ArrayList<CraftingTask>();
     private ItemStack currentlyCrafting = null;
+    int stackSize;
+    int alreadyHas;
     
     private CraftingTask(ItemStack craftStack) {
         this.currentlyCrafting = craftStack;
+        this.stackSize = craftStack.stackSize;
         this.execute();
     }
     
@@ -61,11 +64,13 @@ public class CraftingTask {
             if(currentRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shapedRecipe = (ShapedRecipes) currentRecipe;
                 for(ItemStack input : shapedRecipe.recipeItems) {
-                    int amount = input.stackSize;
-                    
+                    IRecipe inputRecipe = getRecipeFromItem(input.getItem());
+                    if(!(inputRecipe == null)) {
+                        CraftingTask.findOrCreateCraftingTask(input);
+                    }
                 }
             } else if(currentRecipe instanceof ShapelessRecipes) {
-                ShapelessRecipes shapelessRecpe = (ShapelessRecipes) currentRecipe;
+                ShapelessRecipes shapelessRecipe = (ShapelessRecipes) currentRecipe;
                 
             } else {
                 
@@ -78,6 +83,7 @@ public class CraftingTask {
     public static CraftingTask findOrCreateCraftingTask(ItemStack itemStack) {
         for(CraftingTask selectedTask : overallCraftingTasks) {
             if(selectedTask.currentlyCrafting().equals(itemStack))
+                selectedTask.addNeededAmount(itemStack.stackSize);
                 return selectedTask;
         }
         CraftingTask newTask = new CraftingTask(itemStack);
@@ -90,7 +96,25 @@ public class CraftingTask {
     }
     
     public void addNeededAmount(int amount) {
-         
+         stackSize += amount;
+    }
+    
+    public void calculateAlreadyHas() {
+        ItemStack targetItem = null;
+        for(int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++){
+            if(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).equals(currentlyCrafting)) {
+                targetItem = Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i);
+            }
+        }
+        if(targetItem != null) {
+            alreadyHas = stackSize - targetItem.stackSize;
+            return;
+        }
+        alreadyHas = stackSize;
+    }
+    
+    public int stillToCraft() {
+        return alreadyHas;
     }
     
 }
