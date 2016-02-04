@@ -64,6 +64,12 @@ public class MickeyMine {
     }
     public static void toggleOre(String ore) {
         String lower = ore.toLowerCase();
+        if (lower.trim().length() == 0) {
+            for (int i = 0; i < ores.length; i++) {
+                GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i], true);
+            }
+            return;
+        }
         boolean m = false;
         for (int i = 0; i < ores.length; i++) {
             if (!ores[i].contains(lower)) {
@@ -72,7 +78,7 @@ public class MickeyMine {
             }
             m = true;
             enabled[i] = !enabled[i];
-            GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i], true);
+            GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i] + " (I toggled this one just now)", true);
         }
         if (m) {
             goalBlocks = new ArrayList<Block>();

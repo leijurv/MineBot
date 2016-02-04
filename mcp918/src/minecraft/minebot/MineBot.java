@@ -647,7 +647,7 @@ public class MineBot {
         }
         if (text.startsWith("ore")) {
             MickeyMine.toggleOre(text.substring(3).trim());
-            return "k";
+            return "";
         }
         if (text.equals("mine")) {
             mreowMine = !mreowMine;
