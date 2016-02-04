@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.pathfinding;
+package minebot.pathfinding.actions;
 
 import minebot.MineBot;
 import minebot.util.ToolSet;
@@ -15,17 +15,23 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class ActionFall extends ActionPlaceOrBreak {
-    public ActionFall(BlockPos start) {
-        super(start, start.down(), new BlockPos[]{start.down()}, new BlockPos[0]);
+public class ActionDescendTwo extends ActionPlaceOrBreak {
+    public ActionDescendTwo(BlockPos start, BlockPos end) {
+        super(start, end, new BlockPos[]{end.up(3), end.up(2), end.up(), end}, new BlockPos[]{end.down()});
     }
-    int numTicks = 0;
     @Override
-    protected boolean tick0() {
-        numTicks++;
-        if (numTicks > 10) {
-            MineBot.moveTowardsBlock(to);
+    protected double calculateCost(ToolSet ts) {
+        if (!canWalkOn(positionsToPlace[0])) {
+            return 1000000;
         }
+        if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
+            return 1000000;
+        }
+        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST * 2;
+    }
+    @Override
+    protected boolean tick0() {//basically just hold down W until we are where we want to be
+        MineBot.moveTowardsBlock(to);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {
@@ -34,12 +40,5 @@ public class ActionFall extends ActionPlaceOrBreak {
             return true;
         }
         return false;
-    }
-    @Override
-    protected double calculateCost(ToolSet ts) {
-        if (!canWalkOn(to.down())) {
-            return 1000000;
-        }
-        return FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
     }
 }

@@ -5,6 +5,14 @@
  */
 package minebot.pathfinding;
 
+import minebot.pathfinding.goals.Goal;
+import minebot.pathfinding.actions.ActionDescendTwo;
+import minebot.pathfinding.actions.ActionBridge;
+import minebot.pathfinding.actions.ActionClimb;
+import minebot.pathfinding.actions.Action;
+import minebot.pathfinding.actions.ActionDescend;
+import minebot.pathfinding.actions.ActionFall;
+import minebot.pathfinding.actions.ActionPillar;
 import java.util.HashMap;
 import java.util.Random;
 import net.minecraft.client.Minecraft;

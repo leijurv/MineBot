@@ -3,27 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.pathfinding;
+package minebot.pathfinding.goals;
 
+import minebot.pathfinding.actions.Action;
 import net.minecraft.util.BlockPos;
 
 /**
  *
  * @author leijurv
  */
-public class GoalBlock implements Goal {
+public class GoalTwoBlocks implements Goal {
     final int x, y, z;
-    public GoalBlock(BlockPos pos) {
+    public GoalTwoBlocks(BlockPos pos) {
         this(pos.getX(), pos.getY(), pos.getZ());
     }
-    public GoalBlock(int x, int y, int z) {
+    public GoalTwoBlocks(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
     @Override
     public boolean isInGoal(BlockPos pos) {
-        return pos.getX() == this.x && pos.getY() == this.y && pos.getZ() == this.z;
+        return pos.getX() == this.x && (pos.getY() == this.y || pos.getY() == this.y - 1) && pos.getZ() == this.z;
     }
     static final double MIN = 50;
     static final double MAX = 100;
@@ -31,6 +32,9 @@ public class GoalBlock implements Goal {
     public double heuristic(BlockPos pos) {
         double xDiff = pos.getX() - this.x;
         double yDiff = pos.getY() - this.y;
+        if (yDiff < 0) {
+            yDiff++;
+        }
         double zDiff = pos.getZ() - this.z;
         double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
         double heuristic = 0;

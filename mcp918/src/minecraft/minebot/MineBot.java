@@ -13,24 +13,23 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.mining.MickeyMine;
-import minebot.pathfinding.Action;
-import minebot.pathfinding.GoalBlock;
+import minebot.pathfinding.actions.Action;
+import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.Path;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
-import minebot.pathfinding.Goal;
-import minebot.pathfinding.GoalRunAway;
-import minebot.pathfinding.GoalXZ;
-import minebot.pathfinding.GoalYLevel;
+import minebot.pathfinding.goals.Goal;
+import minebot.pathfinding.goals.GoalRunAway;
+import minebot.pathfinding.goals.GoalXZ;
+import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
@@ -147,7 +146,7 @@ public class MineBot {
             Minecraft.theMinecraft.displayGuiScreen(null);
         }
         tickNumber++;
-        if (currentSmeltingTask != null && Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
+        if (currentSmeltingTask != null) {
             currentSmeltingTask.heyPleaseActuallyPutItInTheFurnaceNowOkay();
         }
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiChest) {
@@ -190,6 +189,9 @@ public class MineBot {
                     }
                 }
             }
+        }
+        if (Minecraft.theMinecraft.currentScreen == null) {
+            InventoryManager.onTick();
         }
         boolean tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
@@ -626,9 +628,9 @@ public class MineBot {
         }
         if (text.startsWith("clearbh")) {
             String substr = text.substring(7).trim();
-            if(substr == "crafting_table") {
+            if (substr == "crafting_table") {
                 setCraftingHome(null);
-            } else if(substr == "furnace") {
+            } else if (substr == "furnace") {
                 setFurnaceHome(null);
             }
         }
@@ -1311,30 +1313,25 @@ public class MineBot {
         }
         return null;
     }
-    
     public static void onPlacedBlock(ItemStack itemStack, BlockPos blockPos) {
         Item item = itemStack.getItem();
-        if(craftingTable == null || furnace == null) {
-            if(item.equals(Item.getByNameOrId("minecraft:crafting_table"))) {
+        if (craftingTable == null || furnace == null) {
+            if (item.equals(Item.getByNameOrId("minecraft:crafting_table"))) {
                 setCraftingHome(blockPos);
-            } else if(item.equals(Item.getByNameOrId("minecraft:furnace"))) {
+            } else if (item.equals(Item.getByNameOrId("minecraft:furnace"))) {
                 setFurnaceHome(blockPos);
             }
         }
     }
-        
     public static void setCraftingHome(BlockPos craftingHome) {
         craftingTable = craftingHome;
     }
-    
     public static BlockPos getCraftingHome() {
         return craftingTable;
     }
-    
     public static void setFurnaceHome(BlockPos furnaceHome) {
         furnace = furnaceHome;
     }
-    
     public static BlockPos getFurnaceHome() {
         return furnace;
     }

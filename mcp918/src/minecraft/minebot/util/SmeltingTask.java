@@ -43,14 +43,16 @@ public class SmeltingTask {
     }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     public void heyPleaseActuallyPutItInTheFurnaceNowOkay() {
-        GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
-        if (furnace == null) {
-            furnace = MineBot.whatAreYouLookingAt();
-        }
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
-        if (!didIPutItInAlreadyPhrasing) {
-            if (realPutItIn_PHRASING(contain)) {
-                didIPutItInAlreadyPhrasing = true;
+        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
+            GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
+            if (furnace == null) {
+                furnace = MineBot.whatAreYouLookingAt();
+            }
+            if (!didIPutItInAlreadyPhrasing) {
+                if (realPutItIn_PHRASING(contain)) {
+                    didIPutItInAlreadyPhrasing = true;
+                }
             }
         }
         if (didIPutItInAlreadyPhrasing && !isItDone) {

@@ -3,29 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.pathfinding;
+package minebot.pathfinding.goals;
 
+import minebot.pathfinding.actions.Action;
 import net.minecraft.util.BlockPos;
 
 /**
  *
  * @author leijurv
  */
-public class GoalRunAway implements Goal {
-    public final int x;
-    public final int z;
-    final double distanceSq;
-    public GoalRunAway(int x, int z, double distance) {
+public class GoalXZ implements Goal {
+    final int x;
+    final int z;
+    public GoalXZ(int x, int z) {
         this.x = x;
         this.z = z;
-        this.distanceSq = distance * distance;
     }
     @Override
     public boolean isInGoal(BlockPos pos) {
-        int diffX = pos.getX() - x;
-        int diffZ = pos.getZ() - z;
-        double distSq = diffX * diffX + diffZ * diffZ;
-        return distSq > distanceSq;
+        return pos.getX() == x && pos.getZ() == z;
     }
     @Override
     public double heuristic(BlockPos pos) {//mostly copied from GoalBlock
@@ -36,10 +32,10 @@ public class GoalRunAway implements Goal {
         heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;//overestimate
         heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
         heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
-        return -heuristic;
+        return heuristic;
     }
     @Override
     public String toString() {
-        return "GoalRunAwayFrom{x=" + x + ",z=" + z + "}";
+        return "Goal{x=" + x + ",z=" + z + "}";
     }
 }

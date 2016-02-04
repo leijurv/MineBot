@@ -7,10 +7,10 @@ package minebot.mining;
 
 import java.util.ArrayList;
 import minebot.MineBot;
-import minebot.pathfinding.Action;
-import minebot.pathfinding.GoalBlock;
-import minebot.pathfinding.GoalTwoBlocks;
-import minebot.pathfinding.GoalYLevel;
+import minebot.pathfinding.actions.Action;
+import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalTwoBlocks;
+import minebot.pathfinding.goals.GoalYLevel;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
