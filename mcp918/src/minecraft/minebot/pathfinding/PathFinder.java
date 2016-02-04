@@ -128,7 +128,9 @@ public class PathFinder {
     private final double MIN_DIST_PATH = 5;
     private Node getNodeAtPosition(BlockPos pos) {
         if (map.get(pos) == null) {
-            map.put(pos, new Node(pos, goal));
+            Node node = new Node(pos, goal);
+            map.put(pos, node);
+            return node;
         }
         return map.get(pos);
     }
