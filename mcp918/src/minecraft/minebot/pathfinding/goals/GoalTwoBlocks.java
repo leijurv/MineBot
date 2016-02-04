@@ -37,6 +37,6 @@ public class GoalTwoBlocks implements Goal {
     }
     @Override
     public String toString() {
-        return "Goal{x=" + x + ",y=" + y + ",z=" + z + "}";
+        return "GoalTwoBlocks{x=" + x + ",y=" + y + ",z=" + z + "}";
     }
 }
