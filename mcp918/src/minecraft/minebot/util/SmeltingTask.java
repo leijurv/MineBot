@@ -148,15 +148,15 @@ public class SmeltingTask {
                     GuiScreen.sendChatMessage("Furnace already in use", true);
                     return false;
                 }
-                contain.sketchyMouseClick(i, 0, 0);
+                contain.leftClick(i);
                 if (amountNeeded >= amountHere) {
-                    contain.sketchyMouseClick(1, 0, 0);
+                    contain.leftClick(1);
                 } else {
                     for (int j = 0; j < amountNeeded; j++) {
-                        contain.sketchyMouseClick(1, 1, 0);
+                        contain.rightClick(1);
                     }
                 }
-                contain.sketchyMouseClick(i, 0, 0);
+                contain.leftClick(i);
                 if (currentSize(contain, 1, bestFuel) >= fuelAmt) {
                     GuiScreen.sendChatMessage("done with fuel", true);
                     break;
@@ -184,15 +184,15 @@ public class SmeltingTask {
                     GuiScreen.sendChatMessage("Furnace already in use", true);
                     return false;
                 }
-                contain.sketchyMouseClick(i, 0, 0);
+                contain.leftClick(i);
                 if (amountNeeded >= amountHere) {
-                    contain.sketchyMouseClick(0, 0, 0);
+                    contain.leftClick(0);
                 } else {
                     for (int j = 0; j < amountNeeded; j++) {
-                        contain.sketchyMouseClick(0, 1, 0);
+                        contain.rightClick(0);
                     }
                 }
-                contain.sketchyMouseClick(i, 0, 0);
+                contain.leftClick(i);
                 if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
                     GuiScreen.sendChatMessage("done", true);
                     return true;
