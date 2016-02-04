@@ -24,7 +24,7 @@ public class InventoryManager {
         maximumAmounts = new HashMap();
         add("cobblestone", 128);
         add("coal", 128);
-        add("redstone_dust", 64);
+        add("redstone", 64);
         add("stone", 64);
         add("dirt", 128);
     }
