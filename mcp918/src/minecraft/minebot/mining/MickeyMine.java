@@ -48,9 +48,12 @@ public class MickeyMine {
         mightNeedToGoBackToPath = false;
     }
     public static void notifyFullness(String item, boolean isFull) {
+        if (item.equals("stone")) {
+            return;
+        }
         boolean up = false;
         for (int i = 0; i < ores.length; i++) {
-            if (item.contains(ores[i]) || ores[i].contains(item)) {
+            if (ores[i].endsWith(item)) {
                 if (enabled[i] == isFull) {
                     GuiScreen.sendChatMessage((isFull ? "is full" : "not full") + " of " + item + " so therefore " + ores[i], true);
                     enabled[i] = !isFull;
