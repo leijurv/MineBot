@@ -53,6 +53,7 @@ public class PathFinder {
         openSet.insert(startNode);
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + 10000;
+        long lastPrintout = 0;
         int numNodes = 0;
         while (openSet.first != null) {
             Node me = openSet.removeLowest();
@@ -60,8 +61,9 @@ public class PathFinder {
             me.nextOpen = null;
             BlockPos myPos = me.pos;
             numNodes++;
-            if (numNodes % 1000 == 0) {
+            if (System.currentTimeMillis() > lastPrintout + 1000) {
                 System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
+                lastPrintout = System.currentTimeMillis();
             }
             if (goal.isInGoal(myPos)) {
                 return new Path(startNode, me, goal, numNodes);
@@ -126,7 +128,9 @@ public class PathFinder {
     private final double MIN_DIST_PATH = 5;
     private Node getNodeAtPosition(BlockPos pos) {
         if (map.get(pos) == null) {
-            map.put(pos, new Node(pos, goal));
+            Node node = new Node(pos, goal);
+            map.put(pos, node);
+            return node;
         }
         return map.get(pos);
     }

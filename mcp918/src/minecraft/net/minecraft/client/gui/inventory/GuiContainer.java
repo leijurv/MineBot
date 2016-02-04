@@ -527,8 +527,20 @@ public abstract class GuiContainer extends GuiScreen {
         }
         this.mc.playerController.windowClick(this.inventorySlots.windowId, slotId, clickedButton, clickType, this.mc.thePlayer);
     }
-    public void sketchyMouseClick(int slotId, int clickedButton, int clickType) {
+    protected void sketchyMouseClick(int slotId, int clickedButton, int clickType) {
         this.mc.playerController.windowClick(this.inventorySlots.windowId, slotId, clickedButton, clickType, this.mc.thePlayer);
+    }
+    public void leftClick(int slotId) {
+        sketchyMouseClick(slotId, 0, 0);
+    }
+    public void rightClick(int slotId) {
+        sketchyMouseClick(slotId, 1, 0);
+    }
+    public void leftClickOutOfGui() {
+        sketchyMouseClick(-999, 0, 0);
+    }
+    public void rightClickOutOfGui() {
+        sketchyMouseClick(-999, 1, 0);
     }
     /**
      * Fired when a key is typed (except F11 which toggles full screen). This is

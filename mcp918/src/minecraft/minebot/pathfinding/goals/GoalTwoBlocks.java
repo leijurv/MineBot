@@ -5,7 +5,6 @@
  */
 package minebot.pathfinding.goals;
 
-import minebot.pathfinding.actions.Action;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -26,8 +25,6 @@ public class GoalTwoBlocks implements Goal {
     public boolean isInGoal(BlockPos pos) {
         return pos.getX() == this.x && (pos.getY() == this.y || pos.getY() == this.y - 1) && pos.getZ() == this.z;
     }
-    static final double MIN = 50;
-    static final double MAX = 100;
     @Override
     public double heuristic(BlockPos pos) {
         double xDiff = pos.getX() - this.x;
@@ -36,24 +33,10 @@ public class GoalTwoBlocks implements Goal {
             yDiff++;
         }
         double zDiff = pos.getZ() - this.z;
-        double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
-        double heuristic = 0;
-        if (pythaDist < MAX) {//if we are more than MAX away, ignore the Y coordinate. It really doesn't matter how far away your Y coordinate is if you X coordinate is 1000 blocks away.
-            double multiplier = pythaDist < MIN ? 1 : 1 - (pythaDist - MIN) / (MAX - MIN);
-            if (yDiff < 0) {//pos.getY()-this.y<0 therefore pos.getY()<this.y, so target is above current
-                heuristic -= yDiff * (Action.PLACE_ONE_BLOCK_COST + Action.JUMP_ONE_BLOCK_COST + Action.WALK_ONE_BLOCK_COST);
-            } else {
-                heuristic += yDiff * (Action.PLACE_ONE_BLOCK_COST + Action.FALL_ONE_BLOCK_COST);
-            }
-            heuristic *= multiplier;
-        }
-        heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
-        heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
-        heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
-        return heuristic;
+        return GoalBlock.calculate(xDiff, yDiff, zDiff);
     }
     @Override
     public String toString() {
-        return "Goal{x=" + x + ",y=" + y + ",z=" + z + "}";
+        return "GoalTwoBlocks{x=" + x + ",y=" + y + ",z=" + z + "}";
     }
 }
