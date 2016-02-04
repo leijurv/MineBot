@@ -5,6 +5,9 @@
  */
 package minebot.pathfinding;
 
+import minebot.pathfinding.goals.Goal;
+import minebot.pathfinding.actions.ActionBridge;
+import minebot.pathfinding.actions.Action;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

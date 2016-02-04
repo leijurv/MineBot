@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.pathfinding;
+package minebot.pathfinding.actions;
 
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;

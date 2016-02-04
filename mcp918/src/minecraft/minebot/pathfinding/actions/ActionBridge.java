@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.pathfinding;
+package minebot.pathfinding.actions;
 
 import minebot.util.ToolSet;
 import java.util.Objects;
@@ -63,7 +63,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
         }
     }
     boolean wasTheBridgeBlockAlwaysThere = true;//did we have to place a bridge block or was it always there
-    Boolean oneInTen = null;//a one in ten chance
+    public Boolean oneInTen = null;//a one in ten chance
     public boolean amIGood() {
         return canWalkThrough(positionsToBreak[0]) && canWalkThrough(positionsToBreak[1]) && canWalkOn(positionsToPlace[0]);
     }
