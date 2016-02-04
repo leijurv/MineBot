@@ -51,9 +51,7 @@ public class GoalBlock implements Goal {
         } else {
             heuristic += baseline;
         }
-        heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
-        heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
-        heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
+        heuristic += GoalXZ.calculate(xDiff, zDiff, pythaDist);
         return heuristic;
     }
     @Override

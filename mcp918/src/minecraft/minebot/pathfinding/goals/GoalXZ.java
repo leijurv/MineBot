@@ -27,7 +27,13 @@ public class GoalXZ implements Goal {
     public double heuristic(BlockPos pos) {//mostly copied from GoalBlock
         double xDiff = pos.getX() - this.x;
         double zDiff = pos.getZ() - this.z;
+        return calculate(xDiff, zDiff);
+    }
+    public static double calculate(double xDiff, double zDiff) {
         double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
+        return calculate(xDiff, zDiff, pythaDist);
+    }
+    public static double calculate(double xDiff, double zDiff, double pythaDist) {
         double heuristic = 0;
         heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;//overestimate
         heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
