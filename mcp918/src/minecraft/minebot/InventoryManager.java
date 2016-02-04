@@ -6,6 +6,7 @@
 package minebot;
 
 import java.util.HashMap;
+import minebot.mining.MickeyMine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -18,7 +19,7 @@ import net.minecraft.item.ItemStack;
  * @author leijurv
  */
 public class InventoryManager {
-    static HashMap<Item, Integer> maximumAmounts = null;
+    static HashMap<String, Integer> maximumAmounts = null;
     public static void initMax() {
         maximumAmounts = new HashMap();
         add("cobblestone", 128);
@@ -33,7 +34,7 @@ public class InventoryManager {
             GuiScreen.sendChatMessage(itemName + " doesn't exist", true);
             throw new NullPointerException(itemName + " doesn't exist");
         }
-        maximumAmounts.put(item, amount);
+        maximumAmounts.put(itemName, amount);
     }
     public static void onTick() {
         if (maximumAmounts == null) {
@@ -41,11 +42,13 @@ public class InventoryManager {
         }
         HashMap<Item, Integer> amounts = countItems();
         boolean openedInvYet = false;
-        for (Item item : maximumAmounts.keySet()) {
+        for (String itemName : maximumAmounts.keySet()) {
+            Item item = Item.getByNameOrId("minecraft:" + itemName);
             if (amounts.get(item) == null) {
                 continue;
             }
             int toThrowAway = amounts.get(item) - maximumAmounts.get(item);
+            MickeyMine.notifyFullness(itemName, toThrowAway >= 0);
             if (toThrowAway <= 0) {
                 continue;
             }

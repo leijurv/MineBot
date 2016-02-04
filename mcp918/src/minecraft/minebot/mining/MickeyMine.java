@@ -47,6 +47,21 @@ public class MickeyMine {
         branchPosition = null;
         mightNeedToGoBackToPath = false;
     }
+    public static void notifyFullness(String item, boolean isFull) {
+        boolean up = false;
+        for (int i = 0; i < ores.length; i++) {
+            if (item.contains(ores[i]) || ores[i].contains(item)) {
+                if (enabled[i] == isFull) {
+                    GuiScreen.sendChatMessage((isFull ? "is full" : "not full") + " of " + item + " so therefore " + ores[i], true);
+                    enabled[i] = !isFull;
+                    up = true;
+                }
+            }
+        }
+        if (up) {
+            calculateGoal();
+        }
+    }
     public static void toggleOre(String ore) {
         String lower = ore.toLowerCase();
         boolean m = false;
