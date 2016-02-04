@@ -1247,14 +1247,15 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         break;
                     case BLOCK:
                         BlockPos blockpos = this.objectMouseOver.getBlockPos();
-                       
                         if (this.theWorld.getBlockState(blockpos).getBlock().getMaterial() != Material.air) {
                             int i = itemstack != null ? itemstack.stackSize : 0;
                             if (this.playerController.onPlayerRightClick(this.thePlayer, this.theWorld, itemstack, blockpos, this.objectMouseOver.sideHit, this.objectMouseOver.hitVec)) {
                                 flag = false;
                                 this.thePlayer.swingItem();
                                 System.out.println("Player right clicked on block @ " + blockpos.offset(this.objectMouseOver.sideHit) + "");
-                                MineBot.onPlacedBlock(itemstack, blockpos.offset(this.objectMouseOver.sideHit));
+                                if (itemstack != null) {
+                                    MineBot.onPlacedBlock(itemstack, blockpos.offset(this.objectMouseOver.sideHit));
+                                }
                             }
                             if (itemstack == null) {
                                 return;
