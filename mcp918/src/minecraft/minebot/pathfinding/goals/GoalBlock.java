@@ -33,6 +33,9 @@ public class GoalBlock implements Goal {
         double xDiff = pos.getX() - this.x;
         double yDiff = pos.getY() - this.y;
         double zDiff = pos.getZ() - this.z;
+        return calculate(xDiff, yDiff, zDiff);
+    }
+    public static double calculate(double xDiff, double yDiff, double zDiff) {
         double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
         double heuristic = 0;
         double baseline = (Action.PLACE_ONE_BLOCK_COST + Action.FALL_ONE_BLOCK_COST) * 32;
