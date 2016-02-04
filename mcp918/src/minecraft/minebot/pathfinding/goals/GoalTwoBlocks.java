@@ -32,6 +32,9 @@ public class GoalTwoBlocks implements Goal {
     public double heuristic(BlockPos pos) {
         double xDiff = pos.getX() - this.x;
         double yDiff = pos.getY() - this.y;
+        if (yDiff < 0) {
+            yDiff++;
+        }
         double zDiff = pos.getZ() - this.z;
         double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
         double heuristic = 0;
