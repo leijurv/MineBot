@@ -8,3 +8,5 @@
 /mcp918/usercache.json
 /mcp918/nbproject/private/private.properties
 /mcp918/bin/
+mcp918/temp/*
+*.pyc
