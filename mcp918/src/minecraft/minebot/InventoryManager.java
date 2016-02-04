@@ -47,7 +47,7 @@ public class InventoryManager {
             if (amounts.get(item) == null) {
                 continue;
             }
-            int toThrowAway = amounts.get(item) - maximumAmounts.get(item);
+            int toThrowAway = amounts.get(item) - maximumAmounts.get(itemName);
             MickeyMine.notifyFullness(itemName, toThrowAway >= 0);
             if (toThrowAway <= 0) {
                 continue;
