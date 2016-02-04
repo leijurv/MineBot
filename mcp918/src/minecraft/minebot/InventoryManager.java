@@ -33,12 +33,11 @@ public class InventoryManager {
         HashMap<Item, Integer> amounts = countItems();
         boolean openedInvYet = false;
         for (Item item : maximumAmounts.keySet()) {
-            int max = maximumAmounts.get(item);
             if (amounts.get(item) == null) {
                 continue;
             }
-            int actualAmount = amounts.get(item);
-            if (actualAmount <= max) {
+            int toThrowAway = amounts.get(item) - maximumAmounts.get(item);
+            if (toThrowAway <= 0) {
                 continue;
             }
             if (!openedInvYet) {
@@ -56,10 +55,17 @@ public class InventoryManager {
                     continue;
                 }
                 if (item.equals(is.getItem())) {
-                    actualAmount -= is.stackSize;
                     c.sketchyMouseClick(i, 0, 0);
-                    c.sketchyMouseClick(-999, 0, 0);
-                    if (actualAmount <= max) {
+                    if (is.stackSize <= toThrowAway) {
+                        toThrowAway -= is.stackSize;
+                        c.sketchyMouseClick(-999, 0, 0);
+                    } else {
+                        for (int j = 0; j < toThrowAway; j++) {
+                            c.sketchyMouseClick(-999, 1, 0);
+                        }
+                        toThrowAway = 0;
+                    }
+                    if (toThrowAway <= 0) {
                         break;
                     }
                 }
