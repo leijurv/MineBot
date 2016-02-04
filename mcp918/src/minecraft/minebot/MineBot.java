@@ -30,7 +30,6 @@ import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
@@ -147,7 +146,7 @@ public class MineBot {
             Minecraft.theMinecraft.displayGuiScreen(null);
         }
         tickNumber++;
-        if (currentSmeltingTask != null && Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
+        if (currentSmeltingTask != null) {
             currentSmeltingTask.heyPleaseActuallyPutItInTheFurnaceNowOkay();
         }
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiChest) {
@@ -626,9 +625,9 @@ public class MineBot {
         }
         if (text.startsWith("clearbh")) {
             String substr = text.substring(7).trim();
-            if(substr == "crafting_table") {
+            if (substr == "crafting_table") {
                 setCraftingHome(null);
-            } else if(substr == "furnace") {
+            } else if (substr == "furnace") {
                 setFurnaceHome(null);
             }
         }
@@ -1311,30 +1310,25 @@ public class MineBot {
         }
         return null;
     }
-    
     public static void onPlacedBlock(ItemStack itemStack, BlockPos blockPos) {
         Item item = itemStack.getItem();
-        if(craftingTable == null || furnace == null) {
-            if(item.equals(Item.getByNameOrId("minecraft:crafting_table"))) {
+        if (craftingTable == null || furnace == null) {
+            if (item.equals(Item.getByNameOrId("minecraft:crafting_table"))) {
                 setCraftingHome(blockPos);
-            } else if(item.equals(Item.getByNameOrId("minecraft:furnace"))) {
+            } else if (item.equals(Item.getByNameOrId("minecraft:furnace"))) {
                 setFurnaceHome(blockPos);
             }
         }
     }
-        
     public static void setCraftingHome(BlockPos craftingHome) {
         craftingTable = craftingHome;
     }
-    
     public static BlockPos getCraftingHome() {
         return craftingTable;
     }
-    
     public static void setFurnaceHome(BlockPos furnaceHome) {
         furnace = furnaceHome;
     }
-    
     public static BlockPos getFurnaceHome() {
         return furnace;
     }
