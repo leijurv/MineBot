@@ -28,6 +28,7 @@ import minebot.util.CraftingTask;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -435,7 +436,13 @@ public class MineBot {
     }
     public static void openInventory() {
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
-        Minecraft.theMinecraft.displayGuiScreen(new GuiInventory(Minecraft.theMinecraft.thePlayer));
+        GuiScreen screen = new GuiInventory(Minecraft.theMinecraft.thePlayer);
+        ScaledResolution scaledresolution = new ScaledResolution(Minecraft.theMinecraft);
+        int i = scaledresolution.getScaledWidth();
+        int j = scaledresolution.getScaledHeight();
+        screen.setWorldAndResolution(Minecraft.theMinecraft, i, j);
+        Minecraft.theMinecraft.skipRenderWorld = false;
+        Minecraft.theMinecraft.currentScreen = screen;
     }
     static float previousYaw = 0;
     static float previousPitch = 0;
