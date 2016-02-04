@@ -63,6 +63,7 @@ public class InventoryManager {
                         for (int j = 0; j < toThrowAway; j++) {
                             c.sketchyMouseClick(-999, 1, 0);
                         }
+                        c.sketchyMouseClick(i, 0, 0);
                         toThrowAway = 0;
                     }
                     if (toThrowAway <= 0) {
