@@ -36,7 +36,7 @@ public class MickeyMine {
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
     static ArrayList<Tuple<Integer, Integer>> chunkHasDiamonds = new ArrayList<Tuple<Integer, Integer>>();
     static BlockPos branchPosition = null;
-    static final String[] ores = {"diamond_ore", "iron_ore", "coal_ore", "gold_ore", "redstone_ore", "emerald_ore", "lit_redstone_ore"};
+    static final String[] ores = {"diamond", "iron", "coal", "gold", "redstone", "emerald", "lit_redstone"};
     static final boolean[] enabled = {true, true, false, true, true, true, true};
     static boolean mightNeedToGoBackToPath = false;
     public static void clear() {
@@ -70,11 +70,11 @@ public class MickeyMine {
             if (!enabled[i]) {
                 continue;
             }
-            String oreName = ores[i];
-            Block block = Block.getBlockFromName("minecraft:" + oreName);
+            String oreName = "minecraft:" + ores[i] + "_ore";
+            Block block = Block.getBlockFromName(oreName);
             if (block == null) {
-                GuiScreen.sendChatMessage("minecraft:" + oreName + " doesn't exist bb", true);
-                throw new NullPointerException("minecraft:" + oreName + " doesn't exist bb");
+                GuiScreen.sendChatMessage(oreName + " doesn't exist bb", true);
+                throw new NullPointerException(oreName + " doesn't exist bb");
             }
             goalBlocks.add(block);
         }
