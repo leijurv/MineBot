@@ -7,6 +7,7 @@ package minebot;
 
 import java.util.HashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -20,11 +21,19 @@ public class InventoryManager {
     static HashMap<Item, Integer> maximumAmounts = null;
     public static void initMax() {
         maximumAmounts = new HashMap();
-        maximumAmounts.put(Item.getByNameOrId("minecraft:cobblestone"), 128);
-        maximumAmounts.put(Item.getByNameOrId("minecraft:coal"), 128);
-        maximumAmounts.put(Item.getByNameOrId("minecraft:redstone_dust"), 64);
-        maximumAmounts.put(Item.getByNameOrId("minecraft:stone"), 64);
-        maximumAmounts.put(Item.getByNameOrId("minecraft:dirt"), 128);
+        add("cobblestone", 128);
+        add("coal", 128);
+        add("redstone_dust", 64);
+        add("stone", 64);
+        add("dirt", 128);
+    }
+    public static void add(String itemName, int amount) {
+        Item item = Item.getByNameOrId("minecraft:" + itemName);
+        if (item == null) {
+            GuiScreen.sendChatMessage(itemName + " doesn't exist", true);
+            throw new NullPointerException(itemName + " doesn't exist");
+        }
+        maximumAmounts.put(item, amount);
     }
     public static void onTick() {
         if (maximumAmounts == null) {
