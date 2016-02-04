@@ -1258,7 +1258,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                                 }
                             }
                             if (itemstack == null) {
-                                return;
+                                break;
                             }
                             if (itemstack.stackSize == 0) {
                                 this.thePlayer.inventory.mainInventory[this.thePlayer.inventory.currentItem] = null;
