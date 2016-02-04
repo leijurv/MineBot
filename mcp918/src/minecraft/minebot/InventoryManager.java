@@ -23,9 +23,7 @@ public class InventoryManager {
         maximumAmounts.put(Item.getByNameOrId("minecraft:cobblestone"), 128);
         maximumAmounts.put(Item.getByNameOrId("minecraft:coal"), 128);
         maximumAmounts.put(Item.getByNameOrId("minecraft:redstone_dust"), 64);
-        /*maximumAmounts.put(Item.getByNameOrId("minecraft:andesite"), 0);
-         maximumAmounts.put(Item.getByNameOrId("minecraft:diorite"), 0);
-         maximumAmounts.put(Item.getByNameOrId("minecraft:granite"), 0);*/
+        maximumAmounts.put(Item.getByNameOrId("minecraft:stone"), 64);
     }
     public static void onTick() {
         if (maximumAmounts == null) {
