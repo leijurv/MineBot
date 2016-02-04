@@ -26,13 +26,15 @@ public class CraftingTask {
     
     static ArrayList<CraftingTask> overallCraftingTasks = new ArrayList<CraftingTask>();
     ArrayList<CraftingTask> subCraftingTasks = new ArrayList<CraftingTask>();
-    private ItemStack currentlyCrafting = null;
+    private Item currentlyCrafting = null;
     private int stackSize;
     private int alreadyHas;
     
     private CraftingTask(ItemStack craftStack) {
-        this.currentlyCrafting = craftStack;
-        this.stackSize = craftStack.stackSize;
+        this.currentlyCrafting = craftStack.getItem();
+        this.stackSize = 0;
+        buildTasks();
+        increaseNeededAmount(craftStack.stackSize);
     }
     
     /**
@@ -60,8 +62,25 @@ public class CraftingTask {
         return recipe.getRecipeSize() > 4;
     }
     
-    public void execute() {
-        IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting.getItem());
+    public  void onTick() {
+        if(isDone()){
+            return;
+        }
+        //calculate how many we could craft given current items
+        //if we could craft given what we have in our inv right now
+            //if this recipe could fit in 2x2 grid, craft immediately (if in guicrafting, use crafting table, otherwise use inv grid)
+            //if this recipe needs 3x3 and we are in a GuiCrafting right now, just do it™
+            //if this recipe needs 3x3 and we arent in a gui crafting and there is a crafting table nearby or in our inventory, place/open it
+        //if we actualy ended up crafting some, go through our sub crafting tasks and decrease needed amounts accordingly
+    }
+    public static void tickAll(){
+        for(CraftingTask craftingTask : overallCraftingTasks){
+            craftingTask.onTick();
+        }
+    }
+    
+    public void buildTasks() {
+        IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         if(!(currentRecipe == null)) {
             if(currentRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shapedRecipe = (ShapedRecipes) currentRecipe;
@@ -70,7 +89,7 @@ public class CraftingTask {
                     if(!(inputRecipe == null)) {
                         CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
                         subCraftingTasks.add(newTask);
-                        newTask.execute();
+                        //newTask.execute();
                     }
                 }
             } else if(currentRecipe instanceof ShapelessRecipes) {
@@ -80,21 +99,21 @@ public class CraftingTask {
                     if(!(inputRecipe == null)) {
                         CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
                         subCraftingTasks.add(newTask);
-                        newTask.execute();
+                        //newTask.execute();
                     }
                 }
             } else {
                 throw new IllegalStateException("Current recipe isn't shapeless or shaped");
             }
         } else {
-             
+             throw new IllegalArgumentException("no recipe for this");
         }
     }
     
     public static CraftingTask findOrCreateCraftingTask(ItemStack itemStack) {
         for(CraftingTask selectedTask : overallCraftingTasks) {
             if(selectedTask.currentlyCrafting().equals(itemStack))
-                selectedTask.addNeededAmount(itemStack.stackSize);
+                selectedTask.increaseNeededAmount(itemStack.stackSize);
                 return selectedTask;
         }
         CraftingTask newTask = new CraftingTask(itemStack);
@@ -103,11 +122,21 @@ public class CraftingTask {
     }
     
     public ItemStack currentlyCrafting() {
-        return currentlyCrafting;
+        return new ItemStack(currentlyCrafting, stackSize);
     }
     
-    public void addNeededAmount(int amount) {
+    public void increaseNeededAmount(int amount) {
         stackSize += amount;
+        for(CraftingTask craftingTask : subCraftingTasks)  {
+            craftingTask.increaseNeededAmount(amount);
+        }
+    }
+    
+    public void decreaseNeededAmount(int amount) {
+        stackSize -= amount;
+        for(CraftingTask craftingTask : subCraftingTasks)  {
+            craftingTask.decreaseNeededAmount(amount);
+        }
     }
     
     public static HashMap<Item,ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) throws ClassNotFoundException {
@@ -141,10 +170,10 @@ public class CraftingTask {
         return amountHasAndWhere;
     }
     
-    public void calculateAlreadyHasAmmount() {
+    public void calculateAlreadyHasAmount() {
         ItemStack targetItem = null;
         for(int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++){
-            if(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(currentlyCrafting.getItem())) {
+            if(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(currentlyCrafting)) {
                 targetItem = Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i);
             }
         }
@@ -160,8 +189,8 @@ public class CraftingTask {
     }
     
     public boolean isDone() {
-        calculateAlreadyHasAmmount();
-        return 0 <= alreadyHas;
+        calculateAlreadyHasAmount();
+        return stackSize <= alreadyHas;
     }
     
 }
