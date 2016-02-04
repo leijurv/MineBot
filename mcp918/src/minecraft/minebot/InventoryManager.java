@@ -67,15 +67,15 @@ public class InventoryManager {
                     continue;
                 }
                 if (item.equals(is.getItem())) {
-                    c.sketchyMouseClick(i, 0, 0);
+                    c.leftClick(i);
                     if (is.stackSize <= toThrowAway) {
                         toThrowAway -= is.stackSize;
-                        c.sketchyMouseClick(-999, 0, 0);
+                        c.leftClickOutOfGui();
                     } else {
                         for (int j = 0; j < toThrowAway; j++) {
-                            c.sketchyMouseClick(-999, 1, 0);
+                            c.rightClickOutOfGui();
                         }
-                        c.sketchyMouseClick(i, 0, 0);
+                        c.leftClick(i);
                         toThrowAway = 0;
                     }
                     if (toThrowAway <= 0) {
