@@ -34,7 +34,6 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
@@ -191,38 +190,8 @@ public class MineBot {
                 }
             }
         }
-        if (clearCobble && Minecraft.theMinecraft.currentScreen == null) {
-            int nc = 0;
-            Item cobble = Item.getByNameOrId("minecraft:cobblestone");
-            for (ItemStack is : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
-                if (is != null && cobble.equals(is.getItem())) {
-                    nc += is.stackSize;
-                }
-            }
-            System.out.println("Amount of cobble: " + nc);
-            if (nc > 128) {
-                openInventory();
-                GuiContainer c = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-                for (int i = 0; i < c.inventorySlots.inventorySlots.size(); i++) {
-                    Slot slot = c.inventorySlots.inventorySlots.get(i);
-                    if (slot == null) {
-                        continue;
-                    }
-                    ItemStack is = slot.getStack();
-                    if (is == null) {
-                        continue;
-                    }
-                    if (cobble.equals(is.getItem())) {
-                        nc -= is.stackSize;
-                        c.sketchyMouseClick(i, 0, 0);
-                        c.sketchyMouseClick(-999, 0, 0);
-                        if (nc <= 128) {
-                            break;
-                        }
-                    }
-                }
-                Minecraft.theMinecraft.thePlayer.closeScreen();
-            }
+        if (Minecraft.theMinecraft.currentScreen == null) {
+            InventoryManager.onTick();
         }
         boolean tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
@@ -624,7 +593,6 @@ public class MineBot {
     static boolean playerHunt = false;
     static boolean mreowMine = false;
     public static boolean fullBright = true;
-    static boolean clearCobble = false;
     /**
      * Called by GuiScreen.java
      *
@@ -638,10 +606,6 @@ public class MineBot {
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         System.out.println("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
-        if (text.equals("clearcobble")) {
-            clearCobble = !clearCobble;
-            return "Clear cobble: " + clearCobble;
-        }
         if (text.startsWith("fullbright")) {
             fullBright = !fullBright;
             return "Full bright: " + fullBright;
