@@ -109,7 +109,7 @@ public class MineBot {
         if (sketchyStealer) {
             SketchyStealer.onTick();
         }
-        if (Minecraft.theMinecraft.currentScreen == null) {
+        if (Minecraft.theMinecraft.currentScreen == null && tickNumber % 20 == 0) {
             InventoryManager.onTick();
         }
         boolean tickPath = Combat.onTick();
