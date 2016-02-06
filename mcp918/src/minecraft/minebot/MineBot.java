@@ -105,6 +105,7 @@ public class MineBot {
         }
         tickNumber++;
         SmeltingTask.onTick();
+        CraftingTask.tickAll();
         if (sketchyStealer) {
             SketchyStealer.onTick();
         }
@@ -350,7 +351,7 @@ public class MineBot {
                 String item = spec.split(" ")[0];
                 String amt = spec.split(" ")[1];
                 ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
-                CraftingTask.findOrCreateCraftingTask(stack).craftOneInInventory();
+                CraftingTask.findOrCreateCraftingTask(stack);
             }
             return "k";
         }

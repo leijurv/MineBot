@@ -73,6 +73,7 @@ public class CraftingTask {
         if (isDone()) {
             return;
         }
+        craftOneInInventory();
         //calculate how many we could craft given current items
         //if we could craft given what we have in our inv right now
         //if this recipe could fit in 2x2 grid, craft immediately (if in guicrafting, use crafting table, otherwise use inv grid)
@@ -209,6 +210,9 @@ public class CraftingTask {
     public void calculateAlreadyHasAmount() {
         ItemStack targetItem = null;
         for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {
+            if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i) == null) {
+                continue;
+            }
             if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(currentlyCrafting)) {
                 targetItem = Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i);
             }
