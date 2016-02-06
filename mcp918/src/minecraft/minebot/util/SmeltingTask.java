@@ -6,6 +6,7 @@
 package minebot.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import minebot.MineBot;
@@ -24,7 +25,10 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public class SmeltingTask {
-    private final Map<ItemStack, ItemStack> recipes = getRecipes();
+    static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
+    static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
+    public static void onTick() {
+    }
     private final ItemStack toPutInTheFurnace;
     private final ItemStack desired;
     private BlockPos furnace = null;
@@ -41,8 +45,14 @@ public class SmeltingTask {
         burnTicks = toPutInTheFurnace.stackSize * 200;
         this.desired = desired;
     }
+    public void begin() {
+        if (!inProgress.contains(this)) {
+            inProgress.add(this);
+            //todo: merge different smelting tasks for the same item
+        }
+    }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
-    public void heyPleaseActuallyPutItInTheFurnaceNowOkay() {
+    private void tick() {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
             GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException

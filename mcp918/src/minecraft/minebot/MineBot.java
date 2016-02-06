@@ -54,7 +54,6 @@ public class MineBot {
     public static boolean useCarpet = false;
     static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
-    static SmeltingTask currentSmeltingTask = null;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -137,9 +136,7 @@ public class MineBot {
             Minecraft.theMinecraft.displayGuiScreen(null);
         }
         tickNumber++;
-        if (currentSmeltingTask != null) {
-            currentSmeltingTask.heyPleaseActuallyPutItInTheFurnaceNowOkay();
-        }
+        SmeltingTask.onTick();
         if (sketchyStealer) {
             SketchyStealer.onTick();
         }
@@ -432,9 +429,9 @@ public class MineBot {
                 String item = spec.split(" ")[0];
                 String amt = spec.split(" ")[1];
                 ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
-                currentSmeltingTask = new SmeltingTask(stack);
+                new SmeltingTask(stack).begin();
             } else {
-                currentSmeltingTask = new SmeltingTask(thePlayer.getCurrentEquippedItem());
+                new SmeltingTask(thePlayer.getCurrentEquippedItem()).begin();
             }
             return "k";
         }
