@@ -99,7 +99,7 @@ public class SmeltingTask {
         } else {
             GuiScreen.sendChatMessage("I would suggest going to the furnace at " + blah, true);
         }
-        if (MineBot.couldIReach(blah)) {
+        if (MineBot.couldIReach(blah)) {//todo: if we can't reach it and it's reasonably close, path to it
             furnace = blah;
         }
     }
