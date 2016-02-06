@@ -129,11 +129,11 @@ public class SmeltingTask {
                     furnacesInUse.put(furnace, this);
                 }
             }
-            if (isItDone) {
-                contain.shiftClick(2);
-                if (isEmpty(contain, 2)) {
-                    Minecraft.theMinecraft.thePlayer.closeScreen();
-                    inProgress.remove(this);
+            if (isItDone && furnace.equals(MineBot.whatAreYouLookingAt())) {//if we are done, and this is our furnace
+                contain.shiftClick(2);//take out the output
+                if (isEmpty(contain, 2)) {//make sure
+                    Minecraft.theMinecraft.thePlayer.closeScreen();//close the screen
+                    inProgress.remove(this);//no longer an in progress smelting dask
                     GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
                 }
             }
