@@ -342,7 +342,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
             return false;
         }
     }
-    static String chat_header = "§5[§dMineBot§5]§7 ";
+    static String chat_header = "§5[§dMineBot§5|§2";
+    static String chat_header_2 = "§5]§7 ";
     public void sendChatMessage(String msg) {
         this.sendChatMessage(msg, true);
     }
@@ -351,13 +352,14 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
             try {
                 throw new RuntimeException();
             } catch (RuntimeException e) {
-                for (StackTraceElement blah : e.getStackTrace()) {
+                StackTraceElement[] trace = e.getStackTrace();
+                for (StackTraceElement blah : trace) {
                     String cl = blah.getClassName();
                     if (cl.contains("minebot.Autorun") || (cl.contains("minebot.MineBot") && blah.getMethodName().contains("main"))) {
                         continue;
                     }
                     if (cl.contains("minebot")) {
-                        Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(chat_header + msg));
+                        Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(chat_header + trace[1].getClassName() + chat_header_2 + msg));
                         return;
                     }
                 }
@@ -372,7 +374,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
             return;
         }
         if (!nm.equals(msg)) {
-            nm = chat_header + nm;
+            nm = chat_header + "chat" + chat_header_2 + nm;
             System.out.println("Sending " + nm + " instead of " + msg + " to server");
             if (!MineBot.actuallyPutMessagesInChat) {
                 Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(nm));
