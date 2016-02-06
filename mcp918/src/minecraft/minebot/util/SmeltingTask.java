@@ -66,7 +66,8 @@ public class SmeltingTask {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
         if (!Block.getBlockFromName("minecraft:furnace").equals(block) && !Block.getBlockFromName("minecraft:lit_furnace").equals(block)) {
             GuiScreen.sendChatMessage(block + " isn't a furnace", true);
-            throw new IllegalStateException(block + " isn't a furnace");
+            return;
+            //throw new IllegalStateException(block + " isn't a furnace");
         }
         knownFurnaces.add(pos);
     }
@@ -100,6 +101,7 @@ public class SmeltingTask {
             GuiScreen.sendChatMessage("I would suggest going to the furnace at " + blah, true);
         }
         if (MineBot.couldIReach(blah)) {//todo: if we can't reach it and it's reasonably close, path to it
+            GuiScreen.sendChatMessage("I'm gonna look at it and right click, that's what I'm gonna do", true);
             furnace = blah;
         }
     }
