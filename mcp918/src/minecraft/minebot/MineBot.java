@@ -6,7 +6,6 @@
 package minebot;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
@@ -27,8 +26,6 @@ import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -104,7 +101,6 @@ public class MineBot {
         float f3 = MathHelper.sin(-pitch * 0.017453292F);
         return new Vec3((double) (f1 * f2), (double) f3, (double) (f * f2));
     }
-    static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
     static BlockPos death;
     static long lastDeath = 0;
     public static void onTick1() {
@@ -144,46 +140,8 @@ public class MineBot {
         if (currentSmeltingTask != null) {
             currentSmeltingTask.heyPleaseActuallyPutItInTheFurnaceNowOkay();
         }
-        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiChest) {
-            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-            if (sketchyStealer) {
-                if (contain.yoyoyo()) {
-                    if (tickNumber % 2 == 0) {
-                        try {
-                            contain.mouseClicked(0, 0, 0);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    if (tickNumber % 2 == 1) {
-                        contain.mouseReleased(0, 0, 0);
-                    }
-                } else {
-                    Minecraft.theMinecraft.thePlayer.closeScreen();
-                    BlockPos p = whatAreYouLookingAt();
-                    GuiScreen.sendChatMessage("Finished stealing from " + p, true);
-                    alreadyStolenFrom.add(p);
-                }
-            }
-        }
-        if (sketchyStealer && Minecraft.theMinecraft.currentScreen == null) {
-            for (int x = playerFeet.getX() - 5; x < playerFeet.getX() + 5; x++) {//TODO increase the range, and make it actually pathfind to the chests
-                for (int y = playerFeet.getY() - 5; y < playerFeet.getY() + 5; y++) {
-                    for (int z = playerFeet.getZ() - 5; z < playerFeet.getZ() + 5; z++) {
-                        BlockPos pos = new BlockPos(x, y, z);
-                        if (alreadyStolenFrom.contains(pos)) {
-                            continue;
-                        }
-                        if (theWorld.getBlockState(pos).getBlock().equals(Block.getBlockFromName("minecraft:chest"))) {
-                            if (couldIReach(pos)) {
-                                if (lookAtBlock(pos, true)) {
-                                    Minecraft.theMinecraft.rightClickMouse();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        if (sketchyStealer) {
+            SketchyStealer.onTick();
         }
         if (Minecraft.theMinecraft.currentScreen == null) {
             InventoryManager.onTick();
@@ -516,7 +474,7 @@ public class MineBot {
             return "allowBreakOrPlace: " + allowBreakOrPlace;
         }
         if (text.equals("steal")) {
-            alreadyStolenFrom.clear();
+            SketchyStealer.alreadyStolenFrom.clear();
             sketchyStealer = !sketchyStealer;
             return "Sketchy stealer: " + sketchyStealer;
         }
