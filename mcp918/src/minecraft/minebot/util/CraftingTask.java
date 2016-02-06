@@ -105,7 +105,7 @@ public class CraftingTask {
         if (isDone()) {
             return;
         }
-        craftInInventory(1);
+        craftInInventory(stackSize - alreadyHas);
         //calculate how many we could craft given current items
         //if we could craft given what we have in our inv right now
         //if this recipe could fit in 2x2 grid, craft immediately (if in guicrafting, use crafting table, otherwise use inv grid)
@@ -113,8 +113,10 @@ public class CraftingTask {
         //if this recipe needs 3x3 and we arent in a gui crafting and there is a crafting table nearby or in our inventory, place/open it
         //if we actualy ended up crafting some, go through our sub crafting tasks and decrease needed amounts accordingly
     }
-    public void craftInInventory(int quantity) {
+    public void craftInInventory(int outputQuantity) {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
+        int outputVolume = currentRecipe.getRecipeOutput().stackSize;
+        int inputQuantity = (int) Math.ceil(((double) outputQuantity) / ((double) outputVolume));
         if (currentRecipe instanceof ShapedRecipes) {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
             if (shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2) {
@@ -127,7 +129,7 @@ public class CraftingTask {
                     items[i] = shaped.recipeItems[i].getItem();
                     positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight);
                 }
-                actualDoCraftOne(items, positions, quantity);
+                actualDoCraftOne(items, positions, inputQuantity);
             }
         }
         if (currentRecipe instanceof ShapelessRecipes) {
@@ -139,7 +141,7 @@ public class CraftingTask {
                     items[i] = shapeless.recipeItems.get(i).getItem();
                     positions[i] = i + 1;
                 }
-                actualDoCraftOne(items, positions, quantity);
+                actualDoCraftOne(items, positions, inputQuantity);
             }
         }
     }
