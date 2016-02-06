@@ -189,6 +189,7 @@ public class CraftingTask {
         for (int i = 0; i < items.length; i++) {
             amounts[i] = amount;
         }
+        int[] count = new int[items.length];
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -198,7 +199,36 @@ public class CraftingTask {
             if (in == null) {
                 continue;
             }
-            System.out.println(i + " " + in);
+            Item item = in.getItem();
+            int size = in.stackSize;
+            for (int j = 0; j < items.length; j++) {
+                if (items[j].equals(item)) {
+                    int amountRemain = amounts[j] - count[j];
+                    if (amountRemain >= size) {
+                        count[j] += size;
+                        size = 0;
+                    } else {
+                        count[j] += amountRemain;
+                        size -= amountRemain;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < count.length; i++) {
+            if (count[i] != amounts[i]) {
+                GuiScreen.sendChatMessage("Not enough " + items[i], true);
+                return;
+            }
+        }
+        for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
+            Slot slot = contain.inventorySlots.inventorySlots.get(i);
+            if (!slot.getHasStack()) {
+                continue;
+            }
+            ItemStack in = slot.getStack();
+            if (in == null) {
+                continue;
+            }
             Item item = in.getItem();
             int size = in.stackSize;
             for (int j = 0; j < items.length; j++) {
