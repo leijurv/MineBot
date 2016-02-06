@@ -107,6 +107,7 @@ public class SmeltingTask {
         }
     }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
+    int guiWaitTicks = 0;
     private void tick() {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
         if (furnace != null && !didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
@@ -119,7 +120,16 @@ public class SmeltingTask {
                 }
             }
         }
-        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
+        boolean guiOpen = Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace;
+        if (guiOpen) {
+            guiWaitTicks++;
+            if (guiWaitTicks < 5) {
+                guiOpen = false;
+            }
+        } else {
+            guiWaitTicks = 0;
+        }
+        if (guiOpen) {
             GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;
             if (!didIPutItInAlreadyPhrasing) {
                 if (realPutItIn_PHRASING(contain)) {
