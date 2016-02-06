@@ -9,10 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import minebot.MineBot;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
@@ -72,6 +76,22 @@ public class CraftingTask {
         if (currentRecipe instanceof ShapedRecipes) {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
             if (shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2) {
+                HashMap<Item, ArrayList<Tuple<Integer, Integer>>> current = getCurrentRecipeItems(currentRecipe);
+                if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+                    MineBot.openInventory();
+                }
+                GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+                for (int i = 0; i < contain.inventorySlots.inventorySlots.size(); i++) {
+                    Slot slot = contain.inventorySlots.inventorySlots.get(i);
+                    if (!slot.getHasStack()) {
+                        continue;
+                    }
+                    ItemStack in = slot.getStack();
+                    if (in == null) {
+                        continue;
+                    }
+                    System.out.println(i + " " + in);
+                }
             }
         }
     }
@@ -80,7 +100,7 @@ public class CraftingTask {
             craftingTask.onTick();
         }
     }
-    public void buildTasks() {
+    public final void buildTasks() {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         if (!(currentRecipe == null)) {
             if (currentRecipe instanceof ShapedRecipes) {
@@ -112,10 +132,10 @@ public class CraftingTask {
     }
     public static CraftingTask findOrCreateCraftingTask(ItemStack itemStack) {
         for (CraftingTask selectedTask : overallCraftingTasks) {
-            if (selectedTask.currentlyCrafting().equals(itemStack)) {
+            if (selectedTask.currentlyCrafting().getItem().equals(itemStack.getItem())) {
                 selectedTask.increaseNeededAmount(itemStack.stackSize);
+                return selectedTask;
             }
-            return selectedTask;
         }
         CraftingTask newTask = new CraftingTask(itemStack);
         overallCraftingTasks.add(newTask);
@@ -124,7 +144,7 @@ public class CraftingTask {
     public ItemStack currentlyCrafting() {
         return new ItemStack(currentlyCrafting, stackSize);
     }
-    public void increaseNeededAmount(int amount) {
+    public final void increaseNeededAmount(int amount) {
         stackSize += amount;
         for (CraftingTask craftingTask : subCraftingTasks) {
             craftingTask.increaseNeededAmount(amount);
@@ -136,7 +156,7 @@ public class CraftingTask {
             craftingTask.decreaseNeededAmount(amount);
         }
     }
-    public static HashMap<Item, ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) throws ClassNotFoundException {
+    public static HashMap<Item, ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) {
         HashMap<Item, ArrayList<Tuple<Integer, Integer>>> amountHasAndWhere = new HashMap();
         ArrayList<ItemStack> needsItemStackstmp = null;
         if (recipe instanceof ShapedRecipes) {
@@ -150,9 +170,9 @@ public class CraftingTask {
         }
         ArrayList<Item> needsItemStacks = new ArrayList();
         for (ItemStack stack : needsItemStackstmp) {
-            Item itme = stack.getItem();
-            if (!needsItemStacks.contains(itme)) {
-                needsItemStacks.add(itme);
+            Item item = stack.getItem();
+            if (!needsItemStacks.contains(item)) {
+                needsItemStacks.add(item);
             }
         }
         for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {

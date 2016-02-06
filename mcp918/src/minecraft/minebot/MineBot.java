@@ -340,6 +340,16 @@ public class MineBot {
             goal = new GoalBlock(death);
             return "Set goal to " + goal;
         }
+        if (text.startsWith("craft")) {
+            String spec = text.substring(5).trim();
+            if (spec.length() > 0) {
+                String item = spec.split(" ")[0];
+                String amt = spec.split(" ")[1];
+                ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
+                CraftingTask.findOrCreateCraftingTask(stack).craftOneInInventory();
+            }
+            return "k";
+        }
         if (text.startsWith("smelt")) {
             String spec = text.substring(5).trim();
             if (spec.length() > 0) {
