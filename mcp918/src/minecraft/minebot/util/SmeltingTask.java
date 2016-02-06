@@ -130,6 +130,7 @@ public class SmeltingTask {
                 }
             }
             if (isItDone && furnace.equals(MineBot.whatAreYouLookingAt())) {//if we are done, and this is our furnace
+                GuiScreen.sendChatMessage("taking it out", true);
                 contain.shiftClick(2);//take out the output
                 if (isEmpty(contain, 2)) {//make sure
                     Minecraft.theMinecraft.thePlayer.closeScreen();//close the screen
