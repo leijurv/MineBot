@@ -186,6 +186,9 @@ public class CraftingTask {
         }
         for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {
             for (int j = 0; j < needsItemStacks.size(); j++) {
+                if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i) == null) {
+                    continue;//prevents nullpointerexception if the stack is null
+                }
                 if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(needsItemStacks.get(j))) {
                     if (!amountHasAndWhere.containsKey(needsItemStacks.get(j))) {
                         ArrayList<Tuple<Integer, Integer>> positionAmountArr = new ArrayList<Tuple<Integer, Integer>>();
