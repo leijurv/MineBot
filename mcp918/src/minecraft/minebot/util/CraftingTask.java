@@ -232,6 +232,9 @@ public class CraftingTask {
             if (currentRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shapedRecipe = (ShapedRecipes) currentRecipe;
                 for (ItemStack input : shapedRecipe.recipeItems) {
+                    if (input == null) {
+                        continue;
+                    }
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
                         System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
