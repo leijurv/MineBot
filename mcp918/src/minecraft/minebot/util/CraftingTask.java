@@ -86,6 +86,7 @@ public class CraftingTask {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
             if (shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2) {
                 if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+                    System.out.println("Opening");
                     MineBot.slowOpenInventory();
                 }
                 ItemStack[] items = shaped.recipeItems;
