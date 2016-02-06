@@ -67,6 +67,7 @@ public class MineBot {
             long end = System.currentTimeMillis();
             long time = end - start;
             if (time > 3) {
+                GuiScreen.sendChatMessage("Tick took " + time + "ms", true);
                 System.out.println("Tick took " + time + "ms");
             }
         } catch (Exception ex) {
