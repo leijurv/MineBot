@@ -16,6 +16,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -105,8 +106,15 @@ public class CraftingTask {
             return;
         }
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting))) {
-            craftInInventory(stackSize - alreadyHas);
+            actualDoCraft(stackSize - alreadyHas, true);
+            return;
         }
+        //now we know we need a crafting table
+        if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting) {
+            actualDoCraft(stackSize - alreadyHas, false);
+        }
+        //
+        //
         //calculate how many we could craft given current items
         //if we could craft given what we have in our inv right now
         //if this recipe could fit in 2x2 grid, craft immediately (if in guicrafting, use crafting table, otherwise use inv grid)
@@ -114,13 +122,13 @@ public class CraftingTask {
         //if this recipe needs 3x3 and we arent in a gui crafting and there is a crafting table nearby or in our inventory, place/open it
         //if we actualy ended up crafting some, go through our sub crafting tasks and decrease needed amounts accordingly
     }
-    public void craftInInventory(int outputQuantity) {
+    public void actualDoCraft(int outputQuantity, boolean inInventory) {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         int outputVolume = currentRecipe.getRecipeOutput().stackSize;
         int inputQuantity = (int) Math.ceil(((double) outputQuantity) / ((double) outputVolume));
         if (currentRecipe instanceof ShapedRecipes) {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
-            if (shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2) {
+            if (!inInventory || (inInventory && shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2)) {
                 Item[] items = new Item[shaped.recipeItems.length];
                 int[] positions = new int[items.length];
                 for (int i = 0; i < items.length; i++) {
@@ -128,31 +136,38 @@ public class CraftingTask {
                         continue;
                     }
                     items[i] = shaped.recipeItems[i].getItem();
-                    positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight, 2);
+                    positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight, inInventory ? 2 : 3);
                 }
-                actualDoCraftOne(items, positions, inputQuantity);
+                actualDoCraftOne(items, positions, inputQuantity, true);
             }
         }
         if (currentRecipe instanceof ShapelessRecipes) {
             ShapelessRecipes shapeless = (ShapelessRecipes) currentRecipe;
-            if (shapeless.getRecipeSize() < 4) {
+            if (!inInventory || (inInventory && shapeless.getRecipeSize() < 4)) {
                 Item[] items = new Item[shapeless.getRecipeSize()];
                 int[] positions = new int[items.length];
                 for (int i = 0; i < items.length; i++) {
                     items[i] = shapeless.recipeItems.get(i).getItem();
                     positions[i] = i + 1;
                 }
-                actualDoCraftOne(items, positions, inputQuantity);
+                actualDoCraftOne(items, positions, inputQuantity, true);
             }
         }
     }
-    public static void actualDoCraftOne(Item[] items, int[] positions, int amount) {
-        if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
-            System.out.println("Opening");
-            MineBot.slowOpenInventory();
+    public static void actualDoCraftOne(Item[] items, int[] positions, int amount, boolean inv) {
+        if (inv) {
+            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+                System.out.println("Opening");
+                MineBot.slowOpenInventory();
+            }
+        } else {
+            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
+                GuiScreen.sendChatMessage("Not in crafting table", true);
+                return;
+            }
         }
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < (inv ? 5 : 10); i++) {
             if (contain.inventorySlots.inventorySlots.get(i).getHasStack()) {
                 return;
             }
@@ -162,7 +177,7 @@ public class CraftingTask {
         for (int i = 0; i < items.length; i++) {
             amounts[i] = amount;
         }
-        for (int i = 9; i < contain.inventorySlots.inventorySlots.size(); i++) {
+        for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
                 continue;
