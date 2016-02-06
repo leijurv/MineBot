@@ -20,21 +20,24 @@ import net.minecraft.item.ItemStack;
  */
 public class InventoryManager {
     static HashMap<String, Integer> maximumAmounts = null;
+    static HashMap<String, Integer> minimumAmounts = null;
     public static void initMax() {
         maximumAmounts = new HashMap();
-        add("cobblestone", 128);
-        add("coal", 128);
-        add("redstone", 64);
-        add("stone", 64);
-        add("dirt", 128);
+        minimumAmounts = new HashMap();
+        add("cobblestone", 128, 64);
+        add("coal", 128, 64);
+        add("redstone", 64, 32);
+        add("stone", 64, 32);
+        add("dirt", 128, 64);
     }
-    public static void add(String itemName, int amount) {
+    public static void add(String itemName, int max, int min) {
         Item item = Item.getByNameOrId("minecraft:" + itemName);
         if (item == null) {
             GuiScreen.sendChatMessage(itemName + " doesn't exist", true);
             throw new NullPointerException(itemName + " doesn't exist");
         }
-        maximumAmounts.put(itemName, amount);
+        maximumAmounts.put(itemName, max);
+        minimumAmounts.put(itemName, min);
     }
     public static void onTick() {
         if (maximumAmounts == null) {
@@ -47,8 +50,15 @@ public class InventoryManager {
             if (amounts.get(item) == null) {
                 amounts.put(item, 0);
             }
-            int toThrowAway = amounts.get(item) - maximumAmounts.get(itemName);
-            MickeyMine.notifyFullness(itemName, toThrowAway >= 0);
+            boolean tooMuch = amounts.get(item) > maximumAmounts.get(itemName);
+            boolean tooLittle = amounts.get(item) < minimumAmounts.get(itemName);
+            int toThrowAway = tooMuch ? amounts.get(item) - minimumAmounts.get(itemName) : 0;
+            if (tooMuch) {
+                MickeyMine.notifyFullness(itemName, true);
+            }
+            if (tooLittle) {
+                MickeyMine.notifyFullness(itemName, false);
+            }
             if (toThrowAway <= 0) {
                 continue;
             }
