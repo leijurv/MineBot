@@ -6,6 +6,7 @@
 package minebot.mining;
 
 import java.util.ArrayList;
+import java.util.Random;
 import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.actions.Action;
@@ -131,6 +132,10 @@ public class MickeyMine {
     public static Boolean torch() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
+        CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:torch"), 0));
+        if (task.currentlyCrafting().stackSize < 32) {
+            task.increaseNeededAmount(32 - task.currentlyCrafting().stackSize);
+        }
         for (int i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
@@ -152,10 +157,6 @@ public class MickeyMine {
             }
         }
         if (torchPosition == 0) {
-            CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:torch"), 0));
-            if (task.currentlyCrafting().stackSize < 32) {
-                task.increaseNeededAmount(32 - task.currentlyCrafting().stackSize);
-            }
             return false;
         }
         int blankHotbarSpot = -1;
@@ -165,7 +166,7 @@ public class MickeyMine {
             }
         }
         if (blankHotbarSpot == -1) {
-            return false;
+            blankHotbarSpot = (new Random().nextInt(8) + 1);
         }
         if (Minecraft.theMinecraft.currentScreen == null) {
             MineBot.openInventory();
@@ -175,6 +176,7 @@ public class MickeyMine {
             GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             contain.leftClick(torchPosition);
             contain.leftClick(blankHotbarSpot + 36);
+            contain.leftClick(torchPosition);
             Minecraft.theMinecraft.thePlayer.closeScreen();
             return null;
         }
