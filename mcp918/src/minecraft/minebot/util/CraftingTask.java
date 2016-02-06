@@ -62,10 +62,33 @@ public class CraftingTask {
                 continue;//probably not all of these are necessary, but when I added all three it stopped a nullpointerexception somewhere in this function
             }
             if (currRecipe.getRecipeOutput().getItem().equals(item)) {
-                return currRecipe;
+                if (!avoidRecipe(currRecipe)) {
+                    return currRecipe;
+                }
             }
         }
         return null;
+    }
+    public static boolean avoidRecipe(IRecipe recipe) {
+        if (recipe instanceof ShapedRecipes) {
+            for (ItemStack stack : ((ShapedRecipes) recipe).recipeItems) {
+                if (stack.toString().toLowerCase().contains("block")) {
+                    System.out.println("Not doing " + stack);
+                    return false;
+                }
+            }
+            return true;
+        }
+        if (recipe instanceof ShapelessRecipes) {
+            for (ItemStack stack : ((ShapelessRecipes) recipe).recipeItems) {
+                if (stack.toString().toLowerCase().contains("block")) {
+                    System.out.println("Not doing " + stack);
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
     public static CraftingTask getRequirementsFromItem(Item item) {
         List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
@@ -164,7 +187,7 @@ public class CraftingTask {
         }
         for (int i = 0; i < amounts.length; i++) {
             if (amounts[i] > 0) {
-                System.out.println("Not enough " + i + " " + amounts[i]);
+                System.out.println("Not enough " + i + " " + amounts[i]);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
                 return;
             }
         }
@@ -183,6 +206,7 @@ public class CraftingTask {
                 for (ItemStack input : shapedRecipe.recipeItems) {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
+                        System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
                         CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
@@ -193,6 +217,7 @@ public class CraftingTask {
                 for (ItemStack input : shapelessRecipe.recipeItems) {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
+                        System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
                         CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
@@ -206,6 +231,7 @@ public class CraftingTask {
         }
     }
     public static CraftingTask findOrCreateCraftingTask(ItemStack itemStack) {
+        System.out.println("Getting a task for " + itemStack);
         for (CraftingTask selectedTask : overallCraftingTasks) {
             if (selectedTask.currentlyCrafting().getItem().equals(itemStack.getItem())) {
                 selectedTask.increaseNeededAmount(itemStack.stackSize);
