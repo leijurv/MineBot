@@ -298,7 +298,6 @@ public class MineBot {
     public static boolean sneak = false;
     static HashMap<String, Goal> saved = new HashMap<String, Goal>();
     private static BlockPos craftingTable = null;
-    private static BlockPos furnace = null;
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -438,7 +437,6 @@ public class MineBot {
             if (substr.equals("crafting_table")) {
                 setCraftingHome(null);
             } else if (substr.equals("furnace")) {
-                setFurnaceHome(null);
             }
         }
         if (text.startsWith("containeritem")) {
@@ -1093,11 +1091,11 @@ public class MineBot {
     }
     public static void onPlacedBlock(ItemStack itemStack, BlockPos blockPos) {
         Item item = itemStack.getItem();
-        if (craftingTable == null || furnace == null) {
+        if (craftingTable == null) {
             if (item.equals(Item.getByNameOrId("minecraft:crafting_table"))) {
                 setCraftingHome(blockPos);
             } else if (item.equals(Item.getByNameOrId("minecraft:furnace"))) {
-                setFurnaceHome(blockPos);
+                SmeltingTask.onFurnacePlace(blockPos);
             }
         }
     }
@@ -1106,11 +1104,5 @@ public class MineBot {
     }
     public static BlockPos getCraftingHome() {
         return craftingTable;
-    }
-    public static void setFurnaceHome(BlockPos furnaceHome) {
-        furnace = furnaceHome;
-    }
-    public static BlockPos getFurnaceHome() {
-        return furnace;
     }
 }

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import minebot.MineBot;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiFurnace;
@@ -27,8 +28,24 @@ import net.minecraft.util.BlockPos;
 public class SmeltingTask {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
-    static ArrayList<BlockPos> furnacesUsed = new ArrayList();
+    static ArrayList<BlockPos> knownFurnaces = new ArrayList();
     public static void onTick() {
+        for (SmeltingTask task : inProgress) {
+            task.tick();
+        }
+    }
+    public static void onFurnacePlace(BlockPos pos) {
+        if (pos == null) {
+            throw new NullPointerException("take a hike");
+        }
+        Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        if (!Block.getBlockFromName("minecraft:furnace").equals(block) && !Block.getBlockFromName("minecraft:lit_furnace").equals(block)) {
+            GuiScreen.sendChatMessage(block + " isn't a furnace", true);
+            throw new IllegalStateException(block + " isn't a furnace");
+        }
+        if (!knownFurnaces.contains(pos)) {
+            knownFurnaces.add(pos);
+        }
     }
     private final ItemStack toPutInTheFurnace;
     private final ItemStack desired;
@@ -61,7 +78,7 @@ public class SmeltingTask {
                 if (realPutItIn_PHRASING(contain)) {
                     didIPutItInAlreadyPhrasing = true;
                     furnace = MineBot.whatAreYouLookingAt();
-                    furnacesUsed.add(furnace);
+                    knownFurnaces.add(furnace);
                 }
             }
         }
@@ -73,6 +90,12 @@ public class SmeltingTask {
                 //todo: pathfind to furnace and take result out
             }
         }
+    }
+    public boolean isInFurnace() {
+        return didIPutItInAlreadyPhrasing;
+    }
+    public boolean lookingForFurnace() {
+        return furnace == null;
     }
     private boolean realPutItIn_PHRASING(GuiFurnace contain) {
         int desiredAmount = toPutInTheFurnace.stackSize;
