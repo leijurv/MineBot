@@ -38,6 +38,13 @@ public class CraftingTask {
         buildTasks();
         increaseNeededAmount(craftStack.stackSize);
     }
+    public static int map(int id, int width, int height) {//shamelessly copied from Objectives
+        int yPos = id / width;
+        int xPos = id % width;
+        int z = xPos + 2 * yPos;
+        //System.out.println("Mapping " + id + " in " + width + "," + height + " to " + xPos + "," + yPos + " with id " + z);
+        return z + 1;
+    }
     /**
      * @param item
      * @return recipe for that item, or null if item has no recipe
@@ -87,28 +94,81 @@ public class CraftingTask {
         if (currentRecipe instanceof ShapedRecipes) {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
             if (shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2) {
-                if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
-                    System.out.println("Opening");
-                    MineBot.slowOpenInventory();
-                }
-                ItemStack[] items = shaped.recipeItems;
-                GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-                for (int i = 0; i < contain.inventorySlots.inventorySlots.size(); i++) {
-                    Slot slot = contain.inventorySlots.inventorySlots.get(i);
-                    if (!slot.getHasStack()) {
-                        continue;
-                    }
-                    ItemStack in = slot.getStack();
-                    if (in == null) {
-                        continue;
-                    }
-                    System.out.println(i + " " + in);
-                }
+                Item[] items = new Item[shaped.recipeItems.length];
+                int[] positions = new int[items.length];
                 for (int i = 0; i < items.length; i++) {
-                    System.out.println("item " + i + " " + items[i]);
+                    if (shaped.recipeItems[i] == null) {
+                        continue;
+                    }
+                    items[i] = shaped.recipeItems[i].getItem();
+                    positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight);
+                }
+                actualDoCraftOne(items, positions, 1);
+            }
+        }
+        if (currentRecipe instanceof ShapelessRecipes) {
+            ShapelessRecipes shapeless = (ShapelessRecipes) currentRecipe;
+            if (shapeless.getRecipeSize() < 4) {
+                Item[] items = new Item[shapeless.getRecipeSize()];
+                int[] positions = new int[items.length];
+                for (int i = 0; i < items.length; i++) {
+                    items[i] = shapeless.recipeItems.get(i).getItem();
+                    positions[i] = i + 1;
+                }
+                actualDoCraftOne(items, positions, 1);
+            }
+        }
+    }
+    public static void actualDoCraftOne(Item[] items, int[] positions, int amount) {
+        if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+            System.out.println("Opening");
+            MineBot.slowOpenInventory();
+        }
+        int[] amounts = new int[items.length];
+        for (int i = 0; i < items.length; i++) {
+            amounts[i] = amount;
+        }
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        for (int i = 9; i < contain.inventorySlots.inventorySlots.size(); i++) {
+            Slot slot = contain.inventorySlots.inventorySlots.get(i);
+            if (!slot.getHasStack()) {
+                continue;
+            }
+            ItemStack in = slot.getStack();
+            if (in == null) {
+                continue;
+            }
+            System.out.println(i + " " + in);
+            Item item = in.getItem();
+            int size = in.stackSize;
+            for (int j = 0; j < items.length; j++) {
+                if (amounts[j] <= 0) {
+                    continue;
+                }
+                if (items[j].equals(item)) {
+                    contain.leftClick(i);
+                    if (size <= amounts[j]) {
+                        contain.leftClick(positions[j]);
+                        amounts[j] -= size;
+                        size = 0;
+                    } else {
+                        for (int k = 0; k < amounts[j]; k++) {
+                            contain.rightClick(positions[j]);
+                        }
+                        size -= amounts[j];
+                        contain.leftClick(i);
+                        amounts[j] = 0;
+                    }
                 }
             }
         }
+        for (int i = 0; i < amounts.length; i++) {
+            if (amounts[i] > 0) {
+                System.out.println("Not enough " + i + " " + amounts[i]);
+                return;
+            }
+        }
+        contain.shiftClick(0);
     }
     public static void tickAll() {
         for (CraftingTask craftingTask : overallCraftingTasks) {
