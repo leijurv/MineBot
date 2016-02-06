@@ -104,7 +104,6 @@ public class CraftingTask {
         return (recipe instanceof ShapelessRecipes && recipe.getRecipeSize() > 4) || (recipe instanceof ShapedRecipes && (((ShapedRecipes) recipe).recipeHeight > 2 || ((ShapedRecipes) recipe).recipeWidth > 2));
     }
     public void onTick() {
-        System.out.println(this + " tick " + stackSize + " " + alreadyHas + " " + currentlyCrafting);
         if (isDone()) {
             return;
         }
@@ -441,7 +440,6 @@ public class CraftingTask {
                 targetItem = Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i);
             }
         }
-        System.out.println(this + " " + currentlyCrafting + " " + targetItem);
         if (targetItem != null) {
             alreadyHas = targetItem.stackSize;
             return;
