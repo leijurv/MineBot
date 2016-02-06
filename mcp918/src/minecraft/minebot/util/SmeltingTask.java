@@ -87,10 +87,11 @@ public class SmeltingTask {
         this.desired = desired;
     }
     public void begin() {
-        if (!inProgress.contains(this)) {
-            inProgress.add(this);
-            //todo: merge different smelting tasks for the same item
+        if (inProgress.contains(this)) {
+            return;
         }
+        inProgress.add(this);
+            //todo: merge different smelting tasks for the same item
         BlockPos blah = getUnusedFurnace();
         if (blah == null) {
             GuiScreen.sendChatMessage("No closeby unused furnaces that I know of. Place one?", true);
