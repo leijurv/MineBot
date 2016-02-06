@@ -14,7 +14,10 @@ import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.pathfinding.goals.GoalYLevel;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
@@ -122,9 +125,35 @@ public class MickeyMine {
             doNormalMine();
         }
     }
+    public static boolean torch() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (item.equals(Item.getByNameOrId("minecraft:torch"))) {
+                p.inventory.currentItem = i;
+                return true;
+            }
+        }
+        return false;
+    }
     public static void doBranchMine() {
         if (branchPosition == null) {
             branchPosition = Minecraft.theMinecraft.thePlayer.getPosition0();
+        }
+        if (!branchPosition.equals(Minecraft.theMinecraft.thePlayer.getPosition0())) {
+            mightNeedToGoBackToPath = true;
+        } else {
+            if (torch()) {
+                if (LookManager.lookAtBlock(branchPosition.down(), true)) {
+                    Minecraft.theMinecraft.rightClickMouse();
+                } else {
+                    return;
+                }
+            }
         }
         int i;
         for (i = 0; i < 6 || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
