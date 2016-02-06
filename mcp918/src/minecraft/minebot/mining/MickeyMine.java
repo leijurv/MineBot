@@ -213,7 +213,8 @@ public class MickeyMine {
     public static void updateBlocksMined() {
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : needsToBeMined) {
-            if (net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock().equals(Block.getBlockById(0))) {
+            Block block = net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock();
+            if (block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch"))) {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
@@ -227,7 +228,8 @@ public class MickeyMine {
         boolean wasEmpty = priorityNeedsToBeMined.isEmpty();
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : priorityNeedsToBeMined) {
-            if (net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock().equals(Block.getBlockById(0))) {
+            Block block = net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock();
+            if (block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch"))) {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
