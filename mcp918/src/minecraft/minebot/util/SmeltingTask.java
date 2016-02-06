@@ -7,11 +7,13 @@ package minebot.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.inventory.Slot;
@@ -28,11 +30,34 @@ import net.minecraft.util.BlockPos;
 public class SmeltingTask {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
-    static ArrayList<BlockPos> knownFurnaces = new ArrayList();
+    static HashSet<BlockPos> knownFurnaces = new HashSet();
     public static void onTick() {
         for (SmeltingTask task : inProgress) {
             task.tick();
         }
+    }
+    public static BlockPos getUnusedFurnace() {
+        BlockPos best = null;
+        double bestDist = Double.MAX_VALUE;
+        for (BlockPos pos : knownFurnaces) {
+            if (furnacesInUse.get(pos) != null) {
+                continue;
+            }
+            //todo: get this block and check if its a furnace. If it's out of the loaded chunks, assume its still a furnace. or I guess it might be too far away so don't consider it. idk
+            double dist = dist(pos);
+            if (best == null || dist < bestDist) {
+                bestDist = dist;
+                best = pos;
+            }
+        }
+        return best;
+    }
+    public static double dist(BlockPos pos) {
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        double diffX = thePlayer.posX - pos.getX();
+        double diffY = thePlayer.posY - pos.getY();
+        double diffZ = thePlayer.posZ - pos.getZ();
+        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
     }
     public static void onFurnacePlace(BlockPos pos) {
         if (pos == null) {
@@ -43,9 +68,7 @@ public class SmeltingTask {
             GuiScreen.sendChatMessage(block + " isn't a furnace", true);
             throw new IllegalStateException(block + " isn't a furnace");
         }
-        if (!knownFurnaces.contains(pos)) {
-            knownFurnaces.add(pos);
-        }
+        knownFurnaces.add(pos);
     }
     private final ItemStack toPutInTheFurnace;
     private final ItemStack desired;
@@ -68,17 +91,24 @@ public class SmeltingTask {
             inProgress.add(this);
             //todo: merge different smelting tasks for the same item
         }
+        BlockPos blah = getUnusedFurnace();
+        if (blah == null) {
+            GuiScreen.sendChatMessage("No closeby unused furnaces that I know of. Place one?", true);
+        } else {
+            GuiScreen.sendChatMessage("I would suggest going to the furnace at " + blah, true);
+        }
     }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     private void tick() {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
-            GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
+            GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;
             if (!didIPutItInAlreadyPhrasing) {
                 if (realPutItIn_PHRASING(contain)) {
                     didIPutItInAlreadyPhrasing = true;
                     furnace = MineBot.whatAreYouLookingAt();
                     knownFurnaces.add(furnace);
+                    furnacesInUse.put(furnace, this);
                 }
             }
         }
@@ -87,6 +117,7 @@ public class SmeltingTask {
             if (numTicks >= burnTicks) {
                 isItDone = true;
                 GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
+                furnacesInUse.put(furnace, null);
                 //todo: pathfind to furnace and take result out
             }
         }
