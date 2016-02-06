@@ -114,7 +114,7 @@ public class SmeltingTask {
                 MineBot.lookAtBlock(furnace, true);
             }
             if (furnace.equals(MineBot.whatAreYouLookingAt())) {
-                Minecraft.theMinecraft.rightClickMouse();
+                MineBot.isRightClick = true;
             }
         }
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
