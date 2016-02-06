@@ -27,6 +27,7 @@ import net.minecraft.util.BlockPos;
 public class SmeltingTask {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
+    static ArrayList<BlockPos> furnacesUsed = new ArrayList();
     public static void onTick() {
     }
     private final ItemStack toPutInTheFurnace;
@@ -56,12 +57,11 @@ public class SmeltingTask {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
             GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;//I don't check this, because you should check this before calling it, and if you don't you deserve the ClassCastException
-            if (furnace == null) {
-                furnace = MineBot.whatAreYouLookingAt();
-            }
             if (!didIPutItInAlreadyPhrasing) {
                 if (realPutItIn_PHRASING(contain)) {
                     didIPutItInAlreadyPhrasing = true;
+                    furnace = MineBot.whatAreYouLookingAt();
+                    furnacesUsed.add(furnace);
                 }
             }
         }
@@ -75,7 +75,7 @@ public class SmeltingTask {
         }
     }
     private boolean realPutItIn_PHRASING(GuiFurnace contain) {
-        int desired = toPutInTheFurnace.stackSize;
+        int desiredAmount = toPutInTheFurnace.stackSize;
         if (currentSize(contain, 0, toPutInTheFurnace.getItem()) == -1) {
             GuiScreen.sendChatMessage("Furnace already in use", true);
             return false;
@@ -173,7 +173,7 @@ public class SmeltingTask {
                 }
             }
         }
-        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
+        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
             GuiScreen.sendChatMessage("done", true);
             return true;
         }
@@ -189,7 +189,7 @@ public class SmeltingTask {
             if (in.getItem().equals(toPutInTheFurnace.getItem())) {
                 int currentSize = currentSize(contain, 0, toPutInTheFurnace.getItem());
                 int amountHere = in.stackSize;
-                int amountNeeded = desired - currentSize;
+                int amountNeeded = desiredAmount - currentSize;
                 if (currentSize == -1) {
                     GuiScreen.sendChatMessage("Furnace already in use", true);
                     return false;
@@ -203,17 +203,17 @@ public class SmeltingTask {
                     }
                 }
                 contain.leftClick(i);
-                if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
+                if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
                     GuiScreen.sendChatMessage("done", true);
                     return true;
                 }
             }
         }
-        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desired) {
+        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
             GuiScreen.sendChatMessage("done", true);
             return true;
         }
-        GuiScreen.sendChatMessage("Still need " + (desired - currentSize(contain, 0, toPutInTheFurnace.getItem())) + " items", true);
+        GuiScreen.sendChatMessage("Still need " + (desiredAmount - currentSize(contain, 0, toPutInTheFurnace.getItem())) + " items", true);
         return false;
     }
     private int currentSize(GuiFurnace contain, int id, Item item) {
