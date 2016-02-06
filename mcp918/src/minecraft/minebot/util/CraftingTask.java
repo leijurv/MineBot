@@ -98,14 +98,16 @@ public class CraftingTask {
         return null;
     }
     public static boolean recipeNeedsCraftingTable(IRecipe recipe) {
-        return recipe.getRecipeSize() > 4;
+        return (recipe instanceof ShapelessRecipes && recipe.getRecipeSize() > 4) || (recipe instanceof ShapedRecipes && (((ShapedRecipes) recipe).recipeHeight > 2 || ((ShapedRecipes) recipe).recipeWidth > 2));
     }
     public void onTick() {
         System.out.println(this + " tick " + stackSize + " " + alreadyHas + " " + currentlyCrafting);
         if (isDone()) {
             return;
         }
-        craftInInventory(stackSize - alreadyHas);
+        if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting))) {
+            craftInInventory(stackSize - alreadyHas);
+        }
         //calculate how many we could craft given current items
         //if we could craft given what we have in our inv right now
         //if this recipe could fit in 2x2 grid, craft immediately (if in guicrafting, use crafting table, otherwise use inv grid)
