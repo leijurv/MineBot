@@ -147,7 +147,7 @@ public class MickeyMine {
         BlockPos toMine = priorityNeedsToBeMined.get(0);
         MineBot.goal = new GoalTwoBlocks(toMine);
         if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
-            MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0());
+            MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), false);
         } else {
             addNearby();
         }
@@ -171,7 +171,7 @@ public class MickeyMine {
         if (mightNeedToGoBackToPath) {
             MineBot.goal = new GoalBlock(branchPosition);
             if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
-                MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0());
+                MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), false);
                 GuiScreen.sendChatMessage("Pathing back to branch", true);
             }
             if (Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
@@ -289,7 +289,7 @@ public class MickeyMine {
         if (!isGoingToMine && !isMining) {
             if (MineBot.currentPath == null) {
                 MineBot.goal = new GoalYLevel(6);
-                MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0());
+                MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), true);
                 isGoingToMine = true;
             }
         }

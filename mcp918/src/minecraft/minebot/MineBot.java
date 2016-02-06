@@ -276,7 +276,7 @@ public class MineBot {
             goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);//TODO run away from more than one mob
             if (currentPath == null) {
                 GuiScreen.sendChatMessage("Running away", true);
-                findPathInNewThread(playerFeet);
+                findPathInNewThread(playerFeet, false);
             } else {
                 GoalRunAway g = (GoalRunAway) currentPath.goal;
                 int xDiff = (int) (target.posX - g.x);
@@ -284,7 +284,7 @@ public class MineBot {
                 int d = xDiff * xDiff + zDiff * zDiff;
                 if (d > 5 * 5 && !isThereAnythingInProgress) {
                     GuiScreen.sendChatMessage("Switching who I'm running away from", true);
-                    findPathInNewThread(playerFeet);
+                    findPathInNewThread(playerFeet, false);
                 }
             }
         }
@@ -304,21 +304,21 @@ public class MineBot {
                 double movementSince = dist(targetPos, currentPath.end);
                 if (movementSince > 4 && !isThereAnythingInProgress) {
                     GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
-                    findPathInNewThread(playerFeet);//this will overwrite currentPath
+                    findPathInNewThread(playerFeet, false);//this will overwrite currentPath
                 }
             }
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(what());
             //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
             if (dist > 4 && currentPath == null) {
-                findPathInNewThread(playerFeet);
+                findPathInNewThread(playerFeet, false);
             }
             if (dist <= 4) {
                 AxisAlignedBB lol = target.getEntityBoundingBox();
                 switchtosword();
                 boolean direction = lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
                 if (direction && !actuallyLookingAt) {
-                    findPathInNewThread(playerFeet);
+                    findPathInNewThread(playerFeet, false);
                 }
             }
             if (actuallyLookingAt) {
@@ -345,7 +345,7 @@ public class MineBot {
                     clearPath();
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
                     nextPath = null;
-                    findPathInNewThread(playerFeet);
+                    findPathInNewThread(playerFeet, true);
                     return;
                 } else {
                     clearPath();
@@ -366,7 +366,7 @@ public class MineBot {
                             if (!currentPath.start.equals(playerFeet)) {
                                 GuiScreen.sendChatMessage("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
                                 currentPath = null;
-                                findPathInNewThread(playerFeet);
+                                findPathInNewThread(playerFeet, true);
                             } else {
                                 GuiScreen.sendChatMessage("Going onto next", true);
                                 if (!currentPath.goal.isInGoal(currentPath.end)) {
@@ -376,7 +376,7 @@ public class MineBot {
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                        findPathInNewThread(playerFeet);
+                        findPathInNewThread(playerFeet, true);
                     }
                 }
             } else {
@@ -635,9 +635,9 @@ public class MineBot {
         }
         if (text.startsWith("clearbh")) {
             String substr = text.substring(7).trim();
-            if (substr == "crafting_table") {
+            if (substr.equals("crafting_table")) {
                 setCraftingHome(null);
-            } else if (substr == "furnace") {
+            } else if (substr.equals("furnace")) {
                 setFurnaceHome(null);
             }
         }
@@ -776,7 +776,7 @@ public class MineBot {
                 if (blah.contains(name) || name.contains(blah)) {
                     BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
                     goal = new GoalBlock(pos);
-                    findPathInNewThread(playerFeet);
+                    findPathInNewThread(playerFeet, true);
                     return "Pathing to " + pl.getName() + " at " + goal;
                 }
             }
@@ -798,7 +798,7 @@ public class MineBot {
                             wasTargetSetByMobHunt = false;
                             BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
                             goal = new GoalBlock(pos);
-                            findPathInNewThread(playerFeet);
+                            findPathInNewThread(playerFeet, false);
                             return "Killing " + pl;
                         }
                     }
@@ -810,7 +810,7 @@ public class MineBot {
                 BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
                 goal = new GoalBlock(pos);
                 wasTargetSetByMobHunt = false;
-                findPathInNewThread(playerFeet);
+                findPathInNewThread(playerFeet, false);
                 return "Killing " + w;
             }
             return "Couldn't find " + name;
@@ -835,7 +835,7 @@ public class MineBot {
         }
         if (text.startsWith("path")) {
             plsCancel = false;
-            findPathInNewThread(playerFeet);
+            findPathInNewThread(playerFeet, true);
             return null;
         }
         if (text.startsWith("hardness")) {
@@ -892,7 +892,7 @@ public class MineBot {
         }
         EntityPlayer p = Minecraft.theMinecraft.thePlayer;
         MineBot.goal = new GoalYLevel(y);
-        MineBot.findPathInNewThread(new BlockPos(p.posX, p.posY, p.posZ));
+        MineBot.findPathInNewThread(new BlockPos(p.posX, p.posY, p.posZ), true);
         try {
             do {
                 Thread.sleep(50);
@@ -906,7 +906,7 @@ public class MineBot {
      *
      * @param start
      */
-    public static void findPathInNewThread(final BlockPos start) {
+    public static void findPathInNewThread(final BlockPos start, final boolean talkAboutIt) {
         new Thread() {
             @Override
             public void run() {
@@ -914,14 +914,20 @@ public class MineBot {
                     return;
                 }
                 isThereAnythingInProgress = true;
-                GuiScreen.sendChatMessage("Starting to search for path from " + start + " to " + goal, true);
+                if (talkAboutIt) {
+                    GuiScreen.sendChatMessage("Starting to search for path from " + start + " to " + goal, true);
+                }
                 currentPath = findPath(start);
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
-                    GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can", true);
+                    if (talkAboutIt) {
+                        GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can", true);
+                    }
                     isThereAnythingInProgress = false;
                     planAhead();
                 } else {
-                    GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal, true);
+                    if (talkAboutIt) {
+                        GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal, true);
+                    }
                     isThereAnythingInProgress = false;
                 }
             }
@@ -963,7 +969,7 @@ public class MineBot {
      * @param start
      * @return
      */
-    public static Path findPath(BlockPos start) {
+    private static Path findPath(BlockPos start) {
         if (goal == null) {
             GuiScreen.sendChatMessage("babe, please. there is no goal", true);
             return null;
