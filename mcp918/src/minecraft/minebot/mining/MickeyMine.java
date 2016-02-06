@@ -16,6 +16,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -125,31 +127,70 @@ public class MickeyMine {
             doNormalMine();
         }
     }
-    public static boolean torch() {
+    public static Boolean torch() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
-        for (byte i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
                 continue;
             }
-            if (item.equals(Item.getByNameOrId("minecraft:torch"))) {
+            if (item.getItem().equals(Item.getByNameOrId("minecraft:torch"))) {
                 p.inventory.currentItem = i;
                 return true;
             }
         }
-        return false;
+        int torchPosition = 0;
+        for (int i = 9; i < inv.length; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (item.getItem().equals(Item.getByNameOrId("minecraft:torch"))) {
+                torchPosition = i;
+            }
+        }
+        if (torchPosition == 0) {
+            return false;
+        }
+        int blankHotbarSpot = -1;
+        for (int i = 0; i < 9; i++) {
+            if (inv[i] == null) {
+                blankHotbarSpot = i;
+            }
+        }
+        if (blankHotbarSpot == -1) {
+            return false;
+        }
+        if (Minecraft.theMinecraft.currentScreen == null) {
+            MineBot.openInventory();
+            return null;
+        }
+        if (Minecraft.theMinecraft.currentScreen instanceof GuiInventory) {
+            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+            contain.leftClick(torchPosition);
+            contain.leftClick(blankHotbarSpot + 36);
+            Minecraft.theMinecraft.thePlayer.closeScreen();
+            return null;
+        }
+        return false;//we are in a gui other than inv
     }
     public static void doBranchMine() {
         if (branchPosition == null) {
             branchPosition = Minecraft.theMinecraft.thePlayer.getPosition0();
         }
         if (!branchPosition.equals(Minecraft.theMinecraft.thePlayer.getPosition0())) {
+            GuiScreen.sendChatMessage("Should be at branch position " + branchPosition + " " + Minecraft.theMinecraft.thePlayer.getPosition0(), true);
             mightNeedToGoBackToPath = true;
         } else {
-            if (torch()) {
+            Boolean b = torch();
+            if (b == null || b) {
                 if (LookManager.lookAtBlock(branchPosition.down(), true)) {
-                    Minecraft.theMinecraft.rightClickMouse();
+                    if (b != null && b) {
+                        Minecraft.theMinecraft.rightClickMouse();
+                    } else {
+                        return;
+                    }
                 } else {
                     return;
                 }
