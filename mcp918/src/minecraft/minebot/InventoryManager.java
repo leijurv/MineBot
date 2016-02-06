@@ -50,14 +50,13 @@ public class InventoryManager {
             if (amounts.get(item) == null) {
                 amounts.put(item, 0);
             }
-            boolean tooMuch = amounts.get(item) > maximumAmounts.get(itemName);
-            boolean tooLittle = amounts.get(item) < minimumAmounts.get(itemName);
-            int toThrowAway = tooMuch ? amounts.get(item) - minimumAmounts.get(itemName) : 0;
-            if (tooMuch) {
-                MickeyMine.notifyFullness(itemName, true);
-            }
-            if (tooLittle) {
+            System.out.println(amounts.get(item));
+            int toThrowAway = amounts.get(item) > maximumAmounts.get(itemName) ? amounts.get(item) - minimumAmounts.get(itemName) : 0;
+            if (amounts.get(item) < minimumAmounts.get(itemName)) {
                 MickeyMine.notifyFullness(itemName, false);
+            }
+            if (amounts.get(item) > ((minimumAmounts.get(itemName) + maximumAmounts.get(itemName)) / 2)) {
+                MickeyMine.notifyFullness(itemName, true);
             }
             if (toThrowAway <= 0) {
                 continue;
