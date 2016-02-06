@@ -50,7 +50,7 @@ public class PathFinder {
             bestHeuristicSoFar[i] = Double.MAX_VALUE;
         }
         OpenSet openSet = new OpenSet();
-        startnode.isOpen = true;
+        startNode.isOpen = true;
         openSet.insert(startNode);
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + 10000;
