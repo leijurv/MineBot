@@ -73,6 +73,9 @@ public class CraftingTask {
     public static boolean isRecipeOkay(IRecipe recipe) {
         if (recipe instanceof ShapedRecipes) {
             for (ItemStack stack : ((ShapedRecipes) recipe).recipeItems) {
+                if (stack == null) {
+                    continue;
+                }
                 if (stack.toString().toLowerCase().contains("block")) {
                     System.out.println("Not doing " + stack);
                     return false;
