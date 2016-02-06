@@ -351,7 +351,7 @@ public class MineBot {
                 String item = spec.split(" ")[0];
                 String amt = spec.split(" ")[1];
                 ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
-                CraftingTask.findOrCreateCraftingTask(stack);
+                System.out.println(CraftingTask.findOrCreateCraftingTask(stack));
             }
             return "k";
         }

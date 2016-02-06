@@ -70,6 +70,7 @@ public class CraftingTask {
         return recipe.getRecipeSize() > 4;
     }
     public void onTick() {
+        System.out.println(this + " tick " + stackSize + " " + alreadyHas + " " + currentlyCrafting);
         if (isDone()) {
             return;
         }
@@ -217,13 +218,14 @@ public class CraftingTask {
                 targetItem = Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i);
             }
         }
+        System.out.println(this + " " + currentlyCrafting + " " + targetItem);
         if (targetItem != null) {
-            alreadyHas = stackSize - targetItem.stackSize;
+            alreadyHas = targetItem.stackSize;
             return;
         }
-        alreadyHas = stackSize;
+        alreadyHas = 0;
     }
-    public int stillToCraft() {
+    public int alreadyHas() {
         return alreadyHas;
     }
     public boolean isDone() {
