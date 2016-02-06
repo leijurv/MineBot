@@ -145,6 +145,9 @@ public class CraftingTask {
      */
     public boolean craftAsManyAsICan(boolean inInventory) {
         int amtCurrentlyCraftable = stackSize - alreadyHas;
+        if (amtCurrentlyCraftable > 64) {
+            amtCurrentlyCraftable = 64;
+        }
         while (true) {
             Boolean b = actualDoCraft(amtCurrentlyCraftable, inInventory);
             if (b != null) {
