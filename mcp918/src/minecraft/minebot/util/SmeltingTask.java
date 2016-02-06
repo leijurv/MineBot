@@ -32,7 +32,7 @@ public class SmeltingTask {
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
     static HashSet<BlockPos> knownFurnaces = new HashSet();
     public static void onTick() {
-        for (SmeltingTask task : inProgress) {
+        for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
             task.tick();
         }
     }
