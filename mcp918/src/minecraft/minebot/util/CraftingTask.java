@@ -291,15 +291,27 @@ public class CraftingTask {
         return new ItemStack(currentlyCrafting, stackSize);
     }
     public final void increaseNeededAmount(int amount) {
+        int stackSizeBefore = stackSize;
         stackSize += amount;
+        IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
+        int outputVolume = currentRecipe.getRecipeOutput().stackSize;
+        int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
+        int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
+        int change = inputQuantityNew - inputQuantityBefore;
         for (CraftingTask craftingTask : subCraftingTasks) {
-            craftingTask.increaseNeededAmount(amount);
+            craftingTask.increaseNeededAmount(change);
         }
     }
     public void decreaseNeededAmount(int amount) {
+        int stackSizeBefore = stackSize;
         stackSize -= amount;
+        IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
+        int outputVolume = currentRecipe.getRecipeOutput().stackSize;
+        int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
+        int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
+        int change = inputQuantityBefore - inputQuantityNew;
         for (CraftingTask craftingTask : subCraftingTasks) {
-            craftingTask.decreaseNeededAmount(amount);
+            craftingTask.decreaseNeededAmount(change);
         }
     }
     public static HashMap<Item, ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) {
