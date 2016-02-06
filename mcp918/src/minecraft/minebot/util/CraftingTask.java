@@ -169,7 +169,8 @@ public class CraftingTask {
         if (inv) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
                 System.out.println("Opening");
-                MineBot.slowOpenInventory();
+                MineBot.openInventory();
+                didIOpenMyInventory = true;
             }
         } else {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
@@ -229,9 +230,14 @@ public class CraftingTask {
             }
         }
     }
+    static boolean didIOpenMyInventory = false;
     public static void tickAll() {
+        didIOpenMyInventory = false;
         for (CraftingTask craftingTask : overallCraftingTasks) {
             craftingTask.onTick();
+        }
+        if (didIOpenMyInventory) {
+            Minecraft.theMinecraft.thePlayer.closeScreen();
         }
     }
     public final void buildTasks() {
