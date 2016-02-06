@@ -108,16 +108,16 @@ public class CraftingTask {
         if (isDone()) {
             return;
         }
-        //TODO return here if we can't craft even one
-        int amtCurrentlyCraftable = stackSize - alreadyHas;//TODO replace this with actual calculation given current inventory resources
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting))) {
-            actualDoCraft(amtCurrentlyCraftable, true);
-            return;
+            if (craftAsManyAsICan(true)) {
+                return;
+            }
         }
         //at this point we know that we need a crafting table
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting) {
-            actualDoCraft(amtCurrentlyCraftable, false);
-            return;
+            if (craftAsManyAsICan(true)) {
+                return;
+            }
         }
         //at this point we know that we need a crafting table and we aren't in one at this moment
         //if(craftingTableNearby()){
@@ -138,7 +138,33 @@ public class CraftingTask {
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one and we don't have the materials to make one
         //so just rip at this point
     }
-    public void actualDoCraft(int outputQuantity, boolean inInventory) {
+    /**
+     *
+     * @param inInventory
+     * @return did I actually craft some
+     */
+    public boolean craftAsManyAsICan(boolean inInventory) {
+        int amtCurrentlyCraftable = stackSize - alreadyHas;
+        while (true) {
+            Boolean b = actualDoCraft(amtCurrentlyCraftable, inInventory);
+            if (b != null) {
+                return b;
+            }
+            amtCurrentlyCraftable--;
+            if (amtCurrentlyCraftable <= 0) {
+                return false;
+            }
+        }
+    }
+    /**
+     *
+     * @param outputQuantity
+     * @param inInventory
+     * @return true if it was able to craft and did, null if it was unable to
+     * craft because of a lack of input items, false for anything else
+     * (including being unable to craft for other reasons)
+     */
+    public Boolean actualDoCraft(int outputQuantity, boolean inInventory) {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         int outputVolume = currentRecipe.getRecipeOutput().stackSize;
         int inputQuantity = (int) Math.ceil(((double) outputQuantity) / ((double) outputVolume));
@@ -162,7 +188,7 @@ public class CraftingTask {
                     positions[index] = map(i, shaped.recipeWidth, shaped.recipeHeight, inInventory ? 2 : 3);
                     index++;
                 }
-                actualDoCraftOne(items, positions, inputQuantity, inInventory);
+                return actualDoCraftOne(items, positions, inputQuantity, inInventory);
             }
         }
         if (currentRecipe instanceof ShapelessRecipes) {
@@ -174,11 +200,22 @@ public class CraftingTask {
                     items[i] = shapeless.recipeItems.get(i).getItem();
                     positions[i] = i + 1;
                 }
-                actualDoCraftOne(items, positions, inputQuantity, inInventory);
+                return actualDoCraftOne(items, positions, inputQuantity, inInventory);
             }
         }
+        return false;
     }
-    public static void actualDoCraftOne(Item[] items, int[] positions, int amount, boolean inv) {
+    /**
+     *
+     * @param items
+     * @param positions
+     * @param amount
+     * @param inv
+     * @return true if it was able to craft and did, null if it was unable to
+     * craft because of a lack of input items, false for anything else
+     * (including being unable to craft for other reasons)
+     */
+    public static Boolean actualDoCraftOne(Item[] items, int[] positions, int amount, boolean inv) {
         if (inv) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
                 System.out.println("Opening");
@@ -188,16 +225,15 @@ public class CraftingTask {
         } else {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
                 GuiScreen.sendChatMessage("Not in crafting table", true);
-                return;
+                return false;
             }
         }
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         for (int i = 1; i < (inv ? 5 : 10); i++) {
             if (contain.inventorySlots.inventorySlots.get(i).getHasStack()) {
-                return;
+                return false;
             }
         }
-        GuiScreen.sendChatMessage("Crafting amount " + amount, true);
         int[] amounts = new int[items.length];
         for (int i = 0; i < items.length; i++) {
             amounts[i] = amount;
@@ -229,10 +265,11 @@ public class CraftingTask {
         }
         for (int i = 0; i < count.length; i++) {
             if (count[i] != amounts[i]) {
-                GuiScreen.sendChatMessage("Not enough " + items[i], true);
-                return;
+                //GuiScreen.sendChatMessage("Not enough " + items[i], true);
+                return null;
             }
         }
+        GuiScreen.sendChatMessage("Crafting amount " + amount, true);
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -272,6 +309,7 @@ public class CraftingTask {
                 GuiScreen.sendChatMessage("Not enough " + i + " " + amounts[i] + " " + items[i] + " " + positions[i], true);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
             }
         }
+        return true;
     }
     static boolean didIOpenMyInventory = false;
     public static void tickAll() {
