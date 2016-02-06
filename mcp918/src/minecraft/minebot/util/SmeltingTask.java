@@ -91,17 +91,30 @@ public class SmeltingTask {
             return;
         }
         inProgress.add(this);
-            //todo: merge different smelting tasks for the same item
+        //todo: merge different smelting tasks for the same item
         BlockPos blah = getUnusedFurnace();
         if (blah == null) {
             GuiScreen.sendChatMessage("No closeby unused furnaces that I know of. Place one?", true);
+            return;
         } else {
             GuiScreen.sendChatMessage("I would suggest going to the furnace at " + blah, true);
+        }
+        if (MineBot.couldIReach(blah)) {
+            furnace = blah;
         }
     }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     private void tick() {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
+        if (furnace != null && didIPutItInAlreadyPhrasing) {
+            //we have a furnace, but we haven't put it in yet phrasing
+            if (MineBot.couldIReach(furnace)) {
+                MineBot.lookAtBlock(furnace, true);
+            }
+            if (furnace.equals(MineBot.whatAreYouLookingAt())) {
+                Minecraft.theMinecraft.rightClickMouse();
+            }
+        }
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
             GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;
             if (!didIPutItInAlreadyPhrasing) {
