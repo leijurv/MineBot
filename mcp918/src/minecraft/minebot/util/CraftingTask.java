@@ -219,35 +219,13 @@ public class CraftingTask {
      * (including being unable to craft for other reasons)
      */
     public static Boolean actualDoCraftOne(Item[] items, int[] positions, int amount, boolean inv) {
-        if (inv) {
-            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
-                System.out.println("Opening");
-                MineBot.openInventory();
-                didIOpenMyInventory = true;
-            }
-        } else {
-            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
-                GuiScreen.sendChatMessage("Not in crafting table", true);
-                return false;
-            }
-        }
-        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-        for (int i = 1; i < (inv ? 5 : 10); i++) {
-            if (contain.inventorySlots.inventorySlots.get(i).getHasStack()) {
-                return false;
-            }
-        }
         int[] amounts = new int[items.length];
         for (int i = 0; i < items.length; i++) {
             amounts[i] = amount;
         }
         int[] count = new int[items.length];
-        for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
-            Slot slot = contain.inventorySlots.inventorySlots.get(i);
-            if (!slot.getHasStack()) {
-                continue;
-            }
-            ItemStack in = slot.getStack();
+        for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.mainInventory.length; i++) {
+            ItemStack in = Minecraft.theMinecraft.thePlayer.inventory.mainInventory[i];
             if (in == null) {
                 continue;
             }
@@ -270,6 +248,24 @@ public class CraftingTask {
             if (count[i] != amounts[i]) {
                 //GuiScreen.sendChatMessage("Not enough " + items[i], true);
                 return null;
+            }
+        }
+        if (inv) {
+            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+                System.out.println("Opening");
+                MineBot.openInventory();
+                didIOpenMyInventory = true;
+            }
+        } else {
+            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
+                GuiScreen.sendChatMessage("Not in crafting table", true);
+                return false;
+            }
+        }
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        for (int i = 1; i < (inv ? 5 : 10); i++) {
+            if (contain.inventorySlots.inventorySlots.get(i).getHasStack()) {
+                return false;
             }
         }
         GuiScreen.sendChatMessage("Crafting amount " + amount, true);
