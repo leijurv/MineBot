@@ -132,14 +132,22 @@ public class CraftingTask {
         if (currentRecipe instanceof ShapedRecipes) {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
             if (!inInventory || (inInventory && shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2)) {
-                Item[] items = new Item[shaped.recipeItems.length];
+                int numNotNull = 0;
+                for (ItemStack recipeItem : shaped.recipeItems) {
+                    if (recipeItem != null) {
+                        numNotNull++;
+                    }
+                }
+                Item[] items = new Item[numNotNull];
                 int[] positions = new int[items.length];
-                for (int i = 0; i < items.length; i++) {
+                int index = 0;
+                for (int i = 0; i < shaped.recipeItems.length; i++) {
                     if (shaped.recipeItems[i] == null) {
                         continue;
                     }
-                    items[i] = shaped.recipeItems[i].getItem();
-                    positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight, inInventory ? 2 : 3);
+                    items[index] = shaped.recipeItems[i].getItem();
+                    positions[index] = map(i, shaped.recipeWidth, shaped.recipeHeight, inInventory ? 2 : 3);
+                    index++;
                 }
                 actualDoCraftOne(items, positions, inputQuantity, inInventory);
             }
