@@ -88,6 +88,7 @@ public class CraftingTask {
                 if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
                     MineBot.slowOpenInventory();
                 }
+                ItemStack[] items = shaped.recipeItems;
                 GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
                 for (int i = 0; i < contain.inventorySlots.inventorySlots.size(); i++) {
                     Slot slot = contain.inventorySlots.inventorySlots.get(i);
@@ -99,6 +100,9 @@ public class CraftingTask {
                         continue;
                     }
                     System.out.println(i + " " + in);
+                }
+                for (int i = 0; i < items.length; i++) {
+                    System.out.println("item " + i + " " + items[i]);
                 }
             }
         }
