@@ -111,10 +111,11 @@ public class SmeltingTask {
         if (furnace != null && !didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
             //we have a furnace, but we haven't put it in yet phrasing
             if (MineBot.couldIReach(furnace)) {
-                MineBot.lookAtBlock(furnace, true);
-            }
-            if (furnace.equals(MineBot.whatAreYouLookingAt())) {
-                MineBot.isRightClick = true;
+                if (MineBot.lookAtBlock(furnace, true)) {
+                    if (furnace.equals(MineBot.whatAreYouLookingAt())) {
+                        MineBot.isRightClick = true;
+                    }
+                }
             }
         }
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace) {
