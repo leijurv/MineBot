@@ -62,14 +62,14 @@ public class CraftingTask {
                 continue;//probably not all of these are necessary, but when I added all three it stopped a nullpointerexception somewhere in this function
             }
             if (currRecipe.getRecipeOutput().getItem().equals(item)) {
-                if (!avoidRecipe(currRecipe)) {
+                if (isRecipeOkay(currRecipe)) {
                     return currRecipe;
                 }
             }
         }
         return null;
     }
-    public static boolean avoidRecipe(IRecipe recipe) {
+    public static boolean isRecipeOkay(IRecipe recipe) {
         if (recipe instanceof ShapedRecipes) {
             for (ItemStack stack : ((ShapedRecipes) recipe).recipeItems) {
                 if (stack.toString().toLowerCase().contains("block")) {
