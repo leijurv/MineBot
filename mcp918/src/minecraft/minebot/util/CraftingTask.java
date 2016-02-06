@@ -39,11 +39,10 @@ public class CraftingTask {
         buildTasks();
         increaseNeededAmount(craftStack.stackSize);
     }
-    public static int map(int id, int width, int height) {//shamelessly copied from Objectives
+    public static int map(int id, int width, int height, int craftingSize) {//shamelessly copied from Objectives
         int yPos = id / width;
         int xPos = id % width;
-        int z = xPos + 2 * yPos;
-        //System.out.println("Mapping " + id + " in " + width + "," + height + " to " + xPos + "," + yPos + " with id " + z);
+        int z = xPos + craftingSize * yPos;
         return z + 1;
     }
     /**
@@ -129,7 +128,7 @@ public class CraftingTask {
                         continue;
                     }
                     items[i] = shaped.recipeItems[i].getItem();
-                    positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight);
+                    positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight, 2);
                 }
                 actualDoCraftOne(items, positions, inputQuantity);
             }
