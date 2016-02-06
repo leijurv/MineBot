@@ -190,7 +190,7 @@ public class CraftingTask {
         contain.shiftClick(0);
         for (int i = 0; i < amounts.length; i++) {
             if (amounts[i] > 0) {
-                System.out.println("Not enough " + i + " " + amounts[i]);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
+                GuiScreen.sendChatMessage("Not enough " + i + " " + amounts[i], true);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
                 return;
             }
         }
