@@ -12,6 +12,7 @@ import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.pathfinding.goals.GoalYLevel;
+import minebot.util.CraftingTask;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -151,6 +152,10 @@ public class MickeyMine {
             }
         }
         if (torchPosition == 0) {
+            CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:torch"), 0));
+            if (task.currentlyCrafting().stackSize < 32) {
+                task.increaseNeededAmount(32 - task.currentlyCrafting().stackSize);
+            }
             return false;
         }
         int blankHotbarSpot = -1;
