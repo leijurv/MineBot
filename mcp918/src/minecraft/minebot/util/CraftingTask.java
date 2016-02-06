@@ -87,7 +87,7 @@ public class CraftingTask {
             if (shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2) {
                 HashMap<Item, ArrayList<Tuple<Integer, Integer>>> current = getCurrentRecipeItems(currentRecipe);
                 if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
-                    MineBot.openInventory();
+                    MineBot.slowOpenInventory();
                 }
                 GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
                 for (int i = 0; i < contain.inventorySlots.inventorySlots.size(); i++) {

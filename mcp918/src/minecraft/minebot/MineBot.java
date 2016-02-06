@@ -201,6 +201,10 @@ public class MineBot {
         Minecraft.theMinecraft.skipRenderWorld = false;
         Minecraft.theMinecraft.currentScreen = screen;
     }
+    public static void slowOpenInventory() {
+        Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+        Minecraft.theMinecraft.displayGuiScreen(new GuiInventory(Minecraft.theMinecraft.thePlayer));
+    }
     public static boolean wasScreen = false;
     public static boolean calculatingNext = false;
     public static Path currentPath = null;
