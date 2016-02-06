@@ -17,6 +17,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -25,7 +29,7 @@ import net.minecraft.world.World;
  *
  * @author leijurv
  */
-public class Mobs {
+public class Combat {
     public static boolean mobHunting = false;
     public static boolean mobKilling = false;
     public static boolean playerHunt = false;
@@ -193,5 +197,28 @@ public class Mobs {
         int diffY = a.getY() - b.getY();
         int diffZ = a.getZ() - b.getZ();
         return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+    }
+    public static void switchtosword() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        float bestDamage = 0;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
+            }
+            if (item.getItem() instanceof ItemSword) {
+                float damage = ((ItemSword) (item.getItem())).getDamageVsEntity();
+                if (damage > bestDamage) {
+                    p.inventory.currentItem = i;
+                    bestDamage = damage;
+                }
+            }
+            if (item.getItem() instanceof ItemAxe) {
+                if (bestDamage == 0) {
+                    p.inventory.currentItem = i;
+                }
+            }
+        }
     }
 }

@@ -30,10 +30,8 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.FoodStats;
@@ -143,7 +141,7 @@ public class MineBot {
         if (Minecraft.theMinecraft.currentScreen == null) {
             InventoryManager.onTick();
         }
-        boolean tickPath = Mobs.onTick();
+        boolean tickPath = Combat.onTick();
         //System.out.println("Ticking: " + tickPath);
         //System.out.println("Mob hunting: " + !tickPath);
         if (tickPath) {
@@ -476,16 +474,16 @@ public class MineBot {
             return "Sketchy stealer: " + sketchyStealer;
         }
         if (text.equals("mobkill")) {
-            Mobs.mobKilling = !Mobs.mobKilling;
-            return "Mob killing: " + Mobs.mobKilling;
+            Combat.mobKilling = !Combat.mobKilling;
+            return "Mob killing: " + Combat.mobKilling;
         }
         if (text.equals("playerhunt")) {
-            Mobs.playerHunt = !Mobs.playerHunt;
-            return "Also do players during mobhunt: " + Mobs.playerHunt;
+            Combat.playerHunt = !Combat.playerHunt;
+            return "Also do players during mobhunt: " + Combat.playerHunt;
         }
         if (text.equals("mobhunt")) {
-            Mobs.mobHunting = !Mobs.mobHunting;
-            return "Mob hunting: " + Mobs.mobHunting;
+            Combat.mobHunting = !Combat.mobHunting;
+            return "Mob hunting: " + Combat.mobHunting;
         }
         if (text.equals("carpet")) {
             useCarpet = !useCarpet;
@@ -517,7 +515,7 @@ public class MineBot {
         if (text.equals("cancel")) {
             cancelPath();
             plsCancel = true;
-            Mobs.target = null;
+            Combat.target = null;
             MickeyMine.clear();
             mreowMine = false;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
@@ -591,14 +589,14 @@ public class MineBot {
                     String blah = pl.getName().trim().toLowerCase();
                     if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
                         GuiScreen.sendChatMessage("Considering " + blah, true);
-                        if (Mobs.couldBeInCreative(pl)) {
+                        if (Combat.couldBeInCreative(pl)) {
                             GuiScreen.sendChatMessage("No, creative", true);
                             continue;
                         }
                         if (blah.contains(name) || name.contains(blah)) {
-                            Mobs.target = pl;
-                            Mobs.wasTargetSetByMobHunt = false;
-                            BlockPos pos = new BlockPos(Mobs.target.posX, Mobs.target.posY, Mobs.target.posZ);
+                            Combat.target = pl;
+                            Combat.wasTargetSetByMobHunt = false;
+                            BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
                             goal = new GoalBlock(pos);
                             findPathInNewThread(playerFeet, false);
                             return "Killing " + pl;
@@ -608,10 +606,10 @@ public class MineBot {
             }
             Entity w = what();
             if (w != null) {
-                Mobs.target = w;
-                BlockPos pos = new BlockPos(Mobs.target.posX, Mobs.target.posY, Mobs.target.posZ);
+                Combat.target = w;
+                BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
                 goal = new GoalBlock(pos);
-                Mobs.wasTargetSetByMobHunt = false;
+                Combat.wasTargetSetByMobHunt = false;
                 findPathInNewThread(playerFeet, false);
                 return "Killing " + w;
             }
@@ -821,29 +819,6 @@ public class MineBot {
             return true;
         }
         return false;
-    }
-    public static void switchtosword() {
-        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
-        ItemStack[] inv = p.inventory.mainInventory;
-        float bestDamage = 0;
-        for (byte i = 0; i < 9; i++) {
-            ItemStack item = inv[i];
-            if (inv[i] == null) {
-                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
-            }
-            if (item.getItem() instanceof ItemSword) {
-                float damage = ((ItemSword) (item.getItem())).getDamageVsEntity();
-                if (damage > bestDamage) {
-                    p.inventory.currentItem = i;
-                    bestDamage = damage;
-                }
-            }
-            if (item.getItem() instanceof ItemAxe) {
-                if (bestDamage == 0) {
-                    p.inventory.currentItem = i;
-                }
-            }
-        }
     }
     /**
      * Give a block that's sorta close to the player, at foot level
