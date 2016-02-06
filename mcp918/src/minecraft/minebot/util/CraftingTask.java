@@ -431,20 +431,16 @@ public class CraftingTask {
         return amountHasAndWhere;
     }
     public void calculateAlreadyHasAmount() {
-        ItemStack targetItem = null;
+        int count = 0;
         for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {
             if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i) == null) {
                 continue;
             }
             if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(currentlyCrafting)) {
-                targetItem = Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i);
+                count += Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).stackSize;
             }
         }
-        if (targetItem != null) {
-            alreadyHas = targetItem.stackSize;
-            return;
-        }
-        alreadyHas = 0;
+        alreadyHas = count;
     }
     public int alreadyHas() {
         return alreadyHas;
