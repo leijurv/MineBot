@@ -436,7 +436,12 @@ public class MineBot {
             Combat.target = null;
             MickeyMine.clear();
             mreowMine = false;
+            SmeltingTask.cancelAll();
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
+        }
+        if (text.equals("cancelfurnace")) {
+            SmeltingTask.clearInProgress();
+            return "k =)";
         }
         if (text.equals("st")) {
             GuiScreen.sendChatMessage(info(playerFeet), true);

@@ -37,6 +37,17 @@ public class SmeltingTask {
             task.tick();
         }
     }
+    public static void cancelAll() {
+        inProgress.clear();
+        furnacesInUse.clear();
+    }
+    public static void clearInProgress() {
+        for (int i = 0; i < inProgress.size(); i++) {
+            if (inProgress.get(i).isItDone) {
+                inProgress.remove(i--);
+            }
+        }
+    }
     public static BlockPos getUnusedFurnace() {
         BlockPos best = null;
         double bestDist = Double.MAX_VALUE;
@@ -160,7 +171,7 @@ public class SmeltingTask {
                 //todo: pathfind to furnace and take result out
             }
             if (isItDone && (numTicks - 1) % (60 * 20) == 0) {
-                GuiScreen.sendChatMessage("DUDE. Go to your furnace at " + furnace + " and pick up " + desired, true);
+                GuiScreen.sendChatMessage("DUDE. Go to your furnace at " + furnace + " and pick up " + desired + ". Do /cancelfurnace if you want these notifications to piss off.", true);
             }
         }
     }
