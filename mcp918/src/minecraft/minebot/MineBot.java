@@ -30,11 +30,9 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.FoodStats;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -145,7 +143,7 @@ public class MineBot {
         //System.out.println("Ticking: " + tickPath);
         //System.out.println("Mob hunting: " + !tickPath);
         if (tickPath) {
-            if (dealWithFood()) {
+            if (FoodManager.onTick()) {
                 tickPath = false;
             }
         }
@@ -526,11 +524,6 @@ public class MineBot {
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
             System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
         }
-        if (text.equals("lac")) {
-            BlockPos pos = closestBlock();
-            lookAtBlock(pos, true);
-            return pos.toString();
-        }
         if (text.startsWith("goal") || text.startsWith("setgoal")) {
             plsCancel = false;
             int ind = text.indexOf(' ') + 1;
@@ -774,49 +767,6 @@ public class MineBot {
          path.showPathInStone();
          return;
          }*/
-    }
-    public static boolean dealWithFood() {
-        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
-        FoodStats fs = p.getFoodStats();
-        if (!fs.needFood()) {
-            return false;
-        }
-        int foodNeeded = 20 - fs.getFoodLevel();
-        boolean anything = foodNeeded >= 3 && Minecraft.theMinecraft.thePlayer.getHealth() < 20;//if this is true, we'll just eat anything to get our health up
-        ItemStack[] inv = p.inventory.mainInventory;
-        byte slotForFood = -1;
-        int worst = 10000;
-        for (byte i = 0; i < 9; i++) {
-            ItemStack item = inv[i];
-            if (inv[i] == null) {
-                continue;
-            }
-            if (item.getItem() instanceof ItemFood) {
-                int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
-                //System.out.println(item + " " + healing);
-                if (healing <= foodNeeded) {
-                    slotForFood = i;
-                }
-                if (anything && healing > foodNeeded && healing < worst) {
-                    slotForFood = i;
-                }
-            }
-        }
-        if (slotForFood != -1) {
-            //System.out.println("Switching to slot " + slotForFood + " and right clicking");
-            MineBot.clearMovement();
-            p.inventory.currentItem = slotForFood;
-            sneak = true;
-            if (whatAreYouLookingAt() == null) {
-                isRightClick = true;
-            } else {
-                if (p.isSneaking()) {
-                    isRightClick = true;
-                }
-            }
-            return true;
-        }
-        return false;
     }
     /**
      * The desired yaw, as set by whatever action is happening. Remember to also
