@@ -45,7 +45,7 @@ public class InventoryManager {
         for (String itemName : maximumAmounts.keySet()) {
             Item item = Item.getByNameOrId("minecraft:" + itemName);
             if (amounts.get(item) == null) {
-                continue;
+                amounts.put(item, 0);
             }
             int toThrowAway = amounts.get(item) - maximumAmounts.get(itemName);
             MickeyMine.notifyFullness(itemName, toThrowAway >= 0);
