@@ -108,7 +108,7 @@ public class SmeltingTask {
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     private void tick() {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
-        if (furnace != null && didIPutItInAlreadyPhrasing) {
+        if (furnace != null && !didIPutItInAlreadyPhrasing) {
             //we have a furnace, but we haven't put it in yet phrasing
             if (MineBot.couldIReach(furnace)) {
                 MineBot.lookAtBlock(furnace, true);
