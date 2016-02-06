@@ -148,12 +148,17 @@ public class CraftingTask {
             System.out.println("Opening");
             MineBot.slowOpenInventory();
         }
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        for (int i = 1; i < 5; i++) {
+            if (contain.inventorySlots.inventorySlots.get(i).getHasStack()) {
+                return;
+            }
+        }
         int[] amounts = new int[items.length];
         for (int i = 0; i < items.length; i++) {
             amounts[i] = amount;
             GuiScreen.sendChatMessage(i + " " + items[i] + " " + positions[i] + " " + amount, true);
         }
-        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         for (int i = 9; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -187,8 +192,8 @@ public class CraftingTask {
                 }
             }
         }
-        GuiScreen.sendChatMessage("shift clicking " + contain.inventorySlots.inventoryItemStacks.get(0), true);
-        contain.shiftClick(0);
+        GuiScreen.sendChatMessage("shift clicking " + contain.inventorySlots.inventorySlots.get(0).getStack(), true);
+        //contain.shiftClick(0);
         for (int i = 0; i < amounts.length; i++) {
             if (amounts[i] > 0) {
                 GuiScreen.sendChatMessage("Not enough " + i + " " + amounts[i] + " " + items[i] + " " + positions[i], true);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
