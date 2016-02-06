@@ -129,14 +129,25 @@ public class SmeltingTask {
                     furnacesInUse.put(furnace, this);
                 }
             }
+            if (isItDone) {
+                contain.shiftClick(2);
+                if (isEmpty(contain, 2)) {
+                    Minecraft.theMinecraft.thePlayer.closeScreen();
+                    inProgress.remove(this);
+                    GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
+                }
+            }
         }
-        if (didIPutItInAlreadyPhrasing && !isItDone) {
+        if (didIPutItInAlreadyPhrasing) {
             numTicks++;
-            if (numTicks >= burnTicks) {
+            if (!isItDone && numTicks >= burnTicks) {
                 isItDone = true;
                 GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
                 furnacesInUse.put(furnace, null);
                 //todo: pathfind to furnace and take result out
+            }
+            if (isItDone && (numTicks - 1) % (60 * 20) == 0) {
+                GuiScreen.sendChatMessage("DUDE. Go to your furnace at " + furnace + " and pick up " + desired, true);
             }
         }
     }
@@ -288,7 +299,14 @@ public class SmeltingTask {
         GuiScreen.sendChatMessage("Still need " + (desiredAmount - currentSize(contain, 0, toPutInTheFurnace.getItem())) + " items", true);
         return false;
     }
-    private int currentSize(GuiFurnace contain, int id, Item item) {
+    private static boolean isEmpty(GuiFurnace contain, int id) {
+        Slot slot = contain.inventorySlots.inventorySlots.get(id);
+        if (!slot.getHasStack()) {
+            return true;
+        }
+        return slot.getStack() == null;
+    }
+    private static int currentSize(GuiFurnace contain, int id, Item item) {
         Slot slot = contain.inventorySlots.inventorySlots.get(id);
         if (!slot.getHasStack()) {
             return 0;

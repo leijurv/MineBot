@@ -530,6 +530,9 @@ public abstract class GuiContainer extends GuiScreen {
     protected void sketchyMouseClick(int slotId, int clickedButton, int clickType) {
         this.mc.playerController.windowClick(this.inventorySlots.windowId, slotId, clickedButton, clickType, this.mc.thePlayer);
     }
+    public void shiftClick(int slotId) {
+        sketchyMouseClick(slotId, 0, 1);
+    }
     public void leftClick(int slotId) {
         sketchyMouseClick(slotId, 0, 0);
     }
