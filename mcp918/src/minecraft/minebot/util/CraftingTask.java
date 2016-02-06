@@ -158,6 +158,7 @@ public class CraftingTask {
                 return;
             }
         }
+        GuiScreen.sendChatMessage("Crafting amount " + amount, true);
         int[] amounts = new int[items.length];
         for (int i = 0; i < items.length; i++) {
             amounts[i] = amount;
