@@ -108,22 +108,35 @@ public class CraftingTask {
         if (isDone()) {
             return;
         }
+        //TODO return here if we can't craft even one
+        int amtCurrentlyCraftable = stackSize - alreadyHas;//TODO replace this with actual calculation given current inventory resources
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting))) {
-            actualDoCraft(stackSize - alreadyHas, true);
+            actualDoCraft(amtCurrentlyCraftable, true);
             return;
         }
-        //now we know we need a crafting table
+        //at this point we know that we need a crafting table
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting) {
-            actualDoCraft(stackSize - alreadyHas, false);
+            actualDoCraft(amtCurrentlyCraftable, false);
+            return;
         }
-        //
-        //
-        //calculate how many we could craft given current items
-        //if we could craft given what we have in our inv right now
-        //if this recipe could fit in 2x2 grid, craft immediately (if in guicrafting, use crafting table, otherwise use inv grid)
-        //if this recipe needs 3x3 and we are in a GuiCrafting right now, just do it™
-        //if this recipe needs 3x3 and we arent in a gui crafting and there is a crafting table nearby or in our inventory, place/open it
-        //if we actualy ended up crafting some, go through our sub crafting tasks and decrease needed amounts accordingly
+        //at this point we know that we need a crafting table and we aren't in one at this moment
+        //if(craftingTableNearby()){
+        //    lookAtIt()
+        //    openIt()
+        //    return;     //on the next tick we will use it, once the gui opens
+        //}
+        //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
+        //if(craftingTableInInventory()){
+        //    placeIt();
+        //    return; //on the next tick the craftingTableNearby() will notice it and use it
+        //}
+        //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
+        //if(doWeHaveMaterialsToCraftACraftingTable()){
+        //    addCraftingTaskForCraftingTable();
+        //    return;
+        //}
+        //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one and we don't have the materials to make one
+        //so just rip at this point
     }
     public void actualDoCraft(int outputQuantity, boolean inInventory) {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
