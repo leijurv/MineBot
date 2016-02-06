@@ -45,6 +45,15 @@ public class CraftingTask {
     public static IRecipe getRecipeFromItem(Item item) {
         List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
         for (IRecipe currRecipe : recipes) {
+            if (currRecipe == null) {
+                continue;
+            }
+            if (currRecipe.getRecipeOutput() == null) {
+                continue;
+            }
+            if (currRecipe.getRecipeOutput().getItem() == null) {
+                continue;//probably not all of these are necessary, but when I added all three it stopped a nullpointerexception somewhere in this function
+            }
             if (currRecipe.getRecipeOutput().getItem().equals(item)) {
                 return currRecipe;
             }
