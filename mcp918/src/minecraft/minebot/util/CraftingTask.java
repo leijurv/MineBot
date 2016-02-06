@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
@@ -104,7 +105,7 @@ public class CraftingTask {
         if (isDone()) {
             return;
         }
-        craftOneInInventory();
+        craftInInventory(1);
         //calculate how many we could craft given current items
         //if we could craft given what we have in our inv right now
         //if this recipe could fit in 2x2 grid, craft immediately (if in guicrafting, use crafting table, otherwise use inv grid)
@@ -112,7 +113,7 @@ public class CraftingTask {
         //if this recipe needs 3x3 and we arent in a gui crafting and there is a crafting table nearby or in our inventory, place/open it
         //if we actualy ended up crafting some, go through our sub crafting tasks and decrease needed amounts accordingly
     }
-    public void craftOneInInventory() {
+    public void craftInInventory(int quantity) {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         if (currentRecipe instanceof ShapedRecipes) {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
@@ -126,7 +127,7 @@ public class CraftingTask {
                     items[i] = shaped.recipeItems[i].getItem();
                     positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight);
                 }
-                actualDoCraftOne(items, positions, 1);
+                actualDoCraftOne(items, positions, quantity);
             }
         }
         if (currentRecipe instanceof ShapelessRecipes) {
@@ -138,7 +139,7 @@ public class CraftingTask {
                     items[i] = shapeless.recipeItems.get(i).getItem();
                     positions[i] = i + 1;
                 }
-                actualDoCraftOne(items, positions, 1);
+                actualDoCraftOne(items, positions, quantity);
             }
         }
     }
@@ -185,13 +186,14 @@ public class CraftingTask {
                 }
             }
         }
+        GuiScreen.sendChatMessage("shift clicking " + contain.inventorySlots.inventoryItemStacks.get(0), true);
+        contain.shiftClick(0);
         for (int i = 0; i < amounts.length; i++) {
             if (amounts[i] > 0) {
                 System.out.println("Not enough " + i + " " + amounts[i]);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
                 return;
             }
         }
-        contain.shiftClick(0);
     }
     public static void tickAll() {
         for (CraftingTask craftingTask : overallCraftingTasks) {
