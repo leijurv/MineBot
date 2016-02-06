@@ -61,8 +61,8 @@ public class SketchyStealer {
                             continue;
                         }
                         if (theWorld.getBlockState(pos).getBlock().equals(Block.getBlockFromName("minecraft:chest"))) {
-                            if (MineBot.couldIReach(pos)) {
-                                if (MineBot.lookAtBlock(pos, true)) {
+                            if (LookManager.couldIReach(pos)) {
+                                if (LookManager.lookAtBlock(pos, true)) {
                                     Minecraft.theMinecraft.rightClickMouse();
                                 }
                             }

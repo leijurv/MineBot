@@ -6,6 +6,7 @@
 package minebot.pathfinding.actions;
 
 import java.util.Objects;
+import minebot.LookManager;
 import minebot.util.ToolSet;
 import minebot.MineBot;
 import net.minecraft.client.Minecraft;
@@ -58,7 +59,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
                     double faceX = (to.getX() + against[i].getX() + 1.0D) * 0.5D;
                     double faceY = (to.getY() + against[i].getY()) * 0.5D;
                     double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
-                    MineBot.lookAtCoords(faceX, faceY, faceZ, true);
+                    LookManager.lookAtCoords(faceX, faceY, faceZ, true);
                     if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i])) {
                         Minecraft.theMinecraft.rightClickMouse();
                     }

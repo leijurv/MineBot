@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import minebot.LookManager;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -100,7 +101,7 @@ public class SmeltingTask {
         } else {
             GuiScreen.sendChatMessage("I would suggest going to the furnace at " + blah, true);
         }
-        if (MineBot.couldIReach(blah)) {//todo: if we can't reach it and it's reasonably close, path to it
+        if (LookManager.couldIReach(blah)) {//todo: if we can't reach it and it's reasonably close, path to it
             GuiScreen.sendChatMessage("I'm gonna look at it and right click, that's what I'm gonna do", true);
             furnace = blah;
         }
@@ -110,8 +111,8 @@ public class SmeltingTask {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
         if (furnace != null && !didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
             //we have a furnace, but we haven't put it in yet phrasing
-            if (MineBot.couldIReach(furnace)) {
-                if (MineBot.lookAtBlock(furnace, true)) {
+            if (LookManager.couldIReach(furnace)) {
+                if (LookManager.lookAtBlock(furnace, true)) {
                     if (furnace.equals(MineBot.whatAreYouLookingAt())) {
                         MineBot.isRightClick = true;
                     }

@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import minebot.LookManager;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -872,7 +873,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             }
         }
         this.mc.mcProfiler.endSection();
-        MineBot.frame(p_181560_1_);
+        LookManager.frame(p_181560_1_);
         if (!this.mc.skipRenderWorld) {
             anaglyphEnable = this.mc.gameSettings.anaglyph;
             final ScaledResolution scaledresolution = new ScaledResolution(this.mc);

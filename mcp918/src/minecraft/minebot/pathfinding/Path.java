@@ -11,6 +11,7 @@ import minebot.pathfinding.actions.Action;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import minebot.LookManager;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -239,7 +240,7 @@ public class Path {
                         MineBot.clearMovement();
                         MineBot.moveTowardsCoords(x, 0, z);
                         if (!MineBot.forward && curr.oneInTen != null && curr.oneInTen) {
-                            MineBot.lookAtCoords(x, 0, z, false);
+                            LookManager.lookAtCoords(x, 0, z, false);
                         }
                         return false;
                     }

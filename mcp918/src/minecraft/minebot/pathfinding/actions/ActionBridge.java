@@ -8,6 +8,7 @@ package minebot.pathfinding.actions;
 import minebot.util.ToolSet;
 import java.util.Objects;
 import java.util.Random;
+import minebot.LookManager;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -93,7 +94,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             if (oneInTen && wasTheBridgeBlockAlwaysThere) {
                 //basically one in every ten blocks we walk forwards normally without sneaking and placing, rotate to look forwards.
                 //this way we tend towards looking forwards
-                MineBot.forward = MineBot.lookAtBlock(to, false);
+                MineBot.forward = LookManager.lookAtBlock(to, false);
             } else {
                 MineBot.moveTowardsBlock(to);
             }
@@ -116,7 +117,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                     double faceX = (to.getX() + against[i].getX() + 1.0D) * 0.5D;
                     double faceY = (to.getY() + against[i].getY()) * 0.5D;
                     double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
-                    MineBot.lookAtCoords(faceX, faceY, faceZ, true);
+                    LookManager.lookAtCoords(faceX, faceY, faceZ, true);
                     if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i])) {
                         Minecraft.theMinecraft.rightClickMouse();
                     }
@@ -134,7 +135,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
                 //faceX,faceY,faceZ is the middle of the face between from and to
                 BlockPos goalLook = from.down();//this is the block we were just standing on, and the one we want to place against
-                MineBot.backward = MineBot.lookAtCoords(faceX, faceY, faceZ, true);//if we are in the block, then we are off the edge of the previous looking backward, so we should be moving backward
+                MineBot.backward = LookManager.lookAtCoords(faceX, faceY, faceZ, true);//if we are in the block, then we are off the edge of the previous looking backward, so we should be moving backward
                 if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
                     Minecraft.theMinecraft.rightClickMouse();//wait to right click until we are able to place
                     return false;

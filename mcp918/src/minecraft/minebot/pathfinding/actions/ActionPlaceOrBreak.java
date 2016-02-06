@@ -8,6 +8,7 @@ package minebot.pathfinding.actions;
 import minebot.util.ToolSet;
 import java.util.Arrays;
 import java.util.List;
+import minebot.LookManager;
 import minebot.MineBot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -79,7 +80,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                     return false;
                 }
                 //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
-                boolean lookingInCorrectDirection = MineBot.lookAtBlock(positionsToBreak[i], true);
+                boolean lookingInCorrectDirection = LookManager.lookAtBlock(positionsToBreak[i], true);
                 //TODO decide if when actuallyLookingAtTheBlock==true then should it still keep moving the look direction to the exact center of the block
                 boolean actuallyLookingAtTheBlock = positionsToBreak[i].equals(MineBot.whatAreYouLookingAt());
                 if (!(lookingInCorrectDirection || actuallyLookingAtTheBlock)) {

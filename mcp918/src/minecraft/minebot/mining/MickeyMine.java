@@ -6,6 +6,7 @@
 package minebot.mining;
 
 import java.util.ArrayList;
+import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.goals.GoalBlock;
@@ -159,7 +160,7 @@ public class MickeyMine {
                 for (int z = playerFeet.getZ() - 2; z <= playerFeet.getZ() + 2; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
                     if (isGoalBlock(pos)) {
-                        if (MineBot.couldIReach(pos)) {
+                        if (LookManager.couldIReach(pos)) {
                             addPriorityBlock(pos);
                         }
                     }
@@ -182,7 +183,7 @@ public class MickeyMine {
         }
         addNearby();
         BlockPos toMine = needsToBeMined.get(0);
-        if (MineBot.lookAtBlock(toMine, true)) {
+        if (LookManager.lookAtBlock(toMine, true)) {
             if (Action.avoidBreaking(toMine)) {
                 miningFacing = miningFacing.rotateY();
                 GuiScreen.sendChatMessage("Since I need to avoid breaking " + toMine + ", I'm rotating to " + miningFacing, true);

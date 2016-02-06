@@ -33,9 +33,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
@@ -77,25 +75,6 @@ public class MineBot {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public static boolean couldIReach(BlockPos pos) {
-        float[] pitchAndYaw = pitchAndYaw(pos);
-        float yaw = pitchAndYaw[0];
-        float pitch = pitchAndYaw[1];
-        double blockReachDistance = (double) Minecraft.theMinecraft.playerController.getBlockReachDistance();
-        Vec3 vec3 = Minecraft.theMinecraft.thePlayer.getPositionEyes(1.0F);
-        Vec3 vec31 = getVectorForRotation(pitch, yaw);
-        Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
-        MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
-        System.out.println(blah);
-        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
-    }
-    public static Vec3 getVectorForRotation(float pitch, float yaw) {//shamelessly copied from Entity.java
-        float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
-        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
-        float f2 = -MathHelper.cos(-pitch * 0.017453292F);
-        float f3 = MathHelper.sin(-pitch * 0.017453292F);
-        return new Vec3((double) (f1 * f2), (double) f3, (double) (f * f2));
-    }
     static BlockPos death;
     static long lastDeath = 0;
     public static void onTick1() {
@@ -109,14 +88,7 @@ public class MineBot {
         if (isRightClick) {
             rightPressTime = 5;
         }
-        if (lookingYaw) {
-            Minecraft.theMinecraft.thePlayer.rotationYaw = desiredNextYaw;
-        }
-        if (lookingPitch) {
-            Minecraft.theMinecraft.thePlayer.rotationPitch = desiredNextPitch;
-        }
-        lookingYaw = false;
-        lookingPitch = false;
+        LookManager.preTick();
         isLeftClick = false;
         isRightClick = false;
         jumping = false;
@@ -201,7 +173,7 @@ public class MineBot {
                         jumping = true;
                     }
                 }
-                if (!lookingPitch) {
+                if (!LookManager.lookingPitch) {
                     if (thePlayer.rotationPitch < -20) {
                         thePlayer.rotationPitch++;
                     } else if (thePlayer.rotationPitch > 20) {
@@ -217,36 +189,7 @@ public class MineBot {
                 jumping = true;
             }
         }
-        if (lookingYaw) {
-            previousYaw = Minecraft.theMinecraft.thePlayer.rotationYaw;
-            desiredYaw += 360;
-            desiredYaw %= 360;
-            float yawDistance = Minecraft.theMinecraft.thePlayer.rotationYaw - desiredYaw;
-            if (yawDistance > 180) {
-                yawDistance -= 360;
-            } else if (yawDistance < -180) {
-                yawDistance += 360;
-            }
-            if (Math.abs(yawDistance) > MAX_YAW_CHANGE_PER_TICK) {
-                yawDistance = Math.signum(yawDistance) * MAX_YAW_CHANGE_PER_TICK;
-            }
-            desiredNextYaw = Minecraft.theMinecraft.thePlayer.rotationYaw - yawDistance;
-        }
-        if (lookingPitch) {
-            previousPitch = Minecraft.theMinecraft.thePlayer.rotationPitch;
-            desiredPitch += 360;
-            desiredPitch %= 360;
-            float pitchDistance = Minecraft.theMinecraft.thePlayer.rotationPitch - desiredPitch;
-            if (pitchDistance > 180) {
-                pitchDistance -= 360;
-            } else if (pitchDistance < -180) {
-                pitchDistance += 360;
-            }
-            if (Math.abs(pitchDistance) > MAX_PITCH_CHANGE_PER_TICK) {
-                pitchDistance = Math.signum(pitchDistance) * MAX_PITCH_CHANGE_PER_TICK;
-            }
-            desiredNextPitch = Minecraft.theMinecraft.thePlayer.rotationPitch - pitchDistance;
-        }
+        LookManager.postTick();
     }
     public static void openInventory() {
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
@@ -258,27 +201,6 @@ public class MineBot {
         Minecraft.theMinecraft.skipRenderWorld = false;
         Minecraft.theMinecraft.currentScreen = screen;
     }
-    static float previousYaw = 0;
-    static float previousPitch = 0;
-    static float desiredNextYaw = 0;
-    static float desiredNextPitch = 0;
-    public static void frame(float partialTicks) {
-        //System.out.println("Part: " + partialTicks);
-        if (Minecraft.theMinecraft == null || Minecraft.theMinecraft.thePlayer == null) {
-            return;
-        }
-        if (lookingPitch) {
-            Minecraft.theMinecraft.thePlayer.rotationPitch = (desiredNextPitch - previousPitch) * partialTicks + previousPitch;
-        }
-        if (lookingYaw) {
-            Minecraft.theMinecraft.thePlayer.rotationYaw = (desiredNextYaw - previousYaw) * partialTicks + previousYaw;
-        }
-    }
-    public static float getDesiredYaw() {
-        return desiredYaw;
-    }
-    static final float MAX_YAW_CHANGE_PER_TICK = 360 / 20;
-    static final float MAX_PITCH_CHANGE_PER_TICK = 360 / 20;
     public static boolean wasScreen = false;
     public static boolean calculatingNext = false;
     public static Path currentPath = null;
@@ -505,7 +427,7 @@ public class MineBot {
             return "Set goal to " + goal;
         }
         if (text.equals("look")) {
-            lookAtBlock(new BlockPos(0, 0, 0), true);
+            LookManager.lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;
         }
         if (text.equals("cancel")) {
@@ -621,7 +543,7 @@ public class MineBot {
         }
         if (text.startsWith("thisway")) {
             double dist = Double.parseDouble(text.substring(7).trim());
-            goal = fromAngleAndDirection(dist);
+            goal = LookManager.fromAngleAndDirection(dist);
             return "Set goal to " + goal;
         }
         if (text.startsWith("path")) {
@@ -769,112 +691,6 @@ public class MineBot {
          }*/
     }
     /**
-     * The desired yaw, as set by whatever action is happening. Remember to also
-     * set lookingYaw to true if you really want the yaw to change
-     *
-     */
-    static float desiredYaw;
-    /**
-     * The desired pitch, as set by whatever action is happening. Remember to
-     * also set lookingPitch to true if you really want the yaw to change
-     *
-     */
-    static float desiredPitch;
-    /**
-     * Set to true if the action wants the player's yaw to be moved towards
-     * desiredYaw
-     */
-    static boolean lookingYaw = false;
-    /**
-     * Set to true if the action wants the player's pitch to be moved towards
-     * desiredPitch
-     */
-    static boolean lookingPitch = false;
-    /**
-     * Called by our code in order to look in the direction of the center of a
-     * block
-     *
-     * @param p the position to look at
-     * @param alsoDoPitch whether to set desired pitch or just yaw
-     * @return is the actual player yaw (and actual player pitch, if alsoDoPitch
-     * is true) within ANGLE_THRESHOLD (currently 7°) of looking straight at
-     * this block?
-     */
-    public static boolean lookAtBlock(BlockPos p, boolean alsoDoPitch) {
-        Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
-        double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
-        double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
-        double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
-        /*System.out.println("min X: " + b.getBlockBoundsMinX());
-         System.out.println("max X: " + b.getBlockBoundsMaxX());
-         System.out.println("xdiff: " + xDiff);
-         System.out.println("min Y: " + b.getBlockBoundsMinY());
-         System.out.println("max Y: " + b.getBlockBoundsMaxY());
-         System.out.println("ydiff: " + yolo);
-         System.out.println("min Z: " + b.getBlockBoundsMinZ());
-         System.out.println("max Z: " + b.getBlockBoundsMaxZ());
-         System.out.println("zdiff: " + zDiff);*/
-        double x = p.getX() + xDiff;
-        double y = p.getY() + yolo;
-        double z = p.getZ() + zDiff;
-        //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
-        return lookAtCoords(x, y, z, alsoDoPitch);
-    }
-    /**
-     * The threshold for how close it tries to get to looking straight at things
-     */
-    public static final float ANGLE_THRESHOLD = 7;
-    public static GoalXZ fromAngleAndDirection(double distance) {
-        double theta = ((double) Minecraft.theMinecraft.thePlayer.rotationYaw) * Math.PI / 180D;
-        double x = Minecraft.theMinecraft.thePlayer.posX - Math.sin(theta) * distance;
-        double z = Minecraft.theMinecraft.thePlayer.posZ + Math.cos(theta) * distance;
-        return new GoalXZ((int) x, (int) z);
-    }
-    public static float[] pitchAndYaw(BlockPos p) {
-        Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
-        double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
-        double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
-        double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
-        double x = p.getX() + xDiff;
-        double y = p.getY() + yolo;
-        double z = p.getZ() + zDiff;
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        double yDiff = (thePlayer.posY + 1.62) - y;
-        double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
-        double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
-        double pitch = Math.atan2(yDiff, dist);
-        return new float[]{(float) (yaw * 180 / Math.PI), (float) (pitch * 180 / Math.PI)};
-    }
-    /**
-     * Look at coordinates
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param alsoDoPitch also adjust the pitch? if false, y is ignored
-     * @return is the actual player yaw (and actual player pitch, if alsoDoPitch
-     * is true) within ANGLE_THRESHOLD (currently 7°) of looking straight at
-     * these coordinates?
-     */
-    public static boolean lookAtCoords(double x, double y, double z, boolean alsoDoPitch) {
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        double yDiff = (thePlayer.posY + 1.62) - y;
-        double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
-        double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
-        double pitch = Math.atan2(yDiff, dist);
-        desiredYaw = (float) (yaw * 180 / Math.PI);
-        lookingYaw = true;
-        float yawDist = Math.abs(desiredYaw - thePlayer.rotationYaw);
-        boolean withinRange = yawDist < ANGLE_THRESHOLD || yawDist > 360 - ANGLE_THRESHOLD;
-        if (alsoDoPitch) {
-            lookingPitch = true;
-            desiredPitch = (float) (pitch * 180 / Math.PI);
-            float pitchDist = Math.abs(desiredPitch - thePlayer.rotationPitch);
-            withinRange = withinRange && (pitchDist < ANGLE_THRESHOLD || pitchDist > 360 - ANGLE_THRESHOLD);
-        }
-        return withinRange;
-    }
-    /**
      * calls moveTowardsCoords on the center of this block
      *
      * @param p
@@ -939,10 +755,10 @@ public class MineBot {
             tmp -= 360;
         }
         if (rotate) {
-            desiredYaw = yaw - tmp;
-            lookingYaw = true;
+            LookManager.desiredYaw = yaw - tmp;
+            LookManager.lookingYaw = true;
         }
-        double t = rotate ? ANGLE_THRESHOLD : 23;
+        double t = rotate ? LookManager.ANGLE_THRESHOLD : 23;
         //System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
         //System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
         if (distanceToForward < t || distanceToForward > 360 - t) {

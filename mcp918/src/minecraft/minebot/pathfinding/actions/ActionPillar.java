@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding.actions;
 
+import minebot.LookManager;
 import minebot.util.ToolSet;
 import minebot.MineBot;
 import net.minecraft.client.Minecraft;
@@ -32,7 +33,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
     int numTicks = 0;
     @Override
     protected boolean tick0() {
-        if (!MineBot.lookAtBlock(positionsToPlace[0], true)) {
+        if (!LookManager.lookAtBlock(positionsToPlace[0], true)) {
             return false;
         }
         numTicks++;
