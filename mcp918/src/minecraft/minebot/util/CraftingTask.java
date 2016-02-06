@@ -141,7 +141,7 @@ public class CraftingTask {
                     items[i] = shaped.recipeItems[i].getItem();
                     positions[i] = map(i, shaped.recipeWidth, shaped.recipeHeight, inInventory ? 2 : 3);
                 }
-                actualDoCraftOne(items, positions, inputQuantity, true);
+                actualDoCraftOne(items, positions, inputQuantity, inInventory);
             }
         }
         if (currentRecipe instanceof ShapelessRecipes) {
@@ -153,7 +153,7 @@ public class CraftingTask {
                     items[i] = shapeless.recipeItems.get(i).getItem();
                     positions[i] = i + 1;
                 }
-                actualDoCraftOne(items, positions, inputQuantity, true);
+                actualDoCraftOne(items, positions, inputQuantity, inInventory);
             }
         }
     }
