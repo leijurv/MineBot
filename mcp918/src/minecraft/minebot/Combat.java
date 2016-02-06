@@ -61,7 +61,7 @@ public class Combat {
         if (!mobs.isEmpty()) {
             Entity entity = mobs.get(0);
             AxisAlignedBB lol = entity.getEntityBoundingBox();
-            MineBot.switchtosword();
+            switchtosword();
             System.out.println("looking");
             MineBot.lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
             if (entity.equals(MineBot.what())) {
@@ -160,7 +160,7 @@ public class Combat {
             }
             if (dist <= 4) {
                 AxisAlignedBB lol = target.getEntityBoundingBox();
-                MineBot.switchtosword();
+                switchtosword();
                 boolean direction = MineBot.lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
                 if (direction && !actuallyLookingAt) {
                     MineBot.findPathInNewThread(playerFeet, false);
