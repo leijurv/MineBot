@@ -7,7 +7,6 @@ package minebot;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
@@ -21,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.Goal;
-import minebot.pathfinding.goals.GoalRunAway;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
@@ -33,7 +31,6 @@ import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
@@ -41,7 +38,6 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C16PacketClientStatus;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.MathHelper;
@@ -59,8 +55,6 @@ public class MineBot {
     static boolean plsCancel = false;
     public static boolean sketchyStealer = false;
     public static boolean useCarpet = false;
-    static Entity target = null;
-    static boolean wasTargetSetByMobHunt = false;
     static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
     static SmeltingTask currentSmeltingTask = null;
@@ -194,138 +188,7 @@ public class MineBot {
         if (Minecraft.theMinecraft.currentScreen == null) {
             InventoryManager.onTick();
         }
-        boolean tickPath = true;
-        boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
-        ArrayList<Entity> mobs = new ArrayList<Entity>();
-        for (Entity entity : theWorld.loadedEntityList) {
-            if (entity.isEntityAlive()) {
-                if ((mobKilling && entity instanceof EntityMob) || ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))) {
-                    if (distFromMe(entity) < 5) {
-                        mobs.add(entity);
-                    }
-                }
-            }
-        }
-        mobs.sort(new Comparator<Entity>() {
-            @Override
-            public int compare(Entity o1, Entity o2) {
-                return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
-            }
-        });
-        //System.out.println(mobs);
-        if (!mobs.isEmpty()) {
-            Entity entity = mobs.get(0);
-            AxisAlignedBB lol = entity.getEntityBoundingBox();
-            switchtosword();
-            System.out.println("looking");
-            lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
-            if (entity.equals(what())) {
-                isLeftClick = true;
-                tickPath = false;
-                System.out.println("Doing it");
-            }
-        }
-        if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
-            ArrayList<Entity> mobs1 = new ArrayList<Entity>();
-            for (Entity entity : theWorld.loadedEntityList) {
-                if (entity.isEntityAlive()) {
-                    if (!playerHunt && (entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
-                        if (distFromMe(entity) < 30) {
-                            mobs1.add(entity);
-                        }
-                    }
-                    if ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity))) {
-                        if (distFromMe(entity) < 30) {
-                            mobs1.add(entity);
-                        }
-                    }
-                }
-            }
-            mobs1.sort(new Comparator<Entity>() {
-                @Override
-                public int compare(Entity o1, Entity o2) {
-                    return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
-                }
-            });
-            if (!mobs1.isEmpty()) {
-                Entity entity = mobs1.get(0);
-                if (!entity.equals(target)) {
-                    if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {//if playerhunt is true, dont overwrite a player target with a non player target
-                        GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
-                        if (currentPath != null) {
-                            currentPath.clearPath();
-                        }
-                        currentPath = null;
-                        target = entity;
-                        wasTargetSetByMobHunt = true;
-                    }
-                }
-            }
-        }
-        if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
-            if (currentPath != null) {
-                if (!(currentPath.goal instanceof GoalRunAway)) {
-                    GuiScreen.sendChatMessage("Health too low, cancelling hunt", true);
-                    if (currentPath != null) {
-                        currentPath.clearPath();
-                    }
-                    currentPath = null;
-                }
-            }
-            clearMovement();
-            goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);//TODO run away from more than one mob
-            if (currentPath == null) {
-                GuiScreen.sendChatMessage("Running away", true);
-                findPathInNewThread(playerFeet, false);
-            } else {
-                GoalRunAway g = (GoalRunAway) currentPath.goal;
-                int xDiff = (int) (target.posX - g.x);
-                int zDiff = (int) (target.posZ - g.z);
-                int d = xDiff * xDiff + zDiff * zDiff;
-                if (d > 5 * 5 && !isThereAnythingInProgress) {
-                    GuiScreen.sendChatMessage("Switching who I'm running away from", true);
-                    findPathInNewThread(playerFeet, false);
-                }
-            }
-        }
-        if (target != null && target.isDead) {
-            GuiScreen.sendChatMessage(target + " is dead", true);
-            target = null;
-            if (currentPath != null) {
-                currentPath.clearPath();
-            }
-            currentPath = null;
-            clearMovement();
-        }
-        if (target != null && healthOkToHunt) {
-            BlockPos targetPos = new BlockPos(target.posX, target.posY, target.posZ);
-            goal = new GoalBlock(targetPos);
-            if (currentPath != null) {
-                double movementSince = dist(targetPos, currentPath.end);
-                if (movementSince > 4 && !isThereAnythingInProgress) {
-                    GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
-                    findPathInNewThread(playerFeet, false);//this will overwrite currentPath
-                }
-            }
-            double dist = distFromMe(target);
-            boolean actuallyLookingAt = target.equals(what());
-            //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
-            if (dist > 4 && currentPath == null) {
-                findPathInNewThread(playerFeet, false);
-            }
-            if (dist <= 4) {
-                AxisAlignedBB lol = target.getEntityBoundingBox();
-                switchtosword();
-                boolean direction = lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
-                if (direction && !actuallyLookingAt) {
-                    findPathInNewThread(playerFeet, false);
-                }
-            }
-            if (actuallyLookingAt) {
-                isLeftClick = true;
-                tickPath = false;
-            }
-        }
+        boolean tickPath = Mobs.onTick();
         //System.out.println("Ticking: " + tickPath);
         //System.out.println("Mob hunting: " + !tickPath);
         if (tickPath) {
@@ -460,19 +323,6 @@ public class MineBot {
             Minecraft.theMinecraft.thePlayer.rotationYaw = (desiredNextYaw - previousYaw) * partialTicks + previousYaw;
         }
     }
-    public static double distFromMe(Entity a) {
-        EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
-        double diffX = player.posX - a.posX;
-        double diffY = player.posY - a.posY;
-        double diffZ = player.posZ - a.posZ;
-        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
-    }
-    public static double dist(BlockPos a, BlockPos b) {
-        int diffX = a.getX() - b.getX();
-        int diffY = a.getY() - b.getY();
-        int diffZ = a.getZ() - b.getZ();
-        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
-    }
     public static float getDesiredYaw() {
         return desiredYaw;
     }
@@ -595,9 +445,6 @@ public class MineBot {
             return message;
         }
     }
-    static boolean mobHunting = false;
-    static boolean mobKilling = false;
-    static boolean playerHunt = false;
     static boolean mreowMine = false;
     public static boolean fullBright = true;
     /**
@@ -674,16 +521,16 @@ public class MineBot {
             return "Sketchy stealer: " + sketchyStealer;
         }
         if (text.equals("mobkill")) {
-            mobKilling = !mobKilling;
-            return "Mob killing: " + mobKilling;
+            Mobs.mobKilling = !Mobs.mobKilling;
+            return "Mob killing: " + Mobs.mobKilling;
         }
         if (text.equals("playerhunt")) {
-            playerHunt = !playerHunt;
-            return "Also do players during mobhunt: " + playerHunt;
+            Mobs.playerHunt = !Mobs.playerHunt;
+            return "Also do players during mobhunt: " + Mobs.playerHunt;
         }
         if (text.equals("mobhunt")) {
-            mobHunting = !mobHunting;
-            return "Mob hunting: " + mobHunting;
+            Mobs.mobHunting = !Mobs.mobHunting;
+            return "Mob hunting: " + Mobs.mobHunting;
         }
         if (text.equals("carpet")) {
             useCarpet = !useCarpet;
@@ -715,7 +562,7 @@ public class MineBot {
         if (text.equals("cancel")) {
             cancelPath();
             plsCancel = true;
-            target = null;
+            Mobs.target = null;
             MickeyMine.clear();
             mreowMine = false;
             return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
@@ -789,14 +636,14 @@ public class MineBot {
                     String blah = pl.getName().trim().toLowerCase();
                     if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
                         GuiScreen.sendChatMessage("Considering " + blah, true);
-                        if (couldBeInCreative(pl)) {
+                        if (Mobs.couldBeInCreative(pl)) {
                             GuiScreen.sendChatMessage("No, creative", true);
                             continue;
                         }
                         if (blah.contains(name) || name.contains(blah)) {
-                            target = pl;
-                            wasTargetSetByMobHunt = false;
-                            BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
+                            Mobs.target = pl;
+                            Mobs.wasTargetSetByMobHunt = false;
+                            BlockPos pos = new BlockPos(Mobs.target.posX, Mobs.target.posY, Mobs.target.posZ);
                             goal = new GoalBlock(pos);
                             findPathInNewThread(playerFeet, false);
                             return "Killing " + pl;
@@ -806,10 +653,10 @@ public class MineBot {
             }
             Entity w = what();
             if (w != null) {
-                target = w;
-                BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
+                Mobs.target = w;
+                BlockPos pos = new BlockPos(Mobs.target.posX, Mobs.target.posY, Mobs.target.posZ);
                 goal = new GoalBlock(pos);
-                wasTargetSetByMobHunt = false;
+                Mobs.wasTargetSetByMobHunt = false;
                 findPathInNewThread(playerFeet, false);
                 return "Killing " + w;
             }
@@ -859,18 +706,6 @@ public class MineBot {
     public static void cancelPath() {
         nextPath = null;
         clearPath();
-    }
-    public static boolean couldBeInCreative(EntityPlayer player) {
-        if (player.capabilities.isCreativeMode || player.capabilities.allowFlying || player.capabilities.isFlying) {
-            return true;
-        }
-        BlockPos inFeet = new BlockPos(player.posX, player.posY, player.posZ);
-        BlockPos standingOn = inFeet.down();
-        if (isAir(standingOn) && isAir(standingOn.north()) && isAir(standingOn.south()) && isAir(standingOn.east()) && isAir(standingOn.west()) && isAir(standingOn.north().west()) && isAir(standingOn.north().east()) && isAir(standingOn.south().west()) && isAir(standingOn.south().east())) {
-            //if the block they are standing on, and every block touching it, are all air, they are probably flying
-            return true;
-        }
-        return false;
     }
     public static boolean isAir(BlockPos pos) {
         return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().equals(Block.getBlockById(0));
