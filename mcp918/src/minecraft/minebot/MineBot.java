@@ -819,26 +819,6 @@ public class MineBot {
         return false;
     }
     /**
-     * Give a block that's sorta close to the player, at foot level
-     *
-     * @return
-     */
-    public static BlockPos closestBlock() {
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        World theWorld = Minecraft.theMinecraft.theWorld;
-        Block air = Block.getBlockById(0);
-        for (int x = (int) (thePlayer.posX - 5); x <= thePlayer.posX + 5; x++) {
-            for (int z = (int) (thePlayer.posZ - 5); z <= thePlayer.posZ + 5; z++) {
-                BlockPos pos = new BlockPos(x, thePlayer.posY, z);
-                Block b = theWorld.getBlockState(pos).getBlock();
-                if (!b.equals(air)) {
-                    return pos;
-                }
-            }
-        }
-        return null;
-    }
-    /**
      * The desired yaw, as set by whatever action is happening. Remember to also
      * set lookingYaw to true if you really want the yaw to change
      *
