@@ -8,7 +8,10 @@ package minebot;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import static minebot.MineBot.findPathInNewThread;
+import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;
+import static minebot.MineBot.what;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
 import net.minecraft.client.Minecraft;
@@ -220,5 +223,38 @@ public class Combat {
                 }
             }
         }
+    }
+    public static String killCommand(String name) {//TODO make this use Memory.playerLocationMemory
+        BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
+        if (name.length() > 2) {
+            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+                String blah = pl.getName().trim().toLowerCase();
+                if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
+                    GuiScreen.sendChatMessage("Considering " + blah, true);
+                    if (Combat.couldBeInCreative(pl)) {
+                        GuiScreen.sendChatMessage("No, creative", true);
+                        continue;
+                    }
+                    if (blah.contains(name) || name.contains(blah)) {
+                        Combat.target = pl;
+                        Combat.wasTargetSetByMobHunt = false;
+                        BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
+                        goal = new GoalBlock(pos);
+                        findPathInNewThread(playerFeet, false);
+                        return "Killing " + pl;
+                    }
+                }
+            }
+        }
+        Entity w = what();
+        if (w != null) {
+            Combat.target = w;
+            BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
+            goal = new GoalBlock(pos);
+            Combat.wasTargetSetByMobHunt = false;
+            findPathInNewThread(playerFeet, false);
+            return "Killing " + w;
+        }
+        return "Couldn't find " + name;
     }
 }

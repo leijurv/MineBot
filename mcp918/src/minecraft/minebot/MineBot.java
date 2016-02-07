@@ -510,50 +510,10 @@ public class MineBot {
             return "Set goal to " + goal;
         }
         if (text.startsWith("goto")) {
-            String name = text.substring(4).trim().toLowerCase();
-            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
-                String blah = pl.getName().trim().toLowerCase();
-                if (blah.contains(name) || name.contains(blah)) {
-                    BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
-                    goal = new GoalBlock(pos);
-                    findPathInNewThread(playerFeet, true);
-                    return "Pathing to " + pl.getName() + " at " + goal;
-                }
-            }
-            return "Couldn't find " + name;
+            return Memory.gotoCommand(text.substring(4).trim().toLowerCase());
         }
         if (text.startsWith("kill")) {
-            String name = text.substring(4).trim().toLowerCase();
-            if (name.length() > 2) {
-                for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
-                    String blah = pl.getName().trim().toLowerCase();
-                    if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
-                        GuiScreen.sendChatMessage("Considering " + blah, true);
-                        if (Combat.couldBeInCreative(pl)) {
-                            GuiScreen.sendChatMessage("No, creative", true);
-                            continue;
-                        }
-                        if (blah.contains(name) || name.contains(blah)) {
-                            Combat.target = pl;
-                            Combat.wasTargetSetByMobHunt = false;
-                            BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
-                            goal = new GoalBlock(pos);
-                            findPathInNewThread(playerFeet, false);
-                            return "Killing " + pl;
-                        }
-                    }
-                }
-            }
-            Entity w = what();
-            if (w != null) {
-                Combat.target = w;
-                BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
-                goal = new GoalBlock(pos);
-                Combat.wasTargetSetByMobHunt = false;
-                findPathInNewThread(playerFeet, false);
-                return "Killing " + w;
-            }
-            return "Couldn't find " + name;
+            return Combat.killCommand(text.substring(4).trim().toLowerCase());
         }
         if (text.startsWith("player")) {
             String name = text.substring(6).trim();
