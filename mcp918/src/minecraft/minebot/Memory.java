@@ -115,6 +115,7 @@ public class Memory {
             System.out.println("Considering " + type);
             if (type.toString().toLowerCase().contains(lower)) {
                 BlockPos pos = blockMemory.get(type).closest();
+                System.out.println("find" + type + " " + pos);
                 if (pos != null) {
                     return block + " at " + pos;
                 }
@@ -131,6 +132,7 @@ public class Memory {
             System.out.println("Considering " + type);
             if (type.toString().toLowerCase().contains(lower)) {
                 BlockPos pos = blockMemory.get(type).closest();
+                System.out.println("findgo" + type + " " + pos);
                 if (pos != null) {
                     double dist = dist(pos);
                     if (best == null || dist < d) {
