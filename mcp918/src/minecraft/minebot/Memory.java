@@ -46,6 +46,7 @@ public class Memory {
                 knownPositions.add(pos);
                 double dist = dist(pos);
                 if (dist > furthest) {
+                    furthest = dist;
                     return;
                 }
             }
@@ -53,6 +54,7 @@ public class Memory {
             if (dist < furthest) {
                 knownPositions.add(pos);
                 knownPositions.remove(furthest());
+                recalcFurthest();
             }
         }
         public BlockPos getOne() {
