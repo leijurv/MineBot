@@ -41,10 +41,17 @@ public class Memory {
             this.knownPositions = new HashSet();
         }
         public void put(BlockPos pos) {
-            if (knownPositions.size() > 100) {
+            if (knownPositions.size() < 100) {
+                knownPositions.add(pos);
                 return;
             }
-            knownPositions.add(pos);
+            BlockPos furthest = furthest();
+            double d = dist(furthest);
+            double dist = dist(pos);
+            if (dist < d) {
+                knownPositions.add(pos);
+                knownPositions.remove(furthest);
+            }
         }
         public BlockPos getOne() {
             for (BlockPos pos : knownPositions) {
@@ -58,6 +65,18 @@ public class Memory {
             for (BlockPos pos : knownPositions) {
                 double d = dist(pos);
                 if (best == null || d < dist) {
+                    dist = d;
+                    best = pos;
+                }
+            }
+            return best;
+        }
+        public BlockPos furthest() {
+            BlockPos best = null;
+            double dist = Double.MIN_VALUE;
+            for (BlockPos pos : knownPositions) {
+                double d = dist(pos);
+                if (best == null || d > dist) {
                     dist = d;
                     best = pos;
                 }
