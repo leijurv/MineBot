@@ -57,7 +57,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 sum += 1 / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
             }
         }
-        if (!MineBot.allowBreakOrPlace) {
+        if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
             for (int i = 0; i < blocksToPlace.length; i++) {
                 if (!canWalkOn(positionsToPlace[i])) {
                     sum += 1000000;
@@ -121,8 +121,15 @@ public abstract class ActionPlaceOrBreak extends Action {
         return tick0();
     }
     //I dont want to make this static, because then it might be executed before Item gets initialized
-    final List<Item> ACCEPTABLE_THROWAWAY_ITEMS = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
+    private static List<Item> ACCEPTABLE_THROWAWAY_ITEMS = null;
+    private static void set() {
+        if (ACCEPTABLE_THROWAWAY_ITEMS != null) {
+            return;
+        }
+        ACCEPTABLE_THROWAWAY_ITEMS = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
+    }
     public boolean switchtothrowaway(boolean message) {
+        set();
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
         for (byte i = 0; i < 9; i++) {
@@ -137,6 +144,21 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         if (message) {
             GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
+        }
+        return false;
+    }
+    public static boolean hasthrowaway() {
+        set();
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        for (byte i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                item = new ItemStack(Item.getByNameOrId("minecraft:apple"));
+            }
+            if (ACCEPTABLE_THROWAWAY_ITEMS.contains(item.getItem())) {
+                return true;
+            }
         }
         return false;
     }

@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
+import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
@@ -47,6 +48,7 @@ public class MineBot {
     public static boolean useCarpet = false;
     static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
+    public static boolean hasThrowaway = true;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -105,6 +107,7 @@ public class MineBot {
         }
         tickNumber++;
         SmeltingTask.onTick();
+        hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
         CraftingTask.tickAll();
         Memory.tick();
         if (sketchyStealer) {
