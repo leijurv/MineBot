@@ -106,6 +106,7 @@ public class MineBot {
         tickNumber++;
         SmeltingTask.onTick();
         CraftingTask.tickAll();
+        Memory.tick();
         if (sketchyStealer) {
             SketchyStealer.onTick();
         }
