@@ -113,7 +113,9 @@ public class ActionBridge extends ActionPlaceOrBreak {
             wasTheBridgeBlockAlwaysThere = false;
             for (int i = 0; i < against.length; i++) {
                 if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
-                    switchtothrowaway();//get ready to place a throwaway block
+                    if (!switchtothrowaway(true)) {//get ready to place a throwaway block
+                        return false;
+                    }
                     double faceX = (to.getX() + against[i].getX() + 1.0D) * 0.5D;
                     double faceY = (to.getY() + against[i].getY()) * 0.5D;
                     double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
@@ -129,7 +131,9 @@ public class ActionBridge extends ActionPlaceOrBreak {
             if (whereAmI.equals(to)) {
                 //if we are in the block that we are trying to get to, we are sneaking over air and we need to place a block beneath us against the one we just walked off of
                 //System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
-                switchtothrowaway();//get ready to place a throwaway block
+                if (!switchtothrowaway(true)) {//get ready to place a throwaway block
+                    return false;
+                }
                 double faceX = (to.getX() + from.getX() + 1.0D) * 0.5D;
                 double faceY = (to.getY() + from.getY() - 1.0D) * 0.5D;
                 double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;

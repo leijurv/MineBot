@@ -55,13 +55,15 @@ public class ActionClimb extends ActionPlaceOrBreak {
         if (!canWalkOn(positionsToPlace[0])) {
             for (int i = 0; i < against.length; i++) {
                 if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
-                    switchtothrowaway();//get ready to place a throwaway block
+                    if (!switchtothrowaway(true)) {//get ready to place a throwaway block
+                        return false;
+                    }
                     double faceX = (to.getX() + against[i].getX() + 1.0D) * 0.5D;
                     double faceY = (to.getY() + against[i].getY()) * 0.5D;
                     double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
                     LookManager.lookAtCoords(faceX, faceY, faceZ, true);
                     if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i])) {
-                        Minecraft.theMinecraft.rightClickMouse();
+                        Minecraft.theMinecraft.rightClickMouse();//todo: check if we are standing in the way and preventing this block from being placed
                     }
                     System.out.println("Trying to look at " + against[i] + ", actually looking at" + MineBot.whatAreYouLookingAt());
                     return false;

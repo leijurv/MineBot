@@ -122,7 +122,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     }
     //I dont want to make this static, because then it might be executed before Item gets initialized
     final List<Item> ACCEPTABLE_THROWAWAY_ITEMS = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
-    public void switchtothrowaway() {
+    public boolean switchtothrowaway(boolean message) {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
         for (byte i = 0; i < 9; i++) {
@@ -132,10 +132,13 @@ public abstract class ActionPlaceOrBreak extends Action {
             }
             if (ACCEPTABLE_THROWAWAY_ITEMS.contains(item.getItem())) {
                 p.inventory.currentItem = i;
-                return;
+                return true;
             }
         }
-        GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
+        if (message) {
+            GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
+        }
+        return false;
     }
     /**
      * Do the actual tick. This function can assume that all blocks in
