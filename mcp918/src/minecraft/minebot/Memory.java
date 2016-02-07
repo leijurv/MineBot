@@ -44,13 +44,13 @@ public class Memory {
         public void put(BlockPos pos) {
             if (knownPositions.size() < 100) {
                 knownPositions.add(pos);
-                double dist = dist(pos);
+                double dist = distSq(pos);
                 if (dist > furthest) {
                     furthest = dist;
                     return;
                 }
             }
-            double dist = dist(pos);
+            double dist = distSq(pos);
             if (dist < furthest) {
                 knownPositions.add(pos);
                 knownPositions.remove(furthest());
@@ -67,7 +67,7 @@ public class Memory {
             BlockPos best = null;
             double dist = Double.MAX_VALUE;
             for (BlockPos pos : knownPositions) {
-                double d = dist(pos);
+                double d = distSq(pos);
                 if (best == null || d < dist) {
                     dist = d;
                     best = pos;
@@ -76,13 +76,13 @@ public class Memory {
             return best;
         }
         public void recalcFurthest() {
-            furthest = dist(furthest());
+            furthest = distSq(furthest());
         }
         public BlockPos furthest() {
             BlockPos best = null;
             double dist = Double.MIN_VALUE;
             for (BlockPos pos : knownPositions) {
-                double d = dist(pos);
+                double d = distSq(pos);
                 if (best == null || d > dist) {
                     dist = d;
                     best = pos;
@@ -91,12 +91,12 @@ public class Memory {
             return best;
         }
     }
-    public static double dist(BlockPos pos) {
+    public static double distSq(BlockPos pos) {
         EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
         double diffX = player.posX - (pos.getX() + 0.5D);
         double diffY = player.posY - (pos.getY() + 0.5D);
         double diffZ = player.posZ - (pos.getZ() + 0.5D);
-        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        return diffX * diffX + diffY * diffY + diffZ * diffZ;
     }
     public static void tick() {
         if (air == null) {
@@ -145,7 +145,7 @@ public class Memory {
                 BlockPos pos = blockMemory.get(type).closest();
                 System.out.println("find" + type + " " + pos);
                 if (pos != null) {
-                    double dist = dist(pos);
+                    double dist = distSq(pos);
                     if (best == null || dist < d) {
                         d = dist;
                         best = pos;
@@ -169,7 +169,7 @@ public class Memory {
                 BlockPos pos = blockMemory.get(type).closest();
                 System.out.println("findgo" + type + " " + pos);
                 if (pos != null) {
-                    double dist = dist(pos);
+                    double dist = distSq(pos);
                     if (best == null || dist < d) {
                         d = dist;
                         best = pos;
