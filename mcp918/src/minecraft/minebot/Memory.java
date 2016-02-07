@@ -76,7 +76,14 @@ public class Memory {
             return best;
         }
         public void recalcFurthest() {
-            furthest = distSq(furthest());
+            double dist = Double.MIN_VALUE;
+            for (BlockPos pos : knownPositions) {
+                double d = distSq(pos);
+                if (d > dist) {
+                    dist = d;
+                }
+            }
+            furthest = dist;
         }
         public BlockPos furthest() {
             BlockPos best = null;
