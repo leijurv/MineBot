@@ -15,6 +15,7 @@ import static minebot.MineBot.goal;
 import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -51,6 +52,25 @@ public class Memory {
             }
             return null;
         }
+        public BlockPos closest() {
+            BlockPos best = null;
+            double dist = Double.MAX_VALUE;
+            for (BlockPos pos : knownPositions) {
+                double d = dist(pos);
+                if (best == null || d < dist) {
+                    dist = d;
+                    best = pos;
+                }
+            }
+            return best;
+        }
+    }
+    public static double dist(BlockPos pos) {
+        EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
+        double diffX = player.posX - (pos.getX() + 0.5D);
+        double diffY = player.posY - (pos.getY() + 0.5D);
+        double diffZ = player.posZ - (pos.getZ() + 0.5D);
+        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
     }
     public static void tick() {
         if (air == null) {
@@ -90,13 +110,40 @@ public class Memory {
     }
     public static String findCommand(String block) {
         String lower = block.toLowerCase();
+        System.out.println(lower);
         for (Block type : blockMemory.keySet()) {
-            if (type.toString().toLowerCase().contains(block)) {
-                BlockPos pos = blockMemory.get(type).getOne();
+            System.out.println("Considering " + type);
+            if (type.toString().toLowerCase().contains(lower)) {
+                BlockPos pos = blockMemory.get(type).closest();
                 if (pos != null) {
                     return block + " at " + pos;
                 }
             }
+        }
+        return "none";
+    }
+    public static String findGoCommand(String block) {
+        String lower = block.toLowerCase();
+        System.out.println(lower);
+        BlockPos best = null;
+        double d = Double.MAX_VALUE;
+        for (Block type : blockMemory.keySet()) {
+            System.out.println("Considering " + type);
+            if (type.toString().toLowerCase().contains(lower)) {
+                BlockPos pos = blockMemory.get(type).closest();
+                if (pos != null) {
+                    double dist = dist(pos);
+                    if (best == null || dist < d) {
+                        d = dist;
+                        best = pos;
+                    }
+                }
+            }
+        }
+        if (best != null) {
+            goal = new GoalBlock(best);
+            MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), true);
+            return "Pathing to " + goal + " " + block + " at " + best;
         }
         return "none";
     }
@@ -105,32 +152,34 @@ public class Memory {
         int X = playerFeet.getX();
         int Y = playerFeet.getY();
         int Z = playerFeet.getZ();
+        int ymin = Math.max(0, Y - 10);
+        int ymax = Math.min(Y + 10, 256);
         for (int x = X; x >= X - SCAN_DIST && blockLoaded(new BlockPos(x, Y, Z)); x--) {
             for (int z = Z; z >= Z - SCAN_DIST && blockLoaded(new BlockPos(x, Y, z)); z--) {
-                for (int y = 0; y <= 128; y++) {
+                for (int y = ymin; y <= ymax; y++) {
                     scanBlock(new BlockPos(x, y, z));
                 }
             }
             for (int z = Z; z <= Z + SCAN_DIST && blockLoaded(new BlockPos(x, Y, z)); z++) {
-                for (int y = 0; y <= 128; y++) {
+                for (int y = ymin; y <= ymax; y++) {
                     scanBlock(new BlockPos(x, y, z));
                 }
             }
         }
         for (int x = X; x <= X + SCAN_DIST && blockLoaded(new BlockPos(x, Y, Z)); x++) {
             for (int z = Z; z >= Z - SCAN_DIST && blockLoaded(new BlockPos(x, Y, z)); z--) {
-                for (int y = 0; y <= 128; y++) {
+                for (int y = ymin; y <= ymax; y++) {
                     scanBlock(new BlockPos(x, y, z));
                 }
             }
             for (int z = Z; z <= Z + SCAN_DIST && blockLoaded(new BlockPos(x, Y, z)); z++) {
-                for (int y = 0; y <= 128; y++) {
+                for (int y = ymin; y <= ymax; y++) {
                     scanBlock(new BlockPos(x, y, z));
                 }
             }
         }
     }
-    public static final int SCAN_DIST = 100;
+    public static final int SCAN_DIST = 50;
     public static void scanBlock(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
         if (air.equals(block)) {

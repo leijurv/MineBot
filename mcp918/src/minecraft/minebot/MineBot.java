@@ -450,7 +450,10 @@ public class MineBot {
             return "Set goal to " + goal;
         }
         if (text.startsWith("find")) {
-            return Memory.findCommand(text.substring(4));
+            return Memory.findCommand(text.substring(4).trim());
+        }
+        if (text.startsWith("findgo")) {
+            return Memory.findGoCommand(text.substring(6).trim());
         }
         if (text.equals("look")) {
             LookManager.lookAtBlock(new BlockPos(0, 0, 0), true);
