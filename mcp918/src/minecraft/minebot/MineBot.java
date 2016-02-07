@@ -449,6 +449,9 @@ public class MineBot {
             goal = new GoalXZ(x, z);
             return "Set goal to " + goal;
         }
+        if (text.startsWith("find")) {
+            return Memory.findCommand(text.substring(4));
+        }
         if (text.equals("look")) {
             LookManager.lookAtBlock(new BlockPos(0, 0, 0), true);
             return null;

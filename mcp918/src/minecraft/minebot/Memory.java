@@ -45,6 +45,12 @@ public class Memory {
             }
             knownPositions.add(pos);
         }
+        public BlockPos getOne() {
+            for (BlockPos pos : knownPositions) {
+                return pos;
+            }
+            return null;
+        }
     }
     public static void tick() {
         if (air == null) {
@@ -81,6 +87,18 @@ public class Memory {
             };
             scanThread.start();
         }
+    }
+    public static String findCommand(String block) {
+        String lower = block.toLowerCase();
+        for (Block type : blockMemory.keySet()) {
+            if (type.toString().toLowerCase().contains(block)) {
+                BlockPos pos = blockMemory.get(type).getOne();
+                if (pos != null) {
+                    return block + " at " + pos;
+                }
+            }
+        }
+        return "none";
     }
     public static void scan() {
         BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
