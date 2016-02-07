@@ -5,7 +5,6 @@
  */
 package minebot.pathfinding.goals;
 
-import minebot.pathfinding.actions.Action;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -32,12 +31,7 @@ public class GoalRunAway implements Goal {
     public double heuristic(BlockPos pos) {//mostly copied from GoalBlock
         double xDiff = pos.getX() - this.x;
         double zDiff = pos.getZ() - this.z;
-        double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
-        double heuristic = 0;
-        heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;//overestimate
-        heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
-        heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
-        return -heuristic;
+        return -GoalXZ.calculate(xDiff, zDiff);
     }
     @Override
     public String toString() {

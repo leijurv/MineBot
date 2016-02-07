@@ -22,6 +22,9 @@ public class GoalBlock implements Goal {
         this.y = y;
         this.z = z;
     }
+    public BlockPos pos() {
+        return new BlockPos(x, y, z);
+    }
     @Override
     public boolean isInGoal(BlockPos pos) {
         return pos.getX() == this.x && pos.getY() == this.y && pos.getZ() == this.z;

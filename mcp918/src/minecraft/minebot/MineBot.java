@@ -6,7 +6,6 @@
 package minebot;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -224,7 +223,6 @@ public class MineBot {
     public static boolean left = false;
     public static boolean right = false;
     public static boolean sneak = false;
-    static HashMap<String, Goal> saved = new HashMap<String, Goal>();
     private static BlockPos craftingTable = null;
     /**
      * Do not question the logic. Called by Minecraft.java
@@ -427,12 +425,18 @@ public class MineBot {
         }
         if (text.startsWith("save")) {
             String t = text.substring(4).trim();
-            saved.put(t, goal);
+            if (goal == null) {
+                return "no goal to save";
+            }
+            if (!(goal instanceof GoalBlock)) {
+                return "sorry, goal has to be instanceof GoalBlock";
+            }
+            Memory.goalMemory.put(t, ((GoalBlock) goal).pos());
             return "Saved " + goal + " under " + t;
         }
         if (text.startsWith("load")) {
             String t = text.substring(4).trim();
-            goal = saved.get(t);
+            goal = new GoalBlock(Memory.goalMemory.get(t));
             return "Set goal to " + goal;
         }
         if (text.startsWith("random direction")) {
