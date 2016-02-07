@@ -36,6 +36,7 @@ public class Memory {
     public static class BlockMemory {
         final Block block;
         final HashSet<BlockPos> knownPositions;//idk whether to use hashset or arraylist here...
+        private volatile double furthest;
         public BlockMemory(Block block) {
             this.block = block;
             this.knownPositions = new HashSet();
@@ -43,14 +44,15 @@ public class Memory {
         public void put(BlockPos pos) {
             if (knownPositions.size() < 100) {
                 knownPositions.add(pos);
-                return;
+                double dist = dist(pos);
+                if (dist > furthest) {
+                    return;
+                }
             }
-            BlockPos furthest = furthest();
-            double d = dist(furthest);
             double dist = dist(pos);
-            if (dist < d) {
+            if (dist < furthest) {
                 knownPositions.add(pos);
-                knownPositions.remove(furthest);
+                knownPositions.remove(furthest());
             }
         }
         public BlockPos getOne() {
@@ -70,6 +72,9 @@ public class Memory {
                 }
             }
             return best;
+        }
+        public void recalcFurthest() {
+            furthest = dist(furthest());
         }
         public BlockPos furthest() {
             BlockPos best = null;
@@ -130,15 +135,24 @@ public class Memory {
     public static String findCommand(String block) {
         String lower = block.toLowerCase();
         System.out.println(lower);
+        BlockPos best = null;
+        double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
             System.out.println("Considering " + type);
             if (type.toString().toLowerCase().contains(lower)) {
                 BlockPos pos = blockMemory.get(type).closest();
                 System.out.println("find" + type + " " + pos);
                 if (pos != null) {
-                    return block + " at " + pos;
+                    double dist = dist(pos);
+                    if (best == null || dist < d) {
+                        d = dist;
+                        best = pos;
+                    }
                 }
             }
+        }
+        if (best != null) {
+            return block + " at " + best;
         }
         return "none";
     }
@@ -169,6 +183,9 @@ public class Memory {
         return "none";
     }
     public static void scan() {
+        for (Block block : blockMemory.keySet()) {
+            blockMemory.get(block).recalcFurthest();
+        }
         BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
         int X = playerFeet.getX();
         int Y = playerFeet.getY();
