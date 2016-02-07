@@ -12,6 +12,7 @@ import static minebot.MineBot.goal;
 import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 
@@ -23,10 +24,13 @@ public class Memory {
     public static HashMap<Block, ArrayList<BlockPos>> blockMemory = new HashMap();
     public static HashMap<String, BlockPos> playerLocationMemory = new HashMap();
     public static HashMap<String, BlockPos> goalMemory = new HashMap();
+    public static ArrayList<String> playersCurrentlyInRange = new ArrayList();
     public static void tick() {
+        playersCurrentlyInRange.clear();
         for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
             String blah = pl.getName().trim().toLowerCase();
             playerLocationMemory.put(blah, new BlockPos(pl.posX, pl.posY, pl.posZ));
+            playersCurrentlyInRange.add(blah);
         }
     }
     public static String gotoCommand(String targetName) {
@@ -47,6 +51,24 @@ public class Memory {
          return "Pathing to " + pl.getName() + " at " + goal;
          }
          }*/
+        return "Couldn't find " + targetName;
+    }
+    public static String playerCommand(String targetName) {
+        String resp = "";
+        for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
+            resp += "(" + pl.getName() + "," + pl.posX + "," + pl.posY + "," + pl.posZ + ")\n";
+            if (pl.getName().equals(targetName)) {
+                BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
+                goal = new GoalBlock(pos);
+                return "Set goal to " + goal;
+            }
+        }
+        for (String x : resp.split("\n")) {
+            GuiScreen.sendChatMessage(x, true);
+        }
+        if (targetName.equals("")) {
+            return "";
+        }
         return "Couldn't find " + targetName;
     }
 }

@@ -516,17 +516,7 @@ public class MineBot {
             return Combat.killCommand(text.substring(4).trim().toLowerCase());
         }
         if (text.startsWith("player")) {
-            String name = text.substring(6).trim();
-            String resp = "";
-            for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
-                resp += "(" + pl.getName() + "," + pl.posX + "," + pl.posY + "," + pl.posZ + ")";
-                if (pl.getName().equals(name)) {
-                    BlockPos pos = new BlockPos(pl.posX, pl.posY, pl.posZ);
-                    goal = new GoalBlock(pos);
-                    return "Set goal to " + goal;
-                }
-            }
-            return resp;
+            return Memory.playerCommand(text.substring(6).trim());
         }
         if (text.startsWith("thisway")) {
             double dist = Double.parseDouble(text.substring(7).trim());
