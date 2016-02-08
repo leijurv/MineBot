@@ -5,12 +5,14 @@
  */
 package minebot;
 
+import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.util.CraftingTask;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 /**
  * goals:
@@ -46,14 +48,26 @@ public class EarlyGameStrategy {
             TreePuncher.tick();
             return;
         }
-        ensureCraftingDesired(Item.getByNameOrId("minecraft:crafting_table"), 1);
-        ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
+        boolean craftingTableInInventory = ensureCraftingDesired(Item.getByNameOrId("minecraft:crafting_table"), 1);
+        boolean hasWooden = ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
+        if (hasWooden) {
+            BlockPos closest = Memory.closest("stone");
+            if (closest == null) {
+                GuiScreen.sendChatMessage("NO STONE NEARBY. GOD DAMN IT");
+                return;
+            }
+            MineBot.goal = new GoalTwoBlocks(closest);
+            if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
+                MineBot.findPathInNewThread(false);
+            }
+        }
     }
-    public static void ensureCraftingDesired(Item item, int quantity) {
+    public static boolean ensureCraftingDesired(Item item, int quantity) {
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
         if (craftingTableTask.currentlyCrafting().stackSize < quantity) {
             craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.currentlyCrafting().stackSize);
         }
+        return craftingTableTask.alreadyHas() >= quantity;
     }
     public static int countWood_PHRASING() {
         Item log1 = Item.getItemFromBlock(Block.getBlockFromName("minecraft:log"));
