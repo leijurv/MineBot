@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 package minebot;
+import minebot.util.CraftingTask;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -22,15 +24,29 @@ import net.minecraft.item.ItemStack;
  */
 public class EarlyGameStrategy {
     static boolean gotWood_PHRASING = false;
-    static final int WOOD_AMT = 16;
+    static final int WOOD_AMT = 16;//triggers stopping
+    static final int MIN_WOOD_AMT = 5;//triggers getting more
     public static void tick() {
         int wood = countWood_PHRASING();
         if (wood >= WOOD_AMT) {
+            if (!gotWood_PHRASING) {
+                GuiScreen.sendChatMessage("Done getting wood", true);
+            }
             gotWood_PHRASING = true;
+        }
+        if (wood > MIN_WOOD_AMT) {
+            if (gotWood_PHRASING) {
+                GuiScreen.sendChatMessage("Getting more wood", true);
+            }
+            gotWood_PHRASING = false;
         }
         if (!gotWood_PHRASING) {
             TreePuncher.tick();
             return;
+        }
+        CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0));
+        if (craftingTableTask.currentlyCrafting().stackSize < 1) {
+            craftingTableTask.increaseNeededAmount(1);
         }
     }
     public static int countWood_PHRASING() {
