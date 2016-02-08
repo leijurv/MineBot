@@ -1,5 +1,4 @@
 package net.minecraft.client.gui;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -344,8 +343,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
     static String chat_header = "§5[§dMineBot§5|§2";
     static String chat_header_2 = "§5]§7 ";
-    public void sendChatMessage(String msg) {
-        this.sendChatMessage(msg, true);
+    public static void sendChatMessage(String msg) {
+        sendChatMessage(msg, true);
     }
     public static void sendChatMessage(String msg, boolean addToChat) {
         if (!MineBot.actuallyPutMessagesInChat) {

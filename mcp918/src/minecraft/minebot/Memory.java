@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package minebot;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +12,7 @@ import java.util.logging.Logger;
 import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalTwoBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -40,6 +40,19 @@ public class Memory {
         public BlockMemory(Block block) {
             this.block = block;
             this.knownPositions = new HashSet();
+        }
+        public void checkForChange() {
+            for (BlockPos pos : new ArrayList<BlockPos>(knownPositions)) {//make duplicate to prevent concurrent modification exceptions
+                if (!blockLoaded(pos)) {
+                    GuiScreen.sendChatMessage("Too far away from " + pos + " to remember that it's " + block, true);
+                }
+                Block current = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+                if (!current.equals(block)) {
+                    GuiScreen.sendChatMessage("Block at " + pos + " has changed from " + block + " to " + current + ". Removing from memory.", true);
+                    knownPositions.remove(pos);
+                    scanBlock(pos);//rescan to put in proper memory
+                }
+            }
         }
         public void put(BlockPos pos) {
             if (knownPositions.size() < 100) {
@@ -165,6 +178,27 @@ public class Memory {
         }
         return "none";
     }
+    public static BlockPos closest(String block) {
+        String lower = block.toLowerCase();
+        System.out.println(lower);
+        BlockPos best = null;
+        double d = Double.MAX_VALUE;
+        for (Block type : blockMemory.keySet()) {
+            System.out.println("Considering " + type);
+            if (type.toString().toLowerCase().contains(lower)) {
+                BlockPos pos = blockMemory.get(type).closest();
+                System.out.println("closest" + type + " " + pos);
+                if (pos != null) {
+                    double dist = distSq(pos);
+                    if (best == null || dist < d) {
+                        d = dist;
+                        best = pos;
+                    }
+                }
+            }
+        }
+        return best;
+    }
     public static String findGoCommand(String block) {
         String lower = block.toLowerCase();
         System.out.println(lower);
@@ -185,13 +219,16 @@ public class Memory {
             }
         }
         if (best != null) {
-            goal = new GoalBlock(best);
-            MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), true);
+            goal = new GoalTwoBlocks(best);
+            MineBot.findPathInNewThread(true);
             return "Pathing to " + goal + " " + block + " at " + best;
         }
         return "none";
     }
     public static void scan() {
+        for (Block block : blockMemory.keySet()) {
+            blockMemory.get(block).checkForChange();
+        }
         for (Block block : blockMemory.keySet()) {
             blockMemory.get(block).recalcFurthest();
         }

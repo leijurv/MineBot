@@ -4,26 +4,25 @@
  * and open the template in the editor.
  */
 package minebot;
-
 import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.mining.MickeyMine;
-import minebot.pathfinding.actions.Action;
-import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.Path;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import minebot.pathfinding.PathFinder;
+import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
+import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -590,10 +589,14 @@ public class MineBot {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public static void findPathInNewThread(final boolean talkAboutIt) {
+        findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), talkAboutIt);
+    }
     /**
      * In a new thread, pathfind to target blockpos
      *
      * @param start
+     * @param talkAboutIt
      */
     public static void findPathInNewThread(final BlockPos start, final boolean talkAboutIt) {
         new Thread() {
