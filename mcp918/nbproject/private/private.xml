@@ -5,35 +5,39 @@
         <group>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/entity/monster/EntityCreeper.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/main/GameConfiguration.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/ActionPillar.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/multiplayer/ChunkProviderClient.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/item/ItemSword.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/entity/Entity.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/Action.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/item/Item.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/actions/ActionBridge.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/gui/GuiScreen.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/util/BlockPos.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/TreePuncher.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/util/MovementInput.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/block/Block.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/mining/MickeyMine.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/actions/ActionDescend.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/util/SmeltingTask.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/world/World.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/world/chunk/EmptyChunk.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/renderer/EntityRenderer.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/GoalRunAway.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/Memory.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/multiplayer/WorldClient.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/entity/EntityLiving.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/util/MovementInputFromOptions.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/entity/AbstractClientPlayer.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/item/ItemFood.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/Path.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/world/chunk/Chunk.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/entity/monster/EntityMob.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/GoalTwoBlocks.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/entity/EntityPlayerSP.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/EarlyGameStrategy.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/util/CraftingTask.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/Start.java</file>
-            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/GoalBlock.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/actions/ActionPillar.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/MineBot.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/main/Main.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/client/Minecraft.java</file>
+            <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/minebot/pathfinding/actions/ActionClimb.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/util/Vec3i.java</file>
             <file>file:/Users/leijurv/Dropbox/MineBot/mcp918/src/minecraft/net/minecraft/entity/player/InventoryPlayer.java</file>
         </group>

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import minebot.LookManager;
+import minebot.Memory;
 import minebot.MineBot;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
@@ -22,6 +24,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
 
 /**
@@ -119,11 +122,14 @@ public class CraftingTask {
             }
         }
         //at this point we know that we need a crafting table and we aren't in one at this moment
-        //if(craftingTableNearby()){
-        //    lookAtIt()
-        //    openIt()
-        //    return;     //on the next tick we will use it, once the gui opens
-        //}
+        BlockPos craftingTableLocation = Memory.closest("crafting");
+        if (craftingTableLocation != null && LookManager.couldIReach(craftingTableLocation)) {
+            LookManager.lookAtBlock(craftingTableLocation, true);
+            if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
+                Minecraft.theMinecraft.rightClickMouse();
+            }
+            return;
+        }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         //if(craftingTableInInventory()){
         //    placeIt();
