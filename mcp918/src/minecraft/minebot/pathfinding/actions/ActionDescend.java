@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 package minebot.pathfinding.actions;
-
-import minebot.util.ToolSet;
 import minebot.MineBot;
+import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;

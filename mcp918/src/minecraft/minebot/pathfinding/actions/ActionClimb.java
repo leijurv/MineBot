@@ -4,11 +4,10 @@
  * and open the template in the editor.
  */
 package minebot.pathfinding.actions;
-
 import java.util.Objects;
 import minebot.LookManager;
-import minebot.util.ToolSet;
 import minebot.MineBot;
+import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -36,6 +35,8 @@ public class ActionClimb extends ActionPlaceOrBreak {
         if (!placementLocation.west().equals(from)) {
             against[i++] = placementLocation.west();
         }
+        //TODO: add ability to place against .down() as well as the cardinal directions
+        //useful for when you are starting a staircase without anything to place against
     }
     @Override
     protected double calculateCost(ToolSet ts) {

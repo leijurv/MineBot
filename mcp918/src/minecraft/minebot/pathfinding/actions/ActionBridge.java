@@ -4,12 +4,11 @@
  * and open the template in the editor.
  */
 package minebot.pathfinding.actions;
-
-import minebot.util.ToolSet;
 import java.util.Objects;
 import java.util.Random;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -36,6 +35,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
         if (!to.west().equals(from)) {
             against[i++] = to.west().down();
         }
+        //note: do NOT add ability to place against .down().down()
     }
     @Override
     protected double calculateCost(ToolSet ts) {
