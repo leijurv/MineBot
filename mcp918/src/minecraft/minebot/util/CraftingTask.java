@@ -111,15 +111,13 @@ public class CraftingTask {
             return;
         }
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting))) {
-            if (craftAsManyAsICan(true)) {
-                return;
-            }
+            craftAsManyAsICan(true);
+            return;//if this doesn't need a crafting table, return no matter what
         }
         //at this point we know that we need a crafting table
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting) {
-            if (craftAsManyAsICan(false)) {
-                return;
-            }
+            craftAsManyAsICan(false);
+            return;//since we are already in a crafting table, return so we don't run the code to get into a crafting table repeatedly
         }
         //at this point we know that we need a crafting table and we aren't in one at this moment
         BlockPos craftingTableLocation = Memory.closest("crafting");
