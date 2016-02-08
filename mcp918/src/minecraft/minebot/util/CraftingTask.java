@@ -129,9 +129,14 @@ public class CraftingTask {
             if (LookManager.couldIReach(craftingTableLocation)) {
                 LookManager.lookAtBlock(craftingTableLocation, true);
             } else {
-                MineBot.goal = new GoalBlock(craftingTableLocation.up());
-                if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
-                    MineBot.findPathInNewThread(false);
+                double dist = Math.sqrt(Memory.distSq(craftingTableLocation));
+                if (dist < 50) {
+                    MineBot.goal = new GoalBlock(craftingTableLocation.up());
+                    if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
+                        MineBot.findPathInNewThread(false);
+                    }
+                } else {
+                    GuiScreen.sendChatMessage("too far away (" + dist + " blocks)");
                 }
             }
             if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
