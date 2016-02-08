@@ -1,0 +1,82 @@
+---- Minecraft Crash Report ----
+// Oops.
+
+Time: 2/7/16 5:04 PM
+Description: Updating screen events
+
+java.lang.IncompatibleClassChangeError: Expecting non-static method net.minecraft.client.gui.GuiChat.sendChatMessage(Ljava/lang/String;)V
+	at net.minecraft.client.gui.GuiChat.keyTyped(GuiChat.java:133)
+	at net.minecraft.client.gui.GuiScreen.handleKeyboardInput(GuiScreen.java:487)
+	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:453)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1378)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:900)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:420)
+	at net.minecraft.client.main.Main.main(Main.java:121)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:54)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at net.minecraft.client.gui.GuiChat.keyTyped(GuiChat.java:133)
+	at net.minecraft.client.gui.GuiScreen.handleKeyboardInput(GuiScreen.java:487)
+	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:453)
+
+-- Affected screen --
+Details:
+	Screen name: net.minecraft.client.gui.GuiChat
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['jurvetson5'/1705147, l='MpServer', x=-1138.05, y=76.00, z=-642.08]]
+	Chunk stats: MultiplayerChunkCache: 439, 439
+	Level seed: 0
+	Level generator: ID 00 - default, ver 1. Features enabled: false
+	Level generator options: 
+	Level spawn location: -108.00,64.00,256.00 - World: (-108,64,256), Chunk: (at 4,4,0 in -7,16; contains blocks -112,0,256 to -97,255,271), Region: (-1,0; contains chunks -32,0 to -1,31, blocks -512,0,0 to -1,255,511)
+	Level time: 22551677 game time, 1000 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: false
+	Forced entities: 42 total; [EntityPlayerSP['jurvetson5'/1705147, l='MpServer', x=-1138.05, y=76.00, z=-642.08], EntityBat['Bat'/1705179, l='MpServer', x=-1107.50, y=25.69, z=-689.75], EntityRabbit['Rabbit'/1705182, l='MpServer', x=-1115.41, y=73.97, z=-650.53], EntitySquid['Squid'/1705310, l='MpServer', x=-1076.69, y=52.31, z=-669.94], EntityRabbit['Rabbit'/1705180, l='MpServer', x=-1111.53, y=63.00, z=-699.50], EntitySquid['Squid'/1705309, l='MpServer', x=-1078.84, y=51.09, z=-675.66], EntityRabbit['Rabbit'/1705181, l='MpServer', x=-1118.91, y=68.00, z=-693.53], EntityItem['item.tile.sapling.spruce'/1705170, l='MpServer', x=-1149.00, y=66.00, z=-606.03], EntityMinecartChest['container.minecart'/1705171, l='MpServer', x=-1122.50, y=8.06, z=-685.50], EntityBat['Bat'/1705168, l='MpServer', x=-1142.53, y=48.10, z=-667.75], EntityCow['Cow'/1705169, l='MpServer', x=-1148.56, y=72.00, z=-645.44], EntityChicken['Chicken'/1705174, l='MpServer', x=-1121.72, y=64.00, z=-594.59], EntityBat['Bat'/1705172, l='MpServer', x=-1128.88, y=14.91, z=-672.50], EntityBat['Bat'/1705173, l='MpServer', x=-1136.41, y=32.00, z=-596.25], EntitySquid['Squid'/1705294, l='MpServer', x=-1109.25, y=48.78, z=-613.28], EntityCow['Cow'/1705166, l='MpServer', x=-1154.75, y=68.00, z=-638.44], EntitySquid['Squid'/1705295, l='MpServer', x=-1119.71, y=47.42, z=-623.58], EntityBat['Bat'/1705167, l='MpServer', x=-1144.16, y=18.31, z=-669.78], EntitySquid['Squid'/1705292, l='MpServer', x=-1119.53, y=53.03, z=-618.41], EntitySquid['Squid'/1705293, l='MpServer', x=-1115.25, y=48.66, z=-614.81], EntityCow['Cow'/1705165, l='MpServer', x=-1164.09, y=66.00, z=-630.00], EntityMinecartChest['container.minecart'/1705155, l='MpServer', x=-1189.50, y=13.06, z=-719.50], EntityBat['Bat'/1705153, l='MpServer', x=-1213.75, y=18.00, z=-603.25], EntityMinecartChest['container.minecart'/1705156, l='MpServer', x=-1189.50, y=13.06, z=-719.50], EntityBat['Bat'/1705157, l='MpServer', x=-1190.53, y=19.10, z=-709.03], EntityChicken['Chicken'/1705210, l='MpServer', x=-1065.31, y=79.00, z=-611.63], EntityRabbit['Rabbit'/1705208, l='MpServer', x=-1059.31, y=67.00, z=-687.72], EntityBat['Bat'/1705209, l='MpServer', x=-1059.25, y=76.63, z=-623.47], EntityRabbit['Rabbit'/1705202, l='MpServer', x=-1087.97, y=71.00, z=-650.63], EntityRabbit['Rabbit'/1705200, l='MpServer', x=-1076.69, y=71.00, z=-653.28], EntityRabbit['Rabbit'/1705201, l='MpServer', x=-1091.25, y=71.00, z=-646.66], EntityRabbit['Rabbit'/1705207, l='MpServer', x=-1059.31, y=67.00, z=-684.72], EntityRabbit['Rabbit'/1705205, l='MpServer', x=-1058.94, y=67.00, z=-686.94], EntityItem['item.item.egg'/1705194, l='MpServer', x=-1088.34, y=67.00, z=-581.28], EntityBat['Bat'/1705192, l='MpServer', x=-1102.25, y=63.10, z=-647.75], EntityRabbit['Rabbit'/1705193, l='MpServer', x=-1089.81, y=71.00, z=-646.31], EntitySheep['Sheep'/1705198, l='MpServer', x=-1085.16, y=61.00, z=-696.81], EntitySheep['Sheep'/1705199, l='MpServer', x=-1072.91, y=64.00, z=-698.06], EntityBat['Bat'/1705196, l='MpServer', x=-1074.25, y=14.03, z=-688.25], EntitySheep['Sheep'/1705197, l='MpServer', x=-1075.66, y=63.00, z=-690.25], EntityRabbit['Rabbit'/1705190, l='MpServer', x=-1095.44, y=71.00, z=-704.72], EntityBat['Bat'/1705191, l='MpServer', x=-1085.42, y=53.37, z=-688.18]]
+	Retry entities: 0 total; []
+	Server brand: vanilla
+	Server type: Non-integrated multiplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:380)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2052)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:433)
+	at net.minecraft.client.main.Main.main(Main.java:121)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:54)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.4
+	Java Version: 1.8.0_45, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 340501000 bytes (324 MB) / 593494016 bytes (566 MB) up to 1908932608 bytes (1820 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 13, tallocated: 95
+	Launched Version: mcp
+	LWJGL: 2.9.2
+	OpenGL: Intel HD Graphics 4000 OpenGL Engine GL version 2.1 INTEL-10.6.31, Intel Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because ARB_framebuffer_object is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: ~~ERROR~~ NullPointerException: null
+	Profiler Position: N/A (disabled)
+	CPU: 4x Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz

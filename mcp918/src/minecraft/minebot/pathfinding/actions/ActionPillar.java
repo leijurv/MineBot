@@ -4,10 +4,9 @@
  * and open the template in the editor.
  */
 package minebot.pathfinding.actions;
-
 import minebot.LookManager;
-import minebot.util.ToolSet;
 import minebot.MineBot;
+import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -22,13 +21,16 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
-        if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
-            return 1000000;
+        double hardness = getTotalHardnessOfBlocksToBreak(ts);
+        if (hardness != 0) {
+            if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3))) {//if the block above where we want to break is not a full block, don't do it
+                return 1000000;
+            }
         }
         if (isLiquid(from) || isLiquid(from.down())) {//can't pillar on water or in water
             return 1000000;
         }
-        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST;//dont ever break the block above you, so multiply by a million
+        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + hardness;
     }
     int numTicks = 0;
     @Override
