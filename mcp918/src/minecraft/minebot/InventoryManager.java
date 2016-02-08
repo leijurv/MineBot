@@ -24,13 +24,13 @@ public class InventoryManager {
     public static void initMax() {
         maximumAmounts = new HashMap();
         minimumAmounts = new HashMap();
-        add("cobblestone", 128, 64);
-        add("coal", 128, 64);
-        add("redstone", 64, 32);
-        add("stone", 64, 32);
-        add("dirt", 128, 64);
+        addBounds("cobblestone", 128, 64);
+        addBounds("coal", 128, 64);
+        addBounds("redstone", 64, 32);
+        addBounds("stone", 64, 32);
+        addBounds("dirt", 128, 64);
     }
-    public static void add(String itemName, int max, int min) {
+    public static void addBounds(String itemName, int max, int min) {
         Item item = Item.getByNameOrId("minecraft:" + itemName);
         if (item == null) {
             GuiScreen.sendChatMessage(itemName + " doesn't exist", true);
