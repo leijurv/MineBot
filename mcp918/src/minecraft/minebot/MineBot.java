@@ -48,6 +48,7 @@ public class MineBot {
     static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
     public static boolean hasThrowaway = true;
+    public static boolean fullAuto = false;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -122,6 +123,9 @@ public class MineBot {
             if (FoodManager.onTick()) {
                 tickPath = false;
             }
+        }
+        if (tickPath && fullAuto) {
+            EarlyGameStrategy.tick();
         }
         if (mreowMine && tickPath) {
             MickeyMine.tick();
@@ -404,6 +408,10 @@ public class MineBot {
         if (text.startsWith("allowBreakOrPlace")) {
             allowBreakOrPlace = !allowBreakOrPlace;
             return "allowBreakOrPlace: " + allowBreakOrPlace;
+        }
+        if (text.startsWith("fullAuto")) {
+            fullAuto = !fullAuto;
+            return "fullAuto: " + fullAuto;
         }
         if (text.equals("steal")) {
             SketchyStealer.alreadyStolenFrom.clear();
