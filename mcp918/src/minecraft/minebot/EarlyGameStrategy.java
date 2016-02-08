@@ -56,11 +56,11 @@ public class EarlyGameStrategy {
             craftingTableTask.increaseNeededAmount(1);
             return;
         }
-        if (!putCraftingTableOnHotBar()) {
-            return;
-        }
-        System.out.println("Ready to place!");
         if (!didPlace) {
+            if (!putCraftingTableOnHotBar()) {
+                return;
+            }
+            System.out.println("Ready to place!");
             LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
             MineBot.isRightClick = true;
             MineBot.jumping = true;
