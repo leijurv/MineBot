@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package minebot;
+
 import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
@@ -139,7 +140,12 @@ public class MineBot {
                     clearPath();
                     GuiScreen.sendChatMessage("Recalculating because path failed", true);
                     nextPath = null;
-                    findPathInNewThread(playerFeet, true);
+                    if (isAir(playerFeet.down())) {//sometimes we are jumping and we make a path that starts in the air and then jumps up, which is impossible
+                        GuiScreen.sendChatMessage("DOING THE JANKY THING, WARNING");
+                        findPathInNewThread(playerFeet.down(), true);
+                    } else {
+                        findPathInNewThread(playerFeet, true);
+                    }
                     return;
                 } else {
                     clearPath();
