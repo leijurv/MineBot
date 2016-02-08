@@ -4,10 +4,15 @@
  * and open the template in the editor.
  */
 package minebot;
+
+import java.util.Random;
 import minebot.util.CraftingTask;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -47,7 +52,60 @@ public class EarlyGameStrategy {
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0));
         if (craftingTableTask.currentlyCrafting().stackSize < 1) {
             craftingTableTask.increaseNeededAmount(1);
+            return;
         }
+        if (!putCraftingTableOnHotBar()) {
+            return;
+        }
+        System.out.println("Ready to place!");
+    }
+    public static boolean putCraftingTableOnHotBar() {//shamelessly copied from MickeyMine.torch()
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (Item.getByNameOrId("minecraft:crafting_table").equals(item.getItem())) {
+                p.inventory.currentItem = i;
+                return true;
+            }
+        }
+        int torchPosition = 0;
+        for (int i = 9; i < inv.length; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (Item.getByNameOrId("minecraft:crafting_table").equals(item.getItem())) {
+                torchPosition = i;
+            }
+        }
+        if (torchPosition == 0) {
+            return false;
+        }
+        int blankHotbarSpot = -1;
+        for (int i = 0; i < 9; i++) {
+            if (inv[i] == null) {
+                blankHotbarSpot = i;
+            }
+        }
+        if (blankHotbarSpot == -1) {
+            blankHotbarSpot = (new Random().nextInt(8) + 1);
+        }
+        if (Minecraft.theMinecraft.currentScreen == null) {
+            MineBot.openInventory();
+            return false;
+        }
+        if (Minecraft.theMinecraft.currentScreen instanceof GuiInventory) {
+            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+            contain.leftClick(torchPosition);
+            contain.leftClick(blankHotbarSpot + 36);
+            contain.leftClick(torchPosition);
+            Minecraft.theMinecraft.thePlayer.closeScreen();
+        }
+        return false;
     }
     public static int countWood_PHRASING() {
         Item log1 = Item.getItemFromBlock(Block.getBlockFromName("minecraft:log"));
