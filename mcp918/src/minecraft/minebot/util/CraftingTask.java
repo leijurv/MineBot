@@ -136,7 +136,7 @@ public class CraftingTask {
                         MineBot.findPathInNewThread(false);
                     }
                 } else {
-                    GuiScreen.sendChatMessage("too far away (" + dist + " blocks)");
+                    GuiScreen.sendChatMessage("too far away from closest crafting table (" + dist + " blocks)");
                 }
             }
             if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
