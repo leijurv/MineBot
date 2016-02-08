@@ -1,8 +1,8 @@
 #!/bin/bash
 
+MESSAGE=$1
 if [ $# -lt 1 ]; then
-  echo "You need to provide a commit message."
-  exit
+  MESSAGE="updated"
 fi
 if [ $# -gt 1 ]; then
   echo "Provide exactly one argument. "
@@ -11,7 +11,7 @@ fi
 git pull
 find . -name .DS_Store -print0 | xargs -0 rm -f --
 git add --all .
-git commit -m "$1"
+git commit -m "$MESSAGE"
 git push
 echo "------------"
 echo "Commit ID: "
