@@ -10,3 +10,4 @@
 /mcp918/bin/
 mcp918/temp/*
 *.pyc
+/mcp918/jars/options.txt

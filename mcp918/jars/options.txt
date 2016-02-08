@@ -1,6 +1,6 @@
 invertYMouse:false
 mouseSensitivity:0.5
-fov:0.0
+fov:1.0
 gamma:1.0
 saturation:0.0
 renderDistance:15
@@ -10,7 +10,7 @@ bobView:true
 anaglyph3d:false
 maxFps:120
 fboEnable:true
-difficulty:1
+difficulty:3
 fancyGraphics:false
 ao:2
 renderClouds:true
@@ -64,7 +64,7 @@ key_key.back:31
 key_key.right:32
 key_key.jump:57
 key_key.sneak:42
-key_key.sprint:29
+key_key.sprint:33
 key_key.drop:16
 key_key.inventory:18
 key_key.chat:20
