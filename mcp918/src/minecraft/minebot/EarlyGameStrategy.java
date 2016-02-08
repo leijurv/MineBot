@@ -63,6 +63,7 @@ public class EarlyGameStrategy {
         if (!didPlace) {
             LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
             MineBot.isRightClick = true;
+            MineBot.jumping = true;
             BlockPos looking = MineBot.whatAreYouLookingAt();
             if (looking == null) {
                 return;
