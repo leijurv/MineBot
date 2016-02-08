@@ -15,6 +15,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 /**
  * goals:
@@ -31,6 +32,7 @@ public class EarlyGameStrategy {
     static boolean gotWood_PHRASING = false;
     static final int WOOD_AMT = 16;//triggers stopping
     static final int MIN_WOOD_AMT = 5;//triggers getting more
+    static boolean didPlace = false;
     public static void tick() {
         int wood = countWood_PHRASING();
         if (wood >= WOOD_AMT) {
@@ -58,6 +60,21 @@ public class EarlyGameStrategy {
             return;
         }
         System.out.println("Ready to place!");
+        if (!didPlace) {
+            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
+            MineBot.isRightClick = true;
+            BlockPos looking = MineBot.whatAreYouLookingAt();
+            if (looking == null) {
+                return;
+            }
+            Block current = Minecraft.theMinecraft.theWorld.getBlockState(looking).getBlock();
+            if (current.equals(Block.getBlockFromItem(Item.getByNameOrId("minecraft:crafting_table")))) {
+                GuiScreen.sendChatMessage("Did place");
+                didPlace = true;
+            }
+            return;
+        }
+        System.out.println("Crafting table is there");
     }
     public static boolean putCraftingTableOnHotBar() {//shamelessly copied from MickeyMine.torch()
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
