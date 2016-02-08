@@ -80,6 +80,12 @@ public class Memory {
             BlockPos best = null;
             double dist = Double.MAX_VALUE;
             for (BlockPos pos : knownPositions) {
+                if (!blockLoaded(pos)) {
+                    continue;
+                }
+                if (!block.equals(Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock())) {
+                    continue;
+                }
                 double d = distSq(pos);
                 if (best == null || d < dist) {
                     dist = d;
