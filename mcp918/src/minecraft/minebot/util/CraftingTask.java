@@ -155,7 +155,9 @@ public class CraftingTask {
                 }
             }
             LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
-            MineBot.isRightClick = true;
+            if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
+                MineBot.isRightClick = true;
+            }
             MineBot.jumping = true;
             return;
         }
