@@ -50,6 +50,7 @@ public class EarlyGameStrategy {
         }
         boolean craftingTableInInventory = ensureCraftingDesired(Item.getByNameOrId("minecraft:crafting_table"), 1);
         boolean hasWooden = ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
+        ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
         if (hasWooden) {
             BlockPos closest = Memory.closest("stone");
             if (closest == null) {
