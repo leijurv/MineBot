@@ -63,7 +63,7 @@ public class EarlyGameStrategy {
             if (stack == null) {
                 continue;
             }
-            if (stack.getItem().equals(log1) || stack.getItem().equals(log2_NOTCH_IS_A_BAD_PROGRAMMER)) {
+            if (log1.equals(stack.getItem()) || log2_NOTCH_IS_A_BAD_PROGRAMMER.equals(stack.getItem())) {
                 count += stack.stackSize;
             }
         }
