@@ -34,7 +34,7 @@ public class EarlyGameStrategy {
             }
             gotWood_PHRASING = true;
         }
-        if (wood > MIN_WOOD_AMT) {
+        if (wood < MIN_WOOD_AMT) {
             if (gotWood_PHRASING) {
                 GuiScreen.sendChatMessage("Getting more wood", true);
             }
