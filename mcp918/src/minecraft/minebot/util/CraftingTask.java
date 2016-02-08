@@ -9,13 +9,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
@@ -129,10 +132,20 @@ public class CraftingTask {
             return;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
-        //if(craftingTableInInventory()){
-        //    placeIt();
-        //    return; //on the next tick the craftingTableNearby() will notice it and use it
-        //}
+        if (putCraftingTableOnHotBar()) {
+            System.out.println("Ready to place!");
+            BlockPos looking = MineBot.whatAreYouLookingAt();
+            if (looking != null) {
+                Block current = Minecraft.theMinecraft.theWorld.getBlockState(looking).getBlock();
+                if (current.equals(Block.getBlockFromItem(Item.getByNameOrId("minecraft:crafting_table")))) {
+                    return;
+                }
+            }
+            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
+            MineBot.isRightClick = true;
+            MineBot.jumping = true;
+            return;
+        }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
         //if(doWeHaveMaterialsToCraftACraftingTable()){
         //    addCraftingTaskForCraftingTable();
@@ -140,6 +153,54 @@ public class CraftingTask {
         //}
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one and we don't have the materials to make one
         //so just rip at this point
+    }
+    public static boolean putCraftingTableOnHotBar() {//shamelessly copied from MickeyMine.torch()
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (Item.getByNameOrId("minecraft:crafting_table").equals(item.getItem())) {
+                p.inventory.currentItem = i;
+                return true;
+            }
+        }
+        int torchPosition = 0;
+        for (int i = 9; i < inv.length; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (Item.getByNameOrId("minecraft:crafting_table").equals(item.getItem())) {
+                torchPosition = i;
+            }
+        }
+        if (torchPosition == 0) {
+            return false;
+        }
+        int blankHotbarSpot = -1;
+        for (int i = 0; i < 9; i++) {
+            if (inv[i] == null) {
+                blankHotbarSpot = i;
+            }
+        }
+        if (blankHotbarSpot == -1) {
+            blankHotbarSpot = (new Random().nextInt(8) + 1);
+        }
+        if (Minecraft.theMinecraft.currentScreen == null) {
+            MineBot.openInventory();
+            return false;
+        }
+        if (Minecraft.theMinecraft.currentScreen instanceof GuiInventory) {
+            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+            contain.leftClick(torchPosition);
+            contain.leftClick(blankHotbarSpot + 36);
+            contain.leftClick(torchPosition);
+            Minecraft.theMinecraft.thePlayer.closeScreen();
+        }
+        return false;
     }
     /**
      *
