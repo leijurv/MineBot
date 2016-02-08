@@ -117,7 +117,7 @@ public class CraftingTask {
         }
         //at this point we know that we need a crafting table
         if (Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting) {
-            if (craftAsManyAsICan(true)) {
+            if (craftAsManyAsICan(false)) {
                 return;
             }
         }
