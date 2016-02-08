@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package minebot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -120,7 +121,7 @@ public class Memory {
     public static double distSq(BlockPos pos) {
         EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
         double diffX = player.posX - (pos.getX() + 0.5D);
-        double diffY = player.posY - (pos.getY() + 0.5D);
+        double diffY = (player.posY + 1.62) - (pos.getY() + 0.5D);
         double diffZ = player.posZ - (pos.getZ() + 0.5D);
         return diffX * diffX + diffY * diffY + diffZ * diffZ;
     }
