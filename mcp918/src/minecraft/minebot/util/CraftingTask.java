@@ -13,6 +13,7 @@ import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
@@ -124,8 +125,15 @@ public class CraftingTask {
         }
         //at this point we know that we need a crafting table and we aren't in one at this moment
         BlockPos craftingTableLocation = Memory.closest("crafting");
-        if (craftingTableLocation != null && LookManager.couldIReach(craftingTableLocation)) {
-            LookManager.lookAtBlock(craftingTableLocation, true);
+        if (craftingTableLocation != null) {
+            if (LookManager.couldIReach(craftingTableLocation)) {
+                LookManager.lookAtBlock(craftingTableLocation, true);
+            } else {
+                MineBot.goal = new GoalBlock(craftingTableLocation.up());
+                if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
+                    MineBot.findPathInNewThread(false);
+                }
+            }
             if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
                 Minecraft.theMinecraft.rightClickMouse();
             }

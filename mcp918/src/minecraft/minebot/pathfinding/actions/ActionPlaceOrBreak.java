@@ -54,7 +54,8 @@ public abstract class ActionPlaceOrBreak extends Action {
                 if (!MineBot.allowBreakOrPlace) {
                     sum += 1000000;
                 }
-                sum += 1 / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
+                double m = Block.getBlockFromName("minecraft:crafting_table").equals(blocksToBreak[i]) ? 10 : 1;
+                sum += m / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
             }
         }
         if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
