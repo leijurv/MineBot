@@ -392,7 +392,7 @@ public class CraftingTask {
         }
         GuiScreen.sendChatMessage("Crafting amount " + amount + " of " + currentlyCrafting(), true);
         plan = new ArrayList();
-        tickNumber = 0;
+        tickNumber = -40;
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
