@@ -94,7 +94,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     }
     @Override
     public String toString() {
-        return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak) + " cost " + cost() + " break cost " + getTotalHardnessOfBlocksToBreak();
+        return this.getClass() + " place " + Arrays.asList(blocksToPlace) + " break " + Arrays.asList(blocksToBreak) + " cost " + cost(null) + " break cost " + getTotalHardnessOfBlocksToBreak();
     }
     @Override
     public boolean tick() {

@@ -43,11 +43,12 @@ public abstract class Action {
     /**
      * Get the cost. It's cached
      *
+     * @param ts
      * @return
      */
-    public double cost() {
+    public double cost(ToolSet ts) {
         if (cost == null) {
-            cost = calculateCost();
+            cost = calculateCost(ts == null ? new ToolSet() : ts);
         }
         if (cost < 1) {
             System.out.println("Bad cost " + this + " " + cost);

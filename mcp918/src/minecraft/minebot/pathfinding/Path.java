@@ -222,8 +222,8 @@ public class Path {
             ticksOnCurrent = 0;
         } else {
             ticksOnCurrent++;
-            if (ticksOnCurrent > actions.get(pathPosition).cost() + 100) {
-                GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost() + "). Cancelling.", true);
+            if (ticksOnCurrent > actions.get(pathPosition).cost(null) + 100) {
+                GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost(null) + "). Cancelling.", true);
                 pathPosition = path.size() + 3;
                 failed = true;
                 return true;

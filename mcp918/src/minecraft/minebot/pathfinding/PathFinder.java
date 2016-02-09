@@ -15,6 +15,7 @@ import minebot.pathfinding.actions.ActionFall;
 import minebot.pathfinding.actions.ActionPillar;
 import java.util.HashMap;
 import java.util.Random;
+import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
@@ -57,6 +58,7 @@ public class PathFinder {
         long timeoutTime = startTime + 10000;
         long lastPrintout = 0;
         int numNodes = 0;
+        ToolSet ts = new ToolSet();
         while (openSet.first != null) {
             Node me = openSet.removeLowest();
             me.isOpen = false;
@@ -72,7 +74,7 @@ public class PathFinder {
             }
             Action[] connected = getConnectedPositions(myPos);
             for (Action actionToGetToNeighbor : connected) {
-                double actionCost = actionToGetToNeighbor.cost();
+                double actionCost = actionToGetToNeighbor.cost(ts);
                 if (actionCost >= COST_INF || Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
                     continue;
                 }
