@@ -47,16 +47,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
         for (int i = 0; i < blocksToBreak.length; i++) {
-            if (!blocksToBreak[i].equals(Block.getBlockById(0)) && !canWalkThrough(positionsToBreak[i])) {
-                if (avoidBreaking(positionsToBreak[i])) {
-                    sum += 1000000;
-                }
-                if (!MineBot.allowBreakOrPlace) {
-                    sum += 1000000;
-                }
-                double m = Block.getBlockFromName("minecraft:crafting_table").equals(blocksToBreak[i]) ? 10 : 1;
-                sum += m / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
-            }
+            sum += getHardness(ts, blocksToBreak[i], positionsToBreak[i]);
         }
         if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
             for (int i = 0; i < blocksToPlace.length; i++) {
@@ -64,6 +55,20 @@ public abstract class ActionPlaceOrBreak extends Action {
                     sum += 1000000;
                 }
             }
+        }
+        return sum;
+    }
+    public double getHardness(ToolSet ts, Block block, BlockPos position) {
+        double sum = 0;
+        if (!block.equals(Block.getBlockById(0)) && !canWalkThrough(position)) {
+            if (avoidBreaking(position)) {
+                sum += 1000000;
+            }
+            if (!MineBot.allowBreakOrPlace) {
+                sum += 1000000;
+            }
+            double m = Block.getBlockFromName("minecraft:crafting_table").equals(block) ? 10 : 1;
+            sum += m / ts.getStrVsBlock(block, position);
         }
         return sum;
     }
