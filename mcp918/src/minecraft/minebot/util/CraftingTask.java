@@ -181,6 +181,7 @@ public class CraftingTask {
             }
             if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
                 MineBot.currentPath = null;
+                MineBot.clearMovement();
                 Minecraft.theMinecraft.rightClickMouse();
             }
             return true;
@@ -446,24 +447,26 @@ public class CraftingTask {
         plan.add(new int[]{slot, 0, 1});
     }
     static boolean didIOpenMyInventory = false;
-    public static void tickAll() {
+    public static boolean tickAll() {
+        MineBot.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
                 if (!craftingTask.onTick()) {
                     Minecraft.theMinecraft.thePlayer.closeScreen();
                 }
-                return;
+                return true;
             }
         }
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.onTick()) {
-                return;
+                return true;
             }
         }
         if (didIOpenMyInventory) {
             Minecraft.theMinecraft.thePlayer.closeScreen();
             didIOpenMyInventory = false;
         }
+        return false;
     }
     public final void buildTasks() {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);

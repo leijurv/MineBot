@@ -130,7 +130,11 @@ public class MineBot {
         if (tickPath && fullAuto) {
             EarlyGameStrategy.tick();
         }
-        CraftingTask.tickAll();
+        if (tickPath) {
+            if (CraftingTask.tickAll()) {
+                tickPath = false;
+            }
+        }
         if (mreowMine && tickPath) {
             MickeyMine.tick();
         }
@@ -334,7 +338,6 @@ public class MineBot {
     }
     public static boolean mreowMine = false;
     public static boolean fullBright = true;
-    
     public static String info(BlockPos bp) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock();
         return bp + " " + block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube() + " is liquid: " + Action.isLiquid(block) + " is flow: " + Action.isFlowing(bp);
@@ -639,7 +642,7 @@ public class MineBot {
     public static boolean isKeyDown(int i) {
         return lockedKeys.get(i) == null ? Keyboard.isKeyDown(i) : lockedKeys.get(i);
     }
-    public boolean isNull() throws NullPointerException{
+    public boolean isNull() throws NullPointerException {
         NullPointerException up = new NullPointerException("You are disgusting");
         throw up;
     }
