@@ -438,6 +438,13 @@ public class CraftingTask {
         return true;
     }
     public void leftClick(int slot) {
+        if (!plan.isEmpty()) {
+            int[] last = plan.get(plan.size() - 1);
+            if (last[0] == slot && last[1] == 0 && last[2] == 0) {
+                plan.remove(plan.size() - 1);
+                return;
+            }
+        }
         plan.add(new int[]{slot, 0, 0});
     }
     public void rightClick(int slot) {
