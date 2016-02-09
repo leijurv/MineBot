@@ -6,6 +6,7 @@
 package minebot.pathfinding.goals;
 
 import minebot.pathfinding.actions.Action;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -14,6 +15,9 @@ import net.minecraft.util.BlockPos;
  */
 public class GoalBlock implements Goal {
     final int x, y, z;
+    public GoalBlock(){
+        this(Minecraft.theMinecraft.thePlayer.playerFeet());
+    }
     public GoalBlock(BlockPos pos) {
         this(pos.getX(), pos.getY(), pos.getZ());
     }

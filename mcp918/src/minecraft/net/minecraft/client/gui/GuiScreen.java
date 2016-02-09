@@ -10,12 +10,15 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import minebot.MineBot;
+import minebot.util.ChatCommand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -368,20 +371,17 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         if (addToChat) {
             Minecraft.theMinecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
         }
-        String nm = MineBot.therewasachatmessage(msg);
-        if (nm == null) {
-            System.out.println("Not sending chat message to server: " + msg);
+        boolean nm = false;
+        try {
+            if(ChatCommand.message(msg)){
+                System.out.println("Not sending chat message to server: " + msg);
             return;
-        }
-        if (!nm.equals(msg)) {
-            nm = chat_header + "chat" + chat_header_2 + nm;
-            System.out.println("Sending " + nm + " instead of " + msg + " to server");
-            if (!MineBot.actuallyPutMessagesInChat) {
-                Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(nm));
-                return;
             }
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(GuiScreen.class.getName()).log(Level.SEVERE, null, ex);
+            sendChatMessage("the chat block: " + ex.getClass().getName());
         }
-        Minecraft.theMinecraft.thePlayer.sendChatMessage(nm);
+        Minecraft.theMinecraft.thePlayer.sendChatMessage(msg);
     }
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton

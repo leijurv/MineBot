@@ -1,0 +1,90 @@
+---- Minecraft Crash Report ----
+// I blame Dinnerbone.
+
+Time: 2/8/16 4:22 PM
+Description: Updating screen events
+
+java.lang.ExceptionInInitializerError
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:376)
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:351)
+	at net.minecraft.client.gui.GuiChat.keyTyped(GuiChat.java:133)
+	at net.minecraft.client.gui.GuiScreen.handleKeyboardInput(GuiScreen.java:497)
+	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:463)
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1378)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:900)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:420)
+	at net.minecraft.client.main.Main.main(Main.java:121)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:56)
+Caused by: java.lang.NullPointerException
+	at minebot.util.ChatCommand.addFields(ChatCommand.java:332)
+	at minebot.util.ChatCommand.<clinit>(ChatCommand.java:62)
+	... 11 more
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:376)
+	at net.minecraft.client.gui.GuiScreen.sendChatMessage(GuiScreen.java:351)
+	at net.minecraft.client.gui.GuiChat.keyTyped(GuiChat.java:133)
+	at net.minecraft.client.gui.GuiScreen.handleKeyboardInput(GuiScreen.java:497)
+	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:463)
+
+-- Affected screen --
+Details:
+	Screen name: net.minecraft.client.gui.GuiChat
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['ave4224'/15030, l='MpServer', x=223.71, y=70.00, z=216.50]]
+	Chunk stats: MultiplayerChunkCache: 441, 441
+	Level seed: 0
+	Level generator: ID 00 - default, ver 1. Features enabled: false
+	Level generator options: 
+	Level spawn location: 226.00,64.00,215.00 - World: (226,64,215), Chunk: (at 2,4,7 in 14,13; contains blocks 224,0,208 to 239,255,223), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,0,0 to 511,255,511)
+	Level time: 137763 game time, 137763 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+	Forced entities: 79 total; [EntityPlayerSP['ave4224'/15030, l='MpServer', x=223.71, y=70.00, z=216.50], EntityZombie['Zombie'/14725, l='MpServer', x=257.69, y=50.00, z=226.28], EntityCreeper['Creeper'/14597, l='MpServer', x=160.69, y=27.00, z=159.44], EntityCreeper['Creeper'/15366, l='MpServer', x=192.50, y=55.00, z=270.50], EntityZombie['Zombie'/15367, l='MpServer', x=158.50, y=24.00, z=240.50], EntitySpider['Spider'/15240, l='MpServer', x=175.50, y=64.00, z=246.50], EntityCreeper['Creeper'/15368, l='MpServer', x=212.50, y=66.00, z=265.50], EntitySkeleton['Skeleton'/15371, l='MpServer', x=202.50, y=38.00, z=296.50], EntityFallingBlock['Falling Block'/15116, l='MpServer', x=88.50, y=36.00, z=104.50], EntitySquid['Squid'/14348, l='MpServer', x=178.47, y=58.25, z=220.28], EntityFallingBlock['Falling Block'/15117, l='MpServer', x=89.50, y=36.00, z=104.50], EntityZombie['Zombie'/15245, l='MpServer', x=261.50, y=32.00, z=154.50], EntityCreeper['Creeper'/15374, l='MpServer', x=250.50, y=44.00, z=158.50], EntityZombie['Zombie'/14735, l='MpServer', x=221.50, y=20.00, z=259.50], EntitySkeleton['Skeleton'/15375, l='MpServer', x=254.50, y=44.00, z=159.50], EntitySkeleton['Skeleton'/15248, l='MpServer', x=259.50, y=32.00, z=153.50], EntitySkeleton['Skeleton'/11793, l='MpServer', x=227.47, y=41.00, z=191.09], EntityCreeper['Creeper'/14737, l='MpServer', x=223.50, y=20.00, z=262.50], EntitySpider['Spider'/15249, l='MpServer', x=304.50, y=64.00, z=293.50], EntitySkeleton['Skeleton'/14998, l='MpServer', x=281.50, y=14.00, z=271.50], EntityCreeper['Creeper'/14235, l='MpServer', x=285.50, y=37.00, z=258.50], EntityCreeper['Creeper'/14236, l='MpServer', x=289.50, y=37.00, z=258.50], EntityCreeper['Creeper'/13727, l='MpServer', x=190.50, y=33.00, z=175.50], EntityFallingBlock['Falling Block'/15136, l='MpServer', x=91.50, y=21.00, z=351.50], EntityCow['Cow'/32, l='MpServer', x=271.16, y=57.00, z=245.91], EntityZombie['Zombie'/13600, l='MpServer', x=290.50, y=21.00, z=263.50], EntityFallingBlock['Falling Block'/15137, l='MpServer', x=92.50, y=19.00, z=351.50], EntityFallingBlock['Falling Block'/15138, l='MpServer', x=93.50, y=19.00, z=351.50], EntityCow['Cow'/35, l='MpServer', x=238.16, y=47.00, z=218.28], EntityFallingBlock['Falling Block'/15139, l='MpServer', x=91.50, y=21.00, z=350.50], EntityFallingBlock['Falling Block'/15140, l='MpServer', x=92.50, y=19.00, z=350.50], EntityFallingBlock['Falling Block'/15141, l='MpServer', x=95.50, y=57.00, z=342.50], EntitySkeleton['Skeleton'/14630, l='MpServer', x=262.69, y=54.00, z=236.28], EntityFallingBlock['Falling Block'/15142, l='MpServer', x=95.50, y=56.00, z=343.50], EntityZombie['Zombie'/14763, l='MpServer', x=238.47, y=47.00, z=207.94], EntityZombie['Zombie'/14764, l='MpServer', x=251.06, y=47.00, z=221.50], EntityZombie['Zombie'/14765, l='MpServer', x=252.09, y=47.00, z=224.47], EntityFallingBlock['Falling Block'/15150, l='MpServer', x=92.50, y=19.00, z=352.50], EntityZombie['Zombie'/15022, l='MpServer', x=191.50, y=33.00, z=171.50], EntityZombie['Zombie'/15278, l='MpServer', x=163.50, y=48.00, z=180.50], EntitySpider['Spider'/14767, l='MpServer', x=243.00, y=47.94, z=210.22], EntityCreeper['Creeper'/15281, l='MpServer', x=233.50, y=17.00, z=291.50], EntityCreeper['Creeper'/15287, l='MpServer', x=259.53, y=67.00, z=147.94], EntitySpider['Spider'/14650, l='MpServer', x=260.38, y=52.00, z=238.09], EntitySkeleton['Skeleton'/15290, l='MpServer', x=183.50, y=36.00, z=289.50], EntitySkeleton['Skeleton'/14911, l='MpServer', x=186.50, y=42.00, z=161.50], EntityBat['Bat'/15300, l='MpServer', x=208.52, y=35.42, z=273.49], EntitySkeleton['Skeleton'/14917, l='MpServer', x=288.50, y=14.00, z=249.50], EntityCreeper['Creeper'/15306, l='MpServer', x=272.78, y=63.00, z=241.44], EntityZombie['Zombie'/15308, l='MpServer', x=261.50, y=31.00, z=152.50], EntityZombie['Zombie'/14671, l='MpServer', x=281.50, y=62.00, z=247.50], EntitySkeleton['Skeleton'/15313, l='MpServer', x=299.50, y=24.00, z=290.50], EntitySkeleton['Skeleton'/14675, l='MpServer', x=219.50, y=21.00, z=257.50], EntitySkeleton['Skeleton'/14676, l='MpServer', x=218.50, y=21.00, z=255.50], EntityCreeper['Creeper'/14550, l='MpServer', x=221.03, y=59.00, z=184.59], EntityCreeper['Creeper'/14551, l='MpServer', x=220.06, y=64.00, z=168.44], EntitySkeleton['Skeleton'/1371, l='MpServer', x=247.88, y=42.00, z=186.44], EntityCreeper['Creeper'/13532, l='MpServer', x=246.66, y=46.00, z=207.28], EntityCreeper['Creeper'/1372, l='MpServer', x=244.59, y=41.00, z=184.19], EntitySkeleton['Skeleton'/13534, l='MpServer', x=245.28, y=47.00, z=206.28], EntitySkeleton['Skeleton'/15204, l='MpServer', x=270.50, y=67.00, z=151.50], EntityCreeper['Creeper'/13670, l='MpServer', x=295.50, y=34.00, z=239.50], EntityZombie['Zombie'/15214, l='MpServer', x=183.84, y=61.88, z=198.88], EntityFallingBlock['Falling Block'/15088, l='MpServer', x=85.50, y=9.00, z=330.50], EntityFallingBlock['Falling Block'/15089, l='MpServer', x=84.50, y=9.00, z=331.50], EntityCreeper['Creeper'/14834, l='MpServer', x=290.47, y=16.00, z=244.94], EntityFallingBlock['Falling Block'/15090, l='MpServer', x=82.50, y=13.00, z=333.50], EntityFallingBlock['Falling Block'/15091, l='MpServer', x=83.50, y=12.00, z=332.50], EntitySpider['Spider'/15347, l='MpServer', x=243.50, y=72.00, z=171.50], EntityZombie['Zombie'/12916, l='MpServer', x=291.50, y=50.00, z=221.50], EntityFallingBlock['Falling Block'/15092, l='MpServer', x=83.50, y=12.00, z=333.50], EntityFallingBlock['Falling Block'/15093, l='MpServer', x=84.50, y=10.00, z=332.50], EntitySkeleton['Skeleton'/14837, l='MpServer', x=285.50, y=14.00, z=249.50], EntityFallingBlock['Falling Block'/15094, l='MpServer', x=81.50, y=13.00, z=334.50], EntityFallingBlock['Falling Block'/15095, l='MpServer', x=82.50, y=12.00, z=334.50], EntityFallingBlock['Falling Block'/15096, l='MpServer', x=83.50, y=11.00, z=334.50], EntityFallingBlock['Falling Block'/15098, l='MpServer', x=81.50, y=11.00, z=335.50], EntityZombie['Zombie'/14971, l='MpServer', x=257.31, y=50.00, z=232.69], EntityFallingBlock['Falling Block'/15099, l='MpServer', x=82.50, y=11.00, z=335.50]]
+	Retry entities: 0 total; []
+	Server brand: CraftBukkit
+	Server type: Non-integrated multiplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:380)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2052)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:433)
+	at net.minecraft.client.main.Main.main(Main.java:121)
+	at minebot.Autorun.start(Autorun.java:24)
+	at minebot.MineBot.main(MineBot.java:56)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.5
+	Java Version: 1.8.0_60, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 398588112 bytes (380 MB) / 708837376 bytes (676 MB) up to 3817865216 bytes (3641 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 13, tallocated: 95
+	Launched Version: mcp
+	LWJGL: 2.9.2
+	OpenGL: Intel(R) Iris(TM) Graphics 6100 GL version 2.1 INTEL-10.6.33, Intel
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because ARB_framebuffer_object is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: ~~ERROR~~ NullPointerException: null
+	Profiler Position: N/A (disabled)
+	CPU: 4x Intel(R) Core(TM) i5-5257U CPU @ 2.70GHz

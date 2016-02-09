@@ -36,8 +36,8 @@ public class Combat {
     public static boolean mobHunting = false;
     public static boolean mobKilling = false;
     public static boolean playerHunt = false;
-    static Entity target = null;
-    static boolean wasTargetSetByMobHunt = false;
+    public static Entity target = null;
+    public static boolean wasTargetSetByMobHunt = false;
     public static boolean onTick() {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
