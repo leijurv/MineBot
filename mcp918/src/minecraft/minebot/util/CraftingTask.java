@@ -122,7 +122,7 @@ public class CraftingTask {
                 return;
             }
             int[] click = plan.get(index);
-            GuiScreen.sendChatMessage(tickNumber + " " + index + " " + click[0] + " " + click[1] + " " + click[2]);
+            GuiScreen.sendChatMessage(tickNumber + " " + index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
             contain.sketchyMouseClick(click[0], click[1], click[2]);
         }
         tickNumber++;
