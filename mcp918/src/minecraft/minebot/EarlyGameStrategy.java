@@ -30,6 +30,7 @@ public class EarlyGameStrategy {
     static final int DIRT_AMT = 32;
     static boolean didPlace = false;
     static boolean gotDirt = false;
+    static boolean cobble = false;
     public static void tick() {
         if (!gotDirt) {
             int dirt = countDirt();
@@ -62,7 +63,12 @@ public class EarlyGameStrategy {
         boolean hasWooden = ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
         ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
         if (hasWooden) {
-            BlockPuncher.tick("stone");
+            if (!cobble) {
+                BlockPuncher.tick("stone");
+                if (countCobble() > 64) {
+                    cobble = true;
+                }
+            }
         }
     }
     public static boolean ensureCraftingDesired(Item item, int quantity) {
@@ -94,6 +100,19 @@ public class EarlyGameStrategy {
                 continue;
             }
             if (dirt.equals(stack.getItem())) {
+                count += stack.stackSize;
+            }
+        }
+        return count;
+    }
+    public static int countCobble() {
+        Item cobble = Item.getItemFromBlock(Block.getBlockFromName("minecraft:cobblestone"));
+        int count = 0;
+        for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
+            if (stack == null) {
+                continue;
+            }
+            if (cobble.equals(stack.getItem())) {
                 count += stack.stackSize;
             }
         }
