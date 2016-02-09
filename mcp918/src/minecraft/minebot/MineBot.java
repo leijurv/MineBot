@@ -131,9 +131,7 @@ public class MineBot {
             EarlyGameStrategy.tick();
         }
         if (tickPath) {
-            if (CraftingTask.tickAll()) {
-                tickPath = false;
-            }
+            CraftingTask.tickAll();
         }
         if (mreowMine && tickPath) {
             MickeyMine.tick();
