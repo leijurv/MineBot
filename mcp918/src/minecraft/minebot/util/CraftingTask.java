@@ -449,6 +449,12 @@ public class CraftingTask {
     public static void tickAll() {
         didIOpenMyInventory = false;
         for (CraftingTask craftingTask : overallCraftingTasks) {
+            if (craftingTask.plan != null) {
+                craftingTask.onTick();
+                return;
+            }
+        }
+        for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.onTick()) {
                 return;
             }
