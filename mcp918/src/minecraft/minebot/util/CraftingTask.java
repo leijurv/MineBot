@@ -447,10 +447,11 @@ public class CraftingTask {
     }
     static boolean didIOpenMyInventory = false;
     public static void tickAll() {
-        didIOpenMyInventory = false;
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
-                craftingTask.onTick();
+                if (!craftingTask.onTick()) {
+                    Minecraft.theMinecraft.thePlayer.closeScreen();
+                }
                 return;
             }
         }
@@ -461,6 +462,7 @@ public class CraftingTask {
         }
         if (didIOpenMyInventory) {
             Minecraft.theMinecraft.thePlayer.closeScreen();
+            didIOpenMyInventory = false;
         }
     }
     public final void buildTasks() {
