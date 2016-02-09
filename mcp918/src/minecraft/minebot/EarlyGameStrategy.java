@@ -5,14 +5,12 @@
  */
 package minebot;
 
-import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.util.CraftingTask;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 
 /**
  * goals:
@@ -40,15 +38,7 @@ public class EarlyGameStrategy {
                 gotDirt = true;
                 return;
             }
-            BlockPos closest = Memory.closest("dirt", "grass");
-            if (closest == null) {
-                GuiScreen.sendChatMessage("NO DIRT NEARBY. GOD DAMN IT");
-                return;
-            }
-            MineBot.goal = new GoalTwoBlocks(closest);
-            if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
-                MineBot.findPathInNewThread(false);
-            }
+            BlockPuncher.tick("dirt", "grass");
             return;
         }
         int wood = countWood_PHRASING();
@@ -72,15 +62,7 @@ public class EarlyGameStrategy {
         boolean hasWooden = ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
         ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
         if (hasWooden) {
-            BlockPos closest = Memory.closest("stone");
-            if (closest == null) {
-                GuiScreen.sendChatMessage("NO STONE NEARBY. GOD DAMN IT");
-                return;
-            }
-            MineBot.goal = new GoalTwoBlocks(closest);
-            if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
-                MineBot.findPathInNewThread(false);
-            }
+            BlockPuncher.tick("stone");
         }
     }
     public static boolean ensureCraftingDesired(Item item, int quantity) {
