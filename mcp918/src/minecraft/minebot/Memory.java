@@ -185,21 +185,22 @@ public class Memory {
         }
         return "none";
     }
-    public static BlockPos closest(String block) {
-        String lower = block.toLowerCase();
-        System.out.println(lower);
+    public static BlockPos closest(String... block) {
         BlockPos best = null;
         double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
             System.out.println("Considering " + type);
-            if (type.toString().toLowerCase().contains(lower)) {
-                BlockPos pos = blockMemory.get(type).closest();
-                System.out.println("closest" + type + " " + pos);
-                if (pos != null) {
-                    double dist = distSq(pos);
-                    if (best == null || dist < d) {
-                        d = dist;
-                        best = pos;
+            for (String b : block) {
+                String lower = b.toLowerCase();
+                if (type.toString().toLowerCase().contains(lower)) {
+                    BlockPos pos = blockMemory.get(type).closest();
+                    System.out.println("closest" + type + " " + pos);
+                    if (pos != null) {
+                        double dist = distSq(pos);
+                        if (best == null || dist < d) {
+                            d = dist;
+                            best = pos;
+                        }
                     }
                 }
             }
