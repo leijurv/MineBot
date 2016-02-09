@@ -55,7 +55,7 @@ public class EarlyGameStrategy {
             gotWood_PHRASING = false;
         }
         if (!gotWood_PHRASING) {
-            BlockPuncher.tick("log");
+            BlockPuncher.tick("log", "log2");
             return;
         }
         boolean craftingTableInInventory = ensureCraftingDesired(Item.getByNameOrId("minecraft:crafting_table"), 1);

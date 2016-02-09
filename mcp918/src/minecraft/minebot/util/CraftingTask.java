@@ -128,7 +128,7 @@ public class CraftingTask {
             return;
         }
         //at this point we know that we need a crafting table and we aren't in one at this moment
-        BlockPos craftingTableLocation = Memory.closest("crafting");
+        BlockPos craftingTableLocation = Memory.closest("crafting_table");
         if (craftingTableLocation != null) {
             if (LookManager.couldIReach(craftingTableLocation)) {
                 LookManager.lookAtBlock(craftingTableLocation, true);
