@@ -6,49 +6,45 @@
 package minebot.pathfinding.goals;
 
 import java.util.Arrays;
-import minebot.pathfinding.actions.Action;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
 /**
  *
  * @author avecowa
  */
-public class GoalComposite implements Goal{
+public class GoalComposite implements Goal {
     public final Goal[] goals;
-    public GoalComposite(Goal[] goals){
+    public GoalComposite(Goal[] goals) {
         this.goals = goals;
     }
-    public GoalComposite(BlockPos[] blocks){
+    public GoalComposite(BlockPos[] blocks) {
         goals = new Goal[blocks.length];
-        for (int i = 0; i < blocks.length; i++){
+        for (int i = 0; i < blocks.length; i++) {
             goals[i] = new GoalBlock(blocks[i]);
         }
     }
-    
     public Goal[] goals() {
         return goals;
     }
-    
     @Override
     public boolean isInGoal(BlockPos pos) {
-        for(Goal g : goals){
-            if(g.isInGoal(pos))
+        for (Goal g : goals) {
+            if (g.isInGoal(pos)) {
                 return true;
+            }
         }
         return false;
     }
-    
     @Override
     public double heuristic(BlockPos pos) {
         double min = Double.MAX_VALUE;
-        for(Goal g : goals)
+        for (Goal g : goals) {
             min = Math.min(min, g.heuristic(pos));
+        }
         return min;
     }
-    
     @Override
     public String toString() {
-        return "GoalComposite"+Arrays.toString(goals);
+        return "GoalComposite" + Arrays.toString(goals);
     }
 }

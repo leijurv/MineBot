@@ -6,8 +6,8 @@
 package minebot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static minebot.MineBot.findPathInNewThread;
@@ -185,7 +185,7 @@ public class Memory {
         }
         return "none";
     }
-    public static BlockPos closest(String... block) {
+    public static BlockPos closestOne(String... block) {
         BlockPos best = null;
         double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
@@ -206,6 +206,25 @@ public class Memory {
             }
         }
         return best;
+    }
+    public static ArrayList<BlockPos> closest(int num, String... block) {
+        ArrayList<BlockPos> result = new ArrayList();
+        for (Block type : blockMemory.keySet()) {
+            System.out.println("Considering " + type);
+            for (String b : block) {
+                String lower = "block{minecraft:" + b.toLowerCase() + "}";
+                if (type.toString().toLowerCase().equals(lower)) {
+                    result.addAll(blockMemory.get(type).knownPositions);
+                }
+            }
+        }
+        result.sort(new Comparator<BlockPos>() {
+            @Override
+            public int compare(BlockPos o1, BlockPos o2) {
+                return Double.compare(distSq(o1), distSq(o2));
+            }
+        });
+        return new ArrayList(result.subList(0, num));
     }
     public static String findGoCommand(String block) {
         String lower = block.toLowerCase();
