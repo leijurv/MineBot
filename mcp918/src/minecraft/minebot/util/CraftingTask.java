@@ -131,9 +131,6 @@ public class CraftingTask {
         tickNumber++;
     }
     public boolean onTick() {
-        if (isDone()) {
-            return false;
-        }
         if (plan != null) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiContainer)) {
                 plan = null;
@@ -142,6 +139,9 @@ public class CraftingTask {
             }
             tickPlan();
             return true;
+        }
+        if (isDone()) {
+            return false;
         }
         boolean hasMaterials = actualDoCraft(1, false, true) != null;
         //System.out.println("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
