@@ -340,7 +340,7 @@ public abstract class GuiContainer extends GuiScreen {
                         if (mouseButton == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100) {
                             this.handleMouseClick(slot, l, mouseButton, 3);
                         } else {
-                            boolean flag2 = l != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54) || MineBot.sketchyStealer);
+                            boolean flag2 = l != -999 && (MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer);
                             int i1 = 0;
                             if (flag2) {
                                 this.shiftClickedSlot = slot != null && slot.getHasStack() ? slot.getStack() : null;
@@ -487,7 +487,7 @@ public abstract class GuiContainer extends GuiScreen {
                 if (state == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100) {
                     this.handleMouseClick(slot, k, state, 3);
                 } else {
-                    boolean flag1 = k != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54) || MineBot.sketchyStealer);
+                    boolean flag1 = k != -999 && (MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer);
                     if (flag1) {
                         this.shiftClickedSlot = slot != null && slot.getHasStack() ? slot.getStack() : null;
                     }

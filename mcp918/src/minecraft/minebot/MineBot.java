@@ -6,7 +6,7 @@
 package minebot;
 
 import java.io.IOException;
-import java.util.Random;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.mining.MickeyMine;
@@ -15,8 +15,6 @@ import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
-import minebot.pathfinding.goals.GoalBlock;
-import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
 import minebot.util.SmeltingTask;
@@ -35,6 +33,7 @@ import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import org.lwjgl.input.Keyboard;
 
 /**
  *
@@ -332,240 +331,9 @@ public class MineBot {
         rightPressTime = 0;
         clearMovement();
     }
-    public static String therewasachatmessage(String message) {
-        try {
-            return therewasachatmessage1(message);
-        } catch (Exception e) {
-            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, e);
-            return message;
-        }
-    }
     public static boolean mreowMine = false;
     public static boolean fullBright = true;
-    /**
-     * Called by GuiScreen.java
-     *
-     * @param message the message that was sent in chat to trigger this
-     * @return what message should actually be sent. can be null to send nothing
-     */
-    public static String therewasachatmessage1(String message) {
-        Minecraft mc = Minecraft.theMinecraft;
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        World theWorld = Minecraft.theMinecraft.theWorld;
-        BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        System.out.println("MSG: " + message);
-        String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
-        if (text.startsWith("fullbright")) {
-            fullBright = !fullBright;
-            return "Full bright: " + fullBright;
-        }
-        if (text.startsWith("death")) {
-            goal = new GoalBlock(death);
-            return "Set goal to " + goal;
-        }
-        if (text.startsWith("craft")) {
-            String spec = text.substring(5).trim();
-            if (spec.length() > 0) {
-                String item = spec.split(" ")[0];
-                String amt = spec.split(" ")[1];
-                ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
-                System.out.println(CraftingTask.findOrCreateCraftingTask(stack));
-            }
-            return "k";
-        }
-        if (text.startsWith("smelt")) {
-            String spec = text.substring(5).trim();
-            if (spec.length() > 0) {
-                String item = spec.split(" ")[0];
-                String amt = spec.split(" ")[1];
-                ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
-                new SmeltingTask(stack).begin();
-            } else {
-                new SmeltingTask(thePlayer.getCurrentEquippedItem()).begin();
-            }
-            return "k";
-        }
-        if (text.startsWith("clearbh")) {
-            String substr = text.substring(7).trim();
-            if (substr.equals("crafting_table")) {
-                setCraftingHome(null);
-            } else if (substr.equals("furnace")) {
-            }
-        }
-        if (text.startsWith("containeritem")) {
-            CraftingTask.getRecipeFromItem(thePlayer.getCurrentEquippedItem().getItem());
-            return "k";
-        }
-        if (text.startsWith("ore")) {
-            MickeyMine.toggleOre(text.substring(3).trim());
-            return "";
-        }
-        if (text.equals("mine")) {
-            mreowMine = !mreowMine;
-            if (!mreowMine) {
-                MickeyMine.clear();
-            }
-            return "Mreow mine: " + mreowMine;
-        }
-        if (text.contains("wizard")) {
-            isThereAnythingInProgress = !isThereAnythingInProgress;
-            return "YOURE A LIZARD HARRY " + isThereAnythingInProgress;
-        }
-        if (text.startsWith("actuallyPutMessagesInChat")) {
-            actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
-            return "toggled to " + actuallyPutMessagesInChat;
-        }
-        if (text.startsWith("allowBreakOrPlace") || text.startsWith("adventure")) {
-            allowBreakOrPlace = !allowBreakOrPlace;
-            return "allowBreakOrPlace: " + allowBreakOrPlace;
-        }
-        if (text.startsWith("fullAuto")) {
-            fullAuto = !fullAuto;
-            return "fullAuto: " + fullAuto;
-        }
-        if (text.equals("steal")) {
-            SketchyStealer.alreadyStolenFrom.clear();
-            sketchyStealer = !sketchyStealer;
-            return "Sketchy stealer: " + sketchyStealer;
-        }
-        if (text.equals("mobkill")) {
-            Combat.mobKilling = !Combat.mobKilling;
-            return "Mob killing: " + Combat.mobKilling;
-        }
-        if (text.equals("playerhunt")) {
-            Combat.playerHunt = !Combat.playerHunt;
-            return "Also do players during mobhunt: " + Combat.playerHunt;
-        }
-        if (text.equals("mobhunt")) {
-            Combat.mobHunting = !Combat.mobHunting;
-            return "Mob hunting: " + Combat.mobHunting;
-        }
-        if (text.equals("carpet")) {
-            useCarpet = !useCarpet;
-            return "Use carpet: " + useCarpet;
-        }
-        if (text.startsWith("save")) {
-            String t = text.substring(4).trim();
-            if (goal == null) {
-                return "no goal to save";
-            }
-            if (!(goal instanceof GoalBlock)) {
-                return "sorry, goal has to be instanceof GoalBlock";
-            }
-            Memory.goalMemory.put(t, ((GoalBlock) goal).pos());
-            return "Saved " + goal + " under " + t;
-        }
-        if (text.startsWith("load")) {
-            String t = text.substring(4).trim();
-            goal = new GoalBlock(Memory.goalMemory.get(t));
-            return "Set goal to " + goal;
-        }
-        if (text.startsWith("random direction")) {
-            double dist = Double.parseDouble(text.substring("random direction".length()).trim());
-            double ang = new Random().nextDouble() * Math.PI * 2;
-            GuiScreen.sendChatMessage("Angle: " + ang, true);
-            int x = playerFeet.getX() + (int) (Math.sin(ang) * dist);
-            int z = playerFeet.getZ() + (int) (Math.cos(ang) * dist);
-            goal = new GoalXZ(x, z);
-            return "Set goal to " + goal;
-        }
-        if (text.startsWith("findgo")) {
-            return Memory.findGoCommand(text.substring(6).trim());
-        } else {
-            if (text.startsWith("find")) {
-                return Memory.findCommand(text.substring(4).trim());
-            }
-        }
-        if (text.equals("look")) {
-            LookManager.lookAtBlock(new BlockPos(0, 0, 0), true);
-            return null;
-        }
-        if (text.equals("cancel")) {
-            cancelPath();
-            plsCancel = true;
-            Combat.target = null;
-            MickeyMine.clear();
-            mreowMine = false;
-            SmeltingTask.cancelAll();
-            return isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
-        }
-        if (text.equals("cancelfurnace")) {
-            SmeltingTask.clearInProgress();
-            return "k =)";
-        }
-        if (text.equals("st")) {
-            GuiScreen.sendChatMessage(info(playerFeet), true);
-            GuiScreen.sendChatMessage(info(playerFeet.down()), true);
-            GuiScreen.sendChatMessage(info(playerFeet.up()), true);
-            System.out.println(theWorld.getBlockState(playerFeet).getBlock());
-            System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
-            System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
-        }
-        if (text.startsWith("goal") || text.startsWith("setgoal")) {
-            plsCancel = false;
-            int ind = text.indexOf(' ') + 1;
-            if (ind == 0) {
-                goal = new GoalBlock(playerFeet);
-                return "Set goal to " + goal;
-            }
-            String[] strs = text.substring(ind).split(" ");
-            int[] coords = new int[strs.length];
-            for (int i = 0; i < strs.length; i++) {
-                try {
-                    coords[i] = Integer.parseInt(strs[i]);
-                } catch (NumberFormatException nfe) {
-                    goal = new GoalBlock(playerFeet);
-                    return strs[i] + ". yup. A+ coordinate";//A+? you might even say A*
-                }
-            }
-            switch (strs.length) {
-                case 3:
-                    goal = new GoalBlock(coords[0], coords[1], coords[2]);
-                    break;
-                case 2:
-                    goal = new GoalXZ(coords[0], coords[1]);
-                    break;
-                case 1:
-                    goal = new GoalYLevel(coords[0]);
-                    break;
-                default:
-                    goal = new GoalBlock(playerFeet);
-                    if (strs.length != 0) {
-                        return strs.length + " coordinates. Nice.";
-                    }
-                    break;
-            }
-            return "Set goal to " + goal;
-        }
-        if (text.startsWith("goto")) {
-            return Memory.gotoCommand(text.substring(4).trim().toLowerCase());
-        }
-        if (text.startsWith("kill")) {
-            return Combat.killCommand(text.substring(4).trim().toLowerCase());
-        }
-        if (text.startsWith("player")) {
-            return Memory.playerCommand(text.substring(6).trim());
-        }
-        if (text.startsWith("thisway")) {
-            double dist = Double.parseDouble(text.substring(7).trim());
-            goal = LookManager.fromAngleAndDirection(dist);
-            return "Set goal to " + goal;
-        }
-        if (text.startsWith("path")) {
-            plsCancel = false;
-            findPathInNewThread(playerFeet, true);
-            return null;
-        }
-        if (text.startsWith("hardness")) {
-            BlockPos bp = MineBot.whatAreYouLookingAt();
-            return bp == null ? "0" : (1 / theWorld.getBlockState(bp).getBlock().getPlayerRelativeBlockHardness(Minecraft.theMinecraft.thePlayer, Minecraft.theMinecraft.theWorld, MineBot.whatAreYouLookingAt())) + "";
-        }
-        if (text.startsWith("info")) {
-            BlockPos bp = MineBot.whatAreYouLookingAt();
-            return info(bp);
-        }
-        return message;
-    }
+    
     public static String info(BlockPos bp) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock();
         return bp + " " + block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube() + " is liquid: " + Action.isLiquid(block) + " is flow: " + Action.isFlowing(bp);
@@ -859,6 +627,16 @@ public class MineBot {
     }
     public static BlockPos getCraftingHome() {
         return craftingTable;
+    }
+    private static HashMap<Integer, Boolean> lockedKeys = new HashMap<Integer, Boolean>();
+    public static Boolean isKeyLocked(int i) {
+        return lockedKeys.get(i);
+    }
+    public static void setKeyLocked(int i, Boolean b) {
+        lockedKeys.put(i, b);
+    }
+    public static boolean isKeyDown(int i) {
+        return lockedKeys.get(i) == null ? Keyboard.isKeyDown(i) : lockedKeys.get(i);
     }
     public boolean isNull() throws NullPointerException{
         NullPointerException up = new NullPointerException("You are disgusting");

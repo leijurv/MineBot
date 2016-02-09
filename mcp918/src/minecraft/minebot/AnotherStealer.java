@@ -5,6 +5,7 @@
  */
 package minebot;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Tuple;
+import org.lwjgl.input.Keyboard;
 
 /**
  *
@@ -36,6 +40,7 @@ public class AnotherStealer {
     public static BlockPos current = null;
     public static boolean dropitem = false;
     private static final Block CHEST = Block.getBlockFromName("chest");
+    public static boolean holdShift = false;
 
     public static void onTick() {
         //try{
@@ -63,11 +68,11 @@ public class AnotherStealer {
             stuff = true;
             return;
         }
-        if (MineBot.whatAreYouLookingAt().equals(near)) {
+        if (near.equals(MineBot.whatAreYouLookingAt())) {
             if (chestStuff) {
                 EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
                 WorldClient world = Minecraft.theMinecraft.theWorld;
-                if(Minecraft.theMinecraft.currentScreen == null) {
+                if (Minecraft.theMinecraft.currentScreen == null) {
                     chestStuff = false;
                     return;
                 }
@@ -77,21 +82,15 @@ public class AnotherStealer {
                     return;
                 }
                 GuiChest contain = (GuiChest) Minecraft.theMinecraft.currentScreen;
-                if(dropitem) {
-                    contain.mouseReleased(tickNumber, tickNumber, tickNumber);
+                Slot slot = getFilledSlot(contain);
+                if (slot != null) {
+                    contain.shiftClick(slot.slotNumber);
+                    return;
                 }
-                //contain.inventorySlots
-                if (tickNumber % 2 == 0) {
-                        try {
-                            contain.mouseClicked(0, 0, 0);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    if (tickNumber % 2 == 1) {
-                        contain.mouseReleased(0, 0, 0);
-                    }
+                player.closeScreen();
+                alreadyStolenFrom.add(near);
                 return;
+
             }
             chestStuff = true;
             MineBot.isRightClick = true;
@@ -100,20 +99,6 @@ public class AnotherStealer {
         }
         LookManager.lookAtBlock(near, true);
         return;
-//        if(chestStuff){
-//            GuiScreen.sendChatMessage("Cheststuff");
-//        } else {
-//            if(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock()!=CHEST){
-//                LookManager.lookAtBlock(getAjacentChest(), stuff);
-//                MineBot.switchToBestTool();
-//                MineBot.isLeftClick = true;
-//            } else {
-//            MineBot.isRightClick = true;
-//            chestStuff = true;
-//            }
-//        } 
-        //}catch (Exception e) { System.err.println(Arrays.toString(e.getStackTrace())); }
-
     }
 
     public static BlockPos getAjacentChest() {
@@ -122,6 +107,15 @@ public class AnotherStealer {
         for (BlockPos p : pos) {
             if (!alreadyStolenFrom.contains(p) && w.getBlockState(p).getBlock().equals(CHEST)) {
                 return p;
+            }
+        }
+        return null;
+    }
+
+    public static Slot getFilledSlot(GuiChest chest) {
+        for (int i = 0; i < chest.lowerChestInventory.getSizeInventory(); i++) {
+            if (chest.lowerChestInventory.getStackInSlot(i) != null) {
+                return chest.inventorySlots.getSlotFromInventory(chest.lowerChestInventory, i);
             }
         }
         return null;

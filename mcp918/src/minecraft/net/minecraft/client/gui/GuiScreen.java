@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import minebot.AnotherStealer;
 import minebot.MineBot;
 import minebot.util.ChatCommand;
 import net.minecraft.client.Minecraft;
@@ -562,19 +563,19 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
      * is down
      */
     public static boolean isCtrlKeyDown() {
-        return Minecraft.isRunningOnMac ? Keyboard.isKeyDown(219) || Keyboard.isKeyDown(220) : Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
+        return Minecraft.isRunningOnMac ? MineBot.isKeyDown(219) || MineBot.isKeyDown(220) : MineBot.isKeyDown(29) || MineBot.isKeyDown(157);
     }
     /**
      * Returns true if either shift key is down
      */
     public static boolean isShiftKeyDown() {
-        return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54) || MineBot.sketchyStealer;
+        return MineBot.isKeyDown(42) || MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer || AnotherStealer.holdShift;
     }
     /**
      * Returns true if either alt key is down
      */
     public static boolean isAltKeyDown() {
-        return Keyboard.isKeyDown(56) || Keyboard.isKeyDown(184);
+        return MineBot.isKeyDown(56) || MineBot.isKeyDown(184);
     }
     public static boolean isKeyComboCtrlX(int p_175277_0_) {
         return p_175277_0_ == 45 && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();

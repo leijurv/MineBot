@@ -1452,10 +1452,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     if (getSystemTime() - this.debugCrashKeyPressTime >= 6000L) {
                         throw new ReportedException(new CrashReport("Manually triggered debug crash", new Throwable()));
                     }
-                    if (!Keyboard.isKeyDown(46) || !Keyboard.isKeyDown(61)) {
+                    if (!MineBot.isKeyDown(46) || !MineBot.isKeyDown(61)) {
                         this.debugCrashKeyPressTime = -1L;
                     }
-                } else if (Keyboard.isKeyDown(46) && Keyboard.isKeyDown(61)) {
+                } else if (MineBot.isKeyDown(46) && MineBot.isKeyDown(61)) {
                     this.debugCrashKeyPressTime = getSystemTime();
                 }
                 this.dispatchKeypresses();
@@ -1473,44 +1473,44 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                                 this.displayInGameMenu();
                             }
                         }
-                        if (k == 32 && Keyboard.isKeyDown(61) && this.ingameGUI != null) {
+                        if (k == 32 && MineBot.isKeyDown(61) && this.ingameGUI != null) {
                             this.ingameGUI.getChatGUI().clearChatMessages();
                         }
-                        if (k == 31 && Keyboard.isKeyDown(61)) {
+                        if (k == 31 && MineBot.isKeyDown(61)) {
                             this.refreshResources();
                         }
-                        if (k == 17 && Keyboard.isKeyDown(61)) {
+                        if (k == 17 && MineBot.isKeyDown(61)) {
                             ;
                         }
-                        if (k == 18 && Keyboard.isKeyDown(61)) {
+                        if (k == 18 && MineBot.isKeyDown(61)) {
                             ;
                         }
-                        if (k == 47 && Keyboard.isKeyDown(61)) {
+                        if (k == 47 && MineBot.isKeyDown(61)) {
                             ;
                         }
-                        if (k == 38 && Keyboard.isKeyDown(61)) {
+                        if (k == 38 && MineBot.isKeyDown(61)) {
                             ;
                         }
-                        if (k == 22 && Keyboard.isKeyDown(61)) {
+                        if (k == 22 && MineBot.isKeyDown(61)) {
                             ;
                         }
-                        if (k == 20 && Keyboard.isKeyDown(61)) {
+                        if (k == 20 && MineBot.isKeyDown(61)) {
                             this.refreshResources();
                         }
-                        if (k == 33 && Keyboard.isKeyDown(61)) {
+                        if (k == 33 && MineBot.isKeyDown(61)) {
                             this.gameSettings.setOptionValue(GameSettings.Options.RENDER_DISTANCE, GuiScreen.isShiftKeyDown() ? -1 : 1);
                         }
-                        if (k == 30 && Keyboard.isKeyDown(61)) {
+                        if (k == 30 && MineBot.isKeyDown(61)) {
                             this.renderGlobal.loadRenderers();
                         }
-                        if (k == 35 && Keyboard.isKeyDown(61)) {
+                        if (k == 35 && MineBot.isKeyDown(61)) {
                             this.gameSettings.advancedItemTooltips = !this.gameSettings.advancedItemTooltips;
                             this.gameSettings.saveOptions();
                         }
-                        if (k == 48 && Keyboard.isKeyDown(61)) {
+                        if (k == 48 && MineBot.isKeyDown(61)) {
                             this.renderManager.setDebugBoundingBox(!this.renderManager.isDebugBoundingBox());
                         }
-                        if (k == 25 && Keyboard.isKeyDown(61)) {
+                        if (k == 25 && MineBot.isKeyDown(61)) {
                             this.gameSettings.pauseOnLostFocus = !this.gameSettings.pauseOnLostFocus;
                             this.gameSettings.saveOptions();
                         }
