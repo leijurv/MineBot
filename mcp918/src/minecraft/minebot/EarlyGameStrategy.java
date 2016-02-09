@@ -29,12 +29,13 @@ public class EarlyGameStrategy {
     static boolean gotWood_PHRASING = false;
     static final int WOOD_AMT = 64;//triggers stopping
     static final int MIN_WOOD_AMT = 16;//triggers getting more
+    static final int DIRT_AMT = 32;
     static boolean didPlace = false;
     static boolean gotDirt = false;
     public static void tick() {
         if (!gotDirt) {
             int dirt = countDirt();
-            if (dirt >= 64) {
+            if (dirt >= DIRT_AMT) {
                 GuiScreen.sendChatMessage("Done getting dirt");
                 gotDirt = true;
                 return;
