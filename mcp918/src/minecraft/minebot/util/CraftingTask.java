@@ -120,13 +120,15 @@ public class CraftingTask {
             if (index >= plan.size()) {
                 GuiScreen.sendChatMessage("Plan over");
                 plan = null;
-                tickNumber = 0;
+                tickNumber = -40;
                 return;
             }
-            int[] click = plan.get(index);
-            GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
-            contain.sketchyMouseClick(click[0], click[1], click[2]);
-            System.out.println("Ticking plan");
+            if (index >= 0) {
+                int[] click = plan.get(index);
+                GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
+                contain.sketchyMouseClick(click[0], click[1], click[2]);
+                System.out.println("Ticking plan");
+            }
         }
         tickNumber++;
     }
