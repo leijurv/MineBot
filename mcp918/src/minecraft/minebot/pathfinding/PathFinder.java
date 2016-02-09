@@ -28,6 +28,7 @@ public class PathFinder {
     final BlockPos start;
     final Goal goal;
     final HashMap<BlockPos, Node> map;
+    public static final double COST_INF = 1000000;
     public PathFinder(BlockPos start, Goal goal) {
         this.start = start;
         this.goal = goal;
@@ -72,7 +73,7 @@ public class PathFinder {
             Action[] connected = getConnectedPositions(myPos);
             for (Action actionToGetToNeighbor : connected) {
                 double actionCost = actionToGetToNeighbor.cost();
-                if (actionCost >= 1000000 || Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
+                if (actionCost >= COST_INF || Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
                     continue;
                 }
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);

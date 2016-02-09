@@ -4,10 +4,12 @@
  * and open the template in the editor.
  */
 package minebot.pathfinding.actions;
+
 import java.util.Objects;
 import java.util.Random;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -53,13 +55,13 @@ public class ActionBridge extends ActionPlaceOrBreak {
             if (blocksToPlace[0].equals(Block.getBlockById(0)) || (!isWater(blocksToPlace[0]) && blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0]))) {
                 for (int i = 0; i < against.length; i++) {
                     if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
-                        return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+                        return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                     }
                 }
                 //TODO this really should replace WC with the cost of sneaking
-                return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+                return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
             }
-            return 100000000;
+            return PathFinder.COST_INF;
             //System.out.println("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         }
     }

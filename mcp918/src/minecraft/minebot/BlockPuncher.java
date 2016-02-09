@@ -5,6 +5,7 @@
  */
 package minebot;
 
+import java.util.Arrays;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
@@ -14,10 +15,10 @@ import net.minecraft.util.BlockPos;
  * @author avecowa
  */
 public class BlockPuncher {
-    public static void tick(String block) {
+    public static void tick(String... block) {
         BlockPos closest = Memory.closest(block);
         if (closest == null) {
-            GuiScreen.sendChatMessage("NO TREES NEARBY. GOD DAMN IT");
+            GuiScreen.sendChatMessage("NO " + Arrays.asList(block) + " NEARBY. GOD DAMN IT");
             return;
         }
         MineBot.goal = new GoalTwoBlocks(closest);

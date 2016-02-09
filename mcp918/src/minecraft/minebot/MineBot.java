@@ -110,7 +110,6 @@ public class MineBot {
         tickNumber++;
         SmeltingTask.onTick();
         hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
-        CraftingTask.tickAll();
         Memory.tick();
         if (stealer) {
             AnotherStealer.onTick();
@@ -131,11 +130,13 @@ public class MineBot {
         if (tickPath && fullAuto) {
             EarlyGameStrategy.tick();
         }
+        CraftingTask.tickAll();
         if (mreowMine && tickPath) {
             MickeyMine.tick();
         }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
+                Goal currentPathGoal = currentPath == null ? null : currentPath.goal;
                 if (currentPath != null) {
                     currentPath.clearPath();
                 }
@@ -179,7 +180,7 @@ public class MineBot {
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                        findPathInNewThread(playerFeet, true);
+                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? currentPathGoal.toString().equals(goal.toString()) : true);
                     }
                 }
             } else {

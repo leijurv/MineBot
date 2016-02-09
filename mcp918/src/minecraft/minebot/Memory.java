@@ -191,8 +191,8 @@ public class Memory {
         for (Block type : blockMemory.keySet()) {
             System.out.println("Considering " + type);
             for (String b : block) {
-                String lower = b.toLowerCase();
-                if (type.toString().toLowerCase().contains(lower)) {
+                String lower = "block{minecraft:" + b.toLowerCase() + "}";
+                if (type.toString().toLowerCase().equals(lower)) {
                     BlockPos pos = blockMemory.get(type).closest();
                     System.out.println("closest" + type + " " + pos);
                     if (pos != null) {

@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 package minebot.pathfinding.actions;
+
 import java.util.Objects;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -43,12 +45,12 @@ public class ActionClimb extends ActionPlaceOrBreak {
         if (!canWalkOn(positionsToPlace[0])) {
             for (int i = 0; i < against.length; i++) {
                 if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
-                    return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+                    return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                 }
             }
-            return 1000000;
+            return PathFinder.COST_INF;
         }
-        return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+        return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }
     @Override
     protected boolean tick0() {//basically just hold down W and space until we are where we want to be

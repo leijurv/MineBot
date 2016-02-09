@@ -7,10 +7,13 @@ package minebot.pathfinding.actions;
 
 import minebot.util.ToolSet;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -46,26 +49,45 @@ public abstract class ActionPlaceOrBreak extends Action {
     }
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
-        for (int i = 0; i < blocksToBreak.length; i++) {
-            if (!blocksToBreak[i].equals(Block.getBlockById(0)) && !canWalkThrough(positionsToBreak[i])) {
-                if (avoidBreaking(positionsToBreak[i])) {
-                    sum += 1000000;
-                }
-                if (!MineBot.allowBreakOrPlace) {
-                    sum += 1000000;
-                }
-                double m = Block.getBlockFromName("minecraft:crafting_table").equals(blocksToBreak[i]) ? 10 : 1;
-                sum += m / ts.getStrVsBlock(blocksToBreak[i], positionsToBreak[i]);
+        HashSet<BlockPos> toBreak = new HashSet();
+        for (int i = 0; i < positionsToBreak.length; i++) {
+            toBreak.add(positionsToBreak[i]);
+            BlockPos tmp = positionsToBreak[i].up();
+            while (canFall(tmp)) {
+                toBreak.add(tmp);
+                tmp = tmp.up();
+            }
+        }
+        for (BlockPos pos : toBreak) {
+            sum += getHardness(ts, Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock(), pos);
+            if (sum >= PathFinder.COST_INF) {
+                return PathFinder.COST_INF;
             }
         }
         if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
             for (int i = 0; i < blocksToPlace.length; i++) {
                 if (!canWalkOn(positionsToPlace[i])) {
-                    sum += 1000000;
+                    return PathFinder.COST_INF;
                 }
             }
         }
         return sum;
+    }
+    public static boolean canFall(BlockPos pos) {
+        return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock() instanceof BlockFalling;
+    }
+    public static double getHardness(ToolSet ts, Block block, BlockPos position) {
+        if (!block.equals(Block.getBlockById(0)) && !canWalkThrough(position)) {
+            if (avoidBreaking(position)) {
+                return PathFinder.COST_INF;
+            }
+            if (!MineBot.allowBreakOrPlace) {
+                return PathFinder.COST_INF;
+            }
+            double m = Block.getBlockFromName("minecraft:crafting_table").equals(block) ? 10 : 1;
+            return m / ts.getStrVsBlock(block, position);
+        }
+        return 0;
     }
     @Override
     public String toString() {
@@ -74,7 +96,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     @Override
     public boolean tick() {
         //breaking first
-        for (int i = 0; i < blocksToBreak.length; i++) {
+        for (int i = 0; i < positionsToBreak.length; i++) {
             if (!canWalkThrough(positionsToBreak[i])) {
                 if (!MineBot.allowBreakOrPlace) {
                     GuiScreen.sendChatMessage("BB I can't break this =(((", true);
@@ -105,7 +127,7 @@ public abstract class ActionPlaceOrBreak extends Action {
             }
         }
         MineBot.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
-        for (int i = 0; i < blocksToPlace.length; i++) {
+        for (int i = 0; i < positionsToPlace.length; i++) {
             if (!canWalkOn(positionsToPlace[i])) {
                 if (!MineBot.allowBreakOrPlace) {
                     GuiScreen.sendChatMessage("BB I can't place this =(((", true);

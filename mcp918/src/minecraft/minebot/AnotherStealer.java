@@ -77,7 +77,10 @@ public class AnotherStealer {
                     return;
                 }
                 GuiChest contain = (GuiChest) Minecraft.theMinecraft.currentScreen;
-                contain.inventorySlots
+                if(dropitem) {
+                    contain.mouseReleased(tickNumber, tickNumber, tickNumber);
+                }
+                //contain.inventorySlots
                 if (tickNumber % 2 == 0) {
                         try {
                             contain.mouseClicked(0, 0, 0);

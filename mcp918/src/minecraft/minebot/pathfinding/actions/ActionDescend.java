@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package minebot.pathfinding.actions;
+
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -21,7 +23,7 @@ public class ActionDescend extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
-            return 1000000;
+            return PathFinder.COST_INF;
         }
         return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }

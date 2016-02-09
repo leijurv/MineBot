@@ -6,6 +6,7 @@
 package minebot.pathfinding.actions;
 
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -22,12 +23,12 @@ public class ActionDescendTwo extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
-            return 1000000;
+            return PathFinder.COST_INF;
         }
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
-            return 1000000;
+            return PathFinder.COST_INF;
         }
-        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST * 2;
+        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST;
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
