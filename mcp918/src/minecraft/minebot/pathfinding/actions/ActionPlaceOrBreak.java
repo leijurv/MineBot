@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
@@ -59,11 +60,14 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         for (BlockPos pos : toBreak) {
             sum += getHardness(ts, Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock(), pos);
+            if (sum >= PathFinder.COST_INF) {
+                return PathFinder.COST_INF;
+            }
         }
         if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
             for (int i = 0; i < blocksToPlace.length; i++) {
                 if (!canWalkOn(positionsToPlace[i])) {
-                    sum += 1000000;
+                    return PathFinder.COST_INF;
                 }
             }
         }
@@ -73,18 +77,17 @@ public abstract class ActionPlaceOrBreak extends Action {
         return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock() instanceof BlockFalling;
     }
     public static double getHardness(ToolSet ts, Block block, BlockPos position) {
-        double sum = 0;
         if (!block.equals(Block.getBlockById(0)) && !canWalkThrough(position)) {
             if (avoidBreaking(position)) {
-                sum += 1000000;
+                return PathFinder.COST_INF;
             }
             if (!MineBot.allowBreakOrPlace) {
-                sum += 1000000;
+                return PathFinder.COST_INF;
             }
             double m = Block.getBlockFromName("minecraft:crafting_table").equals(block) ? 10 : 1;
-            sum += m / ts.getStrVsBlock(block, position);
+            return m / ts.getStrVsBlock(block, position);
         }
-        return sum;
+        return 0;
     }
     @Override
     public String toString() {

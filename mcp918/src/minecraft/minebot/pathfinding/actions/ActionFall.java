@@ -6,6 +6,7 @@
 package minebot.pathfinding.actions;
 
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -38,8 +39,8 @@ public class ActionFall extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(to.down())) {
-            return 1000000;
+            return PathFinder.COST_INF;
         }
-        return FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak();
+        return FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }
 }
