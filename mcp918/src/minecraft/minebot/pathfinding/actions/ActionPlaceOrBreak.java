@@ -58,7 +58,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return sum;
     }
-    public double getHardness(ToolSet ts, Block block, BlockPos position) {
+    public static double getHardness(ToolSet ts, Block block, BlockPos position) {
         double sum = 0;
         if (!block.equals(Block.getBlockById(0)) && !canWalkThrough(position)) {
             if (avoidBreaking(position)) {
