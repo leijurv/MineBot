@@ -138,7 +138,7 @@ public class CraftingTask {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiContainer)) {
                 plan = null;
                 tickNumber = 0;
-                return false;
+                return true;
             }
             tickPlan();
             return true;
