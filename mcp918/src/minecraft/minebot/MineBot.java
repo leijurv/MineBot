@@ -109,7 +109,6 @@ public class MineBot {
         tickNumber++;
         SmeltingTask.onTick();
         hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
-        CraftingTask.tickAll();
         Memory.tick();
         if (sketchyStealer) {
             SketchyStealer.onTick();
@@ -128,6 +127,7 @@ public class MineBot {
         if (tickPath && fullAuto) {
             EarlyGameStrategy.tick();
         }
+        CraftingTask.tickAll();
         if (mreowMine && tickPath) {
             MickeyMine.tick();
         }
