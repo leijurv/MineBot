@@ -176,7 +176,7 @@ public class MineBot {
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                        findPathInNewThread(playerFeet, true);
+                        findPathInNewThread(playerFeet, currentPath.goal.toString().equals(goal.toString()));
                     }
                 }
             } else {
