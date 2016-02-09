@@ -214,7 +214,11 @@ public class Memory {
             for (String b : block) {
                 String lower = "block{minecraft:" + b.toLowerCase() + "}";
                 if (type.toString().toLowerCase().equals(lower)) {
-                    result.addAll(blockMemory.get(type).knownPositions);
+                    for (BlockPos pos : blockMemory.get(type).knownPositions) {
+                        if (type.equals(Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock())) {
+                            result.add(pos);
+                        }
+                    }
                 }
             }
         }
