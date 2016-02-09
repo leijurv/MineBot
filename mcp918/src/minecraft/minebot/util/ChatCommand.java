@@ -15,7 +15,6 @@ import minebot.Combat;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
-import minebot.SketchyStealer;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalXZ;
@@ -114,10 +113,10 @@ public class ChatCommand {
         }
         return "THATS NOT A THING";
     }
-    public static String fullBright(String message) {
-        MineBot.fullBright ^= true;
-        return "";
-    }
+    /*public static String fullBright(String message) {
+     MineBot.fullBright ^= true;
+     return "";
+     }*/
     public static String death(String message) {
         MineBot.goal = new GoalBlock(MineBot.death);
         return "Set goal to " + MineBot.goal;
@@ -180,25 +179,25 @@ public class ChatCommand {
     public static String adventure(String message) {
         return "allowBreakOrPlace: " + (MineBot.allowBreakOrPlace ^= true);
     }
-    public static String fullAuto(String message) {
-        return "fullAuto: " + (MineBot.fullAuto ^= true);
-    }
-    public static String steal(String message) {
-        SketchyStealer.alreadyStolenFrom.clear();
-        return "Sketchy stealer: " + (MineBot.sketchyStealer ^= true);
-    }
-    public static String mobkill(String message) {
-        return "Mob killing: " + (Combat.mobKilling ^= true);
-    }
-    public static String playerhunt(String message) {
-        return "Also do players during mobhunt: " + (Combat.playerHunt ^= true);
-    }
-    public static String mobhunt(String message) {
-        return "Mob hunting: " + (Combat.mobHunting ^= true);
-    }
-    public static String usecarpet(String message) {
-        return "Use carpet: " + (MineBot.useCarpet ^= true);
-    }
+    /*public static String fullAuto(String message) {
+     return "fullAuto: " + (MineBot.fullAuto ^= true);
+     }
+     public static String steal(String message) {
+     SketchyStealer.alreadyStolenFrom.clear();
+     return "Sketchy stealer: " + (MineBot.sketchyStealer ^= true);
+     }
+     public static String mobkill(String message) {
+     return "Mob killing: " + (Combat.mobKilling ^= true);
+     }
+     public static String playerhunt(String message) {
+     return "Also do players during mobhunt: " + (Combat.playerHunt ^= true);
+     }
+     public static String mobhunt(String message) {
+     return "Mob hunting: " + (Combat.mobHunting ^= true);
+     }
+     public static String usecarpet(String message) {
+     return "Use carpet: " + (MineBot.useCarpet ^= true);
+     }*/
     public static String save(String message) {
         String t = message.substring(4).trim();
         if (MineBot.goal == null) {
