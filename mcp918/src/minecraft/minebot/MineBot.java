@@ -133,6 +133,7 @@ public class MineBot {
         }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
+                Goal currentPathGoal = currentPath.goal;
                 if (currentPath != null) {
                     currentPath.clearPath();
                 }
@@ -176,7 +177,7 @@ public class MineBot {
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                        findPathInNewThread(playerFeet, currentPath.goal.toString().equals(goal.toString()));
+                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? currentPathGoal.toString().equals(goal.toString()) : true);
                     }
                 }
             } else {
