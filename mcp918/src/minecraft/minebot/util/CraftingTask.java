@@ -118,12 +118,15 @@ public class CraftingTask {
         if (tickNumber % ticksBetweenClicks == 0) {
             int index = tickNumber / ticksBetweenClicks;
             if (index >= plan.size()) {
+                GuiScreen.sendChatMessage("Plan over");
                 plan = null;
+                tickNumber = 0;
                 return;
             }
             int[] click = plan.get(index);
             GuiScreen.sendChatMessage(tickNumber + " " + index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
             contain.sketchyMouseClick(click[0], click[1], click[2]);
+            System.out.println("Ticking plan");
         }
         tickNumber++;
     }
@@ -134,13 +137,14 @@ public class CraftingTask {
         if (plan != null) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiContainer)) {
                 plan = null;
+                tickNumber = 0;
                 return false;
             }
             tickPlan();
             return true;
         }
         boolean hasMaterials = actualDoCraft(1, false, true) != null;
-        System.out.println("materials " + this + " " + currentlyCrafting + " " + hasMaterials);
+        System.out.println("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
         if (!hasMaterials) {
             return false;
         }
@@ -321,7 +325,7 @@ public class CraftingTask {
                 return actualDoCraftOne(items, positions, inputQuantity, inInventory, justChecking);
             }
         }
-        return false;
+        return justChecking ? null : false;
     }
     /**
      *
@@ -386,7 +390,7 @@ public class CraftingTask {
                 return false;
             }
         }
-        GuiScreen.sendChatMessage("Crafting amount " + amount, true);
+        GuiScreen.sendChatMessage("Crafting amount " + amount + " of " + currentlyCrafting(), true);
         plan = new ArrayList();
         tickNumber = 0;
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
@@ -444,7 +448,7 @@ public class CraftingTask {
         didIOpenMyInventory = false;
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.onTick()) {
-                break;
+                return;
             }
         }
         if (didIOpenMyInventory) {
