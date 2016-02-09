@@ -25,7 +25,7 @@ import net.minecraft.world.World;
  * @author leijurv
  */
 public class SketchyStealer {
-    static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
+    public static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
     public static void onTick() {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;

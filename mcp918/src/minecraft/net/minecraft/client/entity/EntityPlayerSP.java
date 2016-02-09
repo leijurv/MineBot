@@ -651,4 +651,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
             this.sendPlayerAbilities();
         }
     }
+    public BlockPos playerFeet(){
+        return new BlockPos(posX, posY, posZ);
+    }
 }

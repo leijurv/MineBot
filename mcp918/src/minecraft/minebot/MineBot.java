@@ -42,11 +42,11 @@ import net.minecraft.world.World;
  */
 public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
-    static boolean isThereAnythingInProgress = false;
-    static boolean plsCancel = false;
+    public static boolean isThereAnythingInProgress = false;
+    public static boolean plsCancel = false;
     public static boolean sketchyStealer = false;
     public static boolean useCarpet = false;
-    static int tickNumber = 0;
+    public static int tickNumber = 0;
     public static boolean allowBreakOrPlace = true;
     public static boolean hasThrowaway = true;
     public static boolean fullAuto = false;
@@ -78,8 +78,8 @@ public class MineBot {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    static BlockPos death;
-    static long lastDeath = 0;
+    public static BlockPos death;
+    public static long lastDeath = 0;
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             cancelPath();
@@ -336,7 +336,7 @@ public class MineBot {
             return message;
         }
     }
-    static boolean mreowMine = false;
+    public static boolean mreowMine = false;
     public static boolean fullBright = true;
     /**
      * Called by GuiScreen.java
@@ -411,7 +411,7 @@ public class MineBot {
             actuallyPutMessagesInChat = !actuallyPutMessagesInChat;
             return "toggled to " + actuallyPutMessagesInChat;
         }
-        if (text.startsWith("allowBreakOrPlace")) {
+        if (text.startsWith("allowBreakOrPlace") || text.startsWith("adventure")) {
             allowBreakOrPlace = !allowBreakOrPlace;
             return "allowBreakOrPlace: " + allowBreakOrPlace;
         }
