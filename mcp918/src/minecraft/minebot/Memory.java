@@ -215,7 +215,7 @@ public class Memory {
                 String lower = "block{minecraft:" + b.toLowerCase() + "}";
                 if (type.toString().toLowerCase().equals(lower)) {
                     for (BlockPos pos : blockMemory.get(type).knownPositions) {
-                        if (type.equals(Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock())) {
+                        if (type.equals(Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock()) && !result.contains(pos)) {
                             result.add(pos);
                         }
                     }
@@ -228,7 +228,7 @@ public class Memory {
                 return Double.compare(distSq(o1), distSq(o2));
             }
         });
-        return new ArrayList(result.subList(0, num));
+        return new ArrayList(result.subList(0, Math.min(num, result.size())));
     }
     public static String findGoCommand(String block) {
         String lower = block.toLowerCase();
