@@ -9,6 +9,7 @@ import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
 import minebot.util.ToolSet;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -25,7 +26,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
     protected double calculateCost(ToolSet ts) {
         double hardness = getTotalHardnessOfBlocksToBreak(ts);
         if (hardness != 0) {
-            if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3))) {//if the block above where we want to break is not a full block, don't do it
+            if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3)) || Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//if the block above where we want to break is not a full block, don't do it
                 return PathFinder.COST_INF;
             }
         }

@@ -52,6 +52,9 @@ public abstract class ActionPlaceOrBreak extends Action {
         HashSet<BlockPos> toBreak = new HashSet();
         for (int i = 0; i < positionsToBreak.length; i++) {
             toBreak.add(positionsToBreak[i]);
+            if (this instanceof ActionFall) {
+                continue;
+            }
             BlockPos tmp = positionsToBreak[i].up();
             while (canFall(tmp)) {
                 toBreak.add(tmp);
