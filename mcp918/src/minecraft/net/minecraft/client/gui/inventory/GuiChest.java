@@ -18,6 +18,10 @@ public class GuiChest extends GuiContainer
      */
     private int inventoryRows;
 
+    public int getInventoryRows(){
+        return inventoryRows;
+    }
+    
     public GuiChest(IInventory upperInv, IInventory lowerInv)
     {
         super(new ContainerChest(upperInv, lowerInv, Minecraft.getMinecraft().thePlayer));

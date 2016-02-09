@@ -36,11 +36,11 @@ public class Memory {
 
     public static class BlockMemory {
         final Block block;
-        final HashSet<BlockPos> knownPositions;//idk whether to use hashset or arraylist here...
+        final ArrayList<BlockPos> knownPositions;//idk whether to use hashset or arraylist here...
         private volatile double furthest;
         public BlockMemory(Block block) {
             this.block = block;
-            this.knownPositions = new HashSet();
+            this.knownPositions = new ArrayList();
         }
         public void checkForChange() {
             for (BlockPos pos : new ArrayList<BlockPos>(knownPositions)) {//make duplicate to prevent concurrent modification exceptions

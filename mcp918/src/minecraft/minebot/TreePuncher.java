@@ -4,24 +4,13 @@
  * and open the template in the editor.
  */
 package minebot;
-import minebot.pathfinding.goals.GoalTwoBlocks;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.BlockPos;
 
 /**
  *
  * @author leijurv
  */
-public class TreePuncher {
+public class TreePuncher extends BlockPuncher{
     public static void tick() {
-        BlockPos closest = Memory.closest("log");
-        if (closest == null) {
-            GuiScreen.sendChatMessage("NO TREES NEARBY. GOD DAMN IT");
-            return;
-        }
-        MineBot.goal = new GoalTwoBlocks(closest);
-        if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
-            MineBot.findPathInNewThread(false);
-        }
+        BlockPuncher.tick("log");
     }
 }

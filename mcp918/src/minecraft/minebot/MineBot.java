@@ -44,6 +44,7 @@ public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
     public static boolean isThereAnythingInProgress = false;
     public static boolean plsCancel = false;
+    public static boolean stealer = false;
     public static boolean sketchyStealer = false;
     public static boolean useCarpet = false;
     public static int tickNumber = 0;
@@ -111,7 +112,9 @@ public class MineBot {
         hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
         CraftingTask.tickAll();
         Memory.tick();
-        if (sketchyStealer) {
+        if (stealer) {
+            AnotherStealer.onTick();
+        } else if (sketchyStealer) {
             SketchyStealer.onTick();
         }
         if (Minecraft.theMinecraft.currentScreen == null && tickNumber % 20 == 0) {
@@ -855,5 +858,9 @@ public class MineBot {
     }
     public static BlockPos getCraftingHome() {
         return craftingTable;
+    }
+    public boolean isNull() throws NullPointerException{
+        NullPointerException up = new NullPointerException("You are disgusting");
+        throw up;
     }
 }

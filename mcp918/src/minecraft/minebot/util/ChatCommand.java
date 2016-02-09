@@ -11,8 +11,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import minebot.AnotherStealer;
 import minebot.Combat;
 import minebot.LookManager;
 import minebot.Memory;
@@ -20,6 +19,7 @@ import minebot.MineBot;
 import minebot.SketchyStealer;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalGetToBlock;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
 import net.minecraft.client.Minecraft;
@@ -29,7 +29,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
 
 /**
  *
@@ -122,6 +121,16 @@ public class ChatCommand {
         return "THATS NOT A THING";
     }
 
+    public static String importfrom(String message) throws ClassNotFoundException{
+        String[] args = message.split(" ");
+        if(args.length!=3 || (!"m".equals(args[1]) && !"f".equals(args[1]))){
+            return "import (m/f) class";
+        }
+        Class c = Class.forName(args[2]);
+        if(args[1].equals("m")) addMethods(c); else addFields(c);
+        return "Added from "+c;
+    }
+    
     public static String fullBright(String message) {
         MineBot.fullBright ^= true;
         return "";
@@ -206,6 +215,7 @@ public class ChatCommand {
 
     public static String steal(String message) {
         SketchyStealer.alreadyStolenFrom.clear();
+        MineBot.stealer = false;
         return "Sketchy stealer: " + (MineBot.sketchyStealer ^= true);
     }
 
@@ -368,5 +378,43 @@ public class ChatCommand {
     
     public static String toggle(String message) throws IllegalArgumentException, IllegalAccessException{
         return set(message);
+    }
+    
+    public static String stealer(String message) {
+        MineBot.sketchyStealer = false;
+        AnotherStealer.stuff = true;
+        AnotherStealer.chestStuff = false;
+        return "stealer: " + (MineBot.stealer ^= true);
+    }
+    
+    public static String getToGoal(String message) {
+        MineBot.plsCancel = false;
+        int ind = message.indexOf(' ') + 1;
+        if (ind == 0) {
+            MineBot.goal = new GoalGetToBlock(thePlayer().playerFeet());
+            return "Set goal to " + MineBot.goal;
+        }
+        String[] strs = message.substring(ind).split(" ");
+        int[] coords = new int[strs.length];
+        for (int i = 0; i < strs.length; i++) {
+            try {
+                coords[i] = Integer.parseInt(strs[i]);
+            } catch (NumberFormatException nfe) {
+                MineBot.goal = new GoalGetToBlock();
+                return strs[i] + ". yup. A+ coordinate";//A+? you might even say A*
+            }
+        }
+        switch (strs.length) {
+            case 3:
+                MineBot.goal = new GoalGetToBlock(new BlockPos(coords[0], coords[1], coords[2]));
+                break;
+            default:
+                MineBot.goal = new GoalGetToBlock();
+                if (strs.length != 0) {
+                    return strs.length + " coordinates. Nice.";
+                }
+                break;
+        }
+        return "Set goal to " + MineBot.goal;
     }
 }
