@@ -133,7 +133,7 @@ public class MineBot {
         }
         if (currentPath != null && tickPath) {
             if (currentPath.tick()) {
-                Goal currentPathGoal = currentPath.goal;
+                Goal currentPathGoal = currentPath == null ? null : currentPath.goal;
                 if (currentPath != null) {
                     currentPath.clearPath();
                 }
