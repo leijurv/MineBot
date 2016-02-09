@@ -7,10 +7,12 @@ package minebot.pathfinding.actions;
 
 import minebot.util.ToolSet;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import minebot.LookManager;
 import minebot.MineBot;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -46,8 +48,17 @@ public abstract class ActionPlaceOrBreak extends Action {
     }
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
+        HashSet<BlockPos> toBreak = new HashSet();
         for (int i = 0; i < blocksToBreak.length; i++) {
-            sum += getHardness(ts, blocksToBreak[i], positionsToBreak[i]);
+            toBreak.add(positionsToBreak[i]);
+            BlockPos tmp = positionsToBreak[i].up();
+            while (canFall(tmp)) {
+                toBreak.add(tmp);
+                tmp = tmp.up();
+            }
+        }
+        for (BlockPos pos : toBreak) {
+            sum += getHardness(ts, Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock(), pos);
         }
         if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
             for (int i = 0; i < blocksToPlace.length; i++) {
@@ -57,6 +68,9 @@ public abstract class ActionPlaceOrBreak extends Action {
             }
         }
         return sum;
+    }
+    public static boolean canFall(BlockPos pos) {
+        return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock() instanceof BlockFalling;
     }
     public static double getHardness(ToolSet ts, Block block, BlockPos position) {
         double sum = 0;
@@ -79,7 +93,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     @Override
     public boolean tick() {
         //breaking first
-        for (int i = 0; i < blocksToBreak.length; i++) {
+        for (int i = 0; i < positionsToBreak.length; i++) {
             if (!canWalkThrough(positionsToBreak[i])) {
                 if (!MineBot.allowBreakOrPlace) {
                     GuiScreen.sendChatMessage("BB I can't break this =(((", true);
@@ -110,7 +124,7 @@ public abstract class ActionPlaceOrBreak extends Action {
             }
         }
         MineBot.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
-        for (int i = 0; i < blocksToPlace.length; i++) {
+        for (int i = 0; i < positionsToPlace.length; i++) {
             if (!canWalkOn(positionsToPlace[i])) {
                 if (!MineBot.allowBreakOrPlace) {
                     GuiScreen.sendChatMessage("BB I can't place this =(((", true);
