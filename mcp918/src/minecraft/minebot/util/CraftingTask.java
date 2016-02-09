@@ -112,7 +112,7 @@ public class CraftingTask {
     }
     ArrayList<int[]> plan = null;
     int tickNumber = 0;
-    static int ticksBetweenClicks = 3;
+    static int ticksBetweenClicks = 20;
     public void tickPlan() {
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         if (tickNumber % ticksBetweenClicks == 0) {
@@ -132,6 +132,10 @@ public class CraftingTask {
             return false;
         }
         if (plan != null) {
+            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiContainer)) {
+                plan = null;
+                return false;
+            }
             tickPlan();
             return true;
         }
