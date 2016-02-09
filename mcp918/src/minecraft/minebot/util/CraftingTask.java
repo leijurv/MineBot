@@ -124,7 +124,7 @@ public class CraftingTask {
                 return;
             }
             int[] click = plan.get(index);
-            GuiScreen.sendChatMessage(tickNumber + " " + index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
+            GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
             contain.sketchyMouseClick(click[0], click[1], click[2]);
             System.out.println("Ticking plan");
         }
@@ -144,7 +144,7 @@ public class CraftingTask {
             return true;
         }
         boolean hasMaterials = actualDoCraft(1, false, true) != null;
-        System.out.println("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
+        //System.out.println("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
         if (!hasMaterials) {
             return false;
         }
