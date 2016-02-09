@@ -49,7 +49,7 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
         HashSet<BlockPos> toBreak = new HashSet();
-        for (int i = 0; i < blocksToBreak.length; i++) {
+        for (int i = 0; i < positionsToBreak.length; i++) {
             toBreak.add(positionsToBreak[i]);
             BlockPos tmp = positionsToBreak[i].up();
             while (canFall(tmp)) {
