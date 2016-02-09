@@ -110,22 +110,47 @@ public class CraftingTask {
     public static boolean recipeNeedsCraftingTable(IRecipe recipe) {
         return (recipe instanceof ShapelessRecipes && recipe.getRecipeSize() > 4) || (recipe instanceof ShapedRecipes && (((ShapedRecipes) recipe).recipeHeight > 2 || ((ShapedRecipes) recipe).recipeWidth > 2));
     }
-    public void onTick() {
+    ArrayList<int[]> plan = null;
+    int tickNumber = 0;
+    static int ticksBetweenClicks = 3;
+    public void tickPlan() {
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        if (tickNumber % ticksBetweenClicks == 0) {
+            int index = tickNumber / ticksBetweenClicks;
+            if (index >= plan.size()) {
+                plan = null;
+                return;
+            }
+            int[] click = plan.get(index);
+            contain.sketchyMouseClick(click[0], click[1], click[2]);
+        }
+        tickNumber++;
+    }
+    public boolean onTick() {
         if (isDone()) {
-            return;
+            return false;
+        }
+        if (plan != null) {
+            tickPlan();
+            return true;
+        }
+        boolean hasMaterials = actualDoCraft(1, false, true) != null;
+        System.out.println("materials " + this + " " + currentlyCrafting + " " + hasMaterials);
+        if (!hasMaterials) {
+            return false;
         }
         boolean isCraftingTable = Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting;
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting)) && !isCraftingTable) {
             craftAsManyAsICan(true);
-            return;//if this doesn't need a crafting table, return no matter what
+            return true;//if this doesn't need a crafting table, return no matter what
         }
         //at this point we know that we need a crafting table
         if (isCraftingTable) {
             craftAsManyAsICan(false);
-            return;//since we are already in a crafting table, return so we don't run the code to get into a crafting table repeatedly
+            return true;//since we are already in a crafting table, return so we don't run the code to get into a crafting table repeatedly
         }
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting))) {
-            return;
+            return false;
         }
         //at this point we know that we need a crafting table and we aren't in one at this moment
         BlockPos craftingTableLocation = Memory.closestOne("crafting_table");
@@ -147,7 +172,7 @@ public class CraftingTask {
                 MineBot.currentPath = null;
                 Minecraft.theMinecraft.rightClickMouse();
             }
-            return;
+            return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         if (putCraftingTableOnHotBar()) {
@@ -156,7 +181,7 @@ public class CraftingTask {
             if (looking != null) {
                 Block current = Minecraft.theMinecraft.theWorld.getBlockState(looking).getBlock();
                 if (current.equals(Block.getBlockFromItem(Item.getByNameOrId("minecraft:crafting_table")))) {
-                    return;
+                    return true;
                 }
             }
             LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
@@ -164,7 +189,7 @@ public class CraftingTask {
                 Minecraft.theMinecraft.rightClickMouse();
             }
             MineBot.jumping = true;
-            return;
+            return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
         //if(doWeHaveMaterialsToCraftACraftingTable()){
@@ -173,6 +198,7 @@ public class CraftingTask {
         //}
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one and we don't have the materials to make one
         //so just rip at this point
+        return false;
     }
     public static boolean putCraftingTableOnHotBar() {//shamelessly copied from MickeyMine.torch()
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
@@ -233,7 +259,7 @@ public class CraftingTask {
             amtCurrentlyCraftable = 64;
         }
         while (true) {
-            Boolean b = actualDoCraft(amtCurrentlyCraftable, inInventory);
+            Boolean b = actualDoCraft(amtCurrentlyCraftable, inInventory, false);
             if (b != null) {
                 return b;
             }
@@ -251,7 +277,7 @@ public class CraftingTask {
      * craft because of a lack of input items, false for anything else
      * (including being unable to craft for other reasons)
      */
-    public Boolean actualDoCraft(int outputQuantity, boolean inInventory) {
+    public Boolean actualDoCraft(int outputQuantity, boolean inInventory, boolean justChecking) {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         int outputVolume = currentRecipe.getRecipeOutput().stackSize;
         int inputQuantity = (int) Math.ceil(((double) outputQuantity) / ((double) outputVolume));
@@ -275,7 +301,7 @@ public class CraftingTask {
                     positions[index] = map(i, shaped.recipeWidth, shaped.recipeHeight, inInventory ? 2 : 3);
                     index++;
                 }
-                return actualDoCraftOne(items, positions, inputQuantity, inInventory);
+                return actualDoCraftOne(items, positions, inputQuantity, inInventory, justChecking);
             }
         }
         if (currentRecipe instanceof ShapelessRecipes) {
@@ -287,7 +313,7 @@ public class CraftingTask {
                     items[i] = shapeless.recipeItems.get(i).getItem();
                     positions[i] = i + 1;
                 }
-                return actualDoCraftOne(items, positions, inputQuantity, inInventory);
+                return actualDoCraftOne(items, positions, inputQuantity, inInventory, justChecking);
             }
         }
         return false;
@@ -302,7 +328,7 @@ public class CraftingTask {
      * craft because of a lack of input items, false for anything else
      * (including being unable to craft for other reasons)
      */
-    public static Boolean actualDoCraftOne(Item[] items, int[] positions, int amount, boolean inv) {
+    public Boolean actualDoCraftOne(Item[] items, int[] positions, int amount, boolean inv, boolean justChecking) {
         int[] amounts = new int[items.length];
         for (int i = 0; i < items.length; i++) {
             amounts[i] = amount;
@@ -334,6 +360,9 @@ public class CraftingTask {
                 return null;
             }
         }
+        if (justChecking) {
+            return false;
+        }
         if (inv) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
                 System.out.println("Opening");
@@ -353,6 +382,7 @@ public class CraftingTask {
             }
         }
         GuiScreen.sendChatMessage("Crafting amount " + amount, true);
+        plan = new ArrayList();
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -369,24 +399,24 @@ public class CraftingTask {
                     continue;
                 }
                 if (items[j].equals(item)) {
-                    contain.leftClick(i);
+                    leftClick(i);
                     if (size <= amounts[j]) {
-                        contain.leftClick(positions[j]);
+                        leftClick(positions[j]);
                         amounts[j] -= size;
                         size = 0;
                     } else {
                         for (int k = 0; k < amounts[j]; k++) {
-                            contain.rightClick(positions[j]);
+                            rightClick(positions[j]);
                         }
                         size -= amounts[j];
-                        contain.leftClick(i);
+                        leftClick(i);
                         amounts[j] = 0;
                     }
                 }
             }
         }
         GuiScreen.sendChatMessage("shift clicking " + contain.inventorySlots.inventorySlots.get(0).getStack(), true);
-        contain.shiftClick(0);
+        shiftClick(0);
         for (int i = 0; i < amounts.length; i++) {
             if (amounts[i] > 0) {
                 GuiScreen.sendChatMessage("Not enough " + i + " " + amounts[i] + " " + items[i] + " " + positions[i], true);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
@@ -394,11 +424,22 @@ public class CraftingTask {
         }
         return true;
     }
+    public void leftClick(int slot) {
+        plan.add(new int[]{slot, 0, 0});
+    }
+    public void rightClick(int slot) {
+        plan.add(new int[]{slot, 1, 0});
+    }
+    public void shiftClick(int slot) {
+        plan.add(new int[]{slot, 0, 1});
+    }
     static boolean didIOpenMyInventory = false;
     public static void tickAll() {
         didIOpenMyInventory = false;
         for (CraftingTask craftingTask : overallCraftingTasks) {
-            craftingTask.onTick();
+            if (craftingTask.onTick()) {
+                break;
+            }
         }
         if (didIOpenMyInventory) {
             Minecraft.theMinecraft.thePlayer.closeScreen();

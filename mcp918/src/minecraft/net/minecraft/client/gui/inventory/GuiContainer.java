@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
 
 public abstract class GuiContainer extends GuiScreen {
     /**
@@ -527,7 +526,7 @@ public abstract class GuiContainer extends GuiScreen {
         }
         this.mc.playerController.windowClick(this.inventorySlots.windowId, slotId, clickedButton, clickType, this.mc.thePlayer);
     }
-    protected void sketchyMouseClick(int slotId, int clickedButton, int clickType) {
+    public void sketchyMouseClick(int slotId, int clickedButton, int clickType) {
         this.mc.playerController.windowClick(this.inventorySlots.windowId, slotId, clickedButton, clickType, this.mc.thePlayer);
     }
     public void shiftClick(int slotId) {
