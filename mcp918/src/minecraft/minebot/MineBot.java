@@ -47,6 +47,7 @@ public class MineBot {
     public static boolean sketchyStealer = false;
     public static boolean useCarpet = false;
     public static int tickNumber = 0;
+    public static boolean ticktimer = false;
     public static boolean allowBreakOrPlace = true;
     public static boolean hasThrowaway = true;
     public static boolean fullAuto = false;
@@ -68,7 +69,7 @@ public class MineBot {
             onTick1();
             long end = System.currentTimeMillis();
             long time = end - start;
-            if (time > 3) {
+            if (ticktimer && time > 3) {
                 GuiScreen.sendChatMessage("Tick took " + time + "ms", true);
                 System.out.println("Tick took " + time + "ms");
             }
