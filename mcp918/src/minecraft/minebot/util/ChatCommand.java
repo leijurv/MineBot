@@ -5,6 +5,8 @@
  */
 package minebot.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -323,6 +325,12 @@ public class ChatCommand {
         AnotherStealer.chestStuff = false;
         return "stealer: " + (MineBot.stealer ^= true);
     }
+    
+    public static String printtag(String message) throws IOException {
+        SchematicLoader.loadFromFile(new File("/Users/galdara/Downloads/schematics/Bakery.schematic"));
+        return "printed schematic to console.";
+    }
+    
     public static String getToGoal(String message) {
         MineBot.plsCancel = false;
         int ind = message.indexOf(' ') + 1;
