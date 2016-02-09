@@ -188,11 +188,8 @@ public class ChatCommand {
     public static String adventure(String message) {
         return "allowBreakOrPlace: " + (MineBot.allowBreakOrPlace ^= true);
     }
-
     public static String steal(String message) {
-        SketchyStealer.alreadyStolenFrom.clear();
-        MineBot.stealer = false;
-        return "Sketchy stealer: " + (MineBot.sketchyStealer ^= true);
+        return stealer(message);
     }
     public static String save(String message) {
         String t = message.substring(4).trim();
@@ -320,14 +317,12 @@ public class ChatCommand {
     public static String toggle(String message) throws IllegalArgumentException, IllegalAccessException {
         return set(message);
     }
-    
     public static String stealer(String message) {
         MineBot.sketchyStealer = false;
         AnotherStealer.stuff = true;
         AnotherStealer.chestStuff = false;
         return "stealer: " + (MineBot.stealer ^= true);
     }
-    
     public static String getToGoal(String message) {
         MineBot.plsCancel = false;
         int ind = message.indexOf(' ') + 1;
