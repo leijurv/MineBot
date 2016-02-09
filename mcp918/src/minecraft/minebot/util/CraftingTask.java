@@ -122,6 +122,7 @@ public class CraftingTask {
                 return;
             }
             int[] click = plan.get(index);
+            GuiScreen.sendChatMessage(tickNumber + " " + index + " " + click[0] + " " + click[1] + " " + click[2]);
             contain.sketchyMouseClick(click[0], click[1], click[2]);
         }
         tickNumber++;
@@ -383,6 +384,7 @@ public class CraftingTask {
         }
         GuiScreen.sendChatMessage("Crafting amount " + amount, true);
         plan = new ArrayList();
+        tickNumber = 0;
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
