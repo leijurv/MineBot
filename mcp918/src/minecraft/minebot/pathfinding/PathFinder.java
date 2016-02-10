@@ -104,6 +104,9 @@ public class PathFinder {
         }
         double bestDist = 0;
         for (int i = 0; i < bestSoFar.length; i++) {
+            if (bestSoFar[i] == null) {
+                continue;
+            }
             double dist = dist(bestSoFar[i]);
             if (dist > bestDist) {
                 bestDist = dist;
