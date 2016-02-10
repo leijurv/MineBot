@@ -79,6 +79,9 @@ public class CraftingTask {
     }
     public static boolean isRecipeOkay(IRecipe recipe) {
         if (recipe instanceof ShapedRecipes) {
+            if (((ShapedRecipes) recipe).recipeItems.length > 1) {
+                return true;
+            }
             for (ItemStack stack : ((ShapedRecipes) recipe).recipeItems) {
                 if (stack == null) {
                     continue;
@@ -91,6 +94,9 @@ public class CraftingTask {
             return true;
         }
         if (recipe instanceof ShapelessRecipes) {
+            if (((ShapelessRecipes) recipe).recipeItems.size() > 1) {
+                return true;
+            }
             for (ItemStack stack : ((ShapelessRecipes) recipe).recipeItems) {
                 if (stack.toString().toLowerCase().contains("block")) {
                     System.out.println("Not doing " + stack);
