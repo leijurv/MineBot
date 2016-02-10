@@ -32,7 +32,10 @@ public class SmeltingTask extends Manager{
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
     static HashSet<BlockPos> knownFurnaces = new HashSet();
-    public static final SmeltingTask manager = new SmeltingTask();
+    
+    protected static Manager newInstance(Class c){
+        return new SmeltingTask();
+    }
     
     private SmeltingTask(){
         super();

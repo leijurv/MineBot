@@ -8,6 +8,7 @@ package minebot;
 import static minebot.MineBot.isRightClick;
 import static minebot.MineBot.sneak;
 import static minebot.MineBot.whatAreYouLookingAt;
+import minebot.util.Manager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemFood;
@@ -18,8 +19,8 @@ import net.minecraft.util.FoodStats;
  *
  * @author leijurv
  */
-public class FoodManager {
-    public static boolean onTick() {
+public class FoodManager extends Manager{
+    public void onTick() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         FoodStats fs = p.getFoodStats();
         if (!fs.needFood()) {
@@ -61,5 +62,15 @@ public class FoodManager {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onCancel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void onStart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -18,7 +18,6 @@ import minebot.Combat;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
-import minebot.SketchyStealer;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalGetToBlock;
@@ -321,10 +320,7 @@ public class ChatCommand {
         return set(message);
     }
     public static String stealer(String message) {
-        MineBot.sketchyStealer = false;
-        AnotherStealer.stuff = true;
-        AnotherStealer.chestStuff = false;
-        return "stealer: " + (MineBot.stealer ^= true);
+        return "stealer: " + Manager.toggle(AnotherStealer.class);
     }
     
     public static String printtag(String message) throws IOException {

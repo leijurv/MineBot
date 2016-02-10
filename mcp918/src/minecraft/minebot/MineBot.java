@@ -48,8 +48,7 @@ public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
     public static boolean isThereAnythingInProgress = false;
     public static boolean plsCancel = false;
-    public static boolean stealer = false;
-    public static boolean sketchyStealer = false;
+    //public static boolean sketchyStealer = false;
     public static boolean useCarpet = false;
     public static int tickNumber = 0;
     public static boolean ticktimer = false;
@@ -58,13 +57,17 @@ public class MineBot {
     public static boolean fullAuto = false;
     public static Path currentPath = null;
     public static Path nextPath = null;
-    public static HashMap<Class, Manager> managers;
+    public static ArrayList<Class<? extends Manager>> managers;
     static{
-        managers = new HashMap<Class, Manager>();
-        managers.put(LookManager.class, new LookManager());
-        managers.put(SmeltingTask.class, SmeltingTask.manager);
-        managers.put(Memory.class, new Memory());
-        managers.put(AnotherStealer.class, new AmotherStealer());
+        managers = new ArrayList<Class<? extends Manager>>();
+        managers.add(LookManager.class);
+        managers.add(SmeltingTask.class);
+        managers.add(Memory.class);
+        managers.add(AnotherStealer.class);
+        managers.add(InventoryManager.class);
+        managers.add(Combat.class);
+        managers.add(FoodManager.class);
+        
     }
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
@@ -107,8 +110,8 @@ public class MineBot {
         if (isRightClick) {
             rightPressTime = 5;
         }
-        for(Manager m : managers.values()){
-            m.tick(true);
+        for(Class c : managers){
+            Manager.tick(c, true);
         }
         isLeftClick = false;
         isRightClick = false;
@@ -126,16 +129,8 @@ public class MineBot {
         }
         tickNumber++;
         hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
-        for(Manager m : managers.values()){
-            m.tick();
-        }
-        if (stealer) {
-            AnotherStealer.tick();
-        } else if (sketchyStealer) {
-            SketchyStealer.onTick();
-        }
-        if (tickNumber % 10 == 0) {
-            InventoryManager.onTick();
+        for(Class c : managers){
+            Manager.tick(c);
         }
         boolean tickPath = Combat.onTick();
         //System.out.println("Ticking: " + tickPath);
@@ -233,6 +228,7 @@ public class MineBot {
                 jumping = true;
             }
         }
+        
         LookManager.postTick();
     }
     public static void openInventory() {

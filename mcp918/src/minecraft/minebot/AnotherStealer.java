@@ -31,6 +31,9 @@ import net.minecraft.util.BlockPos;
  */
 public class AnotherStealer extends Manager{
 
+    protected static Manager newInstance(){
+        return null;
+    }
     public static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
     public static boolean chestStuff = false;
     public static boolean stuff = false;
@@ -189,5 +192,6 @@ public class AnotherStealer extends Manager{
         current = null;
         positionArmor = false;
         positionSlot = 0;
+        Manager.cancel(SketchyStealer.class);
     }
 }

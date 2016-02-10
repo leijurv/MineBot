@@ -8,6 +8,7 @@ package minebot;
 import java.util.HashMap;
 import java.util.Random;
 import minebot.mining.MickeyMine;
+import minebot.util.Manager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,7 +28,7 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class InventoryManager {
+public class InventoryManager extends Manager{
     static HashMap<String, Integer> maximumAmounts = null;
     static HashMap<String, Integer> minimumAmounts = null;
     public static void initMax() {
@@ -134,7 +135,7 @@ public class InventoryManager {
             array[j] = tmp;
         }
     }
-    public static void onTick() {
+    protected void onTick() {
         if (maximumAmounts == null) {
             initMax();
         }
@@ -334,5 +335,18 @@ public class InventoryManager {
     public static void dropOne(int slotNumber) {
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         contain.sketchyMouseClick(slotNumber, 0, 4);
+    }
+
+    @Override
+    protected void onCancel() {
+    }
+
+    @Override
+    protected void onStart() {
+    }
+    
+    @Override
+    protected boolean onEnabled(boolean enabled) {
+        return MineBot.tickNumber % 10 == 0;
     }
 }

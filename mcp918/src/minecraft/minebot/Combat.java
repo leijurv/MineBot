@@ -15,6 +15,7 @@ import static minebot.MineBot.what;
 import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
+import minebot.util.Manager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -33,13 +34,13 @@ import net.minecraft.world.World;
  *
  * @author leijurv
  */
-public class Combat {
+public class Combat extends Manager{
     public static boolean mobHunting = false;
     public static boolean mobKilling = false;
     public static boolean playerHunt = false;
     public static Entity target = null;
     public static boolean wasTargetSetByMobHunt = false;
-    public static boolean onTick() {
+    public void onTick() {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
@@ -257,5 +258,18 @@ public class Combat {
             return "Killing " + w;
         }
         return "Couldn't find " + name;
+    }
+
+    @Override
+    protected void onCancel() {
+    }
+
+    @Override
+    protected void onStart() {
+    }
+    
+    @Override
+    protected boolean onEnabled(boolean enabled) {
+        return true;
     }
 }
