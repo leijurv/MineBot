@@ -420,6 +420,7 @@ public class CraftingTask {
         plan.add(new int[]{slot, 0, 1});
     }
     static boolean didIOpenMyInventory = false;
+    static boolean waitingToClose = false;
     static int TUC = 20;
     public static boolean tickAll() {
         MineBot.clearMovement();
@@ -437,10 +438,16 @@ public class CraftingTask {
             }
         }
         if (didIOpenMyInventory) {
+            waitingToClose = true;
+            TUC = 20;
+            didIOpenMyInventory = false;
+        }
+        if (waitingToClose) {
             TUC--;
             if (TUC <= 0) {
+                GuiScreen.sendChatMessage("Closing screen!!!");
                 Minecraft.theMinecraft.thePlayer.closeScreen();
-                didIOpenMyInventory = false;
+                waitingToClose = false;
                 TUC = 20;
             }
             return true;
