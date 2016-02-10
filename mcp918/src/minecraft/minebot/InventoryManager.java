@@ -14,6 +14,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -111,6 +112,41 @@ public class InventoryManager {
         switchWithHotBar(swordPos, 2);
         return true;
     }
+    public static boolean placeFood() {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        int foodPos = -1;
+        float bestStrength = Float.MIN_VALUE;
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i];
+            if (stack == null) {
+                continue;
+            }
+            Item item = stack.getItem();
+            if (item instanceof ItemFood) {
+                ItemFood food = (ItemFood) item;
+                float strength = food.getHealAmount(stack);
+                if (strength > bestStrength) {
+                    bestStrength = strength;
+                    foodPos = i;
+                }
+            }
+        }
+        if (foodPos == -1) {
+            return false;
+        }
+        if (foodPos == 8) {
+            return false;
+        }
+        if (foodPos < 9) {
+            foodPos += 36;
+        }
+        if (!openedInvYet) {
+            MineBot.slowOpenInventory();
+            openedInvYet = true;
+        }
+        switchWithHotBar(foodPos, 8);
+        return true;
+    }
     public static int find(Item... items) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int bestPosition = -1;
@@ -167,13 +203,16 @@ public class InventoryManager {
         if (placeSword()) {
             return;
         }
+        if (placeFood()) {
+            return;
+        }
         if (putItemInSlot(3, Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
             return;
         }
         if (putItemInSlot(1, Item.getByNameOrId("minecraft:torch"))) {
             return;
         }
-        if (putItemInSlot(8, Item.getByNameOrId("minecraft:crafting_table"))) {
+        if (putItemInSlot(7, Item.getByNameOrId("minecraft:crafting_table"))) {
             return;
         }
         HashMap<Item, Integer> amounts = countItems();
