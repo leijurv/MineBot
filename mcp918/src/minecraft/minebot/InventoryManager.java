@@ -16,6 +16,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
 /**
  *
@@ -56,6 +57,27 @@ public class InventoryManager {
             if (item instanceof ItemPickaxe) {
                 ItemPickaxe pick = (ItemPickaxe) item;
                 float strength = pick.getStrVsBlock(stack, Block.getBlockFromName("minecraft:stone"));
+                if (strength > bestStrength) {
+                    bestStrength = strength;
+                    bestPosition = i;
+                }
+            }
+        }
+        return bestPosition;
+    }
+    public static int bestSword() {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        int bestPosition = -1;
+        float bestStrength = Float.MIN_VALUE;
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i];
+            if (stack == null) {
+                continue;
+            }
+            Item item = stack.getItem();
+            if (item instanceof ItemSword) {
+                ItemSword sword = (ItemSword) item;
+                float strength = sword.getDamageVsEntity();
                 if (strength > bestStrength) {
                     bestStrength = strength;
                     bestPosition = i;
@@ -114,22 +136,34 @@ public class InventoryManager {
         if (Minecraft.theMinecraft.currentScreen != null && !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
             return;
         }
-        int pos = bestPickaxe();
-        if (pos > 0) {
-            if (pos < 9) {
-                pos += 36;
+        int pickPos = bestPickaxe();
+        if (pickPos > 0) {
+            if (pickPos < 9) {
+                pickPos += 36;
             }
             if (!openedInvYet) {
                 MineBot.slowOpenInventory();
                 openedInvYet = true;
             }
-            switchWithHotBar(pos, 0);
+            switchWithHotBar(pickPos, 0);
             return;
         }
-        if (putItemInSlot(4, Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
+        int swordPos = bestSword();
+        if (swordPos > 0) {
+            if (swordPos < 9) {
+                swordPos += 36;
+            }
+            if (!openedInvYet) {
+                MineBot.slowOpenInventory();
+                openedInvYet = true;
+            }
+            switchWithHotBar(swordPos, 0);
             return;
         }
-        if (putItemInSlot(2, Item.getByNameOrId("minecraft:torch"))) {
+        if (putItemInSlot(3, Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
+            return;
+        }
+        if (putItemInSlot(1, Item.getByNameOrId("minecraft:torch"))) {
             return;
         }
         HashMap<Item, Integer> amounts = countItems();
