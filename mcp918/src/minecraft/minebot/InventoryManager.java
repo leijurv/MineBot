@@ -173,6 +173,9 @@ public class InventoryManager {
         if (putItemInSlot(1, Item.getByNameOrId("minecraft:torch"))) {
             return;
         }
+        if (putItemInSlot(8, Item.getByNameOrId("minecraft:crafting_table"))) {
+            return;
+        }
         HashMap<Item, Integer> amounts = countItems();
         for (String itemName : maximumAmounts.keySet()) {
             Item item = Item.getByNameOrId("minecraft:" + itemName);

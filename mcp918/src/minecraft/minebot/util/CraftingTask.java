@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
@@ -224,39 +223,6 @@ public class CraftingTask {
                 p.inventory.currentItem = i;
                 return true;
             }
-        }
-        int torchPosition = 0;
-        for (int i = 9; i < inv.length; i++) {
-            ItemStack item = inv[i];
-            if (inv[i] == null) {
-                continue;
-            }
-            if (Item.getByNameOrId("minecraft:crafting_table").equals(item.getItem())) {
-                torchPosition = i;
-            }
-        }
-        if (torchPosition == 0) {
-            return false;
-        }
-        int blankHotbarSpot = -1;
-        for (int i = 0; i < 9; i++) {
-            if (inv[i] == null) {
-                blankHotbarSpot = i;
-            }
-        }
-        if (blankHotbarSpot == -1) {
-            blankHotbarSpot = (new Random().nextInt(8) + 1);
-        }
-        if (Minecraft.theMinecraft.currentScreen == null) {
-            MineBot.openInventory();
-            return false;
-        }
-        if (Minecraft.theMinecraft.currentScreen instanceof GuiInventory) {
-            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-            contain.leftClick(torchPosition);
-            contain.leftClick(blankHotbarSpot + 36);
-            contain.leftClick(torchPosition);
-            Minecraft.theMinecraft.thePlayer.closeScreen();
         }
         return false;
     }

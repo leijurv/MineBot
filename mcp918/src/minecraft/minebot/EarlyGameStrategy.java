@@ -98,6 +98,6 @@ public class EarlyGameStrategy {
         return countItem("dirt");
     }
     public static int countCobble() {
-        return countItem("cobble");
+        return countItem("cobblestone");
     }
 }
