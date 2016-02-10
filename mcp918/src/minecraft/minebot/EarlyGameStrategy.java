@@ -78,8 +78,7 @@ public class EarlyGameStrategy {
         }
         return craftingTableTask.alreadyHas() >= quantity;
     }
-    
-    public static int countItem(String s){
+    public static int countItem(String s) {
         Item item = Item.getItemFromBlock(Block.getBlockFromName(s));
         int count = 0;
         for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
@@ -92,9 +91,8 @@ public class EarlyGameStrategy {
         }
         return count;
     }
-    
     public static int countWood_PHRASING() {
-        return countItem("log");
+        return countItem("log") + countItem("log2");
     }
     public static int countDirt() {
         return countItem("dirt");
