@@ -10,6 +10,7 @@ import minebot.mining.MickeyMine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,9 @@ public class InventoryManager {
         if (maximumAmounts == null) {
             initMax();
         }
+        if (Minecraft.theMinecraft.currentScreen != null && !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+            return;
+        }
         HashMap<Item, Integer> amounts = countItems();
         for (String itemName : maximumAmounts.keySet()) {
             Item item = Item.getByNameOrId("minecraft:" + itemName);
@@ -67,6 +71,7 @@ public class InventoryManager {
             }
             GuiContainer c = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             if (c == null) {
+                GuiScreen.sendChatMessage("Null container");
                 return;
             }
             for (int i = 0; i < c.inventorySlots.inventorySlots.size(); i++) {
