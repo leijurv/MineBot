@@ -44,14 +44,17 @@ public class Memory {
         }
         public void checkForChange() {
             for (BlockPos pos : new ArrayList<BlockPos>(knownPositions)) {//make duplicate to prevent concurrent modification exceptions
-                if (!blockLoaded(pos)) {
-                    GuiScreen.sendChatMessage("Too far away from " + pos + " to remember that it's " + block, true);
+                boolean loaded = blockLoaded(pos);
+                if (!loaded) {
+                    //GuiScreen.sendChatMessage("Too far away from " + pos + " to remember that it's " + block, true);
                 }
                 Block current = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-                if (!current.equals(block)) {
-                    GuiScreen.sendChatMessage("Block at " + pos + " has changed from " + block + " to " + current + ". Removing from memory.", true);
+                if (!current.equals(block) || !loaded) {
+                    //GuiScreen.sendChatMessage("Block at " + pos + " has changed from " + block + " to " + current + ". Removing from memory.", true);
                     knownPositions.remove(pos);
-                    scanBlock(pos);//rescan to put in proper memory
+                    if (loaded) {
+                        scanBlock(pos);//rescan to put in proper memory
+                    }
                 }
             }
         }
@@ -140,15 +143,21 @@ public class Memory {
                 @Override
                 public void run() {
                     GuiScreen.sendChatMessage("Starting passive block scan thread", true);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Memory.class.getName()).log(Level.SEVERE, null, ex);
+                        return;
+                    }
                     while (true) {
                         if (Minecraft.theMinecraft == null || Minecraft.theMinecraft.thePlayer == null || Minecraft.theMinecraft.theWorld == null) {
                             return;
                         }
-                        GuiScreen.sendChatMessage("Beginning passive block scan", true);
+                        //GuiScreen.sendChatMessage("Beginning passive block scan", true);
                         long start = System.currentTimeMillis();
                         scan();
                         long end = System.currentTimeMillis();
-                        GuiScreen.sendChatMessage("Passive block scan over after " + (end - start) + "ms", true);
+                        //GuiScreen.sendChatMessage("Passive block scan over after " + (end - start) + "ms", true);
                         try {
                             Thread.sleep(10000);
                         } catch (InterruptedException ex) {
