@@ -8,6 +8,7 @@ package minebot;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static minebot.MineBot.findPathInNewThread;
@@ -19,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.chunk.EmptyChunk;
 
@@ -225,6 +227,11 @@ public class Memory {
                 if (type.toString().toLowerCase().equals(lower)) {
                     for (BlockPos pos : blockMemory.get(type).knownPositions) {
                         if (type.equals(Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock()) && !result.contains(pos)) {
+                            if (b.equals("stone")) {
+                                if (!type.getItemDropped(Minecraft.theMinecraft.theWorld.getBlockState(pos), new Random(), 0).equals(Item.getByNameOrId("cobblestone"))) {
+                                    continue;
+                                }
+                            }
                             result.add(pos);
                         }
                     }
