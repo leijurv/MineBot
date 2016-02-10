@@ -68,14 +68,14 @@ public class EarlyGameStrategy {
         }
         if (hasWooden || hasStone) {
             if (!cobble) {
-                BlockPuncher.tick("stone");
                 if (countCobble() > 64) {
                     cobble = true;
+                } else {
+                    BlockPuncher.tick("stone");
                 }
             }
         }
         if (countCobble() > 5) {
-            System.out.println("Ensuring crafting ");
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
