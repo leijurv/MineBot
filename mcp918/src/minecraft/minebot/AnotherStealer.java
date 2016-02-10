@@ -5,17 +5,12 @@
  */
 package minebot;
 
-import java.awt.Dimension;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static minebot.MineBot.tickNumber;
+import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalGetToBlock;
 import minebot.util.ChatCommand;
+import minebot.util.Manager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -26,18 +21,15 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.Tuple;
-import org.lwjgl.input.Keyboard;
 
 /**
  *
  * @author avecowa
  */
-public class AnotherStealer {
+public class AnotherStealer extends Manager{
 
     public static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
     public static boolean chestStuff = false;
@@ -48,7 +40,8 @@ public class AnotherStealer {
     private static int positionSlot = 0;
     private static int positionStatus = 0;
 
-    public static void onTick() {
+    @Override
+    public void onTick() {
         //try{
         if (invFull()) {
             ChatCommand.stealer("stealer");
@@ -181,5 +174,20 @@ public class AnotherStealer {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onCancel() {
+        
+    }
+
+    @Override
+    protected void onStart() {
+        alreadyStolenFrom = new ArrayList<BlockPos>();
+        chestStuff = false;
+        stuff = false;
+        current = null;
+        positionArmor = false;
+        positionSlot = 0;
     }
 }

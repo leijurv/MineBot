@@ -14,6 +14,7 @@ import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalTwoBlocks;
+import minebot.util.Manager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -26,13 +27,28 @@ import net.minecraft.world.chunk.EmptyChunk;
  *
  * @author leijurv
  */
-public class Memory {
+public class Memory extends Manager{
     public static HashMap<Block, BlockMemory> blockMemory = new HashMap();
     public static HashMap<String, BlockPos> playerLocationMemory = new HashMap();
     public static HashMap<String, BlockPos> goalMemory = new HashMap();
     public static ArrayList<String> playersCurrentlyInRange = new ArrayList();
     public static Thread scanThread = null;
     public static Block air = null;
+
+    @Override
+    protected void onCancel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void onStart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    protected boolean onEnabled(boolean enabled) {
+        return true;
+    }
 
     public static class BlockMemory {
         final Block block;
@@ -128,7 +144,8 @@ public class Memory {
         double diffZ = player.posZ - (pos.getZ() + 0.5D);
         return diffX * diffX + diffY * diffY + diffZ * diffZ;
     }
-    public static void tick() {
+    @Override
+    public void onTick() {
         if (air == null) {
             air = Block.getBlockById(0);
         }

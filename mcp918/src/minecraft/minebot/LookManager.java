@@ -7,6 +7,7 @@ package minebot;
 
 import java.util.Random;
 import minebot.pathfinding.goals.GoalXZ;
+import minebot.util.Manager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -19,7 +20,7 @@ import net.minecraft.util.Vec3;
  *
  * @author leijurv
  */
-public class LookManager {
+public class LookManager extends Manager{
     static final float MAX_YAW_CHANGE_PER_TICK = 360 / 20;
     static final float MAX_PITCH_CHANGE_PER_TICK = 360 / 20;
     static float previousYaw = 0;
@@ -179,7 +180,8 @@ public class LookManager {
         }
         return withinRange;
     }
-    public static void preTick() {
+    @Override
+    public void onTickPre() {
         if (lookingYaw) {
             Minecraft.theMinecraft.thePlayer.rotationYaw = desiredNextYaw;
         }
@@ -189,7 +191,8 @@ public class LookManager {
         lookingYaw = false;
         lookingPitch = false;
     }
-    public static void postTick() {
+    @Override
+    public void onTickPost() {
         desiredYaw += getRandom()[0];
         desiredPitch += getRandom()[1];
         if (lookingYaw) {
@@ -222,5 +225,19 @@ public class LookManager {
             }
             desiredNextPitch = Minecraft.theMinecraft.thePlayer.rotationPitch - pitchDistance;
         }
+    }
+
+    @Override
+    protected void onTick() {}
+
+    @Override
+    protected void onCancel() {}
+
+    @Override
+    protected void onStart() {}
+    
+    @Override
+    protected boolean onEnabled(boolean enabled) {
+        return true;
     }
 }

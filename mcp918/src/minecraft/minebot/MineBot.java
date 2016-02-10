@@ -6,6 +6,7 @@
 package minebot;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
+import minebot.util.Manager;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -51,6 +53,16 @@ public class MineBot {
     public static boolean allowBreakOrPlace = true;
     public static boolean hasThrowaway = true;
     public static boolean fullAuto = false;
+    public static Path currentPath = null;
+    public static Path nextPath = null;
+    public static HashMap<Class, Manager> managers;
+    static{
+        managers = new HashMap<Class, Manager>();
+        managers.put(LookManager.class, new LookManager());
+        managers.put(SmeltingTask.class, SmeltingTask.manager);
+        managers.put(Memory.class, new Memory());
+        managers.put(AnotherStealer.class, new AmotherStealer());
+    }
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -92,7 +104,9 @@ public class MineBot {
         if (isRightClick) {
             rightPressTime = 5;
         }
-        LookManager.preTick();
+        for(Manager m : managers.values()){
+            m.tick(true);
+        }
         isLeftClick = false;
         isRightClick = false;
         jumping = false;
@@ -108,11 +122,12 @@ public class MineBot {
             Minecraft.theMinecraft.displayGuiScreen(null);
         }
         tickNumber++;
-        SmeltingTask.onTick();
         hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
-        Memory.tick();
+        for(Manager m : managers.values()){
+            m.tick();
+        }
         if (stealer) {
-            AnotherStealer.onTick();
+            AnotherStealer.tick();
         } else if (sketchyStealer) {
             SketchyStealer.onTick();
         }
@@ -229,8 +244,7 @@ public class MineBot {
     }
     public static boolean wasScreen = false;
     public static boolean calculatingNext = false;
-    public static Path currentPath = null;
-    public static Path nextPath = null;
+    
     public static Goal goal = null;
     public static int leftPressTime = 0;
     public static int rightPressTime = 0;

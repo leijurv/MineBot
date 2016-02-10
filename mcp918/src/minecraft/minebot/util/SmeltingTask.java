@@ -28,13 +28,23 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class SmeltingTask {
+public class SmeltingTask extends Manager{
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
     static HashSet<BlockPos> knownFurnaces = new HashSet();
-    public static void onTick() {
+    public static final SmeltingTask manager = new SmeltingTask();
+    
+    private SmeltingTask(){
+        super();
+        toPutInTheFurnace=null;
+        desired=null;
+        burnTicks=0;
+    }
+    
+    @Override
+    protected void onTick() {
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
-            task.tick();
+            task.exec();
         }
     }
     public static void cancelAll() {
@@ -119,7 +129,7 @@ public class SmeltingTask {
     }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     int guiWaitTicks = 0;
-    private void tick() {
+    private void exec() {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
         if (furnace != null && !didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
             //we have a furnace, but we haven't put it in yet phrasing
@@ -363,6 +373,19 @@ public class SmeltingTask {
         return null;
     }
 
+    @Override
+    protected void onCancel() {
+        cancelAll();
+    }
+
+    @Override
+    protected void onStart() {
+    }
+
+    @Override
+    protected boolean onEnabled(boolean enabled) {
+        return true;
+    }
     private static class wrapper {//so that people don't try to directly reference recipess
         private static Map<ItemStack, ItemStack> recipes = null;
         public static Map<ItemStack, ItemStack> getRecipes() {

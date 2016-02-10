@@ -13,6 +13,7 @@ import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

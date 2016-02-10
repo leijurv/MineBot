@@ -12,6 +12,7 @@ import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;
 import static minebot.MineBot.what;
+import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
 import net.minecraft.client.Minecraft;

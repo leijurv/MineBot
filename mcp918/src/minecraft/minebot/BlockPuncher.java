@@ -7,6 +7,7 @@ package minebot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalTwoBlocks;
