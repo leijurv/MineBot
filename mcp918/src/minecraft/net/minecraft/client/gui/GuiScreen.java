@@ -10,7 +10,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -363,7 +362,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
                         continue;
                     }
                     if (cl.contains("minebot")) {
-                        Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(chat_header + trace[1].getClassName() + chat_header_2 + msg));
+                        Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(chat_header + (trace[1].getClassName().contains("GuiScreen") ? trace[2].getClassName() : trace[1].getClassName()) + chat_header_2 + msg));
                         return;
                     }
                 }
@@ -374,9 +373,9 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         }
         boolean nm = false;
         try {
-            if(ChatCommand.message(msg)){
+            if (ChatCommand.message(msg)) {
                 System.out.println("Not sending chat message to server: " + msg);
-            return;
+                return;
             }
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(GuiScreen.class.getName()).log(Level.SEVERE, null, ex);
