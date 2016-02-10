@@ -62,10 +62,13 @@ public class InventoryManager {
                 continue;
             }
             if (!openedInvYet) {
-                MineBot.openInventory();
+                MineBot.slowOpenInventory();
                 openedInvYet = true;
             }
             GuiContainer c = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+            if (c == null) {
+                return;
+            }
             for (int i = 0; i < c.inventorySlots.inventorySlots.size(); i++) {
                 Slot slot = c.inventorySlots.inventorySlots.get(i);
                 if (slot == null) {
