@@ -441,7 +441,7 @@ public class CraftingTask {
         }
         if (didIOpenMyInventory) {
             waitingToClose = true;
-            TUC = 20;
+            TUC = 3;
             didIOpenMyInventory = false;
         }
         if (waitingToClose) {
@@ -450,7 +450,7 @@ public class CraftingTask {
                 GuiScreen.sendChatMessage("Closing screen!!!");
                 Minecraft.theMinecraft.thePlayer.closeScreen();
                 waitingToClose = false;
-                TUC = 20;
+                TUC = 3;
             }
             return true;
         }
