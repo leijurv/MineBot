@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
@@ -153,6 +154,9 @@ public class CraftingTask {
             return false;
         }
         boolean isCraftingTable = Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting;
+        if (isCraftingTable) {
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+        }
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting)) && !isCraftingTable) {
             craftAsManyAsICan(true);
             return true;//if this doesn't need a crafting table, return no matter what
@@ -207,10 +211,15 @@ public class CraftingTask {
                     return true;
                 }
             }
-            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
-            if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
-                Minecraft.theMinecraft.rightClickMouse();
-            }
+            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down().north(), true);
+            LookManager.beSketchy();
+            MineBot.forward = new Random().nextBoolean();
+            MineBot.backward = new Random().nextBoolean();
+            MineBot.left = new Random().nextBoolean();
+            MineBot.right = new Random().nextBoolean();
+            //if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
+            Minecraft.theMinecraft.rightClickMouse();
+            //}
             MineBot.jumping = true;
             return true;
         }
