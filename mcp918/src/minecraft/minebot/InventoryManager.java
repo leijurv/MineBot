@@ -72,6 +72,7 @@ public class InventoryManager {
             GuiContainer c = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             if (c == null) {
                 GuiScreen.sendChatMessage("Null container");
+                openedInvYet = false;
                 return;
             }
             for (int i = 0; i < c.inventorySlots.inventorySlots.size(); i++) {
