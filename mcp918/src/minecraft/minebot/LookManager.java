@@ -192,6 +192,12 @@ public class LookManager {
     public static void postTick() {
         desiredYaw += getRandom()[0];
         desiredPitch += getRandom()[1];
+        if (desiredPitch > 90) {
+            desiredPitch = 90;
+        }
+        if (desiredPitch < -90) {
+            desiredPitch = -90;
+        }
         if (lookingYaw) {
             previousYaw = Minecraft.theMinecraft.thePlayer.rotationYaw;
             desiredYaw += 360;
