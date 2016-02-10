@@ -10,7 +10,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -380,7 +379,6 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
             }
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(GuiScreen.class.getName()).log(Level.SEVERE, null, ex);
-            sendChatMessage("the chat block: " + ex.getClass().getName());
         }
         Minecraft.theMinecraft.thePlayer.sendChatMessage(msg);
     }
@@ -569,7 +567,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
      * Returns true if either shift key is down
      */
     public static boolean isShiftKeyDown() {
-        return MineBot.isKeyDown(42) || MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer || AnotherStealer.holdShift;
+        return MineBot.isKeyDown(42) || MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer;
     }
     /**
      * Returns true if either alt key is down

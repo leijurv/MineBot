@@ -156,7 +156,7 @@ public class MineBot {
                 }
                 currentPath = null;
                 if (goal.isInGoal(playerFeet)) {
-                    GuiScreen.sendChatMessage("All done. At " + goal, true);
+                    GuiScreen.sendChatMessage("All done. At goal", true);
                     nextPath = null;
                 } else {
                     GuiScreen.sendChatMessage("Done with segment", true);
@@ -168,7 +168,7 @@ public class MineBot {
                             currentPath = nextPath;
                             nextPath = null;
                             if (!currentPath.start.equals(playerFeet)) {
-                                GuiScreen.sendChatMessage("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
+                                //GuiScreen.sendChatMessage("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
                                 currentPath = null;
                                 findPathInNewThread(playerFeet, true);
                             } else {
@@ -456,7 +456,7 @@ public class MineBot {
         try {
             PathFinder pf = new PathFinder(start, goal);
             Path path = pf.calculatePath();
-            GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + start + " to " + path.end, true);
+            //GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + start + " to " + path.end, true);
             return path;
         } catch (Exception e) {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, e);

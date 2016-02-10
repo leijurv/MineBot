@@ -78,44 +78,28 @@ public class EarlyGameStrategy {
         }
         return craftingTableTask.alreadyHas() >= quantity;
     }
-    public static int countWood_PHRASING() {
-        Item log1 = Item.getItemFromBlock(Block.getBlockFromName("minecraft:log"));
-        Item log2_NOTCH_IS_A_BAD_PROGRAMMER = Item.getItemFromBlock(Block.getBlockFromName("minecraft:log2"));
+    
+    public static int countItem(String s){
+        Item item = Item.getItemFromBlock(Block.getBlockFromName(s));
         int count = 0;
         for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
             if (stack == null) {
                 continue;
             }
-            if (log1.equals(stack.getItem()) || log2_NOTCH_IS_A_BAD_PROGRAMMER.equals(stack.getItem())) {
+            if (item.equals(stack.getItem())) {
                 count += stack.stackSize;
             }
         }
         return count;
+    }
+    
+    public static int countWood_PHRASING() {
+        return countItem("log");
     }
     public static int countDirt() {
-        Item dirt = Item.getItemFromBlock(Block.getBlockFromName("minecraft:dirt"));
-        int count = 0;
-        for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
-            if (stack == null) {
-                continue;
-            }
-            if (dirt.equals(stack.getItem())) {
-                count += stack.stackSize;
-            }
-        }
-        return count;
+        return countItem("dirt");
     }
     public static int countCobble() {
-        Item cobble = Item.getItemFromBlock(Block.getBlockFromName("minecraft:cobblestone"));
-        int count = 0;
-        for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
-            if (stack == null) {
-                continue;
-            }
-            if (cobble.equals(stack.getItem())) {
-                count += stack.stackSize;
-            }
-        }
-        return count;
+        return countItem("cobble");
     }
 }
