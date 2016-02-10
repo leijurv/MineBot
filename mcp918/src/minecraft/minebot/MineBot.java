@@ -219,7 +219,7 @@ public class MineBot {
         }
         LookManager.postTick();
     }
-    public static void slowOpenInventory() {
+    public static void openInventory() {
         GuiScreen.sendChatMessage("real open", true);
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
         GuiScreen screen = new GuiInventory(Minecraft.theMinecraft.thePlayer);
@@ -230,7 +230,7 @@ public class MineBot {
         Minecraft.theMinecraft.skipRenderWorld = false;
         Minecraft.theMinecraft.currentScreen = screen;
     }
-    public static void slowSlowOpenInventory() {
+    public static void slowOpenInventory() {
         GuiScreen.sendChatMessage("slow open", true);
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
         Minecraft.theMinecraft.displayGuiScreen(new GuiInventory(Minecraft.theMinecraft.thePlayer));

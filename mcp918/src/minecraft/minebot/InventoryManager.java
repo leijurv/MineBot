@@ -77,7 +77,7 @@ public class InventoryManager {
             itemPos += 36;
         }
         if (!openedInvYet) {
-            MineBot.slowOpenInventory();
+            MineBot.openInventory();
             openedInvYet = true;
         }
         switchWithHotBar(itemPos, pos);
@@ -120,7 +120,7 @@ public class InventoryManager {
             currPos += 36;
         }
         if (!openedInvYet) {
-            MineBot.slowOpenInventory();
+            MineBot.openInventory();
             openedInvYet = true;
         }
         switchWithHotBar(currPos, hotbarslot);
@@ -199,7 +199,7 @@ public class InventoryManager {
                 continue;
             }
             if (!openedInvYet) {
-                MineBot.slowOpenInventory();
+                MineBot.openInventory();
                 openedInvYet = true;
             }
             GuiContainer c = (GuiContainer) Minecraft.theMinecraft.currentScreen;
@@ -282,7 +282,7 @@ public class InventoryManager {
             swordPos += 36;
         }
         if (!openedInvYet) {
-            MineBot.slowOpenInventory();
+            MineBot.openInventory();
             openedInvYet = true;
         }
         switchWithHotBar(swordPos, slot);
@@ -317,7 +317,7 @@ public class InventoryManager {
             foodPos += 36;
         }
         if (!openedInvYet) {
-            MineBot.slowOpenInventory();
+            MineBot.openInventory();
             openedInvYet = true;
         }
         switchWithHotBar(foodPos, slot);
