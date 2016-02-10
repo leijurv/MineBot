@@ -17,6 +17,7 @@ import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalYLevel;
+import minebot.util.ChatCommand;
 import minebot.util.CraftingTask;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
@@ -84,7 +85,7 @@ public class MineBot {
     public static long lastDeath = 0;
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
-            cancelPath();
+            ChatCommand.cancel(null);
             return;
         }
         if (isLeftClick) {
