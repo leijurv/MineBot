@@ -188,6 +188,12 @@ public class CraftingTask {
             }
             return true;
         }
+        if (MineBot.whatAreYouLookingAt() != null && Block.getBlockFromName("crafting_table").equals(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock())) {
+            MineBot.currentPath = null;
+            MineBot.clearMovement();
+            Minecraft.theMinecraft.rightClickMouse();
+            return true;
+        }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         if (putCraftingTableOnHotBar()) {
             System.out.println("Ready to place!");
