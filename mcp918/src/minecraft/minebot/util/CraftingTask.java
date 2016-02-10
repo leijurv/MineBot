@@ -570,7 +570,7 @@ public class CraftingTask {
     }
     public static boolean ensureCraftingDesired(Item item, int quantity) {
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
-        if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity) {
+        if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity && craftingTableTask.stackSize > 0) {
             craftingTableTask.decreaseNeededAmount(1);
             return true;
         }
