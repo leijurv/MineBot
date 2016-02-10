@@ -112,7 +112,7 @@ public class CraftingTask {
     }
     ArrayList<int[]> plan = null;
     int tickNumber = 0;
-    static int ticksBetweenClicks = 20;
+    static int ticksBetweenClicks = 4;
     public void tickPlan() {
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         if (tickNumber % ticksBetweenClicks == 0) {
@@ -395,7 +395,7 @@ public class CraftingTask {
         }
         GuiScreen.sendChatMessage("Crafting amount " + amount + " of " + currentlyCrafting(), true);
         plan = new ArrayList();
-        tickNumber = -40;
+        tickNumber = -5;
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
