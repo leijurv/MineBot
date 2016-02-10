@@ -570,9 +570,13 @@ public class CraftingTask {
     }
     public static boolean ensureCraftingDesired(Item item, int quantity) {
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
-        if (craftingTableTask.currentlyCrafting().stackSize < quantity) {
-            craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.currentlyCrafting().stackSize);
+        if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity) {
+            craftingTableTask.decreaseNeededAmount(1);
+            return true;
         }
-        return craftingTableTask.alreadyHas() >= quantity;
+        if (craftingTableTask.stackSize < quantity) {
+            craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.stackSize);
+        }
+        return craftingTableTask.alreadyHas >= quantity;
     }
 }
