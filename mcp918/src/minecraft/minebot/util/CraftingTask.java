@@ -185,6 +185,7 @@ public class CraftingTask {
                 MineBot.currentPath = null;
                 MineBot.clearMovement();
                 Minecraft.theMinecraft.rightClickMouse();
+                findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
             }
             return true;
         }
@@ -192,10 +193,12 @@ public class CraftingTask {
             MineBot.currentPath = null;
             MineBot.clearMovement();
             Minecraft.theMinecraft.rightClickMouse();
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
             return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         if (putCraftingTableOnHotBar()) {
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
             System.out.println("Ready to place!");
             BlockPos looking = MineBot.whatAreYouLookingAt();
             if (looking != null) {
