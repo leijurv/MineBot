@@ -6,7 +6,6 @@
 package minebot.mining;
 
 import java.util.ArrayList;
-import java.util.Random;
 import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.actions.Action;
@@ -18,8 +17,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -129,13 +126,10 @@ public class MickeyMine {
             doNormalMine();
         }
     }
-    public static Boolean torch() {
+    public static boolean torch() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
-        CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:torch"), 0));
-        if (task.currentlyCrafting().stackSize < 32) {
-            task.increaseNeededAmount(32 - task.currentlyCrafting().stackSize);
-        }
+        CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:torch"), 32);
         for (int i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
@@ -146,41 +140,7 @@ public class MickeyMine {
                 return true;
             }
         }
-        int torchPosition = 0;
-        for (int i = 9; i < inv.length; i++) {
-            ItemStack item = inv[i];
-            if (inv[i] == null) {
-                continue;
-            }
-            if (item.getItem().equals(Item.getByNameOrId("minecraft:torch"))) {
-                torchPosition = i;
-            }
-        }
-        if (torchPosition == 0) {
-            return false;
-        }
-        int blankHotbarSpot = -1;
-        for (int i = 0; i < 9; i++) {
-            if (inv[i] == null) {
-                blankHotbarSpot = i;
-            }
-        }
-        if (blankHotbarSpot == -1) {
-            blankHotbarSpot = (new Random().nextInt(8) + 1);
-        }
-        if (Minecraft.theMinecraft.currentScreen == null) {
-            MineBot.openInventory();
-            return null;
-        }
-        if (Minecraft.theMinecraft.currentScreen instanceof GuiInventory) {
-            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-            contain.leftClick(torchPosition);
-            contain.leftClick(blankHotbarSpot + 36);
-            contain.leftClick(torchPosition);
-            Minecraft.theMinecraft.thePlayer.closeScreen();
-            return null;
-        }
-        return false;//we are in a gui other than inv
+        return false;
     }
     public static void doBranchMine() {
         if (branchPosition == null) {
@@ -190,14 +150,9 @@ public class MickeyMine {
             GuiScreen.sendChatMessage("Should be at branch position " + branchPosition + " " + Minecraft.theMinecraft.thePlayer.getPosition0(), true);
             mightNeedToGoBackToPath = true;
         } else {
-            Boolean b = torch();
-            if (b == null || b) {
+            if (torch()) {
                 if (LookManager.lookAtBlock(branchPosition.down(), true)) {
-                    if (b != null && b) {
-                        Minecraft.theMinecraft.rightClickMouse();
-                    } else {
-                        return;
-                    }
+                    Minecraft.theMinecraft.rightClickMouse();
                 } else {
                     return;
                 }

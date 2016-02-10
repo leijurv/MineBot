@@ -55,7 +55,7 @@ public class PathFinder {
         startNode.isOpen = true;
         openSet.insert(startNode);
         long startTime = System.currentTimeMillis();
-        long timeoutTime = startTime + 10000;
+        long timeoutTime = startTime + 4000;
         long lastPrintout = 0;
         int numNodes = 0;
         ToolSet ts = new ToolSet();
@@ -104,6 +104,9 @@ public class PathFinder {
         }
         double bestDist = 0;
         for (int i = 0; i < bestSoFar.length; i++) {
+            if (bestSoFar[i] == null) {
+                continue;
+            }
             double dist = dist(bestSoFar[i]);
             if (dist > bestDist) {
                 bestDist = dist;

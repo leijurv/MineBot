@@ -129,7 +129,7 @@ public class AnotherStealer extends Manager{
                     positionArmor = true;
                     positionSlot = 9;
                     positionStatus = 0;
-                    MineBot.openInventory();
+                    MineBot.slowOpenInventory();
                     return;
                 }
                 contain.shiftClick(slot.slotNumber);

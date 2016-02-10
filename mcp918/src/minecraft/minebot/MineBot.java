@@ -16,7 +16,9 @@ import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
+import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalYLevel;
+import minebot.util.ChatCommand;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.SmeltingTask;
@@ -26,6 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -95,7 +98,7 @@ public class MineBot {
     public static long lastDeath = 0;
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
-            cancelPath();
+            ChatCommand.cancel(null);
             return;
         }
         if (isLeftClick) {
@@ -131,7 +134,7 @@ public class MineBot {
         } else if (sketchyStealer) {
             SketchyStealer.onTick();
         }
-        if (Minecraft.theMinecraft.currentScreen == null && tickNumber % 20 == 0) {
+        if (tickNumber % 10 == 0) {
             InventoryManager.onTick();
         }
         boolean tickPath = Combat.onTick();
@@ -146,7 +149,9 @@ public class MineBot {
             EarlyGameStrategy.tick();
         }
         if (tickPath) {
-            CraftingTask.tickAll();
+            if (CraftingTask.tickAll()) {
+                tickPath = false;
+            }
         }
         if (mreowMine && tickPath) {
             MickeyMine.tick();
@@ -197,7 +202,7 @@ public class MineBot {
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? currentPathGoal.toString().equals(goal.toString()) : true);
+                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? !(currentPathGoal instanceof GoalComposite) && currentPathGoal.toString().equals(goal.toString()) : true);
                     }
                 }
             } else {
@@ -216,6 +221,10 @@ public class MineBot {
                     }
                 }
             }
+        }
+        if (Minecraft.theMinecraft.currentScreen != null && (Minecraft.theMinecraft.currentScreen instanceof GuiCrafting || Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+            isLeftClick = false;
+            leftPressTime = -5;
         }
         if (isThereAnythingInProgress && Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
             if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
