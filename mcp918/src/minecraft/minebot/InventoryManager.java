@@ -39,12 +39,12 @@ public class InventoryManager {
         maximumAmounts.put(itemName, max);
         minimumAmounts.put(itemName, min);
     }
+    static boolean openedInvYet = false;
     public static void onTick() {
         if (maximumAmounts == null) {
             initMax();
         }
         HashMap<Item, Integer> amounts = countItems();
-        boolean openedInvYet = false;
         for (String itemName : maximumAmounts.keySet()) {
             Item item = Item.getByNameOrId("minecraft:" + itemName);
             if (amounts.get(item) == null) {
@@ -76,15 +76,15 @@ public class InventoryManager {
                     continue;
                 }
                 if (item.equals(is.getItem())) {
-                    c.leftClick(i);
                     if (is.stackSize <= toThrowAway) {
                         toThrowAway -= is.stackSize;
-                        c.leftClickOutOfGui();
+                        dropAll(i);
+                        return;
                     } else {
                         for (int j = 0; j < toThrowAway; j++) {
-                            c.rightClickOutOfGui();
+                            dropOne(i);
+                            return;
                         }
-                        c.leftClick(i);
                         toThrowAway = 0;
                     }
                     if (toThrowAway <= 0) {
@@ -95,6 +95,7 @@ public class InventoryManager {
         }
         if (openedInvYet) {
             Minecraft.theMinecraft.thePlayer.closeScreen();
+            openedInvYet = false;
         }
     }
     public static HashMap<Item, Integer> countItems() {
