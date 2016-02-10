@@ -110,4 +110,16 @@ public class InventoryManager {
         }
         return amounts;
     }
+    public static void switchWithHotBar(int slotNumber, int hotbarPosition) {
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        contain.sketchyMouseClick(slotNumber, hotbarPosition, 2);
+    }
+    public static void dropAll(int slotNumber) {
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        contain.sketchyMouseClick(slotNumber, 1, 4);
+    }
+    public static void dropOne(int slotNumber) {
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        contain.sketchyMouseClick(slotNumber, 0, 4);
+    }
 }
