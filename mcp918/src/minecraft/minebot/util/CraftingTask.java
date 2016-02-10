@@ -432,7 +432,7 @@ public class CraftingTask {
         }
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.onTick()) {
-                return true;
+                return false;
             }
         }
         if (didIOpenMyInventory) {
