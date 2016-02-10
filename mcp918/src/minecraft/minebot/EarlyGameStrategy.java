@@ -75,6 +75,7 @@ public class EarlyGameStrategy {
             }
         }
         if (countCobble() > 5) {
+            System.out.println("Ensuring crafting ");
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
