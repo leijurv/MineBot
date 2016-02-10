@@ -175,7 +175,7 @@ public class InventoryManager extends Manager{
         if (look != null) {
             int xDiff = look.getX() - Minecraft.theMinecraft.thePlayer.getPosition0().getX();
             int zDiff = look.getZ() - Minecraft.theMinecraft.thePlayer.getPosition0().getZ();
-            if (Math.abs(xDiff) + Math.abs(zDiff) <= 1) {
+            if (Math.abs(xDiff) + Math.abs(zDiff) <= 2) {
                 doThrowAway = false;
             }
         }

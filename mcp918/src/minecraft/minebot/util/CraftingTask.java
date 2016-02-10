@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
@@ -79,6 +80,9 @@ public class CraftingTask {
     }
     public static boolean isRecipeOkay(IRecipe recipe) {
         if (recipe instanceof ShapedRecipes) {
+            if (((ShapedRecipes) recipe).recipeItems.length > 1) {
+                return true;
+            }
             for (ItemStack stack : ((ShapedRecipes) recipe).recipeItems) {
                 if (stack == null) {
                     continue;
@@ -91,6 +95,9 @@ public class CraftingTask {
             return true;
         }
         if (recipe instanceof ShapelessRecipes) {
+            if (((ShapelessRecipes) recipe).recipeItems.size() > 1) {
+                return true;
+            }
             for (ItemStack stack : ((ShapelessRecipes) recipe).recipeItems) {
                 if (stack.toString().toLowerCase().contains("block")) {
                     System.out.println("Not doing " + stack);
@@ -154,6 +161,9 @@ public class CraftingTask {
             return false;
         }
         boolean isCraftingTable = Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting;
+        if (isCraftingTable) {
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
+        }
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting)) && !isCraftingTable) {
             craftAsManyAsICan(true);
             return true;//if this doesn't need a crafting table, return no matter what
@@ -186,7 +196,7 @@ public class CraftingTask {
                 MineBot.currentPath = null;
                 MineBot.clearMovement();
                 Minecraft.theMinecraft.rightClickMouse();
-                findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+                findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             }
             return true;
         }
@@ -194,12 +204,12 @@ public class CraftingTask {
             MineBot.currentPath = null;
             MineBot.clearMovement();
             Minecraft.theMinecraft.rightClickMouse();
-            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         if (putCraftingTableOnHotBar()) {
-            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             System.out.println("Ready to place!");
             BlockPos looking = MineBot.whatAreYouLookingAt();
             if (looking != null) {
@@ -208,10 +218,15 @@ public class CraftingTask {
                     return true;
                 }
             }
-            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
-            if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
-                Minecraft.theMinecraft.rightClickMouse();
-            }
+            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down().north(), true);
+            LookManager.beSketchy();
+            MineBot.forward = new Random().nextBoolean();
+            MineBot.backward = new Random().nextBoolean();
+            MineBot.left = new Random().nextBoolean();
+            MineBot.right = new Random().nextBoolean();
+            //if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
+            Minecraft.theMinecraft.rightClickMouse();
+            //}
             MineBot.jumping = true;
             return true;
         }
@@ -235,6 +250,11 @@ public class CraftingTask {
             }
         }
         return false;
+    }
+    public void clearAll() {
+        if (stackSize != 0) {
+            decreaseNeededAmount(stackSize);
+        }
     }
     /**
      *

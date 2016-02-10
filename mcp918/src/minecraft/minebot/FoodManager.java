@@ -20,7 +20,7 @@ import net.minecraft.util.FoodStats;
  * @author leijurv
  */
 public class FoodManager extends Manager{
-    public void onTick() {
+    public static boolean onTick0() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         FoodStats fs = p.getFoodStats();
         if (!fs.needFood()) {
@@ -72,5 +72,10 @@ public class FoodManager extends Manager{
     @Override
     protected void onStart() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void onTick() {
+        onTick0();
     }
 }
