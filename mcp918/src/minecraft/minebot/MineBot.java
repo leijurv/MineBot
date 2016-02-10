@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -206,16 +207,16 @@ public class MineBot {
                 }
             }
         }
+        if (Minecraft.theMinecraft.currentScreen != null && (Minecraft.theMinecraft.currentScreen instanceof GuiCrafting || Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+            isLeftClick = false;
+            leftPressTime = -5;
+        }
         if (isThereAnythingInProgress && Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
             if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
                 //if water is deeper than one block, or we can't walk on what's below the water, or our head is in water, jump
                 System.out.println("Jumping because in water and pathfinding");
                 jumping = true;
             }
-        }
-        if (tickNumber % 420 == 69) {
-            leftPressTime = -5;
-            isLeftClick = false;
         }
         LookManager.postTick();
     }

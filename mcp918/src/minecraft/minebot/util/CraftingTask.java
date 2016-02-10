@@ -353,7 +353,7 @@ public class CraftingTask {
         if (inv) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
                 System.out.println("Opening");
-                MineBot.openInventory();
+                MineBot.slowOpenInventory();
                 didIOpenMyInventory = true;
             }
         } else {
