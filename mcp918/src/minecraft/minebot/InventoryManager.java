@@ -44,9 +44,9 @@ public class InventoryManager {
         minimumAmounts.put(itemName, min);
     }
     static boolean openedInvYet = false;
-    public static int bestPickaxe() {
+    public static boolean placePickaxe() {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
-        int bestPosition = -1;
+        int pickPos = -1;
         float bestStrength = Float.MIN_VALUE;
         for (int i = 0; i < stacks.length; i++) {
             ItemStack stack = stacks[i];
@@ -59,15 +59,26 @@ public class InventoryManager {
                 float strength = pick.getStrVsBlock(stack, Block.getBlockFromName("minecraft:stone"));
                 if (strength > bestStrength) {
                     bestStrength = strength;
-                    bestPosition = i;
+                    pickPos = i;
                 }
             }
         }
-        return bestPosition;
+        if (pickPos > 0) {
+            if (pickPos < 9) {
+                pickPos += 36;
+            }
+            if (!openedInvYet) {
+                MineBot.slowOpenInventory();
+                openedInvYet = true;
+            }
+            switchWithHotBar(pickPos, 0);
+            return true;
+        }
+        return false;
     }
-    public static int bestSword() {
+    public static boolean placeSword() {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
-        int bestPosition = -1;
+        int swordPos = -1;
         float bestStrength = Float.MIN_VALUE;
         for (int i = 0; i < stacks.length; i++) {
             ItemStack stack = stacks[i];
@@ -80,11 +91,25 @@ public class InventoryManager {
                 float strength = sword.getDamageVsEntity();
                 if (strength > bestStrength) {
                     bestStrength = strength;
-                    bestPosition = i;
+                    swordPos = i;
                 }
             }
         }
-        return bestPosition;
+        if (swordPos == -1) {
+            return false;
+        }
+        if (swordPos == 1) {
+            return false;
+        }
+        if (swordPos < 9) {
+            swordPos += 36;
+        }
+        if (!openedInvYet) {
+            MineBot.slowOpenInventory();
+            openedInvYet = true;
+        }
+        switchWithHotBar(swordPos, 1);
+        return true;
     }
     public static int find(Item... items) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
@@ -136,28 +161,10 @@ public class InventoryManager {
         if (Minecraft.theMinecraft.currentScreen != null && !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
             return;
         }
-        int pickPos = bestPickaxe();
-        if (pickPos > 0) {
-            if (pickPos < 9) {
-                pickPos += 36;
-            }
-            if (!openedInvYet) {
-                MineBot.slowOpenInventory();
-                openedInvYet = true;
-            }
-            switchWithHotBar(pickPos, 0);
+        if (placePickaxe()) {
             return;
         }
-        int swordPos = bestSword();
-        if (swordPos > 0) {
-            if (swordPos < 9) {
-                swordPos += 36;
-            }
-            if (!openedInvYet) {
-                MineBot.slowOpenInventory();
-                openedInvYet = true;
-            }
-            switchWithHotBar(swordPos, 0);
+        if (placeSword()) {
             return;
         }
         if (putItemInSlot(3, Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
