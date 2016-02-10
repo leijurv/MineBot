@@ -6,6 +6,7 @@
 package minebot;
 
 import java.util.HashMap;
+import java.util.Random;
 import minebot.mining.MickeyMine;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -124,6 +125,14 @@ public class InventoryManager {
         switchWithHotBar(currPos, hotbarslot);
         return true;
     }
+    public static void randomize(int[] array, Random random) {
+        for (int i = 0; i < array.length; i++) {
+            int j = random.nextInt(array.length);
+            int tmp = array[i];
+            array[i] = array[j];
+            array[j] = tmp;
+        }
+    }
     public static void onTick() {
         if (maximumAmounts == null) {
             initMax();
@@ -131,28 +140,32 @@ public class InventoryManager {
         if (Minecraft.theMinecraft.currentScreen != null && !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
             return;
         }
-        if (place(0, Block.getBlockFromName("stone"), ItemPickaxe.class)) {
+        Random random = new Random(Minecraft.theMinecraft.thePlayer.getName().hashCode());
+        int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        randomize(slots, random);
+        int ind = 0;
+        if (place(slots[ind++], Block.getBlockFromName("stone"), ItemPickaxe.class)) {
             return;
         }
-        if (placeSword()) {
+        if (placeSword(slots[ind++])) {
             return;
         }
-        if (placeFood()) {
+        if (placeFood(slots[ind++])) {
             return;
         }
-        if (place(4, Block.getBlockFromName("log"), ItemAxe.class)) {
+        if (place(slots[ind++], Block.getBlockFromName("log"), ItemAxe.class)) {
             return;
         }
-        if (place(5, Block.getBlockFromName("dirt"), ItemSpade.class)) {
+        if (place(slots[ind++], Block.getBlockFromName("dirt"), ItemSpade.class)) {
             return;
         }
-        if (putItemInSlot(3, Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
+        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
             return;
         }
-        if (putItemInSlot(1, Item.getByNameOrId("minecraft:torch"))) {
+        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:torch"))) {
             return;
         }
-        if (putItemInSlot(7, Item.getByNameOrId("minecraft:crafting_table"))) {
+        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:crafting_table"))) {
             return;
         }
         HashMap<Item, Integer> amounts = countItems();
@@ -227,7 +240,7 @@ public class InventoryManager {
         }
         return amounts;
     }
-    public static boolean placeSword() {
+    public static boolean placeSword(int slot) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int swordPos = -1;
         float bestStrength = Float.MIN_VALUE;
@@ -249,7 +262,7 @@ public class InventoryManager {
         if (swordPos == -1) {
             return false;
         }
-        if (swordPos == 2) {
+        if (swordPos == slot) {
             return false;
         }
         if (swordPos < 9) {
@@ -259,10 +272,10 @@ public class InventoryManager {
             MineBot.slowOpenInventory();
             openedInvYet = true;
         }
-        switchWithHotBar(swordPos, 2);
+        switchWithHotBar(swordPos, slot);
         return true;
     }
-    public static boolean placeFood() {
+    public static boolean placeFood(int slot) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int foodPos = -1;
         float bestStrength = Float.MIN_VALUE;
@@ -284,7 +297,7 @@ public class InventoryManager {
         if (foodPos == -1) {
             return false;
         }
-        if (foodPos == 8) {
+        if (foodPos == slot) {
             return false;
         }
         if (foodPos < 9) {
@@ -294,7 +307,7 @@ public class InventoryManager {
             MineBot.slowOpenInventory();
             openedInvYet = true;
         }
-        switchWithHotBar(foodPos, 8);
+        switchWithHotBar(foodPos, slot);
         return true;
     }
     public static void switchWithHotBar(int slotNumber, int hotbarPosition) {
