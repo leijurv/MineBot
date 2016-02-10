@@ -59,10 +59,12 @@ public class EarlyGameStrategy {
             BlockPuncher.tick("log", "log2");
             return;
         }
-        boolean craftingTableInInventory = ensureCraftingDesired(Item.getByNameOrId("minecraft:crafting_table"), 1);
-        boolean hasWooden = ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
-        ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
-        if (hasWooden) {
+        boolean hasWooden = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
+        boolean hasStone = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
+        if (hasStone) {
+            dontCraft(Item.getByNameOrId("minecraft:wooden_pickaxe"));
+        }
+        if (hasWooden || hasStone) {
             if (!cobble) {
                 BlockPuncher.tick("stone");
                 if (countCobble() > 64) {
@@ -71,12 +73,11 @@ public class EarlyGameStrategy {
             }
         }
     }
-    public static boolean ensureCraftingDesired(Item item, int quantity) {
-        CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
-        if (craftingTableTask.currentlyCrafting().stackSize < quantity) {
-            craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.currentlyCrafting().stackSize);
+    public static void dontCraft(Item item) {
+        CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
+        if (task.currentlyCrafting().stackSize > 0) {
+            task.decreaseNeededAmount(1);
         }
-        return craftingTableTask.alreadyHas() >= quantity;
     }
     public static int countItem(String s) {
         Item item = Item.getItemFromBlock(Block.getBlockFromName(s));

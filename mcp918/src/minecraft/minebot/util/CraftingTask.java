@@ -203,10 +203,7 @@ public class CraftingTask {
             return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
-        //if(doWeHaveMaterialsToCraftACraftingTable()){
-        //    addCraftingTaskForCraftingTable();
-        //    return;
-        //}
+        ensureCraftingDesired(Item.getByNameOrId("crafting_table"), 1);
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one and we don't have the materials to make one
         //so just rip at this point
         return false;
@@ -570,5 +567,12 @@ public class CraftingTask {
     public boolean isDone() {
         calculateAlreadyHasAmount();
         return stackSize <= alreadyHas;
+    }
+    public static boolean ensureCraftingDesired(Item item, int quantity) {
+        CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
+        if (craftingTableTask.currentlyCrafting().stackSize < quantity) {
+            craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.currentlyCrafting().stackSize);
+        }
+        return craftingTableTask.alreadyHas() >= quantity;
     }
 }
