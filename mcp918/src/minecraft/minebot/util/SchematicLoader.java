@@ -1,0 +1,86 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package minebot.util;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+
+/**
+ *
+ * @author galdara
+ */
+public class SchematicLoader {
+    
+    public static File schematicDir;
+    private static HashMap<File, Schematic> cachedSchematics = new HashMap<File, Schematic>();
+    
+    private SchematicLoader() {
+         schematicDir = new File(Minecraft.theMinecraft.mcDataDir, "schematics");
+         schematicDir.mkdir();
+         for(File file : schematicDir.listFiles(new FileFilter() {
+             @Override
+             public boolean accept(File pathname) {
+                 return pathname.getName().endsWith(".schematic");
+             }
+         })) {
+             try {
+                 cachedSchematics.put(file, loadFromFile(file));
+             } catch (IOException ex) {
+                 Logger.getLogger(SchematicLoader.class.getName()).log(Level.SEVERE, null, ex);
+             }
+         }
+         
+    }
+    
+    public static SchematicLoader getLoader() {
+        return new SchematicLoader();
+    }
+    
+    public Schematic loadFromFile(File nbtFile) throws FileNotFoundException, IOException {
+        if(cachedSchematics.containsKey(nbtFile))
+            return cachedSchematics.get(nbtFile);
+        FileInputStream fileInputStream = new FileInputStream(nbtFile);
+        NBTTagCompound compound = CompressedStreamTools.readCompressed(fileInputStream);
+        System.out.print(compound);
+        int height, width, length;
+        height = compound.getInteger("Height");
+        width = compound.getInteger("Width");
+        length = compound.getInteger("Length");
+        byte[][][] blocks  = new byte[width][height][length], data = new byte[width][height][length];
+        byte[] rawBlocks = compound.getByteArray("Blocks");
+        byte[] rawData = compound.getByteArray("Data");
+        HashMap<BlockPos, Block> blocksMap = new HashMap<BlockPos, Block>();
+        for(int y = 0; y < height; y++) {
+            for(int z = 0; z < length; z++) {
+                for(int x = 0; x < width; x++) {
+                    int index = y * width * length + z * width + x;
+                    blocks[x][y][z] = rawBlocks[index];
+                    if(!Block.getBlockById(rawBlocks[index]).equals(Block.getBlockById(0)))
+                        blocksMap.put(new BlockPos(x, y, z), Block.getBlockById(rawBlocks[index]));
+                }
+            }
+        }
+        System.out.println(blocksMap);
+        Schematic schematic = new Schematic(blocksMap, width, height, length);
+        cachedSchematics.put(nbtFile, schematic);
+        return schematic;
+    }
+   
+}

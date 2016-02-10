@@ -26,4 +26,6 @@ public interface Goal {
      * @return
      */
     public double heuristic(BlockPos pos);
+    @Override
+    public String toString();
 }

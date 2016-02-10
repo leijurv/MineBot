@@ -5,6 +5,7 @@
  */
 package minebot;
 
+import java.util.Random;
 import minebot.pathfinding.goals.GoalXZ;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -118,6 +119,22 @@ public class LookManager {
         double z = Minecraft.theMinecraft.thePlayer.posZ + Math.cos(theta) * distance;
         return new GoalXZ((int) x, (int) z);
     }
+    static double SPEED = 1000;
+    public static float[] getRandom() {
+        long now = (long) Math.ceil(((double) System.currentTimeMillis()) / SPEED);
+        now *= SPEED;
+        long prev = now - (long) SPEED;
+        float frac = (System.currentTimeMillis() - prev) / ((float) SPEED);
+        Random prevR = new Random(prev);
+        Random nowR = new Random(now);
+        float prevFirst = prevR.nextFloat() * 10 - 5;
+        float prevSecond = prevR.nextFloat() * 10 - 5;
+        float nowFirst = nowR.nextFloat() * 10 - 5;
+        float nowSecond = nowR.nextFloat() * 10 - 5;
+        float first = prevFirst + frac * (nowFirst - prevFirst);
+        float second = prevSecond + frac * (nowSecond - prevSecond);
+        return new float[]{first, second};
+    }
     public static float[] pitchAndYaw(BlockPos p) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
@@ -173,6 +190,8 @@ public class LookManager {
         lookingPitch = false;
     }
     public static void postTick() {
+        desiredYaw += getRandom()[0];
+        desiredPitch += getRandom()[1];
         if (lookingYaw) {
             previousYaw = Minecraft.theMinecraft.thePlayer.rotationYaw;
             desiredYaw += 360;
