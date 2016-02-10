@@ -98,7 +98,7 @@ public class InventoryManager {
         if (swordPos == -1) {
             return false;
         }
-        if (swordPos == 1) {
+        if (swordPos == 2) {
             return false;
         }
         if (swordPos < 9) {
@@ -108,7 +108,7 @@ public class InventoryManager {
             MineBot.slowOpenInventory();
             openedInvYet = true;
         }
-        switchWithHotBar(swordPos, 1);
+        switchWithHotBar(swordPos, 2);
         return true;
     }
     public static int find(Item... items) {
