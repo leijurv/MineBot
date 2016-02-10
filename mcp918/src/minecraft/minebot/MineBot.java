@@ -118,7 +118,7 @@ public class MineBot {
         } else if (sketchyStealer) {
             SketchyStealer.onTick();
         }
-        if (tickNumber % 20 == 0) {
+        if (tickNumber % 10 == 0) {
             InventoryManager.onTick();
         }
         boolean tickPath = Combat.onTick();
