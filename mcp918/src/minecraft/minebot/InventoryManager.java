@@ -7,12 +7,14 @@ package minebot;
 
 import java.util.HashMap;
 import minebot.mining.MickeyMine;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -41,11 +43,93 @@ public class InventoryManager {
         minimumAmounts.put(itemName, min);
     }
     static boolean openedInvYet = false;
+    public static int bestPickaxe() {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        int bestPosition = -1;
+        float bestStrength = Float.MIN_VALUE;
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i];
+            if (stack == null) {
+                continue;
+            }
+            Item item = stack.getItem();
+            if (item instanceof ItemPickaxe) {
+                ItemPickaxe pick = (ItemPickaxe) item;
+                float strength = pick.getStrVsBlock(stack, Block.getBlockFromName("minecraft:stone"));
+                if (strength > bestStrength) {
+                    bestStrength = strength;
+                    bestPosition = i;
+                }
+            }
+        }
+        return bestPosition;
+    }
+    public static int find(Item... items) {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        int bestPosition = -1;
+        int bestSize = 0;
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i];
+            if (stack == null) {
+                continue;
+            }
+            for (Item it : items) {
+                if (it.equals(stack.getItem())) {
+                    if (stack.stackSize > bestSize) {
+                        bestSize = stack.stackSize;
+                        bestPosition = i;
+                    }
+                }
+            }
+        }
+        return bestPosition;
+    }
+    public static boolean putItemInSlot(int hotbarslot, Item... items) {
+        int currPos = find(items);
+        ItemStack curr = Minecraft.theMinecraft.thePlayer.inventory.mainInventory[hotbarslot];
+        if (curr != null) {
+            for (Item item : items) {
+                if (item.equals(curr.getItem())) {
+                    return false;
+                }
+            }
+        }
+        if (currPos == -1) {
+            return false;
+        }
+        if (currPos < 9) {
+            currPos += 36;
+        }
+        if (!openedInvYet) {
+            MineBot.slowOpenInventory();
+            openedInvYet = true;
+        }
+        switchWithHotBar(currPos, hotbarslot);
+        return true;
+    }
     public static void onTick() {
         if (maximumAmounts == null) {
             initMax();
         }
         if (Minecraft.theMinecraft.currentScreen != null && !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+            return;
+        }
+        int pos = bestPickaxe();
+        if (pos > 0) {
+            if (pos < 9) {
+                pos += 36;
+            }
+            if (!openedInvYet) {
+                MineBot.slowOpenInventory();
+                openedInvYet = true;
+            }
+            switchWithHotBar(pos, 0);
+            return;
+        }
+        if (putItemInSlot(4, Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
+            return;
+        }
+        if (putItemInSlot(2, Item.getByNameOrId("minecraft:torch"))) {
             return;
         }
         HashMap<Item, Integer> amounts = countItems();
