@@ -167,7 +167,7 @@ public class Memory {
         BlockPos best = null;
         double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
-            System.out.println("Considering " + type);
+            //System.out.println("Considering " + type);
             if (type.toString().toLowerCase().contains(lower)) {
                 BlockPos pos = blockMemory.get(type).closest();
                 System.out.println("find" + type + " " + pos);
@@ -189,7 +189,7 @@ public class Memory {
         BlockPos best = null;
         double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
-            System.out.println("Considering " + type);
+            //System.out.println("Considering " + type);
             for (String b : block) {
                 String lower = "block{minecraft:" + b.toLowerCase() + "}";
                 if (type.toString().toLowerCase().equals(lower)) {
@@ -210,7 +210,7 @@ public class Memory {
     public static ArrayList<BlockPos> closest(int num, String... block) {
         ArrayList<BlockPos> result = new ArrayList();
         for (Block type : blockMemory.keySet()) {
-            System.out.println("Considering " + type);
+            //System.out.println("Considering " + type);
             for (String b : block) {
                 String lower = "block{minecraft:" + b.toLowerCase() + "}";
                 if (type.toString().toLowerCase().equals(lower)) {
@@ -236,7 +236,7 @@ public class Memory {
         BlockPos best = null;
         double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
-            System.out.println("Considering " + type);
+            //System.out.println("Considering " + type);
             if (type.toString().toLowerCase().contains(lower)) {
                 BlockPos pos = blockMemory.get(type).closest();
                 System.out.println("findgo" + type + " " + pos);
