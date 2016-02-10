@@ -182,7 +182,7 @@ public class CraftingTask {
             if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
                 MineBot.currentPath = null;
                 MineBot.clearMovement();
-                //Minecraft.theMinecraft.rightClickMouse();
+                Minecraft.theMinecraft.rightClickMouse();
             }
             return true;
         }
