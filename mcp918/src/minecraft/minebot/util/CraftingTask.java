@@ -141,6 +141,7 @@ public class CraftingTask {
             tickPlan();
             return true;
         }
+        System.out.println(currentlyCrafting() + " " + alreadyHas + " " + isDone());
         if (isDone()) {
             return false;
         }
@@ -570,7 +571,9 @@ public class CraftingTask {
     }
     public static boolean ensureCraftingDesired(Item item, int quantity) {
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
-        System.out.println(item + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
+        craftingTableTask.increaseNeededAmount(10);
+        craftingTableTask.decreaseNeededAmount(10);
+        System.out.println(craftingTableTask.currentlyCrafting() + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
         if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity) {
             if (craftingTableTask.stackSize > 0) {
                 craftingTableTask.decreaseNeededAmount(1);
