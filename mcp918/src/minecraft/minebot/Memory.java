@@ -197,26 +197,31 @@ public class Memory {
         return "none";
     }
     public static BlockPos closestOne(String... block) {
-        BlockPos best = null;
-        double d = Double.MAX_VALUE;
-        for (Block type : blockMemory.keySet()) {
-            //System.out.println("Considering " + type);
-            for (String b : block) {
-                String lower = "block{minecraft:" + b.toLowerCase() + "}";
-                if (type.toString().toLowerCase().equals(lower)) {
-                    BlockPos pos = blockMemory.get(type).closest();
-                    System.out.println("closest" + type + " " + pos);
-                    if (pos != null) {
-                        double dist = distSq(pos);
-                        if (best == null || dist < d) {
-                            d = dist;
-                            best = pos;
-                        }
-                    }
-                }
-            }
+        /*BlockPos best = null;
+         double d = Double.MAX_VALUE;
+         for (Block type : blockMemory.keySet()) {
+         //System.out.println("Considering " + type);
+         for (String b : block) {
+         String lower = "block{minecraft:" + b.toLowerCase() + "}";
+         if (type.toString().toLowerCase().equals(lower)) {
+         BlockPos pos = blockMemory.get(type).closest();
+         System.out.println("closest" + type + " " + pos);
+         if (pos != null) {
+         double dist = distSq(pos);
+         if (best == null || dist < d) {
+         d = dist;
+         best = pos;
+         }
+         }
+         }
+         }
+         }
+         return best;*/
+        ArrayList<BlockPos> u = closest(1, block);
+        if (u.isEmpty()) {
+            return null;
         }
-        return best;
+        return u.get(0);
     }
     public static ArrayList<BlockPos> closest(int num, String... block) {
         ArrayList<BlockPos> result = new ArrayList();

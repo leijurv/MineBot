@@ -25,8 +25,8 @@ import net.minecraft.item.ItemStack;
  */
 public class EarlyGameStrategy {
     static boolean gotWood_PHRASING = false;
-    static final int WOOD_AMT = 64;//triggers stopping
-    static final int MIN_WOOD_AMT = 16;//triggers getting more
+    static int WOOD_AMT = 16;//triggers stopping
+    static int MIN_WOOD_AMT = 1;//triggers getting more
     static final int DIRT_AMT = 32;
     static boolean didPlace = false;
     static boolean gotDirt = false;
@@ -76,7 +76,10 @@ public class EarlyGameStrategy {
             }
         }
         if (countCobble() > 5) {
-            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
+            if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1)) {
+                WOOD_AMT = 64;
+                MIN_WOOD_AMT = 16;
+            }
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
         }
