@@ -155,7 +155,7 @@ public class CraftingTask {
         }
         boolean isCraftingTable = Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting;
         if (isCraftingTable) {
-            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
         }
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting)) && !isCraftingTable) {
             craftAsManyAsICan(true);
@@ -189,7 +189,7 @@ public class CraftingTask {
                 MineBot.currentPath = null;
                 MineBot.clearMovement();
                 Minecraft.theMinecraft.rightClickMouse();
-                findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+                findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             }
             return true;
         }
@@ -197,12 +197,12 @@ public class CraftingTask {
             MineBot.currentPath = null;
             MineBot.clearMovement();
             Minecraft.theMinecraft.rightClickMouse();
-            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         if (putCraftingTableOnHotBar()) {
-            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).stackSize = 0;
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             System.out.println("Ready to place!");
             BlockPos looking = MineBot.whatAreYouLookingAt();
             if (looking != null) {
@@ -243,6 +243,11 @@ public class CraftingTask {
             }
         }
         return false;
+    }
+    public void clearAll() {
+        if (stackSize != 0) {
+            decreaseNeededAmount(stackSize);
+        }
     }
     /**
      *
