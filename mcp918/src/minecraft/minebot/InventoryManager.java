@@ -21,6 +21,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.BlockPos;
 
 /**
  *
@@ -168,8 +169,20 @@ public class InventoryManager {
         if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:crafting_table"))) {
             return;
         }
+        BlockPos look = MineBot.whatAreYouLookingAt();
+        boolean doThrowAway = true;
+        if (look != null) {
+            int xDiff = look.getX() - Minecraft.theMinecraft.thePlayer.getPosition0().getX();
+            int zDiff = look.getZ() - Minecraft.theMinecraft.thePlayer.getPosition0().getZ();
+            if (Math.abs(xDiff) + Math.abs(zDiff) <= 1) {
+                doThrowAway = false;
+            }
+        }
         HashMap<Item, Integer> amounts = countItems();
         for (String itemName : maximumAmounts.keySet()) {
+            if (!doThrowAway) {
+                continue;
+            }
             Item item = Item.getByNameOrId("minecraft:" + itemName);
             if (amounts.get(item) == null) {
                 amounts.put(item, 0);
