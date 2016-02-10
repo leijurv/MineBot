@@ -74,6 +74,14 @@ public class EarlyGameStrategy {
                 }
             }
         }
+        if (countCobble() > 5) {
+            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
+            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
+            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
+        }
+        if (countCobble() > 8) {
+            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1);
+        }
     }
     public static void dontCraft(Item item) {
         CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
