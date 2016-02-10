@@ -213,6 +213,10 @@ public class MineBot {
                 jumping = true;
             }
         }
+        if (tickNumber % 420 == 69) {
+            leftPressTime = -5;
+            isLeftClick = false;
+        }
         LookManager.postTick();
     }
     public static void openInventory() {
