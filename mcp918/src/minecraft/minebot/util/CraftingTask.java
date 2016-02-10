@@ -437,6 +437,7 @@ public class CraftingTask {
                 return false;
             }
         }
+        GuiScreen.sendChatMessage(didIOpenMyInventory + " " + TUC + " " + waitingToClose);
         if (didIOpenMyInventory) {
             waitingToClose = true;
             TUC = 20;
