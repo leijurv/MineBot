@@ -190,7 +190,7 @@ public class LookManager {
         lookingPitch = false;
     }
     public static void beSketchy() {
-        desiredYaw += (System.currentTimeMillis() % 5000) / 5000F * 360F;
+        desiredYaw += (System.currentTimeMillis() % 15000) / 15000F * 360F;
     }
     public static void postTick() {
         desiredYaw += getRandom()[0];
