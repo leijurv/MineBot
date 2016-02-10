@@ -141,9 +141,11 @@ public class CraftingTask {
             tickPlan();
             return true;
         }
-        System.out.println(currentlyCrafting() + " " + alreadyHas + " " + isDone());
         if (isDone()) {
             return false;
+        }
+        if (stackSize != 0) {
+            System.out.println(currentlyCrafting() + " " + alreadyHas + " " + isDone());
         }
         boolean hasMaterials = actualDoCraft(1, false, true) != null;
         //System.out.println("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
@@ -451,7 +453,7 @@ public class CraftingTask {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
                         System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
-                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
+                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(input.getItem(), 0));
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
                     }
@@ -462,7 +464,7 @@ public class CraftingTask {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
                         System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
-                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
+                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(input.getItem(), 0));
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
                     }
@@ -475,10 +477,12 @@ public class CraftingTask {
         }
     }
     public static CraftingTask findOrCreateCraftingTask(ItemStack itemStack) {
-        System.out.println("Getting a task for " + itemStack);
+        //System.out.println("Getting a task for " + itemStack);
         for (CraftingTask selectedTask : overallCraftingTasks) {
             if (selectedTask.currentlyCrafting().getItem().equals(itemStack.getItem())) {
-                selectedTask.increaseNeededAmount(itemStack.stackSize);
+                if (itemStack.stackSize != 0) {
+                    selectedTask.increaseNeededAmount(itemStack.stackSize);
+                }
                 return selectedTask;
             }
         }
@@ -490,6 +494,7 @@ public class CraftingTask {
         return new ItemStack(currentlyCrafting, stackSize);
     }
     public final void increaseNeededAmount(int amount) {
+        //GuiScreen.sendChatMessage(currentlyCrafting() + " inc " + amount);
         int stackSizeBefore = stackSize;
         stackSize += amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
@@ -497,11 +502,17 @@ public class CraftingTask {
         int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
         int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
         int change = inputQuantityNew - inputQuantityBefore;
-        for (CraftingTask craftingTask : subCraftingTasks) {
-            craftingTask.increaseNeededAmount(change);
+        if (change != 0) {
+            /*for (CraftingTask craftingTask : subCraftingTasks) {
+             GuiScreen.sendChatMessage("> inc sub " + craftingTask.currentlyCrafting() + " " + change);
+             }*/
+            for (CraftingTask craftingTask : subCraftingTasks) {
+                craftingTask.increaseNeededAmount(change);
+            }
         }
     }
     public void decreaseNeededAmount(int amount) {
+        //GuiScreen.sendChatMessage(currentlyCrafting() + " dec " + amount);
         int stackSizeBefore = stackSize;
         stackSize -= amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
@@ -509,8 +520,13 @@ public class CraftingTask {
         int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
         int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
         int change = inputQuantityBefore - inputQuantityNew;
-        for (CraftingTask craftingTask : subCraftingTasks) {
-            craftingTask.decreaseNeededAmount(change);
+        if (change != 0) {
+            /*for (CraftingTask craftingTask : subCraftingTasks) {
+             GuiScreen.sendChatMessage("> dec sub " + craftingTask.currentlyCrafting() + " " + change);
+             }*/
+            for (CraftingTask craftingTask : subCraftingTasks) {
+                craftingTask.decreaseNeededAmount(change);
+            }
         }
     }
     public static HashMap<Item, ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) {
@@ -571,9 +587,7 @@ public class CraftingTask {
     }
     public static boolean ensureCraftingDesired(Item item, int quantity) {
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
-        craftingTableTask.increaseNeededAmount(10);
-        craftingTableTask.decreaseNeededAmount(10);
-        System.out.println(craftingTableTask.currentlyCrafting() + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
+        //System.out.println(craftingTableTask.currentlyCrafting() + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
         if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity) {
             if (craftingTableTask.stackSize > 0) {
                 craftingTableTask.decreaseNeededAmount(1);

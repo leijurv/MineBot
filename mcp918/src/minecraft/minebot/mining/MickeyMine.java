@@ -129,10 +129,7 @@ public class MickeyMine {
     public static boolean torch() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;
-        CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:torch"), 0));
-        if (task.currentlyCrafting().stackSize < 32) {
-            task.increaseNeededAmount(32 - task.currentlyCrafting().stackSize);
-        }
+        CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:torch"), 32);
         for (int i = 0; i < 9; i++) {
             ItemStack item = inv[i];
             if (inv[i] == null) {
