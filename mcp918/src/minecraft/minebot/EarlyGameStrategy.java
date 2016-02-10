@@ -59,10 +59,12 @@ public class EarlyGameStrategy {
             BlockPuncher.tick("log", "log2");
             return;
         }
-        boolean hasWooden = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
+        boolean hasWooden = false;
         boolean hasStone = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
         if (hasStone) {
             dontCraft(Item.getByNameOrId("minecraft:wooden_pickaxe"));
+        } else {
+            hasWooden = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
         }
         if (hasWooden || hasStone) {
             if (!cobble) {
