@@ -327,7 +327,7 @@ public class ChatCommand {
     }
     
     public static String printtag(String message) throws IOException {
-        SchematicLoader.loadFromFile(new File("/Users/galdara/Downloads/schematics/Bakery.schematic"));
+        SchematicLoader.getLoader().loadFromFile(new File("/Users/galdara/Downloads/schematics/Bakery.schematic"));
         return "printed schematic to console.";
     }
     

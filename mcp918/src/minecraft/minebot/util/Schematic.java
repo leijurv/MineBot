@@ -5,10 +5,12 @@
  */
 package minebot.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
@@ -18,7 +20,7 @@ import net.minecraft.util.Tuple;
  * @author galdara
  */
 public class Schematic {
-    
+        
     private HashMap<BlockPos, Block> schematicBlocks;
     private int width;
     private int height;
@@ -33,20 +35,14 @@ public class Schematic {
     }
     
     public Tuple<BlockPos, Block> getTupleFromBlockPos(BlockPos blockPos) {
-        if(blockPos != null) {
-            if(schematicBlocks.containsKey(blockPos)) {
-                return new Tuple<BlockPos, Block>(blockPos, schematicBlocks.get(blockPos));
-            }
+        if(schematicBlocks.containsKey(blockPos)) {
+            return new Tuple<BlockPos, Block>(blockPos, schematicBlocks.get(blockPos));
         }
         return null;
     }
     
     public Block getBlockFromBlockPos(BlockPos blockPos) {
-        Tuple<BlockPos, Block> tuple = getTupleFromBlockPos(blockPos);
-        if(tuple != null) {
-            return tuple.getSecond();
-        }
-        return null;
+        return schematicBlocks.get(blockPos);
     }
     
     public int getWidth() {
