@@ -92,7 +92,7 @@ public class AnotherStealer {
                         if (inv.getSlot(armor.armorType).getHasStack() && ((ItemArmor) inv.getSlot(armor.armorType).getStack().getItem()).damageReduceAmount < armor.damageReduceAmount) {
                             positionSlot = i;
                             positionStatus = 1;
-                            Minecraft.theMinecraft.playerController.windowClick(((GuiContainer) Minecraft.theMinecraft.currentScreen).inventorySlots.windowId, armor.armorType, 0, 1, Minecraft.theMinecraft.thePlayer);
+                            Minecraft.theMinecraft.playerController.windowClick(((GuiContainer) Minecraft.theMinecraft.currentScreen).inventorySlots.windowId, 103 - armor.armorType, 0, 1, Minecraft.theMinecraft.thePlayer);
                             return;
                         }
                     }
