@@ -351,6 +351,8 @@ public class CraftingTask {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
                 GuiScreen.sendChatMessage("Not in crafting table", true);
                 return false;
+            } else {
+                didIOpenMyInventory = true;
             }
         }
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
@@ -437,7 +439,6 @@ public class CraftingTask {
                 return false;
             }
         }
-        GuiScreen.sendChatMessage(didIOpenMyInventory + " " + TUC + " " + waitingToClose);
         if (didIOpenMyInventory) {
             waitingToClose = true;
             TUC = 20;
