@@ -57,6 +57,7 @@ public class MineBot {
     public static boolean fullAuto = false;
     public static Path currentPath = null;
     public static Path nextPath = null;
+    public static boolean tickPath = false;
     public static ArrayList<Class<? extends Manager>> managers;
     static{
         managers = new ArrayList<Class<? extends Manager>>();
@@ -132,7 +133,6 @@ public class MineBot {
         for(Class c : managers){
             Manager.tick(c);
         }
-        boolean tickPath = Combat.onTick();
         //System.out.println("Ticking: " + tickPath);
         //System.out.println("Mob hunting: " + !tickPath);
         if (tickPath) {

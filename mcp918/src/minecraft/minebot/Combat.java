@@ -12,6 +12,7 @@ import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;
 import static minebot.MineBot.what;
+import static minebot.MineBot.tickPath;
 import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
@@ -44,7 +45,7 @@ public class Combat extends Manager{
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        boolean tickPath = true;
+        tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
         ArrayList<Entity> mobs = new ArrayList<Entity>();
         for (Entity entity : theWorld.loadedEntityList) {
@@ -176,7 +177,6 @@ public class Combat extends Manager{
                 tickPath = false;
             }
         }
-        return tickPath;
     }
     public static double distFromMe(Entity a) {
         EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;

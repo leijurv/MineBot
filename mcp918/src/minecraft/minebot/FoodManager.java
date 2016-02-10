@@ -75,6 +75,11 @@ public class FoodManager extends Manager{
     }
 
     @Override
+    protected boolean onEnabled(boolean enabled) {
+        return MineBot.tickPath;
+    }
+    
+    @Override
     protected void onTick() {
         onTick0();
     }
