@@ -14,8 +14,10 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
@@ -45,9 +47,9 @@ public class InventoryManager {
         minimumAmounts.put(itemName, min);
     }
     static boolean openedInvYet = false;
-    public static boolean placePickaxe() {
+    public static boolean place(int pos, Block check, Class<?> h) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
-        int pickPos = -1;
+        int itemPos = -1;
         float bestStrength = Float.MIN_VALUE;
         for (int i = 0; i < stacks.length; i++) {
             ItemStack stack = stacks[i];
@@ -55,96 +57,28 @@ public class InventoryManager {
                 continue;
             }
             Item item = stack.getItem();
-            if (item instanceof ItemPickaxe) {
-                ItemPickaxe pick = (ItemPickaxe) item;
-                float strength = pick.getStrVsBlock(stack, Block.getBlockFromName("minecraft:stone"));
+            if (item.getClass() == h) {
+                float strength = item.getStrVsBlock(stack, check);
                 if (strength > bestStrength) {
                     bestStrength = strength;
-                    pickPos = i;
+                    itemPos = i;
                 }
             }
         }
-        if (pickPos > 0) {
-            if (pickPos < 9) {
-                pickPos += 36;
-            }
-            if (!openedInvYet) {
-                MineBot.slowOpenInventory();
-                openedInvYet = true;
-            }
-            switchWithHotBar(pickPos, 0);
-            return true;
-        }
-        return false;
-    }
-    public static boolean placeSword() {
-        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
-        int swordPos = -1;
-        float bestStrength = Float.MIN_VALUE;
-        for (int i = 0; i < stacks.length; i++) {
-            ItemStack stack = stacks[i];
-            if (stack == null) {
-                continue;
-            }
-            Item item = stack.getItem();
-            if (item instanceof ItemSword) {
-                ItemSword sword = (ItemSword) item;
-                float strength = sword.getDamageVsEntity();
-                if (strength > bestStrength) {
-                    bestStrength = strength;
-                    swordPos = i;
-                }
-            }
-        }
-        if (swordPos == -1) {
+        if (itemPos == -1) {
             return false;
         }
-        if (swordPos == 2) {
+        if (itemPos == pos) {
             return false;
         }
-        if (swordPos < 9) {
-            swordPos += 36;
+        if (itemPos < 9) {
+            itemPos += 36;
         }
         if (!openedInvYet) {
             MineBot.slowOpenInventory();
             openedInvYet = true;
         }
-        switchWithHotBar(swordPos, 2);
-        return true;
-    }
-    public static boolean placeFood() {
-        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
-        int foodPos = -1;
-        float bestStrength = Float.MIN_VALUE;
-        for (int i = 0; i < stacks.length; i++) {
-            ItemStack stack = stacks[i];
-            if (stack == null) {
-                continue;
-            }
-            Item item = stack.getItem();
-            if (item instanceof ItemFood) {
-                ItemFood food = (ItemFood) item;
-                float strength = food.getHealAmount(stack);
-                if (strength > bestStrength) {
-                    bestStrength = strength;
-                    foodPos = i;
-                }
-            }
-        }
-        if (foodPos == -1) {
-            return false;
-        }
-        if (foodPos == 8) {
-            return false;
-        }
-        if (foodPos < 9) {
-            foodPos += 36;
-        }
-        if (!openedInvYet) {
-            MineBot.slowOpenInventory();
-            openedInvYet = true;
-        }
-        switchWithHotBar(foodPos, 8);
+        switchWithHotBar(itemPos, pos);
         return true;
     }
     public static int find(Item... items) {
@@ -197,13 +131,19 @@ public class InventoryManager {
         if (Minecraft.theMinecraft.currentScreen != null && !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
             return;
         }
-        if (placePickaxe()) {
+        if (place(0, Block.getBlockFromName("stone"), ItemPickaxe.class)) {
             return;
         }
         if (placeSword()) {
             return;
         }
         if (placeFood()) {
+            return;
+        }
+        if (place(4, Block.getBlockFromName("log"), ItemAxe.class)) {
+            return;
+        }
+        if (place(5, Block.getBlockFromName("dirt"), ItemSpade.class)) {
             return;
         }
         if (putItemInSlot(3, Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
@@ -286,6 +226,76 @@ public class InventoryManager {
             }
         }
         return amounts;
+    }
+    public static boolean placeSword() {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        int swordPos = -1;
+        float bestStrength = Float.MIN_VALUE;
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i];
+            if (stack == null) {
+                continue;
+            }
+            Item item = stack.getItem();
+            if (item instanceof ItemSword) {
+                ItemSword sword = (ItemSword) item;
+                float strength = sword.getDamageVsEntity();
+                if (strength > bestStrength) {
+                    bestStrength = strength;
+                    swordPos = i;
+                }
+            }
+        }
+        if (swordPos == -1) {
+            return false;
+        }
+        if (swordPos == 2) {
+            return false;
+        }
+        if (swordPos < 9) {
+            swordPos += 36;
+        }
+        if (!openedInvYet) {
+            MineBot.slowOpenInventory();
+            openedInvYet = true;
+        }
+        switchWithHotBar(swordPos, 2);
+        return true;
+    }
+    public static boolean placeFood() {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        int foodPos = -1;
+        float bestStrength = Float.MIN_VALUE;
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i];
+            if (stack == null) {
+                continue;
+            }
+            Item item = stack.getItem();
+            if (item instanceof ItemFood) {
+                ItemFood food = (ItemFood) item;
+                float strength = food.getHealAmount(stack);
+                if (strength > bestStrength) {
+                    bestStrength = strength;
+                    foodPos = i;
+                }
+            }
+        }
+        if (foodPos == -1) {
+            return false;
+        }
+        if (foodPos == 8) {
+            return false;
+        }
+        if (foodPos < 9) {
+            foodPos += 36;
+        }
+        if (!openedInvYet) {
+            MineBot.slowOpenInventory();
+            openedInvYet = true;
+        }
+        switchWithHotBar(foodPos, 8);
+        return true;
     }
     public static void switchWithHotBar(int slotNumber, int hotbarPosition) {
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;

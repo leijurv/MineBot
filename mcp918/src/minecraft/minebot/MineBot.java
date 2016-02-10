@@ -15,6 +15,7 @@ import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
+import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
 import minebot.util.SmeltingTask;
@@ -184,7 +185,7 @@ public class MineBot {
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? currentPathGoal.toString().equals(goal.toString()) : true);
+                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? !(currentPathGoal instanceof GoalComposite) && currentPathGoal.toString().equals(goal.toString()) : true);
                     }
                 }
             } else {
