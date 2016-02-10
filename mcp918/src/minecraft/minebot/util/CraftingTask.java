@@ -420,12 +420,13 @@ public class CraftingTask {
         plan.add(new int[]{slot, 0, 1});
     }
     static boolean didIOpenMyInventory = false;
+    static int TUC = 20;
     public static boolean tickAll() {
         MineBot.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
                 if (!craftingTask.onTick()) {
-                    Minecraft.theMinecraft.thePlayer.closeScreen();
+                    didIOpenMyInventory = true;
                 }
                 return true;
             }
@@ -436,8 +437,13 @@ public class CraftingTask {
             }
         }
         if (didIOpenMyInventory) {
-            Minecraft.theMinecraft.thePlayer.closeScreen();
-            didIOpenMyInventory = false;
+            TUC--;
+            if (TUC <= 0) {
+                Minecraft.theMinecraft.thePlayer.closeScreen();
+                didIOpenMyInventory = false;
+                TUC = 20;
+            }
+            return true;
         }
         return false;
     }
