@@ -32,6 +32,7 @@ public class SchematicBuilder {
     }
     public void tick() {
         BlockPos goal = getFirstToPlace();
+        System.out.println("Ticking " + goal);
         if (goal != null) {
             if (MineBot.isAir(goal.up(2))) {
                 MineBot.goal = new GoalBlock(goal);
@@ -57,6 +58,7 @@ public class SchematicBuilder {
                     BlockPos inWorld = offset(inSchematic);
                     Block current = Minecraft.theMinecraft.theWorld.getBlockState(inWorld).getBlock();
                     Block desired = schematic.getBlockFromBlockPos(inSchematic);
+                    System.out.println(inSchematic + " " + current + " " + desired);
                     boolean currentlyAir = air.equals(current);
                     boolean shouldBeAir = air.equals(desired);
                     if (currentlyAir && !shouldBeAir) {
