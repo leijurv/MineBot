@@ -52,6 +52,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
         }
         return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }
+    int ticksWithoutPlacement = 0;
     @Override
     protected boolean tick0() {//basically just hold down W and space until we are where we want to be
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
@@ -66,7 +67,12 @@ public class ActionClimb extends ActionPlaceOrBreak {
                     double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
                     LookManager.lookAtCoords(faceX, faceY, faceZ, true);
                     if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i])) {
-                        Minecraft.theMinecraft.rightClickMouse();//todo: check if we are standing in the way and preventing this block from being placed
+                        ticksWithoutPlacement++;
+                        Minecraft.theMinecraft.rightClickMouse();//todo: (important) check if we are standing in the way and preventing this block from being placed
+                        if (ticksWithoutPlacement > 20) {
+                            MineBot.sneak = true;
+                            MineBot.backward = true;
+                        }
                     }
                     System.out.println("Trying to look at " + against[i] + ", actually looking at" + MineBot.whatAreYouLookingAt());
                     return false;

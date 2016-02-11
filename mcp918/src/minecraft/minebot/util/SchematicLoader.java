@@ -9,8 +9,12 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,8 +76,7 @@ public class SchematicLoader {
                 for(int x = 0; x < width; x++) {
                     int index = y * width * length + z * width + x;
                     blocks[x][y][z] = rawBlocks[index];
-                    if(!Block.getBlockById(rawBlocks[index]).equals(Block.getBlockById(0)))
-                        blocksMap.put(new BlockPos(x, y, z), Block.getBlockById(rawBlocks[index]));
+                    blocksMap.put(new BlockPos(x, y, z), Block.getBlockById(rawBlocks[index]));
                 }
             }
         }

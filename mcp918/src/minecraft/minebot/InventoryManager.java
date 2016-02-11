@@ -209,6 +209,28 @@ public class InventoryManager extends Manager{
                 openedInvYet = false;
                 return;
             }
+            int bestPos = -1;
+            int bestSize = 0;
+            for (int i = 0; i < c.inventorySlots.inventorySlots.size(); i++) {
+                Slot slot = c.inventorySlots.inventorySlots.get(i);
+                if (slot == null) {
+                    continue;
+                }
+                ItemStack is = slot.getStack();
+                if (is == null) {
+                    continue;
+                }
+                if (item.equals(is.getItem())) {
+                    if (is.stackSize > bestSize && is.stackSize <= toThrowAway) {
+                        bestSize = is.stackSize;
+                        bestPos = i;
+                    }
+                }
+            }
+            if (bestPos != -1) {
+                dropAll(bestPos);//throw away the largest stack that's smaller than toThrowAway, if it exists
+                return;
+            }
             for (int i = 0; i < c.inventorySlots.inventorySlots.size(); i++) {
                 Slot slot = c.inventorySlots.inventorySlots.get(i);
                 if (slot == null) {

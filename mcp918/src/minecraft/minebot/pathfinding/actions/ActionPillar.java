@@ -38,6 +38,12 @@ public class ActionPillar extends ActionPlaceOrBreak {
     int numTicks = 0;
     @Override
     protected boolean tick0() {
+        if (!switchtothrowaway(true)) {//get ready to place a throwaway block
+            return false;
+        }
+        return tick1();
+    }
+    public boolean tick1() {
         if (!LookManager.lookAtBlock(positionsToPlace[0], true)) {
             return false;
         }
@@ -56,9 +62,6 @@ public class ActionPillar extends ActionPlaceOrBreak {
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
             System.out.println("Block not there yet");
-            if (!switchtothrowaway(true)) {//get ready to place a throwaway block
-                return false;
-            }
             Minecraft.theMinecraft.rightClickMouse();//constantly right click
         }
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);

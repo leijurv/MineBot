@@ -5,13 +5,11 @@
  */
 package minebot.util;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
 
@@ -34,6 +32,11 @@ public class Schematic {
         this.length = length;
     }
     
+    /**
+     * Tuple links the BlockPos and Block to one another.
+     * @param blockPos
+     * @return Tuple of BlockPos and Block
+     */
     public Tuple<BlockPos, Block> getTupleFromBlockPos(BlockPos blockPos) {
         if(schematicBlocks.containsKey(blockPos)) {
             return new Tuple<BlockPos, Block>(blockPos, schematicBlocks.get(blockPos));
@@ -41,20 +44,42 @@ public class Schematic {
         return null;
     }
     
+    /**
+     * Gets given block type in schematic from a BlockPos
+     * @param blockPos
+     * @return 
+     */
     public Block getBlockFromBlockPos(BlockPos blockPos) {
         return schematicBlocks.get(blockPos);
     }
     
+    /**
+     * Gives the length along the X axis
+     * @return Schematic width
+     */
     public int getWidth() {
         return width;
     }
     
+    /**
+     * Gives the height along the y axis
+     * @return Schematic height
+     */
     public int getHeight() {
         return height;
     }
     
+    
+    /**
+     * Gives the length along the z axis
+     * @return Schematic length
+     */
     public int getLength() {
         return length;
+    }
+    
+    public ArrayList<Entry<BlockPos, Block>> getEntries() {
+        return new ArrayList(schematicBlocks.entrySet());
     }
     
 }
