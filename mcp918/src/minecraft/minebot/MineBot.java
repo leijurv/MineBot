@@ -21,6 +21,7 @@ import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.ChatCommand;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
+import minebot.util.ManagerTick;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -54,10 +55,8 @@ public class MineBot {
     public static boolean ticktimer = false;
     public static boolean allowBreakOrPlace = true;
     public static boolean hasThrowaway = true;
-    public static boolean fullAuto = false;
     public static Path currentPath = null;
     public static Path nextPath = null;
-    public static boolean tickPath = false;
     public static ArrayList<Class<? extends Manager>> managers;
     static{
         managers = new ArrayList<Class<? extends Manager>>();
@@ -69,6 +68,8 @@ public class MineBot {
         managers.add(Combat.class);
         managers.add(FoodManager.class);
         managers.add(EarlyGameStrategy.class);
+        managers.add(CraftingTask.class);
+        managers.add(MickeyMine.class);
         
     }
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -134,15 +135,7 @@ public class MineBot {
         for(Class c : managers){
             Manager.tick(c);
         }
-        if (tickPath) {
-            if (CraftingTask.tickAll()) {
-                tickPath = false;
-            }
-        }
-        if (mreowMine && tickPath) {
-            MickeyMine.tick();
-        }
-        if (currentPath != null && tickPath) {
+        if (currentPath != null && ManagerTick.tickPath) {
             if (currentPath.tick()) {
                 Goal currentPathGoal = currentPath == null ? null : currentPath.goal;
                 if (currentPath != null) {
@@ -345,7 +338,6 @@ public class MineBot {
         rightPressTime = 0;
         clearMovement();
     }
-    public static boolean mreowMine = false;
     public static boolean fullBright = true;
     public static String info(BlockPos bp) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock();

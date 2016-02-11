@@ -33,7 +33,7 @@ public class SmeltingTask extends Manager{
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
     static HashSet<BlockPos> knownFurnaces = new HashSet();
     
-    protected static Manager newInstance(Class c){
+    protected static Manager createInstance(Class c){
         return new SmeltingTask();
     }
     
@@ -49,10 +49,6 @@ public class SmeltingTask extends Manager{
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
             task.exec();
         }
-    }
-    public static void cancelAll() {
-        inProgress.clear();
-        furnacesInUse.clear();
     }
     public static void clearInProgress() {
         for (int i = 0; i < inProgress.size(); i++) {
@@ -378,7 +374,8 @@ public class SmeltingTask extends Manager{
 
     @Override
     protected void onCancel() {
-        cancelAll();
+        inProgress.clear();
+        furnacesInUse.clear();
     }
 
     @Override

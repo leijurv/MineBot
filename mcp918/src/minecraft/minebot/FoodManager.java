@@ -9,6 +9,7 @@ import static minebot.MineBot.isRightClick;
 import static minebot.MineBot.sneak;
 import static minebot.MineBot.whatAreYouLookingAt;
 import minebot.util.Manager;
+import minebot.util.ManagerTick;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemFood;
@@ -19,8 +20,9 @@ import net.minecraft.util.FoodStats;
  *
  * @author leijurv
  */
-public class FoodManager extends Manager{
-    public static boolean onTick0() {
+public class FoodManager extends ManagerTick{
+    @Override
+    protected boolean onTick0() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         FoodStats fs = p.getFoodStats();
         if (!fs.needFood()) {
@@ -66,22 +68,9 @@ public class FoodManager extends Manager{
 
     @Override
     protected void onCancel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     protected void onStart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    protected boolean onEnabled(boolean enabled) {
-        return MineBot.tickPath;
-    }
-    
-    @Override
-    protected void onTick() {
-        if(onTick0())
-            MineBot.tickPath=false;
     }
 }

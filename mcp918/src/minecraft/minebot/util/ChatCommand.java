@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import minebot.AnotherStealer;
 import minebot.Combat;
+import minebot.EarlyGameStrategy;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
@@ -171,10 +172,10 @@ public class ChatCommand {
         return "";
     }
     public static String mine(String message) {
-        if (!(MineBot.mreowMine ^= true)) {
-            MickeyMine.clear();
-        }
-        return "Mreow mine: " + MineBot.mreowMine;
+        return "Mreow mine: " + Manager.toggle(MickeyMine.class);
+    }
+    public static String fullauto(String message) {
+        return "Full Auto: " + Manager.toggle(EarlyGameStrategy.class);
     }
     public static String wizard(String message) {
         return "YOURE A LIZARD HARRY " + (MineBot.isThereAnythingInProgress ^= true);
@@ -232,13 +233,6 @@ public class ChatCommand {
         for(Class c : MineBot.managers){
             Manager.cancel(c);
         }
-        
-        
-        Combat.target = null;
-        MickeyMine.clear();
-        MineBot.mreowMine = false;
-        MineBot.fullAuto = false;
-        SmeltingTask.cancelAll();
         return MineBot.isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";
     }
     public static String cancelfurnace(String message) {

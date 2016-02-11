@@ -63,7 +63,7 @@ public abstract class Manager {
         return getManager(c).toggle();
     }
     
-    protected static Manager newInstance(Class c){
+    protected static Manager createInstance(Class c){
         try {
             return (Manager) c.newInstance();
         } catch (Exception ex) {

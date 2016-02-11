@@ -36,12 +36,13 @@ import net.minecraft.util.Tuple;
  *
  * @author galdara
  */
-public class CraftingTask {
+public class CraftingTask extends ManagerTick{
     static ArrayList<CraftingTask> overallCraftingTasks = new ArrayList<CraftingTask>();
     ArrayList<CraftingTask> subCraftingTasks = new ArrayList<CraftingTask>();
     private Item currentlyCrafting = null;
     private int stackSize;
     private int alreadyHas;
+    
     private CraftingTask(ItemStack craftStack) {
         this.currentlyCrafting = craftStack.getItem();
         this.stackSize = 0;
@@ -139,7 +140,7 @@ public class CraftingTask {
         }
         tickNumber++;
     }
-    public boolean onTick() {
+    public boolean onTick1() {
         if (plan != null) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiContainer)) {
                 plan = null;
@@ -454,18 +455,18 @@ public class CraftingTask {
     static boolean didIOpenMyInventory = false;
     static boolean waitingToClose = false;
     static int TUC = 20;
-    public static boolean tickAll() {
+    protected boolean onTick0() {
         MineBot.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
-                if (!craftingTask.onTick()) {
+                if (!craftingTask.onTick1()) {
                     didIOpenMyInventory = true;
                 }
                 return true;
             }
         }
         for (CraftingTask craftingTask : overallCraftingTasks) {
-            if (craftingTask.onTick()) {
+            if (craftingTask.onTick1()) {
                 return false;
             }
         }
@@ -643,5 +644,26 @@ public class CraftingTask {
             craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.stackSize);
         }
         return craftingTableTask.alreadyHas >= quantity;
+    }
+
+    protected static Manager createInstance(Class c){
+        try {
+            return (Manager) c.newInstance();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    protected void onCancel() {
+    }
+
+    @Override
+    protected void onStart() {
+    }
+
+    @Override
+    protected boolean onEnabled(boolean enabled){
+        return true;
     }
 }

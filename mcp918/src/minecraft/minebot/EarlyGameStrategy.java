@@ -7,6 +7,7 @@ package minebot;
 
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
+import minebot.util.ManagerTick;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,7 +25,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author leijurv
  */
-public class EarlyGameStrategy extends Manager{
+public class EarlyGameStrategy extends ManagerTick{
     static boolean gotWood_PHRASING = false;
     static int WOOD_AMT = 16;//triggers stopping
     static int MIN_WOOD_AMT = 1;//triggers getting more
@@ -34,16 +35,16 @@ public class EarlyGameStrategy extends Manager{
     static boolean cobble = false;
     
     @Override
-    public void onTick() {
+    protected boolean onTick0() {
         if (!gotDirt) {
             int dirt = countDirt();
             if (dirt >= DIRT_AMT) {
                 GuiScreen.sendChatMessage("Done getting dirt");
                 gotDirt = true;
-                return;
+                return false;
             }
             BlockPuncher.tick("dirt", "grass");
-            return;
+            return false;
         }
         int wood = countWood_PHRASING();
         if (wood >= WOOD_AMT) {
@@ -60,7 +61,7 @@ public class EarlyGameStrategy extends Manager{
         }
         if (!gotWood_PHRASING) {
             BlockPuncher.tick("log", "log2");
-            return;
+            return false;
         }
         boolean hasWooden = false;
         boolean hasStone = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
@@ -89,6 +90,7 @@ public class EarlyGameStrategy extends Manager{
         if (countCobble() > 8) {
             CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1);
         }
+        return false;
     }
     public static void dontCraft(Item item) {
         CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
@@ -125,10 +127,5 @@ public class EarlyGameStrategy extends Manager{
 
     @Override
     protected void onStart() {
-    }
-    
-    @Override
-    protected boolean onEnabled(boolean enabled){
-        return MineBot.tickPath && enabled;
     }
 }

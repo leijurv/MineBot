@@ -13,6 +13,7 @@ import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
+import minebot.util.ManagerTick;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -28,7 +29,7 @@ import net.minecraft.world.chunk.Chunk;
  *
  * @author galdara
  */
-public class MickeyMine {
+public class MickeyMine extends ManagerTick{
     static ArrayList<Block> goalBlocks = null;
     static boolean isGoingToMine = false;
     static boolean isMining = false;
@@ -44,14 +45,6 @@ public class MickeyMine {
     static final String[] ores = {"diamond", "iron", "coal", "gold", "redstone", "emerald", "lit_redstone"};
     static final boolean[] enabled = {true, true, false, true, true, true, true};
     static boolean mightNeedToGoBackToPath = false;
-    public static void clear() {
-        isGoingToMine = false;
-        isMining = false;
-        needsToBeMined.clear();
-        priorityNeedsToBeMined.clear();
-        branchPosition = null;
-        mightNeedToGoBackToPath = false;
-    }
     public static void notifyFullness(String item, boolean isFull) {
         if (item.equals("stone")) {
             return;
@@ -319,24 +312,6 @@ public class MickeyMine {
         }
         return false;
     }
-    public static void tick() {
-        System.out.println("mickey" + isGoingToMine + " " + isMining);
-        if (!isGoingToMine && !isMining) {
-            if (MineBot.currentPath == null) {
-                MineBot.goal = new GoalYLevel(6);
-                MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), true);
-                isGoingToMine = true;
-            }
-        }
-        if (isGoingToMine && Minecraft.theMinecraft.thePlayer.getPosition0().getY() == 6) {
-            isGoingToMine = false;
-            isMining = true;
-        }
-        if (isMining) {
-            doMine();
-        }
-        System.out.println("mickey done");
-    }
     public static boolean isGoalBlock(BlockPos blockPos) {
         return isGoalBlock(Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock());
     }
@@ -359,5 +334,40 @@ public class MickeyMine {
     }
     public static Tuple<Integer, Integer> tupleFromBlockPos(BlockPos blockPos) {
         return tupleFromChunk(Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(blockPos));
+    }
+
+    @Override
+    protected boolean onTick0() {
+        System.out.println("mickey" + isGoingToMine + " " + isMining);
+        if (!isGoingToMine && !isMining) {
+            if (MineBot.currentPath == null) {
+                MineBot.goal = new GoalYLevel(6);
+                MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), true);
+                isGoingToMine = true;
+            }
+        }
+        if (isGoingToMine && Minecraft.theMinecraft.thePlayer.getPosition0().getY() == 6) {
+            isGoingToMine = false;
+            isMining = true;
+        }
+        if (isMining) {
+            doMine();
+        }
+        System.out.println("mickey done");
+        return false;
+    }
+
+    @Override
+    protected void onCancel() {
+    }
+
+    @Override
+    protected void onStart() {
+        isGoingToMine = false;
+        isMining = false;
+        needsToBeMined.clear();
+        priorityNeedsToBeMined.clear();
+        branchPosition = null;
+        mightNeedToGoBackToPath = false;
     }
 }

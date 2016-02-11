@@ -12,11 +12,11 @@ import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;
 import static minebot.MineBot.what;
-import static minebot.MineBot.tickPath;
 import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
 import minebot.util.Manager;
+import minebot.util.ManagerTick;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -35,13 +35,14 @@ import net.minecraft.world.World;
  *
  * @author leijurv
  */
-public class Combat extends Manager{
+public class Combat extends ManagerTick{
     public static boolean mobHunting = false;
     public static boolean mobKilling = false;
     public static boolean playerHunt = false;
     public static Entity target = null;
     public static boolean wasTargetSetByMobHunt = false;
-    public void onTick() {
+    @Override
+    public boolean onTick0() {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
@@ -177,6 +178,7 @@ public class Combat extends Manager{
                 tickPath = false;
             }
         }
+        return false;
     }
     public static double distFromMe(Entity a) {
         EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
@@ -262,6 +264,7 @@ public class Combat extends Manager{
 
     @Override
     protected void onCancel() {
+        target = null;
     }
 
     @Override
