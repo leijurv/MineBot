@@ -18,7 +18,6 @@ import minebot.Combat;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
-import minebot.SketchyStealer;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalGetToBlock;
@@ -118,15 +117,18 @@ public class ChatCommand {
         }
         return "THATS NOT A THING";
     }
-
-    public static String importfrom(String message) throws ClassNotFoundException{
+    public static String importfrom(String message) throws ClassNotFoundException {
         String[] args = message.split(" ");
-        if(args.length!=3 || (!"m".equals(args[1]) && !"f".equals(args[1]))){
+        if (args.length != 3 || (!"m".equals(args[1]) && !"f".equals(args[1]))) {
             return "import (m/f) class";
         }
         Class c = Class.forName(args[2]);
-        if(args[1].equals("m")) addMethods(c); else addFields(c);
-        return "Added from "+c;
+        if (args[1].equals("m")) {
+            addMethods(c);
+        } else {
+            addFields(c);
+        }
+        return "Added from " + c;
     }
     public static String death(String message) {
         MineBot.goal = new GoalBlock(MineBot.death);
@@ -307,7 +309,7 @@ public class ChatCommand {
     public static String path(String message) {
         MineBot.plsCancel = false;
         String[] split = message.split(" ");
-        MineBot.findPathInNewThread(thePlayer().playerFeet(), split.length>1 ? Boolean.parseBoolean(split[1]) : true);
+        MineBot.findPathInNewThread(thePlayer().playerFeet(), split.length > 1 ? Boolean.parseBoolean(split[1]) : true);
         return "";
     }
     public static String hardness(String message) {
@@ -326,12 +328,11 @@ public class ChatCommand {
         AnotherStealer.chestStuff = false;
         return "stealer: " + (MineBot.stealer ^= true);
     }
-    
     public static String printtag(String message) throws IOException {
-        SchematicLoader.getLoader().loadFromFile(new File("/Users/galdara/Downloads/schematics/Bakery.schematic"));
+        Schematic sch = SchematicLoader.getLoader().loadFromFile(new File("/Users/galdara/Downloads/schematics/Bakery.schematic"));
+        MineBot.currentBuilder = new SchematicBuilder(sch, Minecraft.theMinecraft.thePlayer.getPosition0());
         return "printed schematic to console.";
     }
-    
     public static String getToGoal(String message) {
         MineBot.plsCancel = false;
         int ind = message.indexOf(' ') + 1;

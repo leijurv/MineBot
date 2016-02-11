@@ -19,6 +19,7 @@ import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.ChatCommand;
 import minebot.util.CraftingTask;
+import minebot.util.SchematicBuilder;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -54,6 +55,7 @@ public class MineBot {
     public static boolean allowBreakOrPlace = true;
     public static boolean hasThrowaway = true;
     public static boolean fullAuto = false;
+    public static SchematicBuilder currentBuilder = null;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -121,6 +123,9 @@ public class MineBot {
         }
         if (tickNumber % 10 == 0) {
             InventoryManager.onTick();
+        }
+        if (currentBuilder != null) {
+            currentBuilder.tick();
         }
         boolean tickPath = Combat.onTick();
         //System.out.println("Ticking: " + tickPath);
