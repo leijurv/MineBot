@@ -59,7 +59,7 @@ public class MineBot {
     public static Path currentPath = null;
     public static Path nextPath = null;
     public static ArrayList<Class<? extends Manager>> managers;
-    static{
+    static {
         managers = new ArrayList<Class<? extends Manager>>();
         managers.add(LookManager.class);
         managers.add(SmeltingTask.class);
@@ -71,7 +71,6 @@ public class MineBot {
         managers.add(EarlyGameStrategy.class);
         managers.add(CraftingTask.class);
         managers.add(MickeyMine.class);
-        
     }
     public static SchematicBuilder currentBuilder = null;
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -115,7 +114,7 @@ public class MineBot {
         if (isRightClick) {
             rightPressTime = 5;
         }
-        for(Class c : managers){
+        for (Class c : managers) {
             Manager.tick(c, true);
         }
         isLeftClick = false;
@@ -134,7 +133,8 @@ public class MineBot {
         }
         tickNumber++;
         hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
-        for(Class c : managers){
+        ManagerTick.tickPath = true;
+        for (Class c : managers) {
             Manager.tick(c);
         }
         if (currentBuilder != null) {
@@ -217,7 +217,7 @@ public class MineBot {
                 jumping = true;
             }
         }
-        for(Class c : managers){
+        for (Class c : managers) {
             Manager.tick(c, false);
         }
     }
@@ -239,7 +239,6 @@ public class MineBot {
     }
     public static boolean wasScreen = false;
     public static boolean calculatingNext = false;
-    
     public static Goal goal = null;
     public static int leftPressTime = 0;
     public static int rightPressTime = 0;
