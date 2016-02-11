@@ -86,11 +86,17 @@ public class EarlyGameStrategy extends ManagerTick {
             } else {
                 readyForMining = false;
             }
-            readyForMining &= CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
-            readyForMining &= CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
+            if (!CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1)) {
+                readyForMining = false;
+            }
+            if (!CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1)) {
+                readyForMining = false;
+            }
         }
         if (countCobble() > 8) {
-            readyForMining &= CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1);
+            if (!CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1)) {
+                readyForMining = false;
+            }
         }
         if (readyForMining) {
             GuiScreen.sendChatMessage("Ready to mine");
