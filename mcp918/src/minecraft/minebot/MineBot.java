@@ -20,12 +20,9 @@ import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.ChatCommand;
 import minebot.util.CraftingTask;
-<<<<<<< HEAD
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
-=======
 import minebot.util.SchematicBuilder;
->>>>>>> df4e580d061c66824387c060bf57b38b5c043d8e
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -59,7 +56,6 @@ public class MineBot {
     public static boolean ticktimer = false;
     public static boolean allowBreakOrPlace = true;
     public static boolean hasThrowaway = true;
-<<<<<<< HEAD
     public static Path currentPath = null;
     public static Path nextPath = null;
     public static ArrayList<Class<? extends Manager>> managers;
@@ -77,10 +73,7 @@ public class MineBot {
         managers.add(MickeyMine.class);
         
     }
-=======
-    public static boolean fullAuto = false;
     public static SchematicBuilder currentBuilder = null;
->>>>>>> df4e580d061c66824387c060bf57b38b5c043d8e
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
