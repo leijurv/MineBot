@@ -22,7 +22,7 @@ public class GuiIngameMenu extends GuiScreen {
         int j = 98;
         int returnWidth = 50;
         int returnHeight = 20;
-        this.buttonList.add(new GuiButton(1, /*this.width / 2 - returnWidth / 2*/ this.width / 10, this.height / 4 + 120 + i, returnWidth, returnHeight, I18n.format("menu.returnToMenu", new Object[0])));
+        this.buttonList.add(new GuiButton(1, /*this.width / 2 - returnWidth / 2*/ 7 * this.width / 10, this.height / 4 + 120 + i, returnWidth, returnHeight, I18n.format("menu.returnToMenu", new Object[0])));
         if (!this.mc.isIntegratedServerRunning()) {
             ((GuiButton) this.buttonList.get(0)).displayString = I18n.format("menu.disconnect", new Object[0]);
         }
