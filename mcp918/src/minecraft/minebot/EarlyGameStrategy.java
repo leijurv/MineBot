@@ -118,7 +118,7 @@ public class EarlyGameStrategy extends ManagerTick {
         }
         MickeyMine instance = (MickeyMine) Manager.getManager(MickeyMine.class);
         if (readyForMining) {
-            MickeyMine.yLevel = 40;
+            MickeyMine.yLevel = 36;
             if (!instance.enabled()) {
                 instance.toggle();
             }
