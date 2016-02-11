@@ -50,7 +50,6 @@ public class SchematicBuilder {
     }
     public BlockPos getFirstToPlace() {
         Block air = Block.getBlockById(0);
-        BlockPos goal = null;
         for (int y = 0; y < schematic.getHeight(); y++) {
             for (int x = 0; x < schematic.getWidth(); x++) {
                 for (int z = 0; z < schematic.getLength(); z++) {
@@ -61,12 +60,12 @@ public class SchematicBuilder {
                     boolean currentlyAir = air.equals(current);
                     boolean shouldBeAir = air.equals(desired);
                     if (currentlyAir && !shouldBeAir) {
-                        goal = inWorld;
+                        return inWorld;
                     }
                 }
             }
         }
-        return goal;
+        return null;
     }
     private BlockPos offset(BlockPos original) {
         return new BlockPos(original.getX() + offset.getX(), original.getY() + offset.getY(), original.getZ() + offset.getZ());
