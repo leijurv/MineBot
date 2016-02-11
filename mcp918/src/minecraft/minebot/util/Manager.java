@@ -22,7 +22,8 @@ public abstract class Manager {
             try {
                 managers.put(c, (Manager) c.getMethod("createInstance", Class.class).invoke(null, c));
             } catch (NoSuchMethodException ex) {
-                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+                managers.put(c, createInstance(c));
+                //Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SecurityException ex) {
                 Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
