@@ -28,7 +28,7 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class InventoryManager extends Manager{
+public class InventoryManager extends Manager {
     static HashMap<String, Integer> maximumAmounts = null;
     static HashMap<String, Integer> minimumAmounts = null;
     public static void initMax() {
@@ -142,6 +142,10 @@ public class InventoryManager extends Manager{
         if (Minecraft.theMinecraft.currentScreen != null && !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
             return;
         }
+        if (openedInvYet && Minecraft.theMinecraft.currentScreen == null) {
+            openedInvYet = false;
+            return;
+        }
         Random random = new Random(Minecraft.theMinecraft.thePlayer.getName().hashCode());
         int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         randomize(slots, random);
@@ -204,7 +208,7 @@ public class InventoryManager extends Manager{
                 openedInvYet = true;
             }
             GuiContainer c = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-            if (c == null) {
+            if (Minecraft.theMinecraft.currentScreen == null) {
                 GuiScreen.sendChatMessage("Null container");
                 openedInvYet = false;
                 return;
@@ -358,15 +362,12 @@ public class InventoryManager extends Manager{
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         contain.sketchyMouseClick(slotNumber, 0, 4);
     }
-
     @Override
     protected void onCancel() {
     }
-
     @Override
     protected void onStart() {
     }
-    
     @Override
     protected boolean onEnabled(boolean enabled) {
         return MineBot.tickNumber % 10 == 0;
