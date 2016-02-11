@@ -6,6 +6,7 @@
 package minebot;
 
 import minebot.util.CraftingTask;
+import minebot.util.Manager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,7 +24,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author leijurv
  */
-public class EarlyGameStrategy {
+public class EarlyGameStrategy extends Manager{
     static boolean gotWood_PHRASING = false;
     static int WOOD_AMT = 16;//triggers stopping
     static int MIN_WOOD_AMT = 1;//triggers getting more
@@ -31,7 +32,9 @@ public class EarlyGameStrategy {
     static boolean didPlace = false;
     static boolean gotDirt = false;
     static boolean cobble = false;
-    public static void tick() {
+    
+    @Override
+    public void onTick() {
         if (!gotDirt) {
             int dirt = countDirt();
             if (dirt >= DIRT_AMT) {
@@ -114,5 +117,18 @@ public class EarlyGameStrategy {
     }
     public static int countCobble() {
         return countItem("cobblestone");
+    }
+
+    @Override
+    protected void onCancel() {
+    }
+
+    @Override
+    protected void onStart() {
+    }
+    
+    @Override
+    protected boolean onEnabled(boolean enabled){
+        return MineBot.tickPath && enabled;
     }
 }

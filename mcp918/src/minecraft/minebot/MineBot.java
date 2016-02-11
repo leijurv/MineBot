@@ -68,6 +68,7 @@ public class MineBot {
         managers.add(InventoryManager.class);
         managers.add(Combat.class);
         managers.add(FoodManager.class);
+        managers.add(EarlyGameStrategy.class);
         
     }
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -132,11 +133,6 @@ public class MineBot {
         hasThrowaway = ActionPlaceOrBreak.hasthrowaway();
         for(Class c : managers){
             Manager.tick(c);
-        }
-        //System.out.println("Ticking: " + tickPath);
-        //System.out.println("Mob hunting: " + !tickPath);
-        if (tickPath && fullAuto) {
-            EarlyGameStrategy.tick();
         }
         if (tickPath) {
             if (CraftingTask.tickAll()) {

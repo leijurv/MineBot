@@ -229,6 +229,11 @@ public class ChatCommand {
     public static String cancel(String message) {
         MineBot.cancelPath();
         MineBot.plsCancel = true;
+        for(Class c : MineBot.managers){
+            Manager.cancel(c);
+        }
+        
+        
         Combat.target = null;
         MickeyMine.clear();
         MineBot.mreowMine = false;
