@@ -192,6 +192,5 @@ public class AnotherStealer extends Manager{
         current = null;
         positionArmor = false;
         positionSlot = 0;
-        Manager.cancel(SketchyStealer.class);
     }
 }
