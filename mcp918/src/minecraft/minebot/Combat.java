@@ -12,10 +12,8 @@ import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;
 import static minebot.MineBot.what;
-import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
-import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -35,7 +33,7 @@ import net.minecraft.world.World;
  *
  * @author leijurv
  */
-public class Combat extends ManagerTick{
+public class Combat extends ManagerTick {
     public static boolean mobHunting = false;
     public static boolean mobKilling = false;
     public static boolean playerHunt = false;
@@ -46,7 +44,6 @@ public class Combat extends ManagerTick{
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        tickPath = true;
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
         ArrayList<Entity> mobs = new ArrayList<Entity>();
         for (Entity entity : theWorld.loadedEntityList) {
@@ -261,16 +258,13 @@ public class Combat extends ManagerTick{
         }
         return "Couldn't find " + name;
     }
-
     @Override
     protected void onCancel() {
         target = null;
     }
-
     @Override
     protected void onStart() {
     }
-    
     @Override
     protected boolean onEnabled(boolean enabled) {
         return true;
