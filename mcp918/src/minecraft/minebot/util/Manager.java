@@ -68,7 +68,7 @@ public abstract class Manager {
         this.tick((Boolean) null);
     }
     public final void tick(Boolean prepost) {
-        System.out.println(this + " " + enabled());
+        //System.out.println(this + " " + enabled());
         if (!enabled()) {
             return;
         }
