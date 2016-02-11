@@ -28,22 +28,19 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class SmeltingTask extends Manager{
+public class SmeltingTask extends Manager {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
     static HashSet<BlockPos> knownFurnaces = new HashSet();
-    
-    protected static Manager createInstance(Class c){
+    public static Manager createInstance(Class c) {
         return new SmeltingTask();
     }
-    
-    private SmeltingTask(){
+    private SmeltingTask() {
         super();
-        toPutInTheFurnace=null;
-        desired=null;
-        burnTicks=0;
+        toPutInTheFurnace = null;
+        desired = null;
+        burnTicks = 0;
     }
-    
     @Override
     protected void onTick() {
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
@@ -371,21 +368,19 @@ public class SmeltingTask extends Manager{
         }
         return null;
     }
-
     @Override
     protected void onCancel() {
         inProgress.clear();
         furnacesInUse.clear();
     }
-
     @Override
     protected void onStart() {
     }
-
     @Override
     protected boolean onEnabled(boolean enabled) {
         return true;
     }
+
     private static class wrapper {//so that people don't try to directly reference recipess
         private static Map<ItemStack, ItemStack> recipes = null;
         public static Map<ItemStack, ItemStack> getRecipes() {

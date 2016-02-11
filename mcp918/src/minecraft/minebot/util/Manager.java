@@ -22,8 +22,8 @@ public abstract class Manager {
             try {
                 managers.put(c, (Manager) c.getMethod("createInstance", Class.class).invoke(null, c));
             } catch (NoSuchMethodException ex) {
+                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
                 managers.put(c, createInstance(c));
-                //Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SecurityException ex) {
                 Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
@@ -57,7 +57,7 @@ public abstract class Manager {
     public final static boolean toggle(Class<? extends Manager> c) {
         return getManager(c).toggle();
     }
-    protected static Manager createInstance(Class c) {
+    public static Manager createInstance(Class c) {
         try {
             return (Manager) c.newInstance();
         } catch (Exception ex) {

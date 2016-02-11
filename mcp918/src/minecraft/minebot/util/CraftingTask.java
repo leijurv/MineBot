@@ -13,7 +13,6 @@ import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
-import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -36,13 +35,12 @@ import net.minecraft.util.Tuple;
  *
  * @author galdara
  */
-public class CraftingTask extends ManagerTick{
+public class CraftingTask extends ManagerTick {
     static ArrayList<CraftingTask> overallCraftingTasks = new ArrayList<CraftingTask>();
     ArrayList<CraftingTask> subCraftingTasks = new ArrayList<CraftingTask>();
     private Item currentlyCrafting = null;
     private int stackSize;
     private int alreadyHas;
-    
     private CraftingTask(ItemStack craftStack) {
         this.currentlyCrafting = craftStack.getItem();
         this.stackSize = 0;
@@ -645,25 +643,21 @@ public class CraftingTask extends ManagerTick{
         }
         return craftingTableTask.alreadyHas >= quantity;
     }
-
-    protected static Manager createInstance(Class c){
+    public static Manager createInstance(Class c) {
         try {
             return (Manager) c.newInstance();
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
         }
     }
-    
     @Override
     protected void onCancel() {
     }
-
     @Override
     protected void onStart() {
     }
-
     @Override
-    protected boolean onEnabled(boolean enabled){
+    protected boolean onEnabled(boolean enabled) {
         return true;
     }
 }
