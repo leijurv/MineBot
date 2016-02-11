@@ -29,24 +29,23 @@ import net.minecraft.world.chunk.EmptyChunk;
  *
  * @author leijurv
  */
-public class Memory extends Manager{
+public class Memory extends Manager {
     public static HashMap<Block, BlockMemory> blockMemory = new HashMap();
     public static HashMap<String, BlockPos> playerLocationMemory = new HashMap();
     public static HashMap<String, BlockPos> goalMemory = new HashMap();
     public static ArrayList<String> playersCurrentlyInRange = new ArrayList();
     public static Thread scanThread = null;
     public static Block air = null;
-
+    public Memory() {
+    }
     @Override
     protected void onCancel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     @Override
     protected void onStart() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
     @Override
     protected boolean onEnabled(boolean enabled) {
         return true;
