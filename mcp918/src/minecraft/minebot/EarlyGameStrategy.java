@@ -25,8 +25,8 @@ import net.minecraft.item.ItemStack;
  */
 public class EarlyGameStrategy {
     static boolean gotWood_PHRASING = false;
-    static final int WOOD_AMT = 64;//triggers stopping
-    static final int MIN_WOOD_AMT = 16;//triggers getting more
+    static int WOOD_AMT = 16;//triggers stopping
+    static int MIN_WOOD_AMT = 1;//triggers getting more
     static final int DIRT_AMT = 32;
     static boolean didPlace = false;
     static boolean gotDirt = false;
@@ -59,63 +59,60 @@ public class EarlyGameStrategy {
             BlockPuncher.tick("log", "log2");
             return;
         }
-        boolean craftingTableInInventory = ensureCraftingDesired(Item.getByNameOrId("minecraft:crafting_table"), 1);
-        boolean hasWooden = ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
-        ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
-        if (hasWooden) {
+        boolean hasWooden = false;
+        boolean hasStone = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
+        if (hasStone) {
+            dontCraft(Item.getByNameOrId("minecraft:wooden_pickaxe"));
+        } else {
+            hasWooden = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
+        }
+        if (hasWooden || hasStone) {
             if (!cobble) {
-                BlockPuncher.tick("stone");
                 if (countCobble() > 64) {
                     cobble = true;
+                } else {
+                    BlockPuncher.tick("stone");
                 }
             }
         }
-    }
-    public static boolean ensureCraftingDesired(Item item, int quantity) {
-        CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
-        if (craftingTableTask.currentlyCrafting().stackSize < quantity) {
-            craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.currentlyCrafting().stackSize);
+        if (countCobble() > 5) {
+            if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1)) {
+                WOOD_AMT = 64;
+                MIN_WOOD_AMT = 16;
+            }
+            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
+            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
         }
-        return craftingTableTask.alreadyHas() >= quantity;
+        if (countCobble() > 8) {
+            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1);
+        }
+    }
+    public static void dontCraft(Item item) {
+        CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
+        if (task.currentlyCrafting().stackSize > 0) {
+            task.decreaseNeededAmount(1);
+        }
+    }
+    public static int countItem(String s) {
+        Item item = Item.getItemFromBlock(Block.getBlockFromName(s));
+        int count = 0;
+        for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
+            if (stack == null) {
+                continue;
+            }
+            if (item.equals(stack.getItem())) {
+                count += stack.stackSize;
+            }
+        }
+        return count;
     }
     public static int countWood_PHRASING() {
-        Item log1 = Item.getItemFromBlock(Block.getBlockFromName("minecraft:log"));
-        Item log2_NOTCH_IS_A_BAD_PROGRAMMER = Item.getItemFromBlock(Block.getBlockFromName("minecraft:log2"));
-        int count = 0;
-        for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
-            if (stack == null) {
-                continue;
-            }
-            if (log1.equals(stack.getItem()) || log2_NOTCH_IS_A_BAD_PROGRAMMER.equals(stack.getItem())) {
-                count += stack.stackSize;
-            }
-        }
-        return count;
+        return countItem("log") + countItem("log2");
     }
     public static int countDirt() {
-        Item dirt = Item.getItemFromBlock(Block.getBlockFromName("minecraft:dirt"));
-        int count = 0;
-        for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
-            if (stack == null) {
-                continue;
-            }
-            if (dirt.equals(stack.getItem())) {
-                count += stack.stackSize;
-            }
-        }
-        return count;
+        return countItem("dirt");
     }
     public static int countCobble() {
-        Item cobble = Item.getItemFromBlock(Block.getBlockFromName("minecraft:cobblestone"));
-        int count = 0;
-        for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
-            if (stack == null) {
-                continue;
-            }
-            if (cobble.equals(stack.getItem())) {
-                count += stack.stackSize;
-            }
-        }
-        return count;
+        return countItem("cobblestone");
     }
 }

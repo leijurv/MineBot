@@ -306,7 +306,8 @@ public class ChatCommand {
     }
     public static String path(String message) {
         MineBot.plsCancel = false;
-        MineBot.findPathInNewThread(thePlayer().playerFeet(), true);
+        String[] split = message.split(" ");
+        MineBot.findPathInNewThread(thePlayer().playerFeet(), split.length>1 ? Boolean.parseBoolean(split[1]) : true);
         return "";
     }
     public static String hardness(String message) {

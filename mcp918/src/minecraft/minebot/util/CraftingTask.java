@@ -79,6 +79,9 @@ public class CraftingTask {
     }
     public static boolean isRecipeOkay(IRecipe recipe) {
         if (recipe instanceof ShapedRecipes) {
+            if (((ShapedRecipes) recipe).recipeItems.length > 1) {
+                return true;
+            }
             for (ItemStack stack : ((ShapedRecipes) recipe).recipeItems) {
                 if (stack == null) {
                     continue;
@@ -91,6 +94,9 @@ public class CraftingTask {
             return true;
         }
         if (recipe instanceof ShapelessRecipes) {
+            if (((ShapelessRecipes) recipe).recipeItems.size() > 1) {
+                return true;
+            }
             for (ItemStack stack : ((ShapelessRecipes) recipe).recipeItems) {
                 if (stack.toString().toLowerCase().contains("block")) {
                     System.out.println("Not doing " + stack);
@@ -145,12 +151,18 @@ public class CraftingTask {
         if (isDone()) {
             return false;
         }
+        if (stackSize != 0) {
+            System.out.println(currentlyCrafting() + " " + alreadyHas + " " + isDone());
+        }
         boolean hasMaterials = actualDoCraft(1, false, true) != null;
         //System.out.println("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
         if (!hasMaterials) {
             return false;
         }
         boolean isCraftingTable = Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiCrafting;
+        if (isCraftingTable) {
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
+        }
         if (!recipeNeedsCraftingTable(getRecipeFromItem(currentlyCrafting)) && !isCraftingTable) {
             craftAsManyAsICan(true);
             return true;//if this doesn't need a crafting table, return no matter what
@@ -183,11 +195,20 @@ public class CraftingTask {
                 MineBot.currentPath = null;
                 MineBot.clearMovement();
                 Minecraft.theMinecraft.rightClickMouse();
+                findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             }
+            return true;
+        }
+        if (MineBot.whatAreYouLookingAt() != null && Block.getBlockFromName("crafting_table").equals(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock())) {
+            MineBot.currentPath = null;
+            MineBot.clearMovement();
+            Minecraft.theMinecraft.rightClickMouse();
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         if (putCraftingTableOnHotBar()) {
+            findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             System.out.println("Ready to place!");
             BlockPos looking = MineBot.whatAreYouLookingAt();
             if (looking != null) {
@@ -196,18 +217,20 @@ public class CraftingTask {
                     return true;
                 }
             }
-            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
-            if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
-                Minecraft.theMinecraft.rightClickMouse();
-            }
+            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down().north(), true);
+            LookManager.beSketchy();
+            MineBot.forward = new Random().nextBoolean();
+            MineBot.backward = new Random().nextBoolean();
+            MineBot.left = new Random().nextBoolean();
+            MineBot.right = new Random().nextBoolean();
+            //if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
+            Minecraft.theMinecraft.rightClickMouse();
+            //}
             MineBot.jumping = true;
             return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
-        //if(doWeHaveMaterialsToCraftACraftingTable()){
-        //    addCraftingTaskForCraftingTable();
-        //    return;
-        //}
+        ensureCraftingDesired(Item.getByNameOrId("crafting_table"), 1);
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one and we don't have the materials to make one
         //so just rip at this point
         return false;
@@ -225,40 +248,12 @@ public class CraftingTask {
                 return true;
             }
         }
-        int torchPosition = 0;
-        for (int i = 9; i < inv.length; i++) {
-            ItemStack item = inv[i];
-            if (inv[i] == null) {
-                continue;
-            }
-            if (Item.getByNameOrId("minecraft:crafting_table").equals(item.getItem())) {
-                torchPosition = i;
-            }
-        }
-        if (torchPosition == 0) {
-            return false;
-        }
-        int blankHotbarSpot = -1;
-        for (int i = 0; i < 9; i++) {
-            if (inv[i] == null) {
-                blankHotbarSpot = i;
-            }
-        }
-        if (blankHotbarSpot == -1) {
-            blankHotbarSpot = (new Random().nextInt(8) + 1);
-        }
-        if (Minecraft.theMinecraft.currentScreen == null) {
-            MineBot.openInventory();
-            return false;
-        }
-        if (Minecraft.theMinecraft.currentScreen instanceof GuiInventory) {
-            GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
-            contain.leftClick(torchPosition);
-            contain.leftClick(blankHotbarSpot + 36);
-            contain.leftClick(torchPosition);
-            Minecraft.theMinecraft.thePlayer.closeScreen();
-        }
         return false;
+    }
+    public void clearAll() {
+        if (stackSize != 0) {
+            decreaseNeededAmount(stackSize);
+        }
     }
     /**
      *
@@ -385,6 +380,8 @@ public class CraftingTask {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
                 GuiScreen.sendChatMessage("Not in crafting table", true);
                 return false;
+            } else {
+                didIOpenMyInventory = true;
             }
         }
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
@@ -454,24 +451,37 @@ public class CraftingTask {
         plan.add(new int[]{slot, 0, 1});
     }
     static boolean didIOpenMyInventory = false;
+    static boolean waitingToClose = false;
+    static int TUC = 20;
     public static boolean tickAll() {
         MineBot.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
                 if (!craftingTask.onTick()) {
-                    Minecraft.theMinecraft.thePlayer.closeScreen();
+                    didIOpenMyInventory = true;
                 }
                 return true;
             }
         }
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.onTick()) {
-                return true;
+                return false;
             }
         }
         if (didIOpenMyInventory) {
-            Minecraft.theMinecraft.thePlayer.closeScreen();
+            waitingToClose = true;
+            TUC = 3;
             didIOpenMyInventory = false;
+        }
+        if (waitingToClose) {
+            TUC--;
+            if (TUC <= 0) {
+                GuiScreen.sendChatMessage("Closing screen!!!");
+                Minecraft.theMinecraft.thePlayer.closeScreen();
+                waitingToClose = false;
+                TUC = 3;
+            }
+            return true;
         }
         return false;
     }
@@ -487,7 +497,7 @@ public class CraftingTask {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
                         System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
-                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
+                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(input.getItem(), 0));
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
                     }
@@ -498,7 +508,7 @@ public class CraftingTask {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
                         System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
-                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(input);
+                        CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(input.getItem(), 0));
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
                     }
@@ -511,10 +521,12 @@ public class CraftingTask {
         }
     }
     public static CraftingTask findOrCreateCraftingTask(ItemStack itemStack) {
-        System.out.println("Getting a task for " + itemStack);
+        //System.out.println("Getting a task for " + itemStack);
         for (CraftingTask selectedTask : overallCraftingTasks) {
             if (selectedTask.currentlyCrafting().getItem().equals(itemStack.getItem())) {
-                selectedTask.increaseNeededAmount(itemStack.stackSize);
+                if (itemStack.stackSize != 0) {
+                    selectedTask.increaseNeededAmount(itemStack.stackSize);
+                }
                 return selectedTask;
             }
         }
@@ -526,6 +538,7 @@ public class CraftingTask {
         return new ItemStack(currentlyCrafting, stackSize);
     }
     public final void increaseNeededAmount(int amount) {
+        //GuiScreen.sendChatMessage(currentlyCrafting() + " inc " + amount);
         int stackSizeBefore = stackSize;
         stackSize += amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
@@ -533,11 +546,17 @@ public class CraftingTask {
         int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
         int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
         int change = inputQuantityNew - inputQuantityBefore;
-        for (CraftingTask craftingTask : subCraftingTasks) {
-            craftingTask.increaseNeededAmount(change);
+        if (change != 0) {
+            /*for (CraftingTask craftingTask : subCraftingTasks) {
+             GuiScreen.sendChatMessage("> inc sub " + craftingTask.currentlyCrafting() + " " + change);
+             }*/
+            for (CraftingTask craftingTask : subCraftingTasks) {
+                craftingTask.increaseNeededAmount(change);
+            }
         }
     }
     public void decreaseNeededAmount(int amount) {
+        //GuiScreen.sendChatMessage(currentlyCrafting() + " dec " + amount);
         int stackSizeBefore = stackSize;
         stackSize -= amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
@@ -545,8 +564,13 @@ public class CraftingTask {
         int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
         int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
         int change = inputQuantityBefore - inputQuantityNew;
-        for (CraftingTask craftingTask : subCraftingTasks) {
-            craftingTask.decreaseNeededAmount(change);
+        if (change != 0) {
+            /*for (CraftingTask craftingTask : subCraftingTasks) {
+             GuiScreen.sendChatMessage("> dec sub " + craftingTask.currentlyCrafting() + " " + change);
+             }*/
+            for (CraftingTask craftingTask : subCraftingTasks) {
+                craftingTask.decreaseNeededAmount(change);
+            }
         }
     }
     public static HashMap<Item, ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) {
@@ -604,5 +628,19 @@ public class CraftingTask {
     public boolean isDone() {
         calculateAlreadyHasAmount();
         return stackSize <= alreadyHas;
+    }
+    public static boolean ensureCraftingDesired(Item item, int quantity) {
+        CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
+        //System.out.println(craftingTableTask.currentlyCrafting() + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
+        if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity) {
+            if (craftingTableTask.stackSize > 0) {
+                craftingTableTask.decreaseNeededAmount(1);
+            }
+            return true;
+        }
+        if (craftingTableTask.stackSize < quantity) {
+            craftingTableTask.increaseNeededAmount(quantity - craftingTableTask.stackSize);
+        }
+        return craftingTableTask.alreadyHas >= quantity;
     }
 }

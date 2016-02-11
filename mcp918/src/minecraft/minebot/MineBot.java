@@ -15,7 +15,9 @@ import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
+import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalYLevel;
+import minebot.util.ChatCommand;
 import minebot.util.CraftingTask;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
@@ -24,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -83,7 +86,7 @@ public class MineBot {
     public static long lastDeath = 0;
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
-            cancelPath();
+            ChatCommand.cancel(null);
             return;
         }
         if (isLeftClick) {
@@ -116,7 +119,7 @@ public class MineBot {
         } else if (sketchyStealer) {
             SketchyStealer.onTick();
         }
-        if (Minecraft.theMinecraft.currentScreen == null && tickNumber % 20 == 0) {
+        if (tickNumber % 10 == 0) {
             InventoryManager.onTick();
         }
         boolean tickPath = Combat.onTick();
@@ -131,7 +134,9 @@ public class MineBot {
             EarlyGameStrategy.tick();
         }
         if (tickPath) {
-            CraftingTask.tickAll();
+            if (CraftingTask.tickAll()) {
+                tickPath = false;
+            }
         }
         if (mreowMine && tickPath) {
             MickeyMine.tick();
@@ -158,7 +163,7 @@ public class MineBot {
                 }
                 currentPath = null;
                 if (goal.isInGoal(playerFeet)) {
-                    GuiScreen.sendChatMessage("All done. At " + goal, true);
+                    GuiScreen.sendChatMessage("All done. At goal", true);
                     nextPath = null;
                 } else {
                     GuiScreen.sendChatMessage("Done with segment", true);
@@ -170,7 +175,7 @@ public class MineBot {
                             currentPath = nextPath;
                             nextPath = null;
                             if (!currentPath.start.equals(playerFeet)) {
-                                GuiScreen.sendChatMessage("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
+                                //GuiScreen.sendChatMessage("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
                                 currentPath = null;
                                 findPathInNewThread(playerFeet, true);
                             } else {
@@ -182,7 +187,7 @@ public class MineBot {
                         }
                     } else {
                         GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
-                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? currentPathGoal.toString().equals(goal.toString()) : true);
+                        findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? !(currentPathGoal instanceof GoalComposite) && currentPathGoal.toString().equals(goal.toString()) : true);
                     }
                 }
             } else {
@@ -201,6 +206,10 @@ public class MineBot {
                     }
                 }
             }
+        }
+        if (Minecraft.theMinecraft.currentScreen != null && (Minecraft.theMinecraft.currentScreen instanceof GuiCrafting || Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+            isLeftClick = false;
+            leftPressTime = -5;
         }
         if (isThereAnythingInProgress && Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
             if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
@@ -457,7 +466,7 @@ public class MineBot {
         try {
             PathFinder pf = new PathFinder(start, goal);
             Path path = pf.calculatePath();
-            GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + start + " to " + path.end, true);
+            //GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + start + " to " + path.end, true);
             return path;
         } catch (Exception e) {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, e);

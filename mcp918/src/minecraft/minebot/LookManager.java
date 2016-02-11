@@ -189,9 +189,18 @@ public class LookManager {
         lookingYaw = false;
         lookingPitch = false;
     }
+    public static void beSketchy() {
+        desiredYaw += (System.currentTimeMillis() % 15000) / 15000F * 360F;
+    }
     public static void postTick() {
         desiredYaw += getRandom()[0];
         desiredPitch += getRandom()[1];
+        if (desiredPitch > 90) {
+            desiredPitch = 90;
+        }
+        if (desiredPitch < -90) {
+            desiredPitch = -90;
+        }
         if (lookingYaw) {
             previousYaw = Minecraft.theMinecraft.thePlayer.rotationYaw;
             desiredYaw += 360;

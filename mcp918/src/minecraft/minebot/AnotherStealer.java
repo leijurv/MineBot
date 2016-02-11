@@ -22,8 +22,13 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
 import org.lwjgl.input.Keyboard;
@@ -38,12 +43,17 @@ public class AnotherStealer {
     public static boolean chestStuff = false;
     public static boolean stuff = false;
     public static BlockPos current = null;
-    public static boolean dropitem = false;
     private static final Block CHEST = Block.getBlockFromName("chest");
-    public static boolean holdShift = false;
+    private static boolean positionArmor = false;
+    private static int positionSlot = 0;
+    private static int positionStatus = 0;
 
     public static void onTick() {
         //try{
+        if (invFull()) {
+            ChatCommand.stealer("stealer");
+            return;
+        }
         if (MineBot.isThereAnythingInProgress || MineBot.currentPath != null) {
             System.out.println(MineBot.currentPath);
             return;
@@ -60,8 +70,43 @@ public class AnotherStealer {
                 goals = Autorun.concat(goals, GoalGetToBlock.ajacentBlocks(chests.get(i)));
             }
             MineBot.goal = new GoalComposite(goals);
-            ChatCommand.path("path");
+            ChatCommand.path("path false");
             return;
+        }
+        if (positionArmor) {
+            if (!(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
+                GuiScreen.sendChatMessage("BAD GUI");
+                positionArmor = false;
+                return;
+            }
+
+            GuiScreen.sendChatMessage("Position Armor:"+positionSlot);
+            if (positionStatus == 0) {
+                Container inv = Minecraft.theMinecraft.thePlayer.inventoryContainer;
+                GuiScreen.sendChatMessage("Position Status 0:"+inv.inventorySlots.size());
+                for (int i = positionSlot; i < 45; i++) {
+                    GuiScreen.sendChatMessage((inv.getSlot(i).getHasStack() ? inv.getSlot(i).getStack().getItem().toString() : "NULL STACK")+ " :"+i);
+                    if (inv.getSlot(i).getHasStack() && inv.getSlot(i).getStack().getItem() instanceof ItemArmor) {
+                        GuiScreen.sendChatMessage("ITEM IS ARMOR");
+                        ItemArmor armor = (ItemArmor) inv.getSlot(i).getStack().getItem();
+                        if (inv.getSlot(armor.armorType).getHasStack() && ((ItemArmor) inv.getSlot(armor.armorType).getStack().getItem()).damageReduceAmount < armor.damageReduceAmount) {
+                            positionSlot = i;
+                            positionStatus = 1;
+                            Minecraft.theMinecraft.playerController.windowClick(((GuiContainer) Minecraft.theMinecraft.currentScreen).inventorySlots.windowId, 103 - armor.armorType, 0, 1, Minecraft.theMinecraft.thePlayer);
+                            return;
+                        }
+                    }
+                    
+                }
+                positionArmor = false;
+                Minecraft.theMinecraft.thePlayer.closeScreen();
+                return;
+            }
+            if (positionStatus == 1) {
+                Minecraft.theMinecraft.playerController.windowClick(((GuiContainer) Minecraft.theMinecraft.currentScreen).inventorySlots.windowId, positionSlot, 0, 1, Minecraft.theMinecraft.thePlayer);
+                positionStatus = 0;
+                return;
+            }
         }
         BlockPos near = getAjacentChest();
         if (near == null) {
@@ -70,28 +115,35 @@ public class AnotherStealer {
         }
         if (near.equals(MineBot.whatAreYouLookingAt())) {
             if (chestStuff) {
+                GuiScreen.sendChatMessage("CHEST STUFF");
                 EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
                 WorldClient world = Minecraft.theMinecraft.theWorld;
                 if (Minecraft.theMinecraft.currentScreen == null) {
                     chestStuff = false;
+                    GuiScreen.sendChatMessage("NULL GUI");
                     return;
                 }
                 if (!(Minecraft.theMinecraft.currentScreen instanceof GuiChest)) {
-                    player.closeScreen();
-                    chestStuff = false;
+                    GuiScreen.sendChatMessage("NOT CHEST GUI");
                     return;
                 }
                 GuiChest contain = (GuiChest) Minecraft.theMinecraft.currentScreen;
                 Slot slot = getFilledSlot(contain);
-                if (slot != null) {
-                    contain.shiftClick(slot.slotNumber);
+                GuiScreen.sendChatMessage(slot == null ? "null slot" : slot.getHasStack() ? slot.getStack().getItem().toString() : "empty slot");
+                if (slot == null) {
+                    GuiScreen.sendChatMessage("CLOSING THE SCREEN");
+                    alreadyStolenFrom.add(near);
+                    positionArmor = true;
+                    positionSlot = 9;
+                    positionStatus = 0;
+                    MineBot.slowOpenInventory();
                     return;
                 }
-                player.closeScreen();
-                alreadyStolenFrom.add(near);
+                contain.shiftClick(slot.slotNumber);
                 return;
 
             }
+            GuiScreen.sendChatMessage("NO CHEST STUFF");
             chestStuff = true;
             MineBot.isRightClick = true;
             current = MineBot.whatAreYouLookingAt();
@@ -119,5 +171,15 @@ public class AnotherStealer {
             }
         }
         return null;
+    }
+
+    public static boolean invFull() {
+        ItemStack[] inv = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        for (ItemStack i : inv) {
+            if (i == null) {
+                return false;
+            }
+        }
+        return true;
     }
 }
