@@ -6,7 +6,6 @@
 package minebot;
 
 import minebot.util.CraftingTask;
-import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -25,7 +24,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author leijurv
  */
-public class EarlyGameStrategy extends ManagerTick{
+public class EarlyGameStrategy extends ManagerTick {
     static boolean gotWood_PHRASING = false;
     static int WOOD_AMT = 16;//triggers stopping
     static int MIN_WOOD_AMT = 1;//triggers getting more
@@ -33,7 +32,6 @@ public class EarlyGameStrategy extends ManagerTick{
     static boolean didPlace = false;
     static boolean gotDirt = false;
     static boolean cobble = false;
-    
     @Override
     protected boolean onTick0() {
         if (!gotDirt) {
@@ -64,12 +62,14 @@ public class EarlyGameStrategy extends ManagerTick{
             return false;
         }
         boolean hasWooden = false;
+        boolean readyForMining = true;
         boolean hasStone = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
         if (hasStone) {
             dontCraft(Item.getByNameOrId("minecraft:wooden_pickaxe"));
         } else {
             hasWooden = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
         }
+        readyForMining &= hasStone;
         if (hasWooden || hasStone) {
             if (!cobble) {
                 if (countCobble() > 64) {
@@ -83,12 +83,17 @@ public class EarlyGameStrategy extends ManagerTick{
             if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1)) {
                 WOOD_AMT = 64;
                 MIN_WOOD_AMT = 16;
+            } else {
+                readyForMining = false;
             }
-            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
-            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
+            readyForMining &= CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1);
+            readyForMining &= CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1);
         }
         if (countCobble() > 8) {
-            CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1);
+            readyForMining &= CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1);
+        }
+        if (readyForMining) {
+            GuiScreen.sendChatMessage("Ready to mine");
         }
         return false;
     }
@@ -120,11 +125,9 @@ public class EarlyGameStrategy extends ManagerTick{
     public static int countCobble() {
         return countItem("cobblestone");
     }
-
     @Override
     protected void onCancel() {
     }
-
     @Override
     protected void onStart() {
     }
