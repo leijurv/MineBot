@@ -135,11 +135,6 @@ public class MineBot {
         }
         //System.out.println("Ticking: " + tickPath);
         //System.out.println("Mob hunting: " + !tickPath);
-        if (tickPath) {
-            if (FoodManager.onTick()) {
-                tickPath = false;
-            }
-        }
         if (tickPath && fullAuto) {
             EarlyGameStrategy.tick();
         }
@@ -228,8 +223,9 @@ public class MineBot {
                 jumping = true;
             }
         }
-        
-        LookManager.postTick();
+        for(Class c : managers){
+            Manager.tick(c, false);
+        }
     }
     public static void openInventory() {
         GuiScreen.sendChatMessage("real open", true);

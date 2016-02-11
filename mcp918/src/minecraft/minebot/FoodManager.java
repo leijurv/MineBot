@@ -81,6 +81,7 @@ public class FoodManager extends Manager{
     
     @Override
     protected void onTick() {
-        onTick0();
+        if(onTick0())
+            MineBot.tickPath=false;
     }
 }
