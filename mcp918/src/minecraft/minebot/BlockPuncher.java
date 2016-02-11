@@ -7,7 +7,6 @@ package minebot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalTwoBlocks;
@@ -19,11 +18,11 @@ import net.minecraft.util.BlockPos;
  * @author avecowa
  */
 public class BlockPuncher {
-    public static void tick(String... block) {
+    public static boolean tick(String... block) {
         ArrayList<BlockPos> closest = Memory.closest(10, block);
-        if (closest == null) {
+        if (closest == null || closest.isEmpty()) {
             GuiScreen.sendChatMessage("NO " + Arrays.asList(block) + " NEARBY. GOD DAMN IT");
-            return;
+            return false;
         }
         Goal[] goals = new Goal[closest.size()];
         for (int i = 0; i < goals.length; i++) {
@@ -33,5 +32,6 @@ public class BlockPuncher {
         if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
             MineBot.findPathInNewThread(false);
         }
+        return true;
     }
 }

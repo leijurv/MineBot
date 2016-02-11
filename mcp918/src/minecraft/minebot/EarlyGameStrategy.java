@@ -41,7 +41,9 @@ public class EarlyGameStrategy extends ManagerTick {
                 gotDirt = true;
                 return false;
             }
-            BlockPuncher.tick("dirt", "grass");
+            if (!BlockPuncher.tick("dirt", "grass")) {
+                GuiScreen.sendChatMessage("No dirt or grass nearby =(");
+            }
             return false;
         }
         int wood = countWood_PHRASING();
@@ -58,7 +60,9 @@ public class EarlyGameStrategy extends ManagerTick {
             gotWood_PHRASING = false;
         }
         if (!gotWood_PHRASING) {
-            BlockPuncher.tick("log", "log2");
+            if (!BlockPuncher.tick("log", "log2")) {
+                GuiScreen.sendChatMessage("No wood nearby =(");
+            }
             return false;
         }
         boolean hasWooden = false;
@@ -75,7 +79,9 @@ public class EarlyGameStrategy extends ManagerTick {
                 if (countCobble() > 64) {
                     cobble = true;
                 } else {
-                    BlockPuncher.tick("stone");
+                    if (!BlockPuncher.tick("stone")) {
+                        GuiScreen.sendChatMessage("No stone nearby =(");
+                    }
                 }
             }
         }
