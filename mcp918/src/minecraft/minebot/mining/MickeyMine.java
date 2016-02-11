@@ -335,17 +335,18 @@ public class MickeyMine extends ManagerTick {
     public static Tuple<Integer, Integer> tupleFromBlockPos(BlockPos blockPos) {
         return tupleFromChunk(Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(blockPos));
     }
+    public static int yLevel = 6;
     @Override
     protected boolean onTick0() {
         System.out.println("mickey" + isGoingToMine + " " + isMining);
         if (!isGoingToMine && !isMining) {
             if (MineBot.currentPath == null) {
-                MineBot.goal = new GoalYLevel(6);
+                MineBot.goal = new GoalYLevel(yLevel);
                 MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), true);
                 isGoingToMine = true;
             }
         }
-        if (isGoingToMine && Minecraft.theMinecraft.thePlayer.getPosition0().getY() == 6) {
+        if (isGoingToMine && Minecraft.theMinecraft.thePlayer.getPosition0().getY() == yLevel) {
             isGoingToMine = false;
             isMining = true;
         }

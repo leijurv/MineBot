@@ -5,7 +5,9 @@
  */
 package minebot;
 
+import minebot.mining.MickeyMine;
 import minebot.util.CraftingTask;
+import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -85,10 +87,14 @@ public class EarlyGameStrategy extends ManagerTick {
                 }
             }
         }
+        if (!cobble) {
+            readyForMining = false;
+        }
         if (cobble && gotDirt && countCobble() + countDirt() < 10) {//if we have already gotten cobble and dirt, but our amounts have run low, get more
             if (!BlockPuncher.tick("dirt", "grass", "stone")) {
                 GuiScreen.sendChatMessage("No dirt, grass, or stone");
             }
+            readyForMining = false;
         }
         if (countCobble() > 5) {
             boolean axe = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
@@ -110,8 +116,12 @@ public class EarlyGameStrategy extends ManagerTick {
                 readyForMining = false;
             }
         }
+        MickeyMine instance = (MickeyMine) Manager.getManager(MickeyMine.class);
         if (readyForMining) {
-            GuiScreen.sendChatMessage("Ready to mine");
+            MickeyMine.yLevel = 40;
+            if (!instance.enabled()) {
+                instance.toggle();
+            }
         }
         return false;
     }
