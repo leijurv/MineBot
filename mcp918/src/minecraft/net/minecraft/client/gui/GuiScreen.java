@@ -567,7 +567,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
      * Returns true if either shift key is down
      */
     public static boolean isShiftKeyDown() {
-        return MineBot.isKeyDown(42) || MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer;
+        return MineBot.isKeyDown(42) || MineBot.isKeyDown(42) || MineBot.isKeyDown(54);
     }
     /**
      * Returns true if either alt key is down

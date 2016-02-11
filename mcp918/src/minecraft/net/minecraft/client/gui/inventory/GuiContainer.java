@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Set;
 import minebot.MineBot;
+import minebot.util.Manager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -281,14 +282,6 @@ public abstract class GuiContainer extends GuiScreen {
      * Returns the slot at the given coordinates or null if there is none.
      */
     private Slot getSlotAtPosition(int x, int y) {
-        if (MineBot.sketchyStealer || MineBot.stealer) {
-            for (int i = 0; i < this.inventorySlots.inventorySlots.size(); ++i) {
-                Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
-                if (slot != null && slot.getHasStack() && i <= 27 && this instanceof GuiChest) {
-                    return slot;
-                }
-            }
-        }
         for (int i = 0; i < this.inventorySlots.inventorySlots.size(); ++i) {
             Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
             if (this.isMouseOverSlot(slot, x, y)) {
@@ -311,9 +304,6 @@ public abstract class GuiContainer extends GuiScreen {
             int j = this.guiLeft;
             int k = this.guiTop;
             boolean flag1 = mouseX < j || mouseY < k || mouseX >= j + this.xSize || mouseY >= k + this.ySize;
-            if (MineBot.sketchyStealer) {
-                flag1 = false;
-            }
             int l = -1;
             if (slot != null) {
                 l = slot.slotNumber;
@@ -339,7 +329,7 @@ public abstract class GuiContainer extends GuiScreen {
                         if (mouseButton == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100) {
                             this.handleMouseClick(slot, l, mouseButton, 3);
                         } else {
-                            boolean flag2 = l != -999 && (MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer);
+                            boolean flag2 = l != -999 && (MineBot.isKeyDown(42) || MineBot.isKeyDown(54));
                             int i1 = 0;
                             if (flag2) {
                                 this.shiftClickedSlot = slot != null && slot.getHasStack() ? slot.getStack() : null;
@@ -412,9 +402,6 @@ public abstract class GuiContainer extends GuiScreen {
         int i = this.guiLeft;
         int j = this.guiTop;
         boolean flag = mouseX < i || mouseY < j || mouseX >= i + this.xSize || mouseY >= j + this.ySize;
-        if (MineBot.sketchyStealer) {
-            flag = false;
-        }
         int k = -1;
         if (slot != null) {
             k = slot.slotNumber;
@@ -486,7 +473,7 @@ public abstract class GuiContainer extends GuiScreen {
                 if (state == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100) {
                     this.handleMouseClick(slot, k, state, 3);
                 } else {
-                    boolean flag1 = k != -999 && (MineBot.isKeyDown(42) || MineBot.isKeyDown(54) || MineBot.sketchyStealer);
+                    boolean flag1 = k != -999 && (MineBot.isKeyDown(42) || MineBot.isKeyDown(54));
                     if (flag1) {
                         this.shiftClickedSlot = slot != null && slot.getHasStack() ? slot.getStack() : null;
                     }

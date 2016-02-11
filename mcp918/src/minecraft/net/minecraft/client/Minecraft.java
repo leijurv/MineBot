@@ -36,6 +36,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 import minebot.MineBot;
+import minebot.util.Manager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -1467,11 +1468,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         this.currentScreen.handleKeyboardInput();
                     } else {
                         if (k == 1) {
-                            if (MineBot.sketchyStealer) {
-                                MineBot.sketchyStealer = false;
-                            } else {
-                                this.displayInGameMenu();
-                            }
+                            this.displayInGameMenu();
                         }
                         if (k == 32 && MineBot.isKeyDown(61) && this.ingameGUI != null) {
                             this.ingameGUI.getChatGUI().clearChatMessages();
