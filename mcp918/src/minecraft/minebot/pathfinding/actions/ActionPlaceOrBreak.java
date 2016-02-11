@@ -154,7 +154,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         ACCEPTABLE_THROWAWAY_ITEMS = Arrays.asList(new Item[]{Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone")});
     }
-    public boolean switchtothrowaway(boolean message) {
+    public static boolean switchtothrowaway(boolean message) {
         set();
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
         ItemStack[] inv = p.inventory.mainInventory;

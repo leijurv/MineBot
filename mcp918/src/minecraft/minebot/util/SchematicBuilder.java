@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import minebot.MineBot;
 import minebot.pathfinding.actions.ActionPillar;
+import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -41,6 +42,7 @@ public class SchematicBuilder {
             }
             BlockPos playerCurrent = Minecraft.theMinecraft.thePlayer.getPosition0();
             if (playerCurrent.equals(goal) || playerCurrent.equals(goal.up())) {
+                ActionPlaceOrBreak.switchtothrowaway(true);
                 new ActionPillar(goal).tick1();
             } else {
                 if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
