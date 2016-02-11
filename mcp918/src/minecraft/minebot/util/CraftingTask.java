@@ -644,11 +644,9 @@ public class CraftingTask extends ManagerTick {
         return craftingTableTask.alreadyHas >= quantity;
     }
     public static Manager createInstance(Class c) {
-        try {
-            return (Manager) c.newInstance();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        return new CraftingTask();
+    }
+    private CraftingTask() {
     }
     @Override
     protected void onCancel() {
