@@ -92,9 +92,7 @@ public class EarlyGameStrategy extends ManagerTick {
         }
         if (countCobble() > 5) {
             boolean axe = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
-            GuiScreen.sendChatMessage("Axe: " + axe);
             if (axe) {
-                GuiScreen.sendChatMessage("HAS AN AXE");
                 WOOD_AMT = 64;
                 MIN_WOOD_AMT = 16;
             } else {

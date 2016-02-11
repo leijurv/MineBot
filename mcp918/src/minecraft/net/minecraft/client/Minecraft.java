@@ -35,8 +35,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
+import minebot.Memory;
 import minebot.MineBot;
-import minebot.util.Manager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -1253,6 +1253,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                             if (this.playerController.onPlayerRightClick(this.thePlayer, this.theWorld, itemstack, blockpos, this.objectMouseOver.sideHit, this.objectMouseOver.hitVec)) {
                                 flag = false;
                                 this.thePlayer.swingItem();
+                                Memory.scanBlock(blockpos);
+                                Memory.scanBlock(blockpos.offset(this.objectMouseOver.sideHit));
                                 System.out.println("Player right clicked on block @ " + blockpos.offset(this.objectMouseOver.sideHit) + "");
                                 if (itemstack != null) {
                                     MineBot.onPlacedBlock(itemstack, blockpos.offset(this.objectMouseOver.sideHit));
