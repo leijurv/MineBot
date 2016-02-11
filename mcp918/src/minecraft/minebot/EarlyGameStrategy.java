@@ -85,8 +85,16 @@ public class EarlyGameStrategy extends ManagerTick {
                 }
             }
         }
+        if (cobble && gotDirt && countCobble() + countDirt() < 10) {//if we have already gotten cobble and dirt, but our amounts have run low, get more
+            if (!BlockPuncher.tick("dirt", "grass", "stone")) {
+                GuiScreen.sendChatMessage("No dirt, grass, or stone");
+            }
+        }
         if (countCobble() > 5) {
-            if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1)) {
+            boolean axe = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
+            GuiScreen.sendChatMessage("Axe: " + axe);
+            if (axe) {
+                GuiScreen.sendChatMessage("HAS AN AXE");
                 WOOD_AMT = 64;
                 MIN_WOOD_AMT = 16;
             } else {

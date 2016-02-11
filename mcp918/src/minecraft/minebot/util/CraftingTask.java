@@ -180,6 +180,13 @@ public class CraftingTask extends ManagerTick {
         if (craftingTableLocation != null) {
             if (LookManager.couldIReach(craftingTableLocation)) {
                 LookManager.lookAtBlock(craftingTableLocation, true);
+                if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
+                    MineBot.currentPath = null;
+                    MineBot.clearMovement();
+                    Minecraft.theMinecraft.rightClickMouse();
+                    findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
+                }
+                return true;
             } else {
                 double dist = Math.sqrt(Memory.distSq(craftingTableLocation));
                 if (dist < 50) {
@@ -187,17 +194,11 @@ public class CraftingTask extends ManagerTick {
                     if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
                         MineBot.findPathInNewThread(false);
                     }
+                    return true;
                 } else {
-                    GuiScreen.sendChatMessage("too far away from closest crafting table (" + dist + " blocks)");
+                    GuiScreen.sendChatMessage("too far away from closest crafting table (" + dist + " blocks), crafting another");
                 }
             }
-            if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
-                MineBot.currentPath = null;
-                MineBot.clearMovement();
-                Minecraft.theMinecraft.rightClickMouse();
-                findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
-            }
-            return true;
         }
         if (MineBot.whatAreYouLookingAt() != null && Block.getBlockFromName("crafting_table").equals(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock())) {
             MineBot.currentPath = null;
