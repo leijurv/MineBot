@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * @author avecowa
  */
 public abstract class Manager {
-    private static boolean enabled = false;
+    private boolean enabled = false;
     private static HashMap<Class<? extends Manager>, Manager> managers = new HashMap<Class<? extends Manager>, Manager>();
     public final static Manager getManager(Class<? extends Manager> c) {
         if (managers.get(c) == null) {
@@ -68,6 +68,7 @@ public abstract class Manager {
         this.tick((Boolean) null);
     }
     public final void tick(Boolean prepost) {
+        System.out.println(this + " " + enabled());
         if (!enabled()) {
             return;
         }
