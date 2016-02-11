@@ -374,8 +374,8 @@ public class CraftingTask extends ManagerTick {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
                 System.out.println("Opening");
                 MineBot.slowOpenInventory();
-                didIOpenMyInventory = true;
             }
+            didIOpenMyInventory = true;
         } else {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
                 GuiScreen.sendChatMessage("Not in crafting table", true);
