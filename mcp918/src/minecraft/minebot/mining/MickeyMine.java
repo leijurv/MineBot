@@ -29,7 +29,7 @@ import net.minecraft.world.chunk.Chunk;
  *
  * @author galdara
  */
-public class MickeyMine extends ManagerTick{
+public class MickeyMine extends ManagerTick {
     static ArrayList<Block> goalBlocks = null;
     static boolean isGoingToMine = false;
     static boolean isMining = false;
@@ -335,7 +335,6 @@ public class MickeyMine extends ManagerTick{
     public static Tuple<Integer, Integer> tupleFromBlockPos(BlockPos blockPos) {
         return tupleFromChunk(Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(blockPos));
     }
-
     @Override
     protected boolean onTick0() {
         System.out.println("mickey" + isGoingToMine + " " + isMining);
@@ -356,18 +355,16 @@ public class MickeyMine extends ManagerTick{
         System.out.println("mickey done");
         return false;
     }
-
     @Override
     protected void onCancel() {
-    }
-
-    @Override
-    protected void onStart() {
         isGoingToMine = false;
         isMining = false;
         needsToBeMined.clear();
         priorityNeedsToBeMined.clear();
         branchPosition = null;
         mightNeedToGoBackToPath = false;
+    }
+    @Override
+    protected void onStart() {
     }
 }
