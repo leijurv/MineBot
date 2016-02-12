@@ -13,6 +13,7 @@ import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
 
