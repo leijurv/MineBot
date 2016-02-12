@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
@@ -29,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 
 /**
@@ -218,16 +218,53 @@ public class CraftingTask extends ManagerTick {
                     return true;
                 }
             }
-            LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down().north(), true);
-            LookManager.beSketchy();
-            MineBot.forward = new Random().nextBoolean();
-            MineBot.backward = new Random().nextBoolean();
-            MineBot.left = new Random().nextBoolean();
-            MineBot.right = new Random().nextBoolean();
-            //if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
-            Minecraft.theMinecraft.rightClickMouse();
-            //}
-            MineBot.jumping = true;
+            BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
+            for (int x = player.getX() - 3; x <= player.getX() + 3; x++) {
+                for (int y = player.getY() - 2; y <= player.getY() + 1; y++) {
+                    for (int z = player.getZ() - 3; z <= player.getZ() + 3; z++) {
+                        if (x == player.getX() && z == player.getZ()) {
+                            continue;
+                        }
+                        BlockPos pos = new BlockPos(x, y, z);
+                        if (Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().equals(Block.getBlockFromName("crafting_table"))) {
+                            Memory.scanBlock(pos);
+                        }
+                        if (MineBot.isAir(pos)) {
+                            for (EnumFacing f : EnumFacing.values()) {
+                                BlockPos placeAgainst = pos.offset(f);
+                                if (!MineBot.isAir(placeAgainst) && Minecraft.theMinecraft.theWorld.getBlockState(placeAgainst).getBlock().isBlockNormalCube()) {
+                                    if (LookManager.couldIReach(placeAgainst, pos)) {
+                                        double faceX = (pos.getX() + placeAgainst.getX() + 1.0D) * 0.5D;
+                                        double faceY = (pos.getY() + placeAgainst.getY()) * 0.5D;
+                                        double faceZ = (pos.getZ() + placeAgainst.getZ() + 1.0D) * 0.5D;
+                                        if (LookManager.lookAtCoords(faceX, faceY, faceZ, true)) {
+                                            Minecraft.theMinecraft.rightClickMouse();
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (MineBot.isAir(player.down()) || MineBot.isAir(player.up())) {
+                GuiScreen.sendChatMessage("Placing down");
+                LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
+                MineBot.jumping = true;
+                if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
+                    Minecraft.theMinecraft.rightClickMouse();
+                }
+                return true;
+            }
+            /*
+             LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down().north(), true);
+             LookManager.beSketchy();
+             MineBot.forward = new Random().nextBoolean();
+             MineBot.backward = new Random().nextBoolean();
+             MineBot.left = new Random().nextBoolean();
+             MineBot.right = new Random().nextBoolean();
+             MineBot.jumping = true;*/
             return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
@@ -651,6 +688,7 @@ public class CraftingTask extends ManagerTick {
     }
     @Override
     protected void onCancel() {
+        overallCraftingTasks.clear();
     }
     @Override
     protected void onStart() {

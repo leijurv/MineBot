@@ -20,7 +20,7 @@ import net.minecraft.util.Vec3;
  *
  * @author leijurv
  */
-public class LookManager extends Manager{
+public class LookManager extends Manager {
     static final float MAX_YAW_CHANGE_PER_TICK = 360 / 20;
     static final float MAX_PITCH_CHANGE_PER_TICK = 360 / 20;
     static float previousYaw = 0;
@@ -104,7 +104,20 @@ public class LookManager extends Manager{
         Vec3 vec31 = getVectorForRotation(pitch, yaw);
         Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
         MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
-        System.out.println(blah);
+        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
+    }
+    public static boolean couldIReach(BlockPos pos, BlockPos side) {
+        double faceX = (pos.getX() + side.getX() + 1.0D) * 0.5D;
+        double faceY = (pos.getY() + side.getY()) * 0.5D;
+        double faceZ = (pos.getZ() + side.getZ() + 1.0D) * 0.5D;
+        float[] pitchAndYaw = pitchAndYaw(faceX, faceY, faceZ);
+        float yaw = pitchAndYaw[0];
+        float pitch = pitchAndYaw[1];
+        double blockReachDistance = (double) Minecraft.theMinecraft.playerController.getBlockReachDistance();
+        Vec3 vec3 = Minecraft.theMinecraft.thePlayer.getPositionEyes(1.0F);
+        Vec3 vec31 = getVectorForRotation(pitch, yaw);
+        Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
+        MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
         return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
     }
     public static Vec3 getVectorForRotation(float pitch, float yaw) {//shamelessly copied from Entity.java
@@ -144,6 +157,9 @@ public class LookManager extends Manager{
         double x = p.getX() + xDiff;
         double y = p.getY() + yolo;
         double z = p.getZ() + zDiff;
+        return pitchAndYaw(x, y, z);
+    }
+    public static float[] pitchAndYaw(double x, double y, double z) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         double yDiff = (thePlayer.posY + 1.62) - y;
         double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
@@ -235,16 +251,15 @@ public class LookManager extends Manager{
             desiredNextPitch = Minecraft.theMinecraft.thePlayer.rotationPitch - pitchDistance;
         }
     }
-
     @Override
-    protected void onTick() {}
-
+    protected void onTick() {
+    }
     @Override
-    protected void onCancel() {}
-
+    protected void onCancel() {
+    }
     @Override
-    protected void onStart() {}
-    
+    protected void onStart() {
+    }
     @Override
     protected boolean onEnabled(boolean enabled) {
         return true;
