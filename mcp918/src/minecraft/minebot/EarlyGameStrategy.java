@@ -122,6 +122,10 @@ public class EarlyGameStrategy extends ManagerTick {
             if (!instance.enabled()) {
                 instance.toggle();
             }
+        } else {
+            if (instance.enabled()) {
+                instance.toggle();
+            }
         }
         return false;
     }
