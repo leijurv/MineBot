@@ -18,7 +18,7 @@ import net.minecraft.util.BlockPos;
  * @author avecowa
  */
 public class BlockPuncher {
-    public static boolean tick(String... block) {
+    public static boolean setGoalTo(String... block) {
         ArrayList<BlockPos> closest = Memory.closest(10, block);
         if (closest == null || closest.isEmpty()) {
             GuiScreen.sendChatMessage("NO " + Arrays.asList(block) + " NEARBY. GOD DAMN IT");
@@ -29,6 +29,12 @@ public class BlockPuncher {
             goals[i] = new GoalTwoBlocks(closest.get(i));
         }
         MineBot.goal = new GoalComposite(goals);
+        return true;
+    }
+    public static boolean tick(String... block) {
+        if (!setGoalTo(block)) {
+            return false;
+        }
         if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
             MineBot.findPathInNewThread(false);
         }
