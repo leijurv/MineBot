@@ -88,7 +88,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 return PathFinder.COST_INF;
             }
             double m = Block.getBlockFromName("minecraft:crafting_table").equals(block) ? 10 : 1;
-            return m / ts.getStrVsBlock(block, position);
+            return m / ts.getStrVsBlock(block, position) + BREAK_ONE_BLOCK_ADD;
         }
         return 0;
     }

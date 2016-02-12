@@ -31,6 +31,13 @@ public abstract class Action {
      * because we want to generally conserve blocks which might be limited
      */
     public static final double PLACE_ONE_BLOCK_COST = 20;
+    /**
+     * Add this to the cost of breaking any block. The cost of breaking any
+     * block is calculated as the number of ticks that block takes to break with
+     * the tools you have. You add this because there's always a little overhead
+     * (e.g. looking at the block)
+     */
+    public static final double BREAK_ONE_BLOCK_ADD = 4;
     public final BlockPos from;
     public final BlockPos to;
     private Double cost;
