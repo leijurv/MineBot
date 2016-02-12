@@ -49,6 +49,8 @@ public class SchematicBuilder {
                     MineBot.findPathInNewThread(false);
                 }
             }
+        } else {
+            GuiScreen.sendChatMessage("done building");
         }
     }
     public BlockPos getFirstToPlace() {
