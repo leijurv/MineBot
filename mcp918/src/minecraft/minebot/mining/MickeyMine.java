@@ -109,13 +109,10 @@ public class MickeyMine extends ManagerTick {
         System.out.println("Goal blocks: " + goalBlocks);
         System.out.println("priority: " + priorityNeedsToBeMined);
         System.out.println("needs to be mined: " + needsToBeMined);
-        updatePriorityBlocksMined();
         updateBlocksMined();
         if (priorityNeedsToBeMined.isEmpty() && needsToBeMined.isEmpty()) {
             doBranchMine();
-        } else if (!priorityNeedsToBeMined.isEmpty()) {
-            doPriorityMine();
-        } else {
+        } else if (priorityNeedsToBeMined.isEmpty()) {
             doNormalMine();
         }
     }
@@ -340,8 +337,8 @@ public class MickeyMine extends ManagerTick {
     protected boolean onTick0() {
         System.out.println("mickey" + isGoingToMine + " " + isMining);
         if (!isGoingToMine && !isMining) {
-            if (MineBot.currentPath == null) {
-                MineBot.goal = new GoalYLevel(yLevel);
+            MineBot.goal = new GoalYLevel(yLevel);
+            if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
                 MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), true);
                 isGoingToMine = true;
             }
@@ -350,8 +347,12 @@ public class MickeyMine extends ManagerTick {
             isGoingToMine = false;
             isMining = true;
         }
+        updatePriorityBlocksMined();
         if (isMining) {
             doMine();
+        }
+        if (!priorityNeedsToBeMined.isEmpty()) {
+            doPriorityMine();
         }
         System.out.println("mickey done");
         return false;
