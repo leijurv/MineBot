@@ -60,7 +60,7 @@ public class PathFinder {
         int numNodes = 0;
         ToolSet ts = new ToolSet();
         int numEmptyChunk = 0;
-        while (openSet.first != null) {
+        while (openSet.first != null && numEmptyChunk < 50 && System.currentTimeMillis() < timeoutTime) {
             Node me = openSet.removeLowest();
             me.isOpen = false;
             me.nextOpen = null;
@@ -81,10 +81,6 @@ public class PathFinder {
                 }
                 if (Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(actionToGetToNeighbor.to) instanceof EmptyChunk) {
                     numEmptyChunk++;
-                    if (numEmptyChunk > 50) {
-                        GuiScreen.sendChatMessage("Too many unloaded blocks");
-                        break;
-                    }
                     continue;
                 }
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
@@ -105,10 +101,6 @@ public class PathFinder {
                         }
                     }
                 }
-            }
-            if (System.currentTimeMillis() > timeoutTime) {
-                System.out.println("Stopping");
-                break;
             }
         }
         double bestDist = 0;
