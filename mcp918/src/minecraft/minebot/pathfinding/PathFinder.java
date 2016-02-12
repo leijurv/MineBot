@@ -46,7 +46,7 @@ public class PathFinder {
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
         final Node startNode = getNodeAtPosition(start);
         startNode.cost = 0;
-        Node[] bestSoFar = new Node[COEFFICIENTS.length];
+        Node[] bestSoFar = new Node[COEFFICIENTS.length];//keep track of the best node by the metric of (estimatedCostToGoal + cost / COEFFICIENTS[i])
         double[] bestHeuristicSoFar = new double[COEFFICIENTS.length];
         for (int i = 0; i < bestHeuristicSoFar.length; i++) {
             bestHeuristicSoFar[i] = Double.MAX_VALUE;
@@ -66,14 +66,14 @@ public class PathFinder {
             me.nextOpen = null;
             BlockPos myPos = me.pos;
             numNodes++;
-            if (System.currentTimeMillis() > lastPrintout + 1000) {
+            if (System.currentTimeMillis() > lastPrintout + 1000) {//print once a second
                 System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
                 lastPrintout = System.currentTimeMillis();
             }
             if (goal.isInGoal(myPos)) {
                 return new Path(startNode, me, goal, numNodes);
             }
-            Action[] connected = getConnectedPositions(myPos);
+            Action[] connected = getConnectedPositions(myPos);//actions that we could take that start at myPos, in random order
             for (Action actionToGetToNeighbor : connected) {
                 double actionCost = actionToGetToNeighbor.cost(ts);
                 if (actionCost >= COST_INF) {
@@ -146,25 +146,6 @@ public class PathFinder {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
-        /*BlockPos[] positions = new BlockPos[13];
-         positions[0] = new BlockPos(x, y + 1, z);//pillar
-         positions[1] = new BlockPos(x + 1, y, z);//bridge
-         positions[2] = new BlockPos(x - 1, y, z);//bridge
-         positions[3] = new BlockPos(x, y, z + 1);//bridge
-         positions[4] = new BlockPos(x, y, z - 1);//bridge
-         positions[5] = new BlockPos(x + 1, y + 1, z);//climb
-         positions[6] = new BlockPos(x - 1, y + 1, z);//climb
-         positions[7] = new BlockPos(x, y + 1, z + 1);//climb
-         positions[8] = new BlockPos(x, y + 1, z - 1);//climb
-         positions[9] = new BlockPos(x + 1, y - 1, z);//fall
-         positions[10] = new BlockPos(x - 1, y - 1, z);//fall
-         positions[11] = new BlockPos(x, y - 1, z + 1);//fall
-         positions[12] = new BlockPos(x, y - 1, z - 1);//fall
-         Action[] actions = new Action[13];
-         for (int i = 0; i < 13; i++) {
-         actions[i] = Action.getAction(pos, positions[i]);
-         }*/
-        //new implementation should have exact same effect
         Action[] actions = new Action[18];
         actions[0] = new ActionPillar(pos);
         actions[1] = new ActionBridge(pos, new BlockPos(x + 1, y, z));
@@ -184,7 +165,6 @@ public class PathFinder {
         actions[15] = new ActionDescendTwo(pos, new BlockPos(x, y - 2, z + 1));
         actions[16] = new ActionDescendTwo(pos, new BlockPos(x - 1, y - 2, z));
         actions[17] = new ActionDescendTwo(pos, new BlockPos(x + 1, y - 2, z));
-        shuffle(actions);
         return actions;
     }
     Random random = new Random();
