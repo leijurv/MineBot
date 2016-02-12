@@ -49,9 +49,9 @@ public class GoalBlock implements Goal {
         if (pythaDist < MAX) {//if we are more than MAX away, ignore the Y coordinate. It really doesn't matter how far away your Y coordinate is if you X coordinate is 1000 blocks away.
             double multiplier = pythaDist < MIN ? 1 : 1 - (pythaDist - MIN) / (MAX - MIN);
             if (yDiff < 0) {//pos.getY()-this.y<0 therefore pos.getY()<this.y, so target is above current
-                heuristic -= yDiff * (Action.PLACE_ONE_BLOCK_COST + Action.JUMP_ONE_BLOCK_COST);//target above current
+                heuristic -= yDiff * (Action.PLACE_ONE_BLOCK_COST * 0.7 + Action.JUMP_ONE_BLOCK_COST);//target above current
             } else {
-                heuristic += yDiff * (Action.PLACE_ONE_BLOCK_COST + Action.FALL_ONE_BLOCK_COST);//target below current
+                heuristic += yDiff * (10 + Action.FALL_ONE_BLOCK_COST);//target below current
             }
             heuristic *= multiplier;
             heuristic += (1 - multiplier) * baseline;
