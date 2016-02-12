@@ -61,20 +61,21 @@ public class PathFinder {
         ToolSet ts = new ToolSet();
         int numEmptyChunk = 0;
         while (openSet.first != null && numEmptyChunk < 50 && System.currentTimeMillis() < timeoutTime) {
-            Node me = openSet.removeLowest();
-            me.isOpen = false;
-            me.nextOpen = null;
-            BlockPos myPos = me.pos;
+            Node currentNode = openSet.removeLowest();
+            currentNode.isOpen = false;
+            currentNode.nextOpen = null;
+            BlockPos currentNodePos = currentNode.pos;
             numNodes++;
             if (System.currentTimeMillis() > lastPrintout + 1000) {//print once a second
-                System.out.println("searching... at " + myPos + ", considered " + numNodes + " nodes so far");
+                System.out.println("searching... at " + currentNodePos + ", considered " + numNodes + " nodes so far");
                 lastPrintout = System.currentTimeMillis();
             }
-            if (goal.isInGoal(myPos)) {
-                return new Path(startNode, me, goal, numNodes);
+            if (goal.isInGoal(currentNodePos)) {
+                return new Path(startNode, currentNode, goal, numNodes);
             }
-            Action[] connected = getConnectedPositions(myPos);//actions that we could take that start at myPos, in random order
-            for (Action actionToGetToNeighbor : connected) {
+            Action[] possibleActions = getConnectedPositions(currentNodePos);//actions that we could take that start at myPos, in random order
+            shuffle(possibleActions);
+            for (Action actionToGetToNeighbor : possibleActions) {
                 double actionCost = actionToGetToNeighbor.cost(ts);
                 if (actionCost >= COST_INF) {
                     continue;
@@ -84,9 +85,9 @@ public class PathFinder {
                     continue;
                 }
                 Node neighbor = getNodeAtPosition(actionToGetToNeighbor.to);
-                double tentativeCost = me.cost + actionCost;
+                double tentativeCost = currentNode.cost + actionCost;
                 if (tentativeCost < neighbor.cost) {
-                    neighbor.previous = me;
+                    neighbor.previous = currentNode;
                     neighbor.previousAction = actionToGetToNeighbor;
                     neighbor.cost = tentativeCost;
                     if (!neighbor.isOpen) {
@@ -94,9 +95,9 @@ public class PathFinder {
                         neighbor.isOpen = true;
                     }
                     for (int i = 0; i < bestSoFar.length; i++) {
-                        double sum = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
-                        if (sum < bestHeuristicSoFar[i]) {
-                            bestHeuristicSoFar[i] = sum;
+                        double heuristic = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
+                        if (heuristic < bestHeuristicSoFar[i]) {
+                            bestHeuristicSoFar[i] = heuristic;
                             bestSoFar[i] = neighbor;
                         }
                     }
