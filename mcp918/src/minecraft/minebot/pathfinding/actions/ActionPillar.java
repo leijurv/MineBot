@@ -20,7 +20,7 @@ import net.minecraft.util.BlockPos;
  */
 public class ActionPillar extends ActionPlaceOrBreak {
     public ActionPillar(BlockPos start) {
-        super(start, start.up(), new BlockPos[]{start, start.up(2)}, new BlockPos[]{start});
+        super(start, start.up(), new BlockPos[]{start.up(2)}, new BlockPos[]{start});
     }
     @Override
     protected double calculateCost(ToolSet ts) {
@@ -62,7 +62,12 @@ public class ActionPillar extends ActionPlaceOrBreak {
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
             System.out.println("Block not there yet");
-            Minecraft.theMinecraft.rightClickMouse();//constantly right click
+            if (!MineBot.isAir(from)) {
+                MineBot.isLeftClick = true;
+                blockIsThere = false;
+            } else {
+                Minecraft.theMinecraft.rightClickMouse();//constantly right click
+            }
         }
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to) && blockIsThere) {//if we are at our goal and the block below us is placed
