@@ -58,9 +58,8 @@ public class MineBot {
     public static boolean hasThrowaway = true;
     public static Path currentPath = null;
     public static Path nextPath = null;
-    public static ArrayList<Class<? extends Manager>> managers;
+    public static final ArrayList<Class<? extends Manager>> managers = new ArrayList<Class<? extends Manager>>();
     static {
-        managers = new ArrayList<Class<? extends Manager>>();
         managers.add(LookManager.class);
         managers.add(SmeltingTask.class);
         managers.add(Memory.class);
