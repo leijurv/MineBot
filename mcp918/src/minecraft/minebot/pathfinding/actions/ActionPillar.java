@@ -50,6 +50,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
         numTicks++;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
+        MineBot.sneak = true;
         //otherwise jump
         if (numTicks > 40) {
             double diffX = thePlayer.posX - (to.getX() + 0.5);
@@ -66,7 +67,9 @@ public class ActionPillar extends ActionPlaceOrBreak {
                 MineBot.isLeftClick = true;
                 blockIsThere = false;
             } else {
-                Minecraft.theMinecraft.rightClickMouse();//constantly right click
+                if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
+                    Minecraft.theMinecraft.rightClickMouse();//constantly right click
+                }
             }
         }
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);

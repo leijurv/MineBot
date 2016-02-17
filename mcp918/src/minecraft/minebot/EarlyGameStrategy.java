@@ -10,7 +10,6 @@ import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import minebot.util.SmeltingTask;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
@@ -119,7 +118,7 @@ public class EarlyGameStrategy extends ManagerTick {
         if (readyForMining) {
             boolean ironPick = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_pickaxe"), 1);
             boolean hasOre = countItem("iron_ore") >= 3;
-            if (!ironPick && hasOre && countItem("iron_ingot") < 3) {//if we don't have a pick or enough ingots, and we have enough ore, do the smelting
+            if (!ironPick && hasOre && countItem("minecraft:iron_ingot") < 3) {//if we don't have a pick or enough ingots, and we have enough ore, do the smelting
                 int tasksForIron = SmeltingTask.tasksFor(Item.getByNameOrId("iron_ingot"));
                 if (tasksForIron == 0) {
                     new SmeltingTask(new ItemStack(Item.getByNameOrId("iron_ingot"), Math.min(countItem("iron_ore"), 64))).begin();
@@ -147,7 +146,7 @@ public class EarlyGameStrategy extends ManagerTick {
         }
     }
     public static int countItem(String s) {
-        Item item = Item.getItemFromBlock(Block.getBlockFromName(s));
+        Item item = Item.getByNameOrId(s);
         int count = 0;
         for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
             if (stack == null) {
