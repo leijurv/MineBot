@@ -33,6 +33,7 @@ public class MickeyMine extends ManagerTick {
     static ArrayList<Block> goalBlocks = null;
     static boolean isGoingToMine = false;
     static boolean isMining = false;
+    public static boolean tempDisable = false;
     //static boolean seesBlock = false;
     static EnumFacing miningFacing = EnumFacing.EAST;
     static ArrayList<Tuple<Integer, Integer>> diamondChunks = new ArrayList<Tuple<Integer, Integer>>();
@@ -335,6 +336,9 @@ public class MickeyMine extends ManagerTick {
     public static int yLevel = 6;
     @Override
     protected boolean onTick0() {
+        if (tempDisable) {
+            return false;
+        }
         System.out.println("mickey" + isGoingToMine + " " + isMining);
         if (!isGoingToMine && !isMining) {
             MineBot.goal = new GoalYLevel(yLevel);
@@ -368,5 +372,9 @@ public class MickeyMine extends ManagerTick {
     }
     @Override
     protected void onStart() {
+    }
+    @Override
+    protected void onTickPre() {
+        tempDisable = false;
     }
 }

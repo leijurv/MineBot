@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import static minebot.util.CraftingTask.placeHeldBlockNearby;
@@ -218,6 +219,9 @@ public class SmeltingTask extends ManagerTick {
                 isItDone = true;
                 GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
                 furnacesInUse.put(furnace, null);
+            }
+            if (isItDone) {
+                MickeyMine.tempDisable = true;
             }
             if (isItDone && !guiOpen) {
                 if (LookManager.couldIReach(furnace)) {
