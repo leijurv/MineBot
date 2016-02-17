@@ -8,7 +8,6 @@ package minebot;
 import static minebot.MineBot.isRightClick;
 import static minebot.MineBot.sneak;
 import static minebot.MineBot.whatAreYouLookingAt;
-import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -20,7 +19,7 @@ import net.minecraft.util.FoodStats;
  *
  * @author leijurv
  */
-public class FoodManager extends ManagerTick{
+public class FoodManager extends ManagerTick {
     @Override
     protected boolean onTick0() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
@@ -65,12 +64,14 @@ public class FoodManager extends ManagerTick{
         }
         return false;
     }
-
     @Override
     protected void onCancel() {
     }
-
     @Override
     protected void onStart() {
+    }
+    @Override
+    protected boolean onEnabled(boolean enabled) {
+        return true;
     }
 }

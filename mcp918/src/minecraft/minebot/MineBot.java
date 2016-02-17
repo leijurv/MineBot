@@ -101,26 +101,12 @@ public class MineBot {
     }
     public static BlockPos death;
     public static long lastDeath = 0;
-    public static ArrayList<Class> disabled = new ArrayList();
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             MineBot.cancelPath();
             MineBot.plsCancel = true;
-            for (Class c : MineBot.managers) {
-                boolean enabled = Manager.getManager(c).enabled();
-                if (enabled) {
-                    if (!disabled.contains(c)) {
-                        disabled.add(c);
-                    }
-                    Manager.cancel(c);
-                }
-            }
             return;
         }
-        for (Class c : disabled) {
-            Manager.start(c);
-        }
-        disabled.clear();
         if (isLeftClick) {
             leftPressTime = 5;
         }
