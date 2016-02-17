@@ -12,6 +12,7 @@ import java.util.List;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -178,6 +179,7 @@ public class CraftingTask extends ManagerTick {
         //at this point we know that we need a crafting table and we aren't in one at this moment
         BlockPos craftingTableLocation = Memory.closestOne("crafting_table");
         if (craftingTableLocation != null) {
+            MickeyMine.tempDisable = true;
             if (LookManager.couldIReach(craftingTableLocation)) {
                 LookManager.lookAtBlock(craftingTableLocation, true);
                 if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
