@@ -53,6 +53,9 @@ public class ActionClimb extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
+            if (!MineBot.isAir(positionsToPlace[0])) {
+                return PathFinder.COST_INF;
+            }
             for (int i = 0; i < against.length; i++) {
                 if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
                     return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
