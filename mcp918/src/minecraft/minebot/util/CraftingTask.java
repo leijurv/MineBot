@@ -188,15 +188,18 @@ public class CraftingTask extends ManagerTick {
                 }
                 return true;
             } else {
-                double dist = Math.sqrt(Memory.distSq(craftingTableLocation));
-                if (dist < 50) {
+                double diffX = craftingTableLocation.getX() + 0.5D - Minecraft.theMinecraft.thePlayer.posX;
+                double diffY = craftingTableLocation.getY() + 0.5D - Minecraft.theMinecraft.thePlayer.posY;
+                double diffZ = craftingTableLocation.getZ() + 0.5D - Minecraft.theMinecraft.thePlayer.posZ;
+                double distXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+                if (distXZ < 50 && Math.abs(diffY) < 20) {
                     MineBot.goal = new GoalBlock(craftingTableLocation.up());
                     if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
                         MineBot.findPathInNewThread(false);
                     }
                     return true;
                 } else {
-                    GuiScreen.sendChatMessage("too far away from closest crafting table (" + dist + " blocks), crafting another");
+                    GuiScreen.sendChatMessage("too far away from closest crafting table (" + distXZ + " blocks), crafting another");
                 }
             }
         }
