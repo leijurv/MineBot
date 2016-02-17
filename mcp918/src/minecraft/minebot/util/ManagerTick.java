@@ -13,7 +13,6 @@ public abstract class ManagerTick extends Manager {
     public static boolean tickPath = false;
     @Override
     protected final void onTick() {
-        System.out.println(this + " " + tickPath);
         if (tickPath) {
             if (onTick0()) {
                 tickPath = false;

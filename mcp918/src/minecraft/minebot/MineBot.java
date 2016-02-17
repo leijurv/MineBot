@@ -18,7 +18,6 @@ import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalYLevel;
-import minebot.util.ChatCommand;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
@@ -102,11 +101,26 @@ public class MineBot {
     }
     public static BlockPos death;
     public static long lastDeath = 0;
+    public static ArrayList<Class> disabled = new ArrayList();
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
-            ChatCommand.cancel(null);
+            MineBot.cancelPath();
+            MineBot.plsCancel = true;
+            for (Class c : MineBot.managers) {
+                boolean enabled = Manager.getManager(c).enabled();
+                if (enabled) {
+                    if (!disabled.contains(c)) {
+                        disabled.add(c);
+                    }
+                    Manager.cancel(c);
+                }
+            }
             return;
         }
+        for (Class c : disabled) {
+            Manager.start(c);
+        }
+        disabled.clear();
         if (isLeftClick) {
             leftPressTime = 5;
         }

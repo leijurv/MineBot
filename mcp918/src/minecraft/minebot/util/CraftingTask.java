@@ -495,6 +495,7 @@ public class CraftingTask extends ManagerTick {
         MineBot.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
+                System.out.println(craftingTask + " " + craftingTask.currentlyCrafting() + " " + craftingTask.plan);
                 if (!craftingTask.onTick1()) {
                     didIOpenMyInventory = true;
                 }
