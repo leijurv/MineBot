@@ -357,14 +357,15 @@ public class SmeltingTask extends Manager {
                 if (amountNeeded >= amountHere) {
                     leftClick(1);
                     currFuelSize += amountHere;
+                    leftClick(i);
                 } else {
                     for (int j = 0; j < amountNeeded; j++) {
                         rightClick(1);
                     }
+                    leftClick(i);
                     GuiScreen.sendChatMessage("done with fuel", true);
                     break;
                 }
-                leftClick(i);
             }
         }
         if (currentSize1(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
@@ -388,13 +389,14 @@ public class SmeltingTask extends Manager {
                 if (amountNeeded >= amountHere) {
                     leftClick(0);
                     currSmeltSize += amountHere;
+                    leftClick(i);
                 } else {
                     for (int j = 0; j < amountNeeded; j++) {
                         rightClick(0);
                     }
+                    leftClick(i);
                     break;
                 }
-                leftClick(i);
             }
         }
         return true;
