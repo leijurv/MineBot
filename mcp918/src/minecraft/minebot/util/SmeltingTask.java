@@ -115,7 +115,7 @@ public class SmeltingTask extends Manager {
                         furnace = furnaceLocation;
                         MineBot.currentPath = null;
                         MineBot.clearMovement();
-                        MineBot.isRightClick = true;
+                        Minecraft.theMinecraft.rightClickMouse();
                     }
                     return true;
                 } else {
