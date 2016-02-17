@@ -31,7 +31,7 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class SmeltingTask extends Manager {
+public class SmeltingTask extends ManagerTick {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
     public static Manager createInstance(Class c) {
@@ -43,12 +43,13 @@ public class SmeltingTask extends Manager {
         burnTicks = 0;
     }
     @Override
-    protected void onTick() {
+    protected boolean onTick0() {
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
             if (task.exec()) {
-                return;
+                return true;
             }
         }
+        return false;
     }
     public static int tasksFor(Item result) {
         int sum = 0;
