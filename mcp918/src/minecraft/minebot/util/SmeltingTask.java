@@ -203,6 +203,7 @@ public class SmeltingTask extends ManagerTick {
                         GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
                         return false;
                     }
+                    shiftWaitTicks++;
                 } else {
                     shiftWaitTicks = 0;
                     if (numTicks % 5 == 0) {
