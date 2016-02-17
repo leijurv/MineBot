@@ -32,7 +32,6 @@ public class EarlyGameStrategy extends ManagerTick {
     static int WOOD_AMT = 16;//triggers stopping
     static int MIN_WOOD_AMT = 1;//triggers getting more
     static final int DIRT_AMT = 32;
-    static boolean didPlace = false;
     static boolean gotDirt = false;
     static boolean cobble = false;
     @Override
@@ -79,7 +78,7 @@ public class EarlyGameStrategy extends ManagerTick {
         readyForMining &= hasStone;
         if (hasWooden || hasStone) {
             if (!cobble) {
-                if (countCobble() > 64) {
+                if (countCobble() > 16) {
                     cobble = true;
                 } else {
                     if (!BlockPuncher.tick("stone")) {
@@ -120,10 +119,10 @@ public class EarlyGameStrategy extends ManagerTick {
         if (readyForMining) {
             boolean ironPick = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_pickaxe"), 1);
             boolean hasOre = countItem("iron_ore") >= 3;
-            if (!ironPick && hasOre) {
+            if (!ironPick && hasOre && countItem("iron_ingot") < 3) {//if we don't have a pick or enough ingots, and we have enough ore, do the smelting
                 int tasksForIron = SmeltingTask.tasksFor(Item.getByNameOrId("iron_ingot"));
                 if (tasksForIron == 0) {
-                    new SmeltingTask(new ItemStack(Item.getByNameOrId("iron_ingot"), countItem("iron_ore"))).begin();
+                    new SmeltingTask(new ItemStack(Item.getByNameOrId("iron_ingot"), Math.min(countItem("iron_ore"), 64))).begin();
                 }
                 readyForMining = false;
             }
@@ -171,8 +170,18 @@ public class EarlyGameStrategy extends ManagerTick {
     }
     @Override
     protected void onCancel() {
+        gotWood_PHRASING = false;
+        WOOD_AMT = 16;
+        MIN_WOOD_AMT = 1;
+        gotDirt = false;
+        cobble = false;
     }
     @Override
     protected void onStart() {
+        gotWood_PHRASING = false;
+        WOOD_AMT = 16;
+        MIN_WOOD_AMT = 1;
+        gotDirt = false;
+        cobble = false;
     }
 }
