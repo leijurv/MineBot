@@ -189,6 +189,7 @@ public class SmeltingTask extends Manager {
                     Minecraft.theMinecraft.thePlayer.closeScreen();//close the screen
                     inProgress.remove(this);//no longer an in progress smelting dask
                     GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
+                    return false;
                 }
                 contain.shiftClick(2);//take out the output
             }
@@ -200,7 +201,7 @@ public class SmeltingTask extends Manager {
                 GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
                 furnacesInUse.put(furnace, null);
             }
-            if (isItDone) {
+            if (isItDone && !guiOpen) {
                 if (LookManager.couldIReach(furnace)) {
                     MineBot.currentPath = null;
                     MineBot.clearMovement();
