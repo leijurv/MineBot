@@ -9,6 +9,7 @@ import minebot.mining.MickeyMine;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
+import minebot.util.SmeltingTask;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -113,6 +114,17 @@ public class EarlyGameStrategy extends ManagerTick {
         }
         if (countCobble() > 8) {
             if (!CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1)) {
+                readyForMining = false;
+            }
+        }
+        if (readyForMining) {
+            boolean ironPick = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_pickaxe"), 1);
+            boolean hasOre = countItem("iron_ore") >= 3;
+            if (!ironPick && hasOre) {
+                int tasksForIron = SmeltingTask.tasksFor(Item.getByNameOrId("iron_ingot"));
+                if (tasksForIron == 0) {
+                    new SmeltingTask(new ItemStack(Item.getByNameOrId("iron_ingot"), countItem("iron_ore"))).begin();
+                }
                 readyForMining = false;
             }
         }

@@ -38,7 +38,6 @@ public class SmeltingTask extends Manager {
         return new SmeltingTask();
     }
     private SmeltingTask() {
-        super();
         toPutInTheFurnace = null;
         desired = null;
         burnTicks = 0;
@@ -50,6 +49,15 @@ public class SmeltingTask extends Manager {
                 return;
             }
         }
+    }
+    public static int tasksFor(Item result) {
+        int sum = 0;
+        for (SmeltingTask task : inProgress) {
+            if (result.equals(task.desired.getItem())) {
+                sum += task.desired.stackSize;
+            }
+        }
+        return sum;
     }
     public static void clearInProgress() {
         for (int i = 0; i < inProgress.size(); i++) {
