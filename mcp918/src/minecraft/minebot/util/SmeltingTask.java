@@ -250,13 +250,14 @@ public class SmeltingTask extends Manager {
         if (tickNumber % ticksBetweenClicks == 0) {
             int index = tickNumber / ticksBetweenClicks;
             if (index >= plan.size()) {
-                if (index == plan.size() + 2) {
+                if (index >= plan.size() + 2) {
                     GuiScreen.sendChatMessage("Plan over");
                     plan = null;
                     tickNumber = -40;
                     Minecraft.theMinecraft.thePlayer.closeScreen();
                     return true;
                 }
+                tickNumber++;
                 return false;
             }
             if (index >= 0) {
