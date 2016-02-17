@@ -211,43 +211,10 @@ public class CraftingTask extends ManagerTick {
         if (putCraftingTableOnHotBar()) {
             findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             System.out.println("Ready to place!");
-            BlockPos looking = MineBot.whatAreYouLookingAt();
-            if (looking != null) {
-                Block current = Minecraft.theMinecraft.theWorld.getBlockState(looking).getBlock();
-                if (current.equals(Block.getBlockFromItem(Item.getByNameOrId("minecraft:crafting_table")))) {
-                    return true;
-                }
+            if (placeHeldBlockNearby()) {
+                return true;
             }
             BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
-            for (int x = player.getX() - 3; x <= player.getX() + 3; x++) {
-                for (int y = player.getY() - 2; y <= player.getY() + 1; y++) {
-                    for (int z = player.getZ() - 3; z <= player.getZ() + 3; z++) {
-                        if (x == player.getX() && z == player.getZ()) {
-                            continue;
-                        }
-                        BlockPos pos = new BlockPos(x, y, z);
-                        if (Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().equals(Block.getBlockFromName("crafting_table"))) {
-                            Memory.scanBlock(pos);
-                        }
-                        if (MineBot.isAir(pos)) {
-                            for (EnumFacing f : EnumFacing.values()) {
-                                BlockPos placeAgainst = pos.offset(f);
-                                if (!MineBot.isAir(placeAgainst) && Minecraft.theMinecraft.theWorld.getBlockState(placeAgainst).getBlock().isBlockNormalCube()) {
-                                    if (LookManager.couldIReach(placeAgainst, pos)) {
-                                        double faceX = (pos.getX() + placeAgainst.getX() + 1.0D) * 0.5D;
-                                        double faceY = (pos.getY() + placeAgainst.getY()) * 0.5D;
-                                        double faceZ = (pos.getZ() + placeAgainst.getZ() + 1.0D) * 0.5D;
-                                        if (LookManager.lookAtCoords(faceX, faceY, faceZ, true)) {
-                                            Minecraft.theMinecraft.rightClickMouse();
-                                        }
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             if (MineBot.isAir(player.down()) || MineBot.isAir(player.up())) {
                 GuiScreen.sendChatMessage("Placing down");
                 LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
@@ -271,6 +238,39 @@ public class CraftingTask extends ManagerTick {
         ensureCraftingDesired(Item.getByNameOrId("crafting_table"), 1);
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one and we don't have the materials to make one
         //so just rip at this point
+        return false;
+    }
+    public static boolean placeHeldBlockNearby() {
+        BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
+        for (int x = player.getX() - 3; x <= player.getX() + 3; x++) {
+            for (int y = player.getY() - 2; y <= player.getY() + 1; y++) {
+                for (int z = player.getZ() - 3; z <= player.getZ() + 3; z++) {
+                    if (x == player.getX() && z == player.getZ()) {
+                        continue;
+                    }
+                    BlockPos pos = new BlockPos(x, y, z);
+                    if (Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().equals(Block.getBlockFromName("crafting_table"))) {
+                        Memory.scanBlock(pos);
+                    }
+                    if (MineBot.isAir(pos)) {
+                        for (EnumFacing f : EnumFacing.values()) {
+                            BlockPos placeAgainst = pos.offset(f);
+                            if (!MineBot.isAir(placeAgainst) && Minecraft.theMinecraft.theWorld.getBlockState(placeAgainst).getBlock().isBlockNormalCube()) {
+                                if (LookManager.couldIReach(placeAgainst, pos)) {
+                                    double faceX = (pos.getX() + placeAgainst.getX() + 1.0D) * 0.5D;
+                                    double faceY = (pos.getY() + placeAgainst.getY()) * 0.5D;
+                                    double faceZ = (pos.getZ() + placeAgainst.getZ() + 1.0D) * 0.5D;
+                                    if (LookManager.lookAtCoords(faceX, faceY, faceZ, true)) {
+                                        Minecraft.theMinecraft.rightClickMouse();
+                                    }
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
     public static boolean putCraftingTableOnHotBar() {//shamelessly copied from MickeyMine.torch()

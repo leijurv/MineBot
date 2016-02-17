@@ -7,15 +7,17 @@ package minebot.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import minebot.LookManager;
+import minebot.Memory;
 import minebot.MineBot;
-import net.minecraft.block.Block;
+import minebot.pathfinding.goals.GoalBlock;
+import static minebot.util.CraftingTask.placeHeldBlockNearby;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -31,7 +33,6 @@ import net.minecraft.util.BlockPos;
 public class SmeltingTask extends Manager {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
-    static HashSet<BlockPos> knownFurnaces = new HashSet();
     public static Manager createInstance(Class c) {
         return new SmeltingTask();
     }
@@ -44,7 +45,9 @@ public class SmeltingTask extends Manager {
     @Override
     protected void onTick() {
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
-            task.exec();
+            if (task.exec()) {
+                return;
+            }
         }
     }
     public static void clearInProgress() {
@@ -57,11 +60,10 @@ public class SmeltingTask extends Manager {
     public static BlockPos getUnusedFurnace() {
         BlockPos best = null;
         double bestDist = Double.MAX_VALUE;
-        for (BlockPos pos : knownFurnaces) {
+        for (BlockPos pos : Memory.closest(100, "furnace", "lit_furnace")) {
             if (furnacesInUse.get(pos) != null) {
                 continue;
             }
-            //todo: get this block and check if its a furnace. If it's out of the loaded chunks, assume its still a furnace. or I guess it might be too far away so don't consider it. idk
             double dist = dist(pos);
             if (best == null || dist < bestDist) {
                 bestDist = dist;
@@ -76,18 +78,6 @@ public class SmeltingTask extends Manager {
         double diffY = thePlayer.posY - pos.getY();
         double diffZ = thePlayer.posZ - pos.getZ();
         return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
-    }
-    public static void onFurnacePlace(BlockPos pos) {
-        if (pos == null) {
-            throw new NullPointerException("take a hike");
-        }
-        Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        if (!Block.getBlockFromName("minecraft:furnace").equals(block) && !Block.getBlockFromName("minecraft:lit_furnace").equals(block)) {
-            GuiScreen.sendChatMessage(block + " isn't a furnace", true);
-            return;
-            //throw new IllegalStateException(block + " isn't a furnace");
-        }
-        knownFurnaces.add(pos);
     }
     private final ItemStack toPutInTheFurnace;
     private final ItemStack desired;
@@ -111,37 +101,68 @@ public class SmeltingTask extends Manager {
         }
         inProgress.add(this);
         //todo: merge different smelting tasks for the same item
-        BlockPos blah = getUnusedFurnace();
-        if (blah == null) {
-            GuiScreen.sendChatMessage("No closeby unused furnaces that I know of. Place one?", true);
-            return;
-        } else {
-            GuiScreen.sendChatMessage("I would suggest going to the furnace at " + blah, true);
-        }
-        if (LookManager.couldIReach(blah)) {//todo: if we can't reach it and it's reasonably close, path to it
-            GuiScreen.sendChatMessage("I'm gonna look at it and right click, that's what I'm gonna do", true);
-            furnace = blah;
-        }
     }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     int guiWaitTicks = 0;
-    private void exec() {
-        System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks);
-        if (furnace != null && !didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
-            //we have a furnace, but we haven't put it in yet phrasing
-            if (LookManager.couldIReach(furnace)) {
-                if (LookManager.lookAtBlock(furnace, true)) {
-                    if (furnace.equals(MineBot.whatAreYouLookingAt())) {
+    private boolean exec() {
+        System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks + " " + furnace);
+        if (!didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
+            BlockPos furnaceLocation = getUnusedFurnace();
+            if (furnaceLocation != null) {
+                if (LookManager.couldIReach(furnaceLocation)) {
+                    LookManager.lookAtBlock(furnaceLocation, true);
+                    if (furnaceLocation.equals(MineBot.whatAreYouLookingAt())) {
+                        furnace = furnaceLocation;
+                        MineBot.currentPath = null;
+                        MineBot.clearMovement();
                         MineBot.isRightClick = true;
+                    }
+                    return true;
+                } else {
+                    double dist = Math.sqrt(Memory.distSq(furnaceLocation));
+                    if (dist < 50) {
+                        MineBot.goal = new GoalBlock(furnaceLocation.up());
+                        if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
+                            MineBot.findPathInNewThread(false);
+                        }
+                        return true;
+                    } else {
+                        GuiScreen.sendChatMessage("too far away from closest furnace (" + dist + " blocks)");
                     }
                 }
             }
+            if (putFurnaceOnHotBar()) {
+                System.out.println("Ready to place!");
+                if (placeHeldBlockNearby()) {
+                    return true;
+                }
+                BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
+                if (MineBot.isAir(player.down()) || MineBot.isAir(player.up())) {
+                    GuiScreen.sendChatMessage("Placing down");
+                    LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
+                    MineBot.jumping = true;
+                    if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
+                        Minecraft.theMinecraft.rightClickMouse();
+                    }
+                    return true;
+                }
+                return true;
+            }
+            return false;
         }
         boolean guiOpen = Minecraft.theMinecraft.currentScreen != null && Minecraft.theMinecraft.currentScreen instanceof GuiFurnace;
+        boolean ret = false;
         if (guiOpen) {
             guiWaitTicks++;
             if (guiWaitTicks < 5) {
                 guiOpen = false;
+            }
+            if (!didIPutItInAlreadyPhrasing) {
+                if (furnace == null) {
+                    furnace = MineBot.whatAreYouLookingAt();
+                }
+                furnacesInUse.put(furnace, this);
+                ret = true;
             }
         } else {
             guiWaitTicks = 0;
@@ -149,23 +170,26 @@ public class SmeltingTask extends Manager {
         if (guiOpen) {
             GuiFurnace contain = (GuiFurnace) Minecraft.theMinecraft.currentScreen;
             if (!didIPutItInAlreadyPhrasing) {
-                if (realPutItIn_PHRASING(contain)) {
+                Boolean b = realPutItIn_PHRASING(contain);
+                if (b != null && b) {
                     didIPutItInAlreadyPhrasing = true;
-                    if (furnace == null) {
-                        furnace = MineBot.whatAreYouLookingAt();
-                    }
-                    knownFurnaces.add(furnace);
-                    furnacesInUse.put(furnace, this);
+                    ret = true;//done
+                }
+                if (b == null) {
+                    ret = true;//in progress
+                }
+                if (b != null && !b) {
+                    ret = false;
                 }
             }
             if (isItDone && furnace.equals(MineBot.whatAreYouLookingAt())) {//if we are done, and this is our furnace
                 GuiScreen.sendChatMessage("taking it out", true);
-                contain.shiftClick(2);//take out the output
                 if (isEmpty(contain, 2)) {//make sure
                     Minecraft.theMinecraft.thePlayer.closeScreen();//close the screen
                     inProgress.remove(this);//no longer an in progress smelting dask
                     GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
                 }
+                contain.shiftClick(2);//take out the output
             }
         }
         if (didIPutItInAlreadyPhrasing) {
@@ -180,6 +204,22 @@ public class SmeltingTask extends Manager {
                 GuiScreen.sendChatMessage("DUDE. Go to your furnace at " + furnace + " and pick up " + desired + ". Do /cancelfurnace if you want these notifications to piss off.", true);
             }
         }
+        return ret;
+    }
+    public static boolean putFurnaceOnHotBar() {//shamelessly copied from MickeyMine.torch()
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = inv[i];
+            if (inv[i] == null) {
+                continue;
+            }
+            if (Item.getByNameOrId("furnace").equals(item.getItem())) {
+                p.inventory.currentItem = i;
+                return true;
+            }
+        }
+        return false;
     }
     public boolean isInFurnace() {
         return didIPutItInAlreadyPhrasing;
@@ -187,9 +227,44 @@ public class SmeltingTask extends Manager {
     public boolean lookingForFurnace() {
         return furnace == null;
     }
-    private boolean realPutItIn_PHRASING(GuiFurnace contain) {
+    private ArrayList<int[]> plan;
+    int tickNumber = 0;
+    static int ticksBetweenClicks = 4;
+    public boolean tickPlan() {
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        if (tickNumber % ticksBetweenClicks == 0) {
+            int index = tickNumber / ticksBetweenClicks;
+            if (index >= plan.size()) {
+                GuiScreen.sendChatMessage("Plan over");
+                plan = null;
+                tickNumber = -40;
+                return true;
+            }
+            if (index >= 0) {
+                int[] click = plan.get(index);
+                GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + desired);
+                contain.sketchyMouseClick(click[0], click[1], click[2]);
+                System.out.println("Ticking plan");
+            }
+        }
+        tickNumber++;
+        return false;
+    }
+    private Boolean realPutItIn_PHRASING(GuiFurnace contain) {//null: in progress. false: unable. true: done
+        if (plan == null) {
+            if (!generatePlan(contain)) {
+                return false;
+            }
+            return null;
+        }
+        if (tickPlan()) {
+            return true;
+        }
+        return null;
+    }
+    private boolean generatePlan(GuiFurnace contain) {
         int desiredAmount = toPutInTheFurnace.stackSize;
-        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) == -1) {
+        if (currentSize1(contain, 0, toPutInTheFurnace.getItem()) == -1) {
             GuiScreen.sendChatMessage("Furnace already in use", true);
             return false;
         }
@@ -254,6 +329,17 @@ public class SmeltingTask extends Manager {
             }
         }
         GuiScreen.sendChatMessage("Using " + fuelAmt + " items of " + bestFuel + ", which wastes " + bestExtra + " ticks of fuel.", true);
+        int currFuelSize = 0;
+        if (currentSize1(contain, 1, bestFuel) == -1) {
+            GuiScreen.sendChatMessage("Furnace already in use", true);
+            return false;
+        }
+        if (currentSize1(contain, 0, toPutInTheFurnace.getItem()) == -1) {
+            GuiScreen.sendChatMessage("Furnace already in use", true);
+            return false;
+        }
+        plan = new ArrayList();
+        tickNumber = -5;
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -264,32 +350,28 @@ public class SmeltingTask extends Manager {
                 continue;
             }
             if (in.getItem().equals(bestFuel)) {
-                int currentSize = currentSize(contain, 1, bestFuel);
+                int currentSize = currFuelSize;
                 int amountHere = in.stackSize;
                 int amountNeeded = fuelAmt - currentSize;
-                if (currentSize == -1) {
-                    GuiScreen.sendChatMessage("Furnace already in use", true);
-                    return false;
-                }
-                contain.leftClick(i);
+                leftClick(i);
                 if (amountNeeded >= amountHere) {
-                    contain.leftClick(1);
+                    leftClick(1);
+                    currFuelSize += amountHere;
                 } else {
                     for (int j = 0; j < amountNeeded; j++) {
-                        contain.rightClick(1);
+                        rightClick(1);
                     }
-                }
-                contain.leftClick(i);
-                if (currentSize(contain, 1, bestFuel) >= fuelAmt) {
                     GuiScreen.sendChatMessage("done with fuel", true);
                     break;
                 }
+                leftClick(i);
             }
         }
-        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
+        if (currentSize1(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
             GuiScreen.sendChatMessage("done", true);
             return true;
         }
+        int currSmeltSize = 0;
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -300,34 +382,38 @@ public class SmeltingTask extends Manager {
                 continue;
             }
             if (in.getItem().equals(toPutInTheFurnace.getItem())) {
-                int currentSize = currentSize(contain, 0, toPutInTheFurnace.getItem());
                 int amountHere = in.stackSize;
-                int amountNeeded = desiredAmount - currentSize;
-                if (currentSize == -1) {
-                    GuiScreen.sendChatMessage("Furnace already in use", true);
-                    return false;
-                }
-                contain.leftClick(i);
+                int amountNeeded = desiredAmount - currSmeltSize;
+                leftClick(i);
                 if (amountNeeded >= amountHere) {
-                    contain.leftClick(0);
+                    leftClick(0);
+                    currSmeltSize += amountHere;
                 } else {
                     for (int j = 0; j < amountNeeded; j++) {
-                        contain.rightClick(0);
+                        rightClick(0);
                     }
+                    break;
                 }
-                contain.leftClick(i);
-                if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
-                    GuiScreen.sendChatMessage("done", true);
-                    return true;
-                }
+                leftClick(i);
             }
         }
-        if (currentSize(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
-            GuiScreen.sendChatMessage("done", true);
-            return true;
+        return true;
+    }
+    public void leftClick(int slot) {
+        if (!plan.isEmpty()) {
+            int[] last = plan.get(plan.size() - 1);
+            if (last[0] == slot && last[1] == 0 && last[2] == 0) {
+                plan.remove(plan.size() - 1);
+                return;
+            }
         }
-        GuiScreen.sendChatMessage("Still need " + (desiredAmount - currentSize(contain, 0, toPutInTheFurnace.getItem())) + " items", true);
-        return false;
+        plan.add(new int[]{slot, 0, 0});
+    }
+    public void rightClick(int slot) {
+        plan.add(new int[]{slot, 1, 0});
+    }
+    public void shiftClick(int slot) {
+        plan.add(new int[]{slot, 0, 1});
     }
     private static boolean isEmpty(GuiFurnace contain, int id) {
         Slot slot = contain.inventorySlots.inventorySlots.get(id);
@@ -336,7 +422,7 @@ public class SmeltingTask extends Manager {
         }
         return slot.getStack() == null;
     }
-    private static int currentSize(GuiFurnace contain, int id, Item item) {
+    private static int currentSize1(GuiFurnace contain, int id, Item item) {
         Slot slot = contain.inventorySlots.inventorySlots.get(id);
         if (!slot.getHasStack()) {
             return 0;

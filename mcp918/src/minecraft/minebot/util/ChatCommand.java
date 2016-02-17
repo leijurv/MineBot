@@ -157,15 +157,6 @@ public class ChatCommand {
         }
         return "k";
     }
-    public static String clearbh(String message) {
-        String substr = message.substring(7).trim();
-        if (substr.equals("crafting_table")) {
-            MineBot.setCraftingHome(null);
-        } else if (substr.equals("furnace")) {
-            return "WAIT ONE GODDAMN MINUTE IM NOT READY 4 THIS";
-        }
-        return "";
-    }
     public static String containeritem(String message) {
         CraftingTask.getRecipeFromItem(thePlayer().getCurrentEquippedItem().getItem());
         return "k";
@@ -233,7 +224,7 @@ public class ChatCommand {
     public static String cancel(String message) {
         MineBot.cancelPath();
         MineBot.plsCancel = true;
-        for(Class c : MineBot.managers){
+        for (Class c : MineBot.managers) {
             Manager.cancel(c);
         }
         return MineBot.isThereAnythingInProgress ? "Cancelled it, but btw I'm pathfinding right now" : "Cancelled it";

@@ -136,6 +136,9 @@ public class MineBot {
         for (Class c : managers) {
             Manager.tick(c);
         }
+        if (whatAreYouLookingAt() != null) {
+            Memory.scanBlock(whatAreYouLookingAt());
+        }
         if (currentBuilder != null) {
             currentBuilder.tick();
         }
@@ -249,7 +252,6 @@ public class MineBot {
     public static boolean left = false;
     public static boolean right = false;
     public static boolean sneak = false;
-    private static BlockPos craftingTable = null;
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -622,19 +624,6 @@ public class MineBot {
     }
     public static void onPlacedBlock(ItemStack itemStack, BlockPos blockPos) {
         Item item = itemStack.getItem();
-        if (craftingTable == null) {
-            if (item.equals(Item.getByNameOrId("minecraft:crafting_table"))) {
-                setCraftingHome(blockPos);
-            } else if (item.equals(Item.getByNameOrId("minecraft:furnace"))) {
-                SmeltingTask.onFurnacePlace(blockPos);
-            }
-        }
-    }
-    public static void setCraftingHome(BlockPos craftingHome) {
-        craftingTable = craftingHome;
-    }
-    public static BlockPos getCraftingHome() {
-        return craftingTable;
     }
     private static HashMap<Integer, Boolean> lockedKeys = new HashMap<Integer, Boolean>();
     public static Boolean isKeyLocked(int i) {
