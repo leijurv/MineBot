@@ -395,13 +395,13 @@ public class MineBot {
      * @param talkAboutIt
      */
     public static void findPathInNewThread(final BlockPos start, final boolean talkAboutIt) {
+        if (isThereAnythingInProgress) {
+            return;
+        }
+        isThereAnythingInProgress = true;
         new Thread() {
             @Override
             public void run() {
-                if (isThereAnythingInProgress) {
-                    return;
-                }
-                isThereAnythingInProgress = true;
                 if (talkAboutIt) {
                     GuiScreen.sendChatMessage("Starting to search for path from " + start + " to " + goal, true);
                 }
@@ -427,13 +427,13 @@ public class MineBot {
      * in the meantime).
      */
     public static void planAhead() {
+        if (isThereAnythingInProgress) {
+            return;
+        }
+        isThereAnythingInProgress = true;
         new Thread() {
             @Override
             public void run() {
-                if (isThereAnythingInProgress) {
-                    return;
-                }
-                isThereAnythingInProgress = true;
                 GuiScreen.sendChatMessage("Planning ahead", true);
                 calculatingNext = true;
                 Path path = findPath(currentPath.end);
