@@ -13,6 +13,7 @@ import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
 import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalTwoBlocks;
 import static minebot.util.CraftingTask.placeHeldBlockNearby;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -198,7 +199,21 @@ public class SmeltingTask extends Manager {
                 isItDone = true;
                 GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
                 furnacesInUse.put(furnace, null);
-                //todo: pathfind to furnace and take result out
+            }
+            if (isItDone) {
+                if (LookManager.couldIReach(furnace)) {
+                    MineBot.currentPath = null;
+                    MineBot.clearMovement();
+                    LookManager.lookAtBlock(furnace, true);
+                    if (furnace.equals(MineBot.whatAreYouLookingAt())) {
+                        Minecraft.theMinecraft.rightClickMouse();
+                    }
+                } else {
+                    MineBot.goal = new GoalTwoBlocks(furnace);
+                    if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
+                        MineBot.findPathInNewThread(false);
+                    }
+                }
             }
             if (isItDone && (numTicks - 1) % (60 * 20) == 0) {
                 GuiScreen.sendChatMessage("DUDE. Go to your furnace at " + furnace + " and pick up " + desired + ". Do /cancelfurnace if you want these notifications to piss off.", true);
@@ -235,10 +250,14 @@ public class SmeltingTask extends Manager {
         if (tickNumber % ticksBetweenClicks == 0) {
             int index = tickNumber / ticksBetweenClicks;
             if (index >= plan.size()) {
-                GuiScreen.sendChatMessage("Plan over");
-                plan = null;
-                tickNumber = -40;
-                return true;
+                if (index == plan.size() + 2) {
+                    GuiScreen.sendChatMessage("Plan over");
+                    plan = null;
+                    tickNumber = -40;
+                    Minecraft.theMinecraft.thePlayer.closeScreen();
+                    return true;
+                }
+                return false;
             }
             if (index >= 0) {
                 int[] click = plan.get(index);
