@@ -340,6 +340,33 @@ public class SmeltingTask extends Manager {
         }
         plan = new ArrayList();
         tickNumber = -5;
+        int currSmeltSize = 0;
+        for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
+            Slot slot = contain.inventorySlots.inventorySlots.get(i);
+            if (!slot.getHasStack()) {
+                continue;
+            }
+            ItemStack in = slot.getStack();
+            if (in == null) {
+                continue;
+            }
+            if (in.getItem().equals(toPutInTheFurnace.getItem())) {
+                int amountHere = in.stackSize;
+                int amountNeeded = desiredAmount - currSmeltSize;
+                leftClick(i);
+                if (amountNeeded >= amountHere) {
+                    leftClick(0);
+                    currSmeltSize += amountHere;
+                    leftClick(i);
+                } else {
+                    for (int j = 0; j < amountNeeded; j++) {
+                        rightClick(0);
+                    }
+                    leftClick(i);
+                    break;
+                }
+            }
+        }
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
             if (!slot.getHasStack()) {
@@ -364,37 +391,6 @@ public class SmeltingTask extends Manager {
                     }
                     leftClick(i);
                     GuiScreen.sendChatMessage("done with fuel", true);
-                    break;
-                }
-            }
-        }
-        if (currentSize1(contain, 0, toPutInTheFurnace.getItem()) >= desiredAmount) {
-            GuiScreen.sendChatMessage("done", true);
-            return true;
-        }
-        int currSmeltSize = 0;
-        for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
-            Slot slot = contain.inventorySlots.inventorySlots.get(i);
-            if (!slot.getHasStack()) {
-                continue;
-            }
-            ItemStack in = slot.getStack();
-            if (in == null) {
-                continue;
-            }
-            if (in.getItem().equals(toPutInTheFurnace.getItem())) {
-                int amountHere = in.stackSize;
-                int amountNeeded = desiredAmount - currSmeltSize;
-                leftClick(i);
-                if (amountNeeded >= amountHere) {
-                    leftClick(0);
-                    currSmeltSize += amountHere;
-                    leftClick(i);
-                } else {
-                    for (int j = 0; j < amountNeeded; j++) {
-                        rightClick(0);
-                    }
-                    leftClick(i);
                     break;
                 }
             }
