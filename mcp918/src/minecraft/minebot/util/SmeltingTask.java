@@ -114,6 +114,7 @@ public class SmeltingTask extends ManagerTick {
     }
     int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     int guiWaitTicks = 0;
+    int shiftWaitTicks = 0;
     private boolean exec() {
         System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks + " " + furnace);
         if (!didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
@@ -193,14 +194,21 @@ public class SmeltingTask extends ManagerTick {
                 }
             }
             if (isItDone && furnace.equals(MineBot.whatAreYouLookingAt())) {//if we are done, and this is our furnace
+                ret = true;
                 GuiScreen.sendChatMessage("taking it out", true);
                 if (isEmpty(contain, 2)) {//make sure
-                    Minecraft.theMinecraft.thePlayer.closeScreen();//close the screen
-                    inProgress.remove(this);//no longer an in progress smelting dask
-                    GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
-                    return false;
+                    if (shiftWaitTicks > 5) {
+                        Minecraft.theMinecraft.thePlayer.closeScreen();//close the screen
+                        inProgress.remove(this);//no longer an in progress smelting dask
+                        GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
+                        return false;
+                    }
+                } else {
+                    shiftWaitTicks = 0;
+                    if (numTicks % 5 == 0) {
+                        contain.shiftClick(2);//take out the output
+                    }
                 }
-                contain.shiftClick(2);//take out the output
             }
         }
         if (didIPutItInAlreadyPhrasing) {
