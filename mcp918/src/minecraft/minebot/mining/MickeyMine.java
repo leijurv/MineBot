@@ -135,7 +135,8 @@ public class MickeyMine extends ManagerTick {
     }
     public static void doBranchMine() {
         if (branchPosition == null) {
-            branchPosition = Minecraft.theMinecraft.thePlayer.getPosition0();
+            BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
+            branchPosition = new BlockPos(player.getX(), yLevel, player.getZ());
         }
         if (!branchPosition.equals(Minecraft.theMinecraft.thePlayer.getPosition0())) {
             GuiScreen.sendChatMessage("Should be at branch position " + branchPosition + " " + Minecraft.theMinecraft.thePlayer.getPosition0(), true);

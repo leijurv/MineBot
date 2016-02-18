@@ -674,6 +674,9 @@ public class CraftingTask extends ManagerTick {
         return stackSize <= alreadyHas;
     }
     public static boolean ensureCraftingDesired(Item item, int quantity) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
         //System.out.println(craftingTableTask.currentlyCrafting() + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
         if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity) {

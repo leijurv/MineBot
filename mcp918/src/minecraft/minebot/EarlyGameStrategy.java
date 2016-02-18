@@ -115,10 +115,31 @@ public class EarlyGameStrategy extends ManagerTick {
                 readyForMining = false;
             }
         }
+        int miningLevel = 36;
         if (readyForMining) {
+            int amtIron = 0;
             boolean ironPick = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_pickaxe"), 1);
-            boolean hasOre = countItem("iron_ore") >= 3;
-            if (!ironPick && hasOre && countItem("minecraft:iron_ingot") < 3) {//if we don't have a pick or enough ingots, and we have enough ore, do the smelting
+            if (ironPick) {
+                boolean ironSword = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_sword"), 1);
+                if (ironSword) {
+                    boolean ironHelmet = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_helmet"), 1);
+                    boolean ironChestplate = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_chestplate"), 1);
+                    boolean ironLeggings = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_leggings"), 1);
+                    boolean ironBoots = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_boots"), 1);
+                    if (ironHelmet && ironChestplate && ironLeggings && ironBoots) {
+                        miningLevel = 6;
+                    } else {
+                        amtIron = 24;
+                    }
+                } else {
+                    amtIron = 2;
+                }
+            } else {
+                amtIron = 3;
+            }
+            int currIron = countItem("minecraft:iron_ingot");
+            boolean hasOre = countItem("iron_ore") >= amtIron;
+            if (hasOre && currIron < amtIron) {
                 int tasksForIron = SmeltingTask.tasksFor(Item.getByNameOrId("iron_ingot"));
                 if (tasksForIron == 0) {
                     new SmeltingTask(new ItemStack(Item.getByNameOrId("iron_ingot"), Math.min(countItem("iron_ore"), 64))).begin();
@@ -128,7 +149,7 @@ public class EarlyGameStrategy extends ManagerTick {
         }
         MickeyMine instance = (MickeyMine) Manager.getManager(MickeyMine.class);
         if (readyForMining) {
-            MickeyMine.yLevel = 36;
+            MickeyMine.yLevel = miningLevel;
             if (!instance.enabled()) {
                 instance.toggle();
             }
