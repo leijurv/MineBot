@@ -129,7 +129,7 @@ public class EarlyGameStrategy extends ManagerTick {
                     if (ironHelmet && ironChestplate && ironLeggings && ironBoots) {
                         miningLevel = 6;
                     } else {
-                        amtIron = 24;
+                        amtIron = (ironHelmet ? 5 : 0) + (ironChestplate ? 8 : 0) + (ironLeggings ? 7 : 0) + (ironBoots ? 4 : 0);
                     }
                 } else {
                     amtIron = 2;
@@ -195,6 +195,7 @@ public class EarlyGameStrategy extends ManagerTick {
         MIN_WOOD_AMT = 1;
         gotDirt = false;
         cobble = false;
+        Combat.mobKilling = false;
     }
     @Override
     protected void onStart() {
@@ -203,5 +204,6 @@ public class EarlyGameStrategy extends ManagerTick {
         MIN_WOOD_AMT = 1;
         gotDirt = false;
         cobble = false;
+        Combat.mobKilling = true;
     }
 }
