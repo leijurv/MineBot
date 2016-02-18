@@ -147,6 +147,12 @@ public class EarlyGameStrategy extends ManagerTick {
                 readyForMining = false;
             }
         }
+        if (readyForMining) {
+            int numDiamonds = countItem("diamond");
+            if (numDiamonds >= 3) {
+                CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_pickaxe"), 1);
+            }
+        }
         MickeyMine instance = (MickeyMine) Manager.getManager(MickeyMine.class);
         if (readyForMining) {
             MickeyMine.yLevel = miningLevel;
