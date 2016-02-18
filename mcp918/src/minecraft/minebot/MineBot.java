@@ -211,6 +211,12 @@ public class MineBot {
         if (Minecraft.theMinecraft.currentScreen != null && (Minecraft.theMinecraft.currentScreen instanceof GuiCrafting || Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
             isLeftClick = false;
             leftPressTime = -5;
+            numTicksInInventoryOrCrafting++;
+            if (numTicksInInventoryOrCrafting > 20 * 20) {
+                Minecraft.theMinecraft.thePlayer.closeScreen();
+            }
+        } else {
+            numTicksInInventoryOrCrafting = 0;
         }
         if (isThereAnythingInProgress && Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
             if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
@@ -223,6 +229,7 @@ public class MineBot {
             Manager.tick(c, false);
         }
     }
+    static int numTicksInInventoryOrCrafting = 0;
     public static void openInventory() {
         GuiScreen.sendChatMessage("real open", true);
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
