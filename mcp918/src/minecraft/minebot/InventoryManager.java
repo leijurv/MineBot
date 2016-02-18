@@ -174,6 +174,9 @@ public class InventoryManager extends Manager {
         if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:crafting_table"))) {
             return;
         }
+        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:furnace"))) {
+            return;
+        }
         BlockPos look = MineBot.whatAreYouLookingAt();
         boolean doThrowAway = true;
         if (look != null) {

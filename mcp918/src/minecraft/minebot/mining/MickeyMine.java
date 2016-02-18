@@ -179,9 +179,9 @@ public class MickeyMine extends ManagerTick {
     }
     public static void addNearby() {
         BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
-        for (int x = playerFeet.getX() - 2; x <= playerFeet.getX() + 2; x++) {
-            for (int y = playerFeet.getY() - 1; y <= playerFeet.getY() + 2; y++) {
-                for (int z = playerFeet.getZ() - 2; z <= playerFeet.getZ() + 2; z++) {
+        for (int x = playerFeet.getX() - 4; x <= playerFeet.getX() + 4; x++) {
+            for (int y = playerFeet.getY() - 4; y <= playerFeet.getY() + 4; y++) {
+                for (int z = playerFeet.getZ() - 4; z <= playerFeet.getZ() + 4; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
                     if (isGoalBlock(pos)) {
                         if (LookManager.couldIReach(pos)) {
