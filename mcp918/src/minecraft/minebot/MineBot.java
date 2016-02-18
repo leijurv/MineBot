@@ -214,6 +214,7 @@ public class MineBot {
             numTicksInInventoryOrCrafting++;
             if (numTicksInInventoryOrCrafting > 20 * 20) {
                 Minecraft.theMinecraft.thePlayer.closeScreen();
+                numTicksInInventoryOrCrafting = 0;
             }
         } else {
             numTicksInInventoryOrCrafting = 0;
