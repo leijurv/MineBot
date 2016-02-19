@@ -16,6 +16,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemPickaxe;
@@ -28,7 +29,7 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class InventoryManager extends Manager {
+public class InventoryManager extends Manager {//TODO put on armor
     static HashMap<String, Integer> maximumAmounts = null;
     static HashMap<String, Integer> minimumAmounts = null;
     public static void initMax() {
@@ -352,6 +353,28 @@ public class InventoryManager extends Manager {
         }
         switchWithHotBar(foodPos, slot);
         return true;
+    }
+    public static int bestArmor(int type) {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        int bestInd = -1;
+        int bestDamageReduce = Integer.MIN_VALUE;
+        for (int i = 0; i < stacks.length; i++) {
+            ItemStack stack = stacks[i];
+            if (stack == null) {
+                continue;
+            }
+            Item item = stack.getItem();
+            if (item instanceof ItemArmor) {
+                ItemArmor armor = (ItemArmor) item;
+                if (armor.armorType == type) {
+                    if (armor.damageReduceAmount > bestDamageReduce) {
+                        bestDamageReduce = armor.damageReduceAmount;
+                        bestInd = i;
+                    }
+                }
+            }
+        }
+        return bestInd;
     }
     public static void switchWithHotBar(int slotNumber, int hotbarPosition) {
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
