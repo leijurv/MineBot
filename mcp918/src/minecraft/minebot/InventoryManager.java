@@ -147,6 +147,9 @@ public class InventoryManager extends Manager {//TODO put on armor
             openedInvYet = false;
             return;
         }
+        if (checkArmor()) {
+            return;
+        }
         Random random = new Random(Minecraft.theMinecraft.thePlayer.getName().hashCode());
         int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         randomize(slots, random);
@@ -354,6 +357,47 @@ public class InventoryManager extends Manager {//TODO put on armor
         switchWithHotBar(foodPos, slot);
         return true;
     }
+    public static boolean playerHasOpenSlot() {
+        ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
+        for (int i = 0; i < stacks.length; i++) {
+            if (stacks[i] == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean checkArmor() {
+        //helmet, inv container slot 5, armorType 0, armorInventory 3
+        //chestplate, inv container slot 6, armorType 1, armorInventory 2
+        //leggings, inv container slot 7, armorType 2, armorInventory 1
+        //boots, inv container slot 8, armorType 3, armorInventory 0
+        for (int i = 0; i < 4; i++) {
+            int betterInd = bestArmor(i);
+            if (betterInd == -1) {
+                continue;
+            }
+            if (!openedInvYet) {
+                MineBot.slowOpenInventory();
+                openedInvYet = true;
+            }
+            ItemStack currentArmor = Minecraft.theMinecraft.thePlayer.inventory.armorInventory[3 - i];
+            if (currentArmor != null) {
+                if (playerHasOpenSlot()) {
+                    shiftClick(i + 5);
+                    return true;
+                } else {
+                    dropOne(i + 5);//if we don't have space, drop the inferior armor
+                    return true;
+                }
+            }
+            if (betterInd < 9) {
+                betterInd += 36;
+            }
+            shiftClick(betterInd);
+            return true;
+        }
+        return false;
+    }
     public static int bestArmor(int type) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int bestInd = -1;
@@ -374,6 +418,16 @@ public class InventoryManager extends Manager {//TODO put on armor
                 }
             }
         }
+        ItemStack currentlyInSlot = Minecraft.theMinecraft.thePlayer.inventory.armorInventory[3 - type];
+        if (currentlyInSlot != null) {
+            ItemArmor armor = (ItemArmor) currentlyInSlot.getItem();
+            if (armor.armorType != type) {
+                throw new IllegalStateException(currentlyInSlot + " should be " + type + ", is " + armor.armorType);
+            }
+            if (armor.damageReduceAmount >= bestDamageReduce) {
+                return -1;//if we are already wearing better armor, pretend there is no good armor of this type in main inv
+            }
+        }
         return bestInd;
     }
     public static void switchWithHotBar(int slotNumber, int hotbarPosition) {
@@ -387,6 +441,10 @@ public class InventoryManager extends Manager {//TODO put on armor
     public static void dropOne(int slotNumber) {
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         contain.sketchyMouseClick(slotNumber, 0, 4);
+    }
+    public static void shiftClick(int slotNumber) {
+        GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
+        contain.shiftClick(slotNumber);
     }
     @Override
     protected void onCancel() {
