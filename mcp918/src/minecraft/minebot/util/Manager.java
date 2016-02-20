@@ -60,8 +60,10 @@ public abstract class Manager {
     public static Manager createInstance(Class c) {
         try {
             return (Manager) c.newInstance();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage());
+        } catch (InstantiationException ex) {
+            throw new RuntimeException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
         }
     }
     public final void tick() {

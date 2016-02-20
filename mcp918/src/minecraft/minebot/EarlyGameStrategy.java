@@ -18,11 +18,33 @@ import net.minecraft.item.ItemStack;
 /**
  * goals:
  *
+ * get dirt
+ *
  * get wood
  *
  * make a crafting table
  *
  * make a wooden pickaxe
+ *
+ * get stone
+ *
+ * make a stone pickaxe
+ *
+ * get more stone
+ *
+ * make stone tools and a furnace
+ *
+ * go mining at level 36
+ *
+ * craft torches
+ *
+ * smelt iron
+ *
+ * make iron pick and iron armor and an iron sword
+ *
+ * change mining level to 6
+ *
+ * craft a diamond pickaxe
  *
  * @author leijurv
  */
@@ -129,7 +151,7 @@ public class EarlyGameStrategy extends ManagerTick {
                     if (ironHelmet && ironChestplate && ironLeggings && ironBoots) {
                         miningLevel = 6;
                     } else {
-                        amtIron = (ironHelmet ? 5 : 0) + (ironChestplate ? 8 : 0) + (ironLeggings ? 7 : 0) + (ironBoots ? 4 : 0);
+                        amtIron = (!ironHelmet ? 5 : 0) + (!ironChestplate ? 8 : 0) + (!ironLeggings ? 7 : 0) + (!ironBoots ? 4 : 0);
                     }
                 } else {
                     amtIron = 2;
@@ -138,10 +160,11 @@ public class EarlyGameStrategy extends ManagerTick {
                 amtIron = 3;
             }
             int currIron = countItem("minecraft:iron_ingot");
-            boolean hasOre = countItem("iron_ore") >= amtIron;
+            boolean hasOre = countItem("iron_ore") >= amtIron - currIron;
             if (hasOre && currIron < amtIron) {
                 int tasksForIron = SmeltingTask.tasksFor(Item.getByNameOrId("iron_ingot"));
-                if (tasksForIron == 0) {
+                int newTask = amtIron - currIron - tasksForIron;
+                if (newTask > 0) {
                     new SmeltingTask(new ItemStack(Item.getByNameOrId("iron_ingot"), Math.min(countItem("iron_ore"), 64))).begin();
                 }
                 readyForMining = false;

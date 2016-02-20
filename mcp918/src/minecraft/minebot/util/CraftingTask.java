@@ -6,8 +6,6 @@
 package minebot.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import minebot.LookManager;
 import minebot.Memory;
@@ -30,7 +28,6 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 
 /**
  *
@@ -214,6 +211,7 @@ public class CraftingTask extends ManagerTick {
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby
         if (putCraftingTableOnHotBar()) {
+            MickeyMine.tempDisable = true;
             findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             System.out.println("Ready to place!");
             if (placeHeldBlockNearby()) {
@@ -224,6 +222,7 @@ public class CraftingTask extends ManagerTick {
                 GuiScreen.sendChatMessage("Placing down");
                 LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
                 MineBot.jumping = true;
+                MineBot.sneak = true;
                 if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
                     Minecraft.theMinecraft.rightClickMouse();
                 }
@@ -262,10 +261,11 @@ public class CraftingTask extends ManagerTick {
                             BlockPos placeAgainst = pos.offset(f);
                             if (!MineBot.isAir(placeAgainst) && Minecraft.theMinecraft.theWorld.getBlockState(placeAgainst).getBlock().isBlockNormalCube()) {
                                 if (LookManager.couldIReach(placeAgainst, pos)) {
+                                    MineBot.sneak = true;
                                     double faceX = (pos.getX() + placeAgainst.getX() + 1.0D) * 0.5D;
                                     double faceY = (pos.getY() + placeAgainst.getY()) * 0.5D;
                                     double faceZ = (pos.getZ() + placeAgainst.getZ() + 1.0D) * 0.5D;
-                                    if (LookManager.lookAtCoords(faceX, faceY, faceZ, true)) {
+                                    if (LookManager.lookAtCoords(faceX, faceY, faceZ, true) && Minecraft.theMinecraft.thePlayer.isSneaking()) {
                                         Minecraft.theMinecraft.rightClickMouse();
                                     }
                                     return true;
@@ -323,6 +323,7 @@ public class CraftingTask extends ManagerTick {
      *
      * @param outputQuantity
      * @param inInventory
+     * @param justChecking
      * @return true if it was able to craft and did, null if it was unable to
      * craft because of a lack of input items, false for anything else
      * (including being unable to craft for other reasons)
@@ -330,7 +331,7 @@ public class CraftingTask extends ManagerTick {
     public Boolean actualDoCraft(int outputQuantity, boolean inInventory, boolean justChecking) {
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         int outputVolume = currentRecipe.getRecipeOutput().stackSize;
-        int inputQuantity = (int) Math.ceil(((double) outputQuantity) / ((double) outputVolume));
+        int inputQuantity = (int) Math.ceil(((double) outputQuantity) / (outputVolume));
         if (currentRecipe instanceof ShapedRecipes) {
             ShapedRecipes shaped = (ShapedRecipes) currentRecipe;
             if (!inInventory || (inInventory && shaped.recipeHeight <= 2 && shaped.recipeWidth <= 2)) {
@@ -374,6 +375,7 @@ public class CraftingTask extends ManagerTick {
      * @param positions
      * @param amount
      * @param inv
+     * @param justChecking
      * @return true if it was able to craft and did, null if it was unable to
      * craft because of a lack of input items, false for anything else
      * (including being unable to craft for other reasons)
@@ -384,8 +386,7 @@ public class CraftingTask extends ManagerTick {
             amounts[i] = amount;
         }
         int[] count = new int[items.length];
-        for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.mainInventory.length; i++) {
-            ItemStack in = Minecraft.theMinecraft.thePlayer.inventory.mainInventory[i];
+        for (ItemStack in : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
             if (in == null) {
                 continue;
             }
@@ -496,6 +497,7 @@ public class CraftingTask extends ManagerTick {
     static boolean didIOpenMyInventory = false;
     static boolean waitingToClose = false;
     static int TUC = 20;
+    @Override
     protected boolean onTick0() {
         MineBot.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
@@ -587,8 +589,8 @@ public class CraftingTask extends ManagerTick {
         stackSize += amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         int outputVolume = currentRecipe.getRecipeOutput().stackSize;
-        int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
-        int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
+        int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / outputVolume);
+        int inputQuantityNew = (int) Math.ceil(((double) stackSize) / outputVolume);
         int change = inputQuantityNew - inputQuantityBefore;
         if (change != 0) {
             /*for (CraftingTask craftingTask : subCraftingTasks) {
@@ -605,8 +607,8 @@ public class CraftingTask extends ManagerTick {
         stackSize -= amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
         int outputVolume = currentRecipe.getRecipeOutput().stackSize;
-        int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / ((double) outputVolume));
-        int inputQuantityNew = (int) Math.ceil(((double) stackSize) / ((double) outputVolume));
+        int inputQuantityBefore = (int) Math.ceil(((double) stackSizeBefore) / (outputVolume));
+        int inputQuantityNew = (int) Math.ceil(((double) stackSize) / outputVolume);
         int change = inputQuantityBefore - inputQuantityNew;
         if (change != 0) {
             /*for (CraftingTask craftingTask : subCraftingTasks) {
@@ -617,45 +619,16 @@ public class CraftingTask extends ManagerTick {
             }
         }
     }
-    public static HashMap<Item, ArrayList<Tuple<Integer, Integer>>> getCurrentRecipeItems(IRecipe recipe) {
-        HashMap<Item, ArrayList<Tuple<Integer, Integer>>> amountHasAndWhere = new HashMap();
-        ArrayList<ItemStack> needsItemStackstmp = null;
-        if (recipe instanceof ShapedRecipes) {
-            ShapedRecipes shapedRecipe = (ShapedRecipes) recipe;
-            needsItemStackstmp = new ArrayList<ItemStack>(Arrays.asList(shapedRecipe.recipeItems));
-        } else if (recipe instanceof ShapelessRecipes) {
-            ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
-            needsItemStackstmp = new ArrayList<ItemStack>(shapelessRecipe.recipeItems);
-        } else {
-            throw new IllegalStateException("recipe was not shaped or shapeless");
-        }
-        ArrayList<Item> needsItemStacks = new ArrayList();
-        for (ItemStack stack : needsItemStackstmp) {
-            Item item = stack.getItem();
-            if (!needsItemStacks.contains(item)) {
-                needsItemStacks.add(item);
-            }
-        }
-        for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {
-            for (int j = 0; j < needsItemStacks.size(); j++) {
-                if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i) == null) {
-                    continue;//prevents nullpointerexception if the stack is null
-                }
-                if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).getItem().equals(needsItemStacks.get(j))) {
-                    if (!amountHasAndWhere.containsKey(needsItemStacks.get(j))) {
-                        ArrayList<Tuple<Integer, Integer>> positionAmountArr = new ArrayList<Tuple<Integer, Integer>>();
-                        positionAmountArr.add(new Tuple(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).stackSize, i));
-                        amountHasAndWhere.put(needsItemStacks.get(j), positionAmountArr);
-                    } else {
-                        amountHasAndWhere.get(needsItemStacks.get(j)).add(new Tuple(Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i).stackSize, i));
-                    }
-                }
-            }
-        }
-        return amountHasAndWhere;
-    }
     public void calculateAlreadyHasAmount() {
         int count = 0;
+        for (ItemStack armor : Minecraft.theMinecraft.thePlayer.inventory.armorInventory) {
+            if (armor == null) {
+                continue;
+            }
+            if (currentlyCrafting.equals(armor.getItem())) {
+                count += armor.stackSize;
+            }
+        }
         for (int i = 0; i < Minecraft.theMinecraft.thePlayer.inventory.getSizeInventory(); i++) {
             if (Minecraft.theMinecraft.thePlayer.inventory.getStackInSlot(i) == null) {
                 continue;

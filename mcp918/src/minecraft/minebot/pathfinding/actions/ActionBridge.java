@@ -26,16 +26,20 @@ public class ActionBridge extends ActionPlaceOrBreak {
         super(from, to, new BlockPos[]{to.up(), to}, new BlockPos[]{to.down()});
         int i = 0;
         if (!to.north().equals(from)) {
-            against[i++] = to.north().down();
+            against[i] = to.north().down();
+            i++;
         }
         if (!to.south().equals(from)) {
-            against[i++] = to.south().down();
+            against[i] = to.south().down();
+            i++;
         }
         if (!to.east().equals(from)) {
-            against[i++] = to.east().down();
+            against[i] = to.east().down();
+            i++;
         }
         if (!to.west().equals(from)) {
-            against[i++] = to.west().down();
+            against[i] = to.west().down();
+            i++;
         }
         //note: do NOT add ability to place against .down().down()
     }
@@ -53,8 +57,8 @@ public class ActionBridge extends ActionPlaceOrBreak {
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
             if (blocksToPlace[0].equals(Block.getBlockById(0)) || (!isWater(blocksToPlace[0]) && blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0]))) {
-                for (int i = 0; i < against.length; i++) {
-                    if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
+                for (BlockPos against1 : against) {
+                    if (Minecraft.theMinecraft.theWorld.getBlockState(against1).getBlock().isBlockNormalCube()) {
                         return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                     }
                 }
@@ -113,19 +117,20 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return false;//not there yet
         } else {
             wasTheBridgeBlockAlwaysThere = false;
-            for (int i = 0; i < against.length; i++) {
-                if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
+            for (BlockPos against1 : against) {
+                if (Minecraft.theMinecraft.theWorld.getBlockState(against1).getBlock().isBlockNormalCube()) {
                     if (!switchtothrowaway(true)) {//get ready to place a throwaway block
                         return false;
                     }
-                    double faceX = (to.getX() + against[i].getX() + 1.0D) * 0.5D;
-                    double faceY = (to.getY() + against[i].getY()) * 0.5D;
-                    double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
+                    MineBot.sneak = true;
+                    double faceX = (to.getX() + against1.getX() + 1.0D) * 0.5D;
+                    double faceY = (to.getY() + against1.getY()) * 0.5D;
+                    double faceZ = (to.getZ() + against1.getZ() + 1.0D) * 0.5D;
                     LookManager.lookAtCoords(faceX, faceY, faceZ, true);
-                    if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i])) {
+                    if (Objects.equals(MineBot.whatAreYouLookingAt(), against1) && Minecraft.theMinecraft.thePlayer.isSneaking()) {
                         Minecraft.theMinecraft.rightClickMouse();
                     }
-                    System.out.println("Trying to look at " + against[i] + ", actually looking at" + MineBot.whatAreYouLookingAt());
+                    System.out.println("Trying to look at " + against1 + ", actually looking at" + MineBot.whatAreYouLookingAt());
                     return false;
                 }
             }

@@ -16,6 +16,9 @@ import net.minecraft.util.BlockPos;
 /**
  *
  * @author avecowa
+ * @author leijurv
+ *
+ * =P
  */
 public class BlockPuncher {
     public static boolean setGoalTo(String... block) {

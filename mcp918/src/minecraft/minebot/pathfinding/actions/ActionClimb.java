@@ -56,8 +56,8 @@ public class ActionClimb extends ActionPlaceOrBreak {
             if (!MineBot.isAir(positionsToPlace[0])) {
                 return PathFinder.COST_INF;
             }
-            for (int i = 0; i < against.length; i++) {
-                if (Minecraft.theMinecraft.theWorld.getBlockState(against[i]).getBlock().isBlockNormalCube()) {
+            for (BlockPos against1 : against) {
+                if (Minecraft.theMinecraft.theWorld.getBlockState(against1).getBlock().isBlockNormalCube()) {
                     return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                 }
             }
@@ -80,12 +80,13 @@ public class ActionClimb extends ActionPlaceOrBreak {
                     double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
                     LookManager.lookAtCoords(faceX, faceY, faceZ, true);
                     EnumFacing side = Minecraft.theMinecraft.objectMouseOver.sideHit;
-                    GuiScreen.sendChatMessage("Placing against " + against[i] + " facing " + side + " " + face[i]);
                     if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i]) && side.getOpposite() == face[i]) {
                         ticksWithoutPlacement++;
-                        Minecraft.theMinecraft.rightClickMouse();
+                        MineBot.sneak = true;
+                        if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
+                            Minecraft.theMinecraft.rightClickMouse();
+                        }
                         if (ticksWithoutPlacement > 20) {
-                            MineBot.sneak = true;
                             MineBot.backward = true;//we might be standing in the way, move back
                         }
                     }

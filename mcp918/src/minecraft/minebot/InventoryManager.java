@@ -29,7 +29,7 @@ import net.minecraft.util.BlockPos;
  *
  * @author leijurv
  */
-public class InventoryManager extends Manager {//TODO put on armor
+public class InventoryManager extends Manager {
     static HashMap<String, Integer> maximumAmounts = null;
     static HashMap<String, Integer> minimumAmounts = null;
     public static void initMax() {
@@ -37,7 +37,7 @@ public class InventoryManager extends Manager {//TODO put on armor
         minimumAmounts = new HashMap();
         addBounds("cobblestone", 128, 64);
         addBounds("coal", 128, 64);
-        addBounds("redstone", 64, 32);
+        //addBounds("redstone", 0, 0);//no one wants stinking redstone
         addBounds("stone", 64, 32);
         addBounds("dirt", 128, 64);
     }
@@ -136,6 +136,7 @@ public class InventoryManager extends Manager {//TODO put on armor
             array[j] = tmp;
         }
     }
+    @Override
     protected void onTick() {
         if (maximumAmounts == null) {
             initMax();
@@ -153,32 +154,31 @@ public class InventoryManager extends Manager {//TODO put on armor
         Random random = new Random(Minecraft.theMinecraft.thePlayer.getName().hashCode());
         int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         randomize(slots, random);
-        int ind = 0;
-        if (place(slots[ind++], Block.getBlockFromName("stone"), ItemPickaxe.class)) {
+        if (place(slots[0], Block.getBlockFromName("stone"), ItemPickaxe.class)) {
             return;
         }
-        if (placeSword(slots[ind++])) {
+        if (placeSword(slots[1])) {
             return;
         }
-        if (placeFood(slots[ind++])) {
+        if (placeFood(slots[2])) {
             return;
         }
-        if (place(slots[ind++], Block.getBlockFromName("log"), ItemAxe.class)) {
+        if (place(slots[3], Block.getBlockFromName("log"), ItemAxe.class)) {
             return;
         }
-        if (place(slots[ind++], Block.getBlockFromName("dirt"), ItemSpade.class)) {
+        if (place(slots[4], Block.getBlockFromName("dirt"), ItemSpade.class)) {
             return;
         }
-        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
+        if (putItemInSlot(slots[5], Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
             return;
         }
-        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:torch"))) {
+        if (putItemInSlot(slots[6], Item.getByNameOrId("minecraft:torch"))) {
             return;
         }
-        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:crafting_table"))) {
+        if (putItemInSlot(slots[7], Item.getByNameOrId("minecraft:crafting_table"))) {
             return;
         }
-        if (putItemInSlot(slots[ind++], Item.getByNameOrId("minecraft:furnace"))) {
+        if (putItemInSlot(slots[8], Item.getByNameOrId("minecraft:furnace"))) {
             return;
         }
         BlockPos look = MineBot.whatAreYouLookingAt();
@@ -201,7 +201,7 @@ public class InventoryManager extends Manager {//TODO put on armor
             }
             //System.out.println(amounts.get(item));
             int toThrowAway = amounts.get(item) > maximumAmounts.get(itemName) ? amounts.get(item) - minimumAmounts.get(itemName) : 0;
-            if (amounts.get(item) < minimumAmounts.get(itemName)) {
+            if (amounts.get(item) <= minimumAmounts.get(itemName)) {
                 MickeyMine.notifyFullness(itemName, false);
             }
             if (amounts.get(item) > ((minimumAmounts.get(itemName) + maximumAmounts.get(itemName)) / 2)) {
@@ -359,8 +359,8 @@ public class InventoryManager extends Manager {//TODO put on armor
     }
     public static boolean playerHasOpenSlot() {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
-        for (int i = 0; i < stacks.length; i++) {
-            if (stacks[i] == null) {
+        for (ItemStack stack : stacks) {
+            if (stack == null) {
                 return true;
             }
         }

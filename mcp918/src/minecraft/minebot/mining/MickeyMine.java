@@ -43,8 +43,8 @@ public class MickeyMine extends ManagerTick {
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
     static ArrayList<Tuple<Integer, Integer>> chunkHasDiamonds = new ArrayList<Tuple<Integer, Integer>>();
     static BlockPos branchPosition = null;
-    static final String[] ores = {"diamond", "iron", "coal", "gold", "redstone", "emerald", "lit_redstone"};
-    static final boolean[] enabled = {true, true, false, true, true, true, true};
+    static final String[] ores = {"diamond", "iron", "coal", "gold", "emerald"};
+    static final boolean[] enabled = {true, true, false, true, true};
     static boolean mightNeedToGoBackToPath = false;
     public static void notifyFullness(String item, boolean isFull) {
         if (item.equals("stone")) {

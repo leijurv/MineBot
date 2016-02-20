@@ -160,6 +160,14 @@ public class Memory extends Manager {
             scanThread = new Thread() {
                 @Override
                 public void run() {
+                    try {
+                        run1();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Memory.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    scanThread = null;
+                }
+                public void run1() {
                     GuiScreen.sendChatMessage("Starting passive block scan thread", true);
                     try {
                         Thread.sleep(2000);
@@ -168,14 +176,13 @@ public class Memory extends Manager {
                         return;
                     }
                     while (true) {
-                        if (Minecraft.theMinecraft == null || Minecraft.theMinecraft.thePlayer == null || Minecraft.theMinecraft.theWorld == null) {
-                            return;
+                        if (Minecraft.theMinecraft != null && Minecraft.theMinecraft.thePlayer != null && Minecraft.theMinecraft.theWorld != null) {
+                            //GuiScreen.sendChatMessage("Beginning passive block scan", true);
+                            long start = System.currentTimeMillis();
+                            scan();
+                            long end = System.currentTimeMillis();
+                            //GuiScreen.sendChatMessage("Passive block scan over after " + (end - start) + "ms", true);
                         }
-                        //GuiScreen.sendChatMessage("Beginning passive block scan", true);
-                        long start = System.currentTimeMillis();
-                        scan();
-                        long end = System.currentTimeMillis();
-                        //GuiScreen.sendChatMessage("Passive block scan over after " + (end - start) + "ms", true);
                         try {
                             Thread.sleep(10000);
                         } catch (InterruptedException ex) {

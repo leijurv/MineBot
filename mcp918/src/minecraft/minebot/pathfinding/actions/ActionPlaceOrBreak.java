@@ -12,6 +12,7 @@ import java.util.List;
 import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
+import minebot.util.SmeltingTask;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
@@ -50,12 +51,12 @@ public abstract class ActionPlaceOrBreak extends Action {
     public double getTotalHardnessOfBlocksToBreak(ToolSet ts) {
         double sum = 0;
         HashSet<BlockPos> toBreak = new HashSet();
-        for (int i = 0; i < positionsToBreak.length; i++) {
-            toBreak.add(positionsToBreak[i]);
+        for (BlockPos positionsToBreak1 : positionsToBreak) {
+            toBreak.add(positionsToBreak1);
             if (this instanceof ActionFall) {
                 continue;
             }
-            BlockPos tmp = positionsToBreak[i].up();
+            BlockPos tmp = positionsToBreak1.up();
             while (canFall(tmp)) {
                 toBreak.add(tmp);
                 tmp = tmp.up();
@@ -85,6 +86,9 @@ public abstract class ActionPlaceOrBreak extends Action {
                 return PathFinder.COST_INF;
             }
             if (!MineBot.allowBreakOrPlace) {
+                return PathFinder.COST_INF;
+            }
+            if (SmeltingTask.avoidBreaking(position)) {
                 return PathFinder.COST_INF;
             }
             double m = Block.getBlockFromName("minecraft:crafting_table").equals(block) ? 10 : 1;
@@ -130,8 +134,8 @@ public abstract class ActionPlaceOrBreak extends Action {
             }
         }
         MineBot.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
-        for (int i = 0; i < positionsToPlace.length; i++) {
-            if (!canWalkOn(positionsToPlace[i])) {
+        for (BlockPos positionsToPlace1 : positionsToPlace) {
+            if (!canWalkOn(positionsToPlace1)) {
                 if (!MineBot.allowBreakOrPlace) {
                     GuiScreen.sendChatMessage("BB I can't place this =(((", true);
                     return false;

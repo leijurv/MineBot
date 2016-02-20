@@ -61,7 +61,6 @@ public class Combat extends ManagerTick {
                 return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
             }
         });
-        //System.out.println(mobs);
         if (!mobs.isEmpty()) {
             Entity entity = mobs.get(0);
             AxisAlignedBB lol = entity.getEntityBoundingBox();
@@ -190,11 +189,7 @@ public class Combat extends ManagerTick {
         }
         BlockPos inFeet = new BlockPos(player.posX, player.posY, player.posZ);
         BlockPos standingOn = inFeet.down();
-        if (isAir(standingOn) && isAir(standingOn.north()) && isAir(standingOn.south()) && isAir(standingOn.east()) && isAir(standingOn.west()) && isAir(standingOn.north().west()) && isAir(standingOn.north().east()) && isAir(standingOn.south().west()) && isAir(standingOn.south().east())) {
-            //if the block they are standing on, and every block touching it, are all air, they are probably flying
-            return true;
-        }
-        return false;
+        return isAir(standingOn) && isAir(standingOn.north()) && isAir(standingOn.south()) && isAir(standingOn.east()) && isAir(standingOn.west()) && isAir(standingOn.north().west()) && isAir(standingOn.north().east()) && isAir(standingOn.south().west()) && isAir(standingOn.south().east());
     }
     public static double dist(BlockPos a, BlockPos b) {
         int diffX = a.getX() - b.getX();

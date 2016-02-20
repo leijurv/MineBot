@@ -49,7 +49,6 @@ public class FoodManager extends ManagerTick {
             }
         }
         if (slotForFood != -1) {
-            //System.out.println("Switching to slot " + slotForFood + " and right clicking");
             MineBot.clearMovement();
             p.inventory.currentItem = slotForFood;
             sneak = true;

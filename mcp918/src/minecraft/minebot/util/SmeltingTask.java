@@ -16,6 +16,7 @@ import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import static minebot.util.CraftingTask.placeHeldBlockNearby;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -35,6 +36,9 @@ import net.minecraft.util.BlockPos;
 public class SmeltingTask extends ManagerTick {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
+    public static boolean avoidBreaking(BlockPos pos) {
+        return furnacesInUse.containsKey(pos);
+    }
     public static Manager createInstance(Class c) {
         return new SmeltingTask();
     }
@@ -64,7 +68,8 @@ public class SmeltingTask extends ManagerTick {
     public static void clearInProgress() {
         for (int i = 0; i < inProgress.size(); i++) {
             if (inProgress.get(i).isItDone) {
-                inProgress.remove(i--);
+                inProgress.remove(i);
+                i--;
             }
         }
     }
@@ -215,6 +220,14 @@ public class SmeltingTask extends ManagerTick {
         }
         if (didIPutItInAlreadyPhrasing) {
             numTicks++;
+            if (Memory.blockLoaded(furnace)) {
+                Block curr = Minecraft.theMinecraft.theWorld.getBlockState(furnace).getBlock();
+                if (!Block.getBlockFromName("furnace").equals(curr) && !Block.getBlockFromName("lit_furnace").equals(curr)) {
+                    GuiScreen.sendChatMessage("Furnace at " + furnace + " is now gone. RIP. Was trying to make " + desired + ". Is now " + curr);
+                    inProgress.remove(this);
+                    return false;
+                }
+            }
             if (!isItDone && numTicks >= burnTicks) {
                 isItDone = true;
                 GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
@@ -335,7 +348,7 @@ public class SmeltingTask extends ManagerTick {
                 burnableItems.add(in.getItem());
                 amountWeHave.add(in.stackSize);
                 burnTimes.add(time);
-                int numRequired = (int) Math.ceil(((double) burnTicks) / ((double) time));
+                int numRequired = (int) Math.ceil(((double) burnTicks) / (time));
                 amtNeeded.add(numRequired);
             } else {
                 amountWeHave.set(ind, amountWeHave.get(ind) + in.stackSize);
@@ -484,7 +497,7 @@ public class SmeltingTask extends ManagerTick {
             if (output.getItem().equals(desired.getItem())) {
                 int desiredQuantity = desired.stackSize;
                 int outputQuantity = output.stackSize;
-                int totalQuantity = (int) Math.ceil(((double) desiredQuantity) / ((double) outputQuantity));
+                int totalQuantity = (int) Math.ceil(((double) desiredQuantity) / (outputQuantity));
                 int inputQuantity = input.stackSize * totalQuantity;
                 System.out.println("Recipe from " + input + " to " + output + " " + desiredQuantity + " " + outputQuantity + " " + totalQuantity + " " + inputQuantity);
                 if (inputQuantity > 64) {

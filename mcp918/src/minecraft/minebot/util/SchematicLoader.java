@@ -9,15 +9,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.block.Block;
@@ -31,35 +24,31 @@ import net.minecraft.util.BlockPos;
  * @author galdara
  */
 public class SchematicLoader {
-    
     public static File schematicDir;
-    private static HashMap<File, Schematic> cachedSchematics = new HashMap<File, Schematic>();
-    
+    private static final HashMap<File, Schematic> cachedSchematics = new HashMap<File, Schematic>();
     private SchematicLoader() {
-         schematicDir = new File(Minecraft.theMinecraft.mcDataDir, "schematics");
-         schematicDir.mkdir();
-         for(File file : schematicDir.listFiles(new FileFilter() {
-             @Override
-             public boolean accept(File pathname) {
-                 return pathname.getName().endsWith(".schematic");
-             }
-         })) {
-             try {
-                 cachedSchematics.put(file, loadFromFile(file));
-             } catch (IOException ex) {
-                 Logger.getLogger(SchematicLoader.class.getName()).log(Level.SEVERE, null, ex);
-             }
-         }
-         
+        schematicDir = new File(Minecraft.theMinecraft.mcDataDir, "schematics");
+        schematicDir.mkdir();
+        for (File file : schematicDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().endsWith(".schematic");
+            }
+        })) {
+            try {
+                cachedSchematics.put(file, loadFromFile(file));
+            } catch (IOException ex) {
+                Logger.getLogger(SchematicLoader.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
-    
     public static SchematicLoader getLoader() {
         return new SchematicLoader();
     }
-    
-    public Schematic loadFromFile(File nbtFile) throws FileNotFoundException, IOException {
-        if(cachedSchematics.containsKey(nbtFile))
+    public final Schematic loadFromFile(File nbtFile) throws FileNotFoundException, IOException {
+        if (cachedSchematics.containsKey(nbtFile)) {
             return cachedSchematics.get(nbtFile);
+        }
         FileInputStream fileInputStream = new FileInputStream(nbtFile);
         NBTTagCompound compound = CompressedStreamTools.readCompressed(fileInputStream);
         System.out.print(compound);
@@ -67,13 +56,12 @@ public class SchematicLoader {
         height = compound.getInteger("Height");
         width = compound.getInteger("Width");
         length = compound.getInteger("Length");
-        byte[][][] blocks  = new byte[width][height][length], data = new byte[width][height][length];
+        byte[][][] blocks = new byte[width][height][length], data = new byte[width][height][length];
         byte[] rawBlocks = compound.getByteArray("Blocks");
-        byte[] rawData = compound.getByteArray("Data");
         HashMap<BlockPos, Block> blocksMap = new HashMap<BlockPos, Block>();
-        for(int y = 0; y < height; y++) {
-            for(int z = 0; z < length; z++) {
-                for(int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int z = 0; z < length; z++) {
+                for (int x = 0; x < width; x++) {
                     int index = y * width * length + z * width + x;
                     blocks[x][y][z] = rawBlocks[index];
                     blocksMap.put(new BlockPos(x, y, z), Block.getBlockById(rawBlocks[index]));
@@ -85,5 +73,4 @@ public class SchematicLoader {
         cachedSchematics.put(nbtFile, schematic);
         return schematic;
     }
-   
 }
