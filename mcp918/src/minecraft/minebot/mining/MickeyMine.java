@@ -269,6 +269,7 @@ public class MickeyMine extends ManagerTick {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
+                ticksSinceBlockMined = 0;
             }
         }
         for (BlockPos needsRemoval : shouldBeRemoved) {
