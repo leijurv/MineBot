@@ -168,6 +168,10 @@ public class MickeyMine extends ManagerTick {
         i--;
         GuiScreen.sendChatMessage("Branch distance " + i, true);
         BlockPos futureBranchPosition = branchPosition.offset(miningFacing, i);
+        if (futureBranchPosition.getY() != yLevel) {
+            onCancel1();
+            return;
+        }
         System.out.println("player reach: " + Minecraft.theMinecraft.playerController.getBlockReachDistance());
         for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
             addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up(), false);
@@ -377,6 +381,9 @@ public class MickeyMine extends ManagerTick {
     }
     @Override
     protected void onCancel() {
+        onCancel1();
+    }
+    private static void onCancel1() {
         isGoingToMine = false;
         isMining = false;
         needsToBeMined.clear();
