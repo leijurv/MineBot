@@ -260,7 +260,7 @@ public class CraftingTask extends ManagerTick {
                         for (EnumFacing f : EnumFacing.values()) {
                             BlockPos placeAgainst = pos.offset(f);
                             if (!MineBot.isAir(placeAgainst) && Minecraft.theMinecraft.theWorld.getBlockState(placeAgainst).getBlock().isBlockNormalCube()) {
-                                if (LookManager.couldIReach(placeAgainst, pos)) {
+                                if (LookManager.couldIReach(placeAgainst, f.getOpposite())) {
                                     MineBot.sneak = true;
                                     double faceX = (pos.getX() + placeAgainst.getX() + 1.0D) * 0.5D;
                                     double faceY = (pos.getY() + placeAgainst.getY()) * 0.5D;

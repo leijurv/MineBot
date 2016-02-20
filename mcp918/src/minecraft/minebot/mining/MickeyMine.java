@@ -7,12 +7,14 @@ package minebot.mining;
 
 import java.util.ArrayList;
 import minebot.LookManager;
+import minebot.Memory;
 import minebot.MineBot;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
+import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -116,6 +118,10 @@ public class MickeyMine extends ManagerTick {
         } else if (priorityNeedsToBeMined.isEmpty()) {
             doNormalMine();
         }
+        if (ticksSinceBlockMined > 200) {
+            GuiScreen.sendChatMessage("Mickey mine stops, its been like 10 seconds and nothing has happened");
+            Manager.getManager(MickeyMine.class).cancel();
+        }
     }
     public static boolean torch() {
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
@@ -137,6 +143,9 @@ public class MickeyMine extends ManagerTick {
         if (branchPosition == null) {
             BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
             branchPosition = new BlockPos(player.getX(), yLevel, player.getZ());
+        }
+        if (!Memory.blockLoaded(branchPosition)) {//if this starts before chunks load, this thing just goes on forever
+            return;
         }
         if (!branchPosition.equals(Minecraft.theMinecraft.thePlayer.getPosition0())) {
             GuiScreen.sendChatMessage("Should be at branch position " + branchPosition + " " + Minecraft.theMinecraft.thePlayer.getPosition0(), true);
@@ -234,7 +243,9 @@ public class MickeyMine extends ManagerTick {
             }
         }
     }
+    static int ticksSinceBlockMined = 0;
     public static void updateBlocksMined() {
+        ticksSinceBlockMined++;
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : needsToBeMined) {
             Block block = net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock();
@@ -242,6 +253,7 @@ public class MickeyMine extends ManagerTick {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
+                ticksSinceBlockMined = 0;
             }
         }
         for (BlockPos needsRemoval : shouldBeRemoved) {

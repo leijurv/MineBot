@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -106,7 +107,8 @@ public class LookManager extends Manager {
         MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
         return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
     }
-    public static boolean couldIReach(BlockPos pos, BlockPos side) {
+    public static boolean couldIReach(BlockPos pos, EnumFacing dir) {
+        BlockPos side = pos.offset(dir);
         double faceX = (pos.getX() + side.getX() + 1.0D) * 0.5D;
         double faceY = (pos.getY() + side.getY()) * 0.5D;
         double faceZ = (pos.getZ() + side.getZ() + 1.0D) * 0.5D;
@@ -118,7 +120,7 @@ public class LookManager extends Manager {
         Vec3 vec31 = getVectorForRotation(pitch, yaw);
         Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
         MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
-        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
+        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos) && blah.sideHit == dir;
     }
     public static Vec3 getVectorForRotation(float pitch, float yaw) {//shamelessly copied from Entity.java
         float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);

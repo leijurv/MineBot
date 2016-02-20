@@ -136,8 +136,9 @@ public class MineBot {
         for (Class c : managers) {
             Manager.tick(c);
         }
-        if (whatAreYouLookingAt() != null) {
-            Memory.scanBlock(whatAreYouLookingAt());
+        BlockPos ts = whatAreYouLookingAt();
+        if (ts != null) {
+            Memory.scanBlock(ts);
         }
         if (currentBuilder != null) {
             currentBuilder.tick();
