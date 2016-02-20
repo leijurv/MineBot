@@ -32,6 +32,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -247,6 +248,16 @@ public class MineBot {
         GuiScreen.sendChatMessage("slow open", true);
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
         Minecraft.theMinecraft.displayGuiScreen(new GuiInventory(Minecraft.theMinecraft.thePlayer));
+    }
+    public static void groundItems() {
+        for (Entity enttaounaoeueoaoeu : Minecraft.theMinecraft.theWorld.loadedEntityList) {
+            if (enttaounaoeueoaoeu instanceof EntityItem) {
+                EntityItem entity = (EntityItem) enttaounaoeueoaoeu;
+                ItemStack stack = entity.getEntityItem();
+                Item item = stack.getItem();
+                BlockPos pos = new BlockPos(entity.posX, entity.posY, entity.posZ);
+            }
+        }
     }
     public static boolean wasScreen = false;
     public static boolean calculatingNext = false;

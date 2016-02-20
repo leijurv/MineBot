@@ -118,7 +118,7 @@ public class SmeltingTask extends ManagerTick {
         inProgress.add(this);
         //todo: merge different smelting tasks for the same item
     }
-    int numTicks = -2;//wait a couple extra ticks, for no reason (I guess server lag maybe)
+    int numTicks = -20;//wait a couple extra ticks, for no reason (I guess server lag maybe)
     int guiWaitTicks = 0;
     int shiftWaitTicks = 0;
     private boolean exec() {
@@ -395,7 +395,7 @@ public class SmeltingTask extends ManagerTick {
             return false;
         }
         plan = new ArrayList();
-        tickNumber = -5;
+        tickNumber = -10;
         int currSmeltSize = 0;
         for (int i = 3; i < contain.inventorySlots.inventorySlots.size(); i++) {
             Slot slot = contain.inventorySlots.inventorySlots.get(i);
