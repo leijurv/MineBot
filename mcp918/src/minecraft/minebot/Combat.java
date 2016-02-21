@@ -45,24 +45,24 @@ public class Combat extends ManagerTick {
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
-        ArrayList<Entity> mobs = new ArrayList<Entity>();
+        ArrayList<Entity> killAura = new ArrayList<Entity>();
         for (Entity entity : theWorld.loadedEntityList) {
             if (entity.isEntityAlive()) {
                 if ((mobKilling && entity instanceof EntityMob) || ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))) {
                     if (distFromMe(entity) < 5) {
-                        mobs.add(entity);
+                        killAura.add(entity);
                     }
                 }
             }
         }
-        mobs.sort(new Comparator<Entity>() {
+        killAura.sort(new Comparator<Entity>() {
             @Override
             public int compare(Entity o1, Entity o2) {
                 return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
             }
         });
-        if (!mobs.isEmpty()) {
-            Entity entity = mobs.get(0);
+        if (!killAura.isEmpty()) {
+            Entity entity = killAura.get(0);
             AxisAlignedBB lol = entity.getEntityBoundingBox();
             switchtosword();
             System.out.println("looking");
@@ -73,30 +73,30 @@ public class Combat extends ManagerTick {
                 System.out.println("Doing it");
             }
         }
-        if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
-            ArrayList<Entity> mobs1 = new ArrayList<Entity>();
-            for (Entity entity : theWorld.loadedEntityList) {
-                if (entity.isEntityAlive()) {
-                    if (!playerHunt && (entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
-                        if (distFromMe(entity) < 30) {
-                            mobs1.add(entity);
-                        }
+        ArrayList<Entity> huntMobs = new ArrayList<Entity>();
+        for (Entity entity : theWorld.loadedEntityList) {
+            if (entity.isEntityAlive()) {
+                if (!playerHunt && (entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
+                    if (distFromMe(entity) < 30) {
+                        huntMobs.add(entity);
                     }
-                    if ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity))) {
-                        if (distFromMe(entity) < 30) {
-                            mobs1.add(entity);
-                        }
+                }
+                if ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity))) {
+                    if (distFromMe(entity) < 30) {
+                        huntMobs.add(entity);
                     }
                 }
             }
-            mobs1.sort(new Comparator<Entity>() {
-                @Override
-                public int compare(Entity o1, Entity o2) {
-                    return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
-                }
-            });
-            if (!mobs1.isEmpty()) {
-                Entity entity = mobs1.get(0);
+        }
+        huntMobs.sort(new Comparator<Entity>() {
+            @Override
+            public int compare(Entity o1, Entity o2) {
+                return new Double(distFromMe(o1)).compareTo(distFromMe(o2));
+            }
+        });
+        if (mobHunting && (target == null || wasTargetSetByMobHunt)) {
+            if (!huntMobs.isEmpty()) {
+                Entity entity = huntMobs.get(0);
                 if (!entity.equals(target)) {
                     if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {//if playerhunt is true, dont overwrite a player target with a non player target
                         GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
@@ -121,17 +121,16 @@ public class Combat extends ManagerTick {
                 }
             }
             MineBot.clearMovement();
-            MineBot.goal = new GoalRunAway((int) target.posX, (int) target.posZ, 50);//TODO run away from more than one mob
+            BlockPos[] away = new BlockPos[Math.min(5, huntMobs.size())];
+            for (int i = 0; i < away.length; i++) {
+                away[i] = new BlockPos(huntMobs.get(i).posX, huntMobs.get(i).posY, huntMobs.get(i).posZ);
+            }
+            MineBot.goal = new GoalRunAway(50, away);
             if (MineBot.currentPath == null) {
                 GuiScreen.sendChatMessage("Running away", true);
                 MineBot.findPathInNewThread(playerFeet, false);
             } else {
-                GoalRunAway g = (GoalRunAway) MineBot.currentPath.goal;
-                int xDiff = (int) (target.posX - g.x);
-                int zDiff = (int) (target.posZ - g.z);
-                int d = xDiff * xDiff + zDiff * zDiff;
-                if (d > 5 * 5 && !MineBot.isThereAnythingInProgress) {
-                    GuiScreen.sendChatMessage("Switching who I'm running away from", true);
+                if (!MineBot.isThereAnythingInProgress) {
                     MineBot.findPathInNewThread(playerFeet, false);
                 }
             }

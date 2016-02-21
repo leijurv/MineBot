@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding.goals;
 
+import java.util.Arrays;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -12,29 +13,40 @@ import net.minecraft.util.BlockPos;
  * @author leijurv
  */
 public class GoalRunAway implements Goal {
-    public final int x;
-    public final int z;
+    public final BlockPos[] from;
     final double distanceSq;
-    public GoalRunAway(int x, int z, double distance) {
-        this.x = x;
-        this.z = z;
+    public GoalRunAway(double distance, BlockPos... from) {
+        if (from.length == 0) {
+            throw new IllegalArgumentException();
+        }
+        this.from = from;
         this.distanceSq = distance * distance;
     }
     @Override
     public boolean isInGoal(BlockPos pos) {
-        int diffX = pos.getX() - x;
-        int diffZ = pos.getZ() - z;
-        double distSq = diffX * diffX + diffZ * diffZ;
-        return distSq > distanceSq;
+        for (BlockPos p : from) {
+            int diffX = pos.getX() - p.getX();
+            int diffZ = pos.getZ() - p.getZ();
+            double distSq = diffX * diffX + diffZ * diffZ;
+            if (distSq < distanceSq) {
+                return false;
+            }
+        }
+        return true;
     }
     @Override
     public double heuristic(BlockPos pos) {//mostly copied from GoalBlock
-        double xDiff = pos.getX() - this.x;
-        double zDiff = pos.getZ() - this.z;
-        return -GoalXZ.calculate(xDiff, zDiff);
+        double min = Double.MAX_VALUE;
+        for (BlockPos p : from) {
+            double h = GoalXZ.calculate(p.getX() - pos.getX(), p.getZ() - pos.getZ());
+            if (h < min) {
+                min = h;
+            }
+        }
+        return -min;
     }
     @Override
     public String toString() {
-        return "GoalRunAwayFrom{x=" + x + ",z=" + z + "}";
+        return "GoalRunAwayFrom[" + Arrays.asList(from) + "]";
     }
 }
