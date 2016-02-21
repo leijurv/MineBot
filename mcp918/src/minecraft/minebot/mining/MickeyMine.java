@@ -10,7 +10,9 @@ import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
 import minebot.pathfinding.actions.Action;
+import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
@@ -182,8 +184,11 @@ public class MickeyMine extends ManagerTick {
         branchPosition = futureBranchPosition;
     }
     public static void doPriorityMine() {
-        BlockPos toMine = priorityNeedsToBeMined.get(0);
-        MineBot.goal = new GoalTwoBlocks(toMine);
+        Goal[] toComposite = new Goal[priorityNeedsToBeMined.size()];
+        for (int i = 0; i < toComposite.length; i++) {
+            toComposite[i] = new GoalTwoBlocks(priorityNeedsToBeMined.get(i));
+        }
+        MineBot.goal = new GoalComposite(toComposite);
         if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
             MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), false);
         } else {
