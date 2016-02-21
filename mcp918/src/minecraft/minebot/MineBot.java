@@ -424,18 +424,20 @@ public class MineBot {
                 if (talkAboutIt) {
                     GuiScreen.sendChatMessage("Starting to search for path from " + start + " to " + goal, true);
                 }
-                currentPath = findPath(start);
+                try {
+                    currentPath = findPath(start);
+                } catch (Exception e) {
+                }
+                isThereAnythingInProgress = false;
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
                     if (talkAboutIt) {
                         GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can", true);
                     }
-                    isThereAnythingInProgress = false;
                     planAhead();
                 } else {
                     if (talkAboutIt) {
                         GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal, true);
                     }
-                    isThereAnythingInProgress = false;
                 }
             }
         }.start();
@@ -456,6 +458,7 @@ public class MineBot {
                 GuiScreen.sendChatMessage("Planning ahead", true);
                 calculatingNext = true;
                 Path path = findPath(currentPath.end);
+                isThereAnythingInProgress = false;
                 GuiScreen.sendChatMessage("Done planning ahead " + calculatingNext, true);
                 if (calculatingNext) {
                     nextPath = path;
@@ -466,7 +469,6 @@ public class MineBot {
                     }
                 }
                 calculatingNext = false;
-                isThereAnythingInProgress = false;
             }
         }.start();
     }

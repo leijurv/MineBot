@@ -151,14 +151,14 @@ public class Combat extends ManagerTick {
                 double movementSince = dist(targetPos, MineBot.currentPath.end);
                 if (movementSince > 4 && !MineBot.isThereAnythingInProgress) {
                     GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
-                    MineBot.findPathInNewThread(playerFeet, false);//this will overwrite currentPath
+                    MineBot.findPathInNewThread(playerFeet, true);//this will overwrite currentPath
                 }
             }
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(MineBot.what());
             //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
             if (dist > 4 && MineBot.currentPath == null) {
-                MineBot.findPathInNewThread(playerFeet, false);
+                MineBot.findPathInNewThread(playerFeet, true);
             }
             if (dist <= 4) {
                 AxisAlignedBB lol = target.getEntityBoundingBox();
