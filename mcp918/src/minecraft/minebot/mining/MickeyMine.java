@@ -390,6 +390,7 @@ public class MickeyMine extends ManagerTick {
         priorityNeedsToBeMined.clear();
         branchPosition = null;
         mightNeedToGoBackToPath = false;
+        ticksSinceBlockMined = 0;
     }
     @Override
     protected void onStart() {
