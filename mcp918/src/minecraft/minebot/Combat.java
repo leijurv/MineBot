@@ -125,13 +125,16 @@ public class Combat extends ManagerTick {
             for (int i = 0; i < away.length; i++) {
                 away[i] = new BlockPos(huntMobs.get(i).posX, huntMobs.get(i).posY, huntMobs.get(i).posZ);
             }
-            MineBot.goal = new GoalRunAway(50, away);
-            if (MineBot.currentPath == null) {
-                GuiScreen.sendChatMessage("Running away", true);
-                MineBot.findPathInNewThread(playerFeet, true);
-            } else {
-                if (!MineBot.isThereAnythingInProgress) {
-                    MineBot.findPathInNewThread(playerFeet, true);
+            if (away.length != 0) {
+                MineBot.goal = new GoalRunAway(35, away);
+                if (MineBot.currentPath == null) {
+                    GuiScreen.sendChatMessage("Running away", true);
+                    MineBot.findPathInNewThread(playerFeet, false);
+                } else {
+                    if (!MineBot.isThereAnythingInProgress && MineBot.tickNumber % 4 == 0) {
+                        GuiScreen.sendChatMessage("Running away", true);
+                        MineBot.findPathInNewThread(playerFeet, false);
+                    }
                 }
             }
         }
