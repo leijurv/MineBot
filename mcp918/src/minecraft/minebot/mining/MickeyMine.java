@@ -22,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -258,7 +259,7 @@ public class MickeyMine extends ManagerTick {
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : needsToBeMined) {
             Block block = net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock();
-            if (block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch"))) {
+            if (block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch")) || block.equals(Blocks.bedrock)) {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
@@ -274,7 +275,7 @@ public class MickeyMine extends ManagerTick {
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : priorityNeedsToBeMined) {
             Block block = net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock();
-            if (block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch"))) {
+            if (block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch")) || block.equals(Blocks.bedrock)) {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
