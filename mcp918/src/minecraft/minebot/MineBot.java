@@ -96,7 +96,6 @@ public class MineBot {
             }
         } catch (Exception ex) {
             System.out.println("Exception");
-            ex.printStackTrace();
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -537,6 +536,7 @@ public class MineBot {
      * @param x
      * @param y
      * @param z
+     * @param rotate
      * @return true if we are moving, false if we are still rotating. we will
      * rotate until within ANGLE_THRESHOLD (currently 7°) of moving in correct
      * direction
@@ -645,7 +645,7 @@ public class MineBot {
     public static void onPlacedBlock(ItemStack itemStack, BlockPos blockPos) {
         Item item = itemStack.getItem();
     }
-    private static HashMap<Integer, Boolean> lockedKeys = new HashMap<Integer, Boolean>();
+    private static final HashMap<Integer, Boolean> lockedKeys = new HashMap<Integer, Boolean>();
     public static Boolean isKeyLocked(int i) {
         return lockedKeys.get(i);
     }
