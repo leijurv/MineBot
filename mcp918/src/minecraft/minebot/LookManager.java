@@ -138,15 +138,7 @@ public class LookManager extends Manager {
         return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos) && blah.sideHit == dir;
     }
     public static MovingObjectPosition raytraceTowards(double x, double y, double z) {
-        float[] pitchAndYaw = pitchAndYaw(x, y, z);
-        float yaw = pitchAndYaw[0];
-        float pitch = pitchAndYaw[1];
-        double blockReachDistance = (double) Minecraft.theMinecraft.playerController.getBlockReachDistance();
-        Vec3 vec3 = Minecraft.theMinecraft.thePlayer.getPositionEyes(1.0F);
-        Vec3 vec31 = getVectorForRotation(pitch, yaw);
-        Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
-        MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
-        return blah;
+        return raytraceTowards(pitchAndYaw(x, y, z));
     }
     public static MovingObjectPosition raytraceTowards(float[] pitchAndYaw) {
         float yaw = pitchAndYaw[0];
