@@ -62,6 +62,7 @@ public class LookManager extends Manager {
             Minecraft.theMinecraft.thePlayer.rotationYaw = (desiredNextYaw - previousYaw) * partialTicks + previousYaw;
         }
     }
+    private static final double[][] BLOCK_SIDE_MULTIPLIERS = {{0, 0.5, 0.5}, {1, 0.5, 0.5}, {0.5, 0, 0.5}, {0.5, 1, 0.5}, {0.5, 0.5, 0}, {0.5, 0.5, 1}};
     /**
      * Called by our code in order to look in the direction of the center of a
      * block
@@ -77,8 +78,7 @@ public class LookManager extends Manager {
             return lookAtCenterOfBlock(p, alsoDoPitch);
         }
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
-        double[][] multipliers = {{0, 0.5, 0.5}, {1, 0.5, 0.5}, {0.5, 0, 0.5}, {0.5, 1, 0.5}, {0.5, 0.5, 0}, {0.5, 0.5, 1}};
-        for (double[] mult : multipliers) {
+        for (double[] mult : BLOCK_SIDE_MULTIPLIERS) {
             double xDiff = b.getBlockBoundsMinX() * mult[0] + b.getBlockBoundsMaxX() * (1 - mult[0]);
             double yDiff = b.getBlockBoundsMinY() * mult[1] + b.getBlockBoundsMaxY() * (1 - mult[1]);
             double zDiff = b.getBlockBoundsMinZ() * mult[2] + b.getBlockBoundsMaxZ() * (1 - mult[2]);
@@ -110,8 +110,7 @@ public class LookManager extends Manager {
             return true;
         }
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        double[][] multipliers = {{0, 0.5, 0.5}, {1, 0.5, 0.5}, {0.5, 0, 0.5}, {0.5, 1, 0.5}, {0.5, 0.5, 0}, {0.5, 0.5, 1}};
-        for (double[] mult : multipliers) {
+        for (double[] mult : BLOCK_SIDE_MULTIPLIERS) {
             double xDiff = b.getBlockBoundsMinX() * mult[0] + b.getBlockBoundsMaxX() * (1 - mult[0]);
             double yDiff = b.getBlockBoundsMinY() * mult[1] + b.getBlockBoundsMaxY() * (1 - mult[1]);
             double zDiff = b.getBlockBoundsMinZ() * mult[2] + b.getBlockBoundsMaxZ() * (1 - mult[2]);
