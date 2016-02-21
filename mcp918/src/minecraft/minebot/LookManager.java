@@ -209,9 +209,6 @@ public class LookManager extends Manager {
         lookingYaw = false;
         lookingPitch = false;
     }
-    public static void beSketchy() {
-        desiredYaw += (System.currentTimeMillis() % 15000) / 15000F * 360F;
-    }
     @Override
     public void onTickPost() {
         desiredYaw += getRandom()[0];
