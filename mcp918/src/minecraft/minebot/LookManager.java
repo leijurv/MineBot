@@ -73,23 +73,32 @@ public class LookManager extends Manager {
      * this block?
      */
     public static boolean lookAtBlock(BlockPos p, boolean alsoDoPitch) {
+        if (couldIReachCenter(p)) {
+            return lookAtCenterOfBlock(p, alsoDoPitch);
+        }
+        Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
+        double[][] multipliers = {{0, 0.5, 0.5}, {1, 0.5, 0.5}, {0.5, 0, 0.5}, {0.5, 1, 0.5}, {0.5, 0.5, 0}, {0.5, 0.5, 1}};
+        for (double[] mult : multipliers) {
+            double xDiff = b.getBlockBoundsMinX() * mult[0] + b.getBlockBoundsMaxX() * (1 - mult[0]);
+            double yDiff = b.getBlockBoundsMinY() * mult[1] + b.getBlockBoundsMaxY() * (1 - mult[1]);
+            double zDiff = b.getBlockBoundsMinZ() * mult[2] + b.getBlockBoundsMaxZ() * (1 - mult[2]);
+            double x = p.getX() + xDiff;
+            double y = p.getY() + yDiff;
+            double z = p.getZ() + zDiff;
+            if (couldIReachByLookingAt(p, x, y, z)) {
+                return lookAtCoords(x, y, z, alsoDoPitch);
+            }
+        }
+        return lookAtCenterOfBlock(p, alsoDoPitch);
+    }
+    public static boolean lookAtCenterOfBlock(BlockPos p, boolean alsoDoPitch) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
-        double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
+        double yDiff = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
         double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
-        /*System.out.println("min X: " + b.getBlockBoundsMinX());
-         System.out.println("max X: " + b.getBlockBoundsMaxX());
-         System.out.println("xdiff: " + xDiff);
-         System.out.println("min Y: " + b.getBlockBoundsMinY());
-         System.out.println("max Y: " + b.getBlockBoundsMaxY());
-         System.out.println("ydiff: " + yolo);
-         System.out.println("min Z: " + b.getBlockBoundsMinZ());
-         System.out.println("max Z: " + b.getBlockBoundsMaxZ());
-         System.out.println("zdiff: " + zDiff);*/
         double x = p.getX() + xDiff;
-        double y = p.getY() + yolo;
+        double y = p.getY() + yDiff;
         double z = p.getZ() + zDiff;
-        //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
         return lookAtCoords(x, y, z, alsoDoPitch);
     }
     /**
@@ -97,14 +106,27 @@ public class LookManager extends Manager {
      */
     public static final float ANGLE_THRESHOLD = 7;
     public static boolean couldIReach(BlockPos pos) {
-        float[] pitchAndYaw = pitchAndYaw(pos);
-        float yaw = pitchAndYaw[0];
-        float pitch = pitchAndYaw[1];
-        double blockReachDistance = (double) Minecraft.theMinecraft.playerController.getBlockReachDistance();
-        Vec3 vec3 = Minecraft.theMinecraft.thePlayer.getPositionEyes(1.0F);
-        Vec3 vec31 = getVectorForRotation(pitch, yaw);
-        Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
-        MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
+        if (couldIReachCenter(pos)) {
+            return true;
+        }
+        Block b = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        double[][] multipliers = {{0, 0.5, 0.5}, {1, 0.5, 0.5}, {0.5, 0, 0.5}, {0.5, 1, 0.5}, {0.5, 0.5, 0}, {0.5, 0.5, 1}};
+        for (double[] mult : multipliers) {
+            double xDiff = b.getBlockBoundsMinX() * mult[0] + b.getBlockBoundsMaxX() * (1 - mult[0]);
+            double yDiff = b.getBlockBoundsMinY() * mult[1] + b.getBlockBoundsMaxY() * (1 - mult[1]);
+            double zDiff = b.getBlockBoundsMinZ() * mult[2] + b.getBlockBoundsMaxZ() * (1 - mult[2]);
+            double x = pos.getX() + xDiff;
+            double y = pos.getY() + yDiff;
+            double z = pos.getZ() + zDiff;
+            if (couldIReachByLookingAt(pos, x, y, z)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean couldIReachCenter(BlockPos pos) {
+        float[] pitchAndYaw = pitchAndYawToCenter(pos);
+        MovingObjectPosition blah = raytraceTowards(pitchAndYaw);
         return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
     }
     public static boolean couldIReach(BlockPos pos, EnumFacing dir) {
@@ -112,7 +134,11 @@ public class LookManager extends Manager {
         double faceX = (pos.getX() + side.getX() + 1.0D) * 0.5D;
         double faceY = (pos.getY() + side.getY()) * 0.5D;
         double faceZ = (pos.getZ() + side.getZ() + 1.0D) * 0.5D;
-        float[] pitchAndYaw = pitchAndYaw(faceX, faceY, faceZ);
+        MovingObjectPosition blah = raytraceTowards(faceX, faceY, faceZ);
+        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos) && blah.sideHit == dir;
+    }
+    public static MovingObjectPosition raytraceTowards(double x, double y, double z) {
+        float[] pitchAndYaw = pitchAndYaw(x, y, z);
         float yaw = pitchAndYaw[0];
         float pitch = pitchAndYaw[1];
         double blockReachDistance = (double) Minecraft.theMinecraft.playerController.getBlockReachDistance();
@@ -120,7 +146,21 @@ public class LookManager extends Manager {
         Vec3 vec31 = getVectorForRotation(pitch, yaw);
         Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
         MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
-        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos) && blah.sideHit == dir;
+        return blah;
+    }
+    public static MovingObjectPosition raytraceTowards(float[] pitchAndYaw) {
+        float yaw = pitchAndYaw[0];
+        float pitch = pitchAndYaw[1];
+        double blockReachDistance = (double) Minecraft.theMinecraft.playerController.getBlockReachDistance();
+        Vec3 vec3 = Minecraft.theMinecraft.thePlayer.getPositionEyes(1.0F);
+        Vec3 vec31 = getVectorForRotation(pitch, yaw);
+        Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
+        MovingObjectPosition blah = Minecraft.theMinecraft.theWorld.rayTraceBlocks(vec3, vec32, false, false, true);
+        return blah;
+    }
+    public static boolean couldIReachByLookingAt(BlockPos pos, double x, double y, double z) {
+        MovingObjectPosition blah = raytraceTowards(x, y, z);
+        return blah != null && blah.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && blah.getBlockPos().equals(pos);
     }
     public static Vec3 getVectorForRotation(float pitch, float yaw) {//shamelessly copied from Entity.java
         float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
@@ -151,7 +191,7 @@ public class LookManager extends Manager {
         float second = prevSecond + frac * (nowSecond - prevSecond);
         return new float[]{first, second};
     }
-    public static float[] pitchAndYaw(BlockPos p) {
+    public static float[] pitchAndYawToCenter(BlockPos p) {
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
