@@ -128,10 +128,10 @@ public class Combat extends ManagerTick {
             MineBot.goal = new GoalRunAway(50, away);
             if (MineBot.currentPath == null) {
                 GuiScreen.sendChatMessage("Running away", true);
-                MineBot.findPathInNewThread(playerFeet, false);
+                MineBot.findPathInNewThread(playerFeet, true);
             } else {
                 if (!MineBot.isThereAnythingInProgress) {
-                    MineBot.findPathInNewThread(playerFeet, false);
+                    MineBot.findPathInNewThread(playerFeet, true);
                 }
             }
         }
