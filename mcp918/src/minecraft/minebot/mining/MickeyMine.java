@@ -328,9 +328,9 @@ public class MickeyMine extends ManagerTick {
             priorityNeedsToBeMined.add(blockPos);
             if (Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock().equals(Block.getBlockFromName("minecraft:diamond_ore"))) {
                 chunkHasDiamonds.add(tupleFromBlockPos(blockPos));
-                for (int x = -2; x <= 2; x++) {
-                    for (int y = -2; y <= 2; y++) {
-                        for (int z = -2; z <= 2; z++) {
+                for (int x = -1; x <= 1; x++) {
+                    for (int y = -1; y <= 1; y++) {
+                        for (int z = -1; z <= 1; z++) {
                             BlockPos oth = new BlockPos(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
                             if (!Action.avoidBreaking(oth) && !priorityNeedsToBeMined.contains(oth)) {
                                 priorityNeedsToBeMined.add(oth);
