@@ -37,6 +37,7 @@ import net.minecraft.util.BlockPos;
 public class SmeltingTask extends ManagerTick {
     static HashMap<BlockPos, SmeltingTask> furnacesInUse = new HashMap();//smelting tasks that have been put in a furnace are here
     static ArrayList<SmeltingTask> inProgress = new ArrayList();//all smelting tasks will be in here
+    public static boolean coalOnly = false;
     public static boolean avoidBreaking(BlockPos pos) {
         return furnacesInUse.containsKey(pos);
     }
@@ -397,7 +398,10 @@ public class SmeltingTask extends ManagerTick {
         for (int i = 0; i < burnableItems.size(); i++) {
             int amt = amtNeeded.get(i);
             int extra = burnTimes.get(i) * amtNeeded.get(i) - burnTicks;
-            if (extra < bestExtra || (extra == bestExtra && amt < fuelAmt)) {
+            boolean better = extra < bestExtra || (extra == bestExtra && amt < fuelAmt);
+            boolean thisisCoal = Item.getByNameOrId("coal").equals(burnableItems.get(i));
+            boolean bestIsCoal = Item.getByNameOrId("coal").equals(bestFuel);
+            if ((better && !coalOnly) || (coalOnly && ((thisisCoal && !bestIsCoal) || (thisisCoal && bestIsCoal && better) || (!thisisCoal && !bestIsCoal && better)))) {
                 fuelAmt = amt;
                 bestExtra = extra;
                 bestFuel = burnableItems.get(i);

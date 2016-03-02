@@ -232,6 +232,7 @@ public class EarlyGameStrategy extends ManagerTick {
         gotDirt = false;
         cobble = false;
         Combat.mobKilling = false;
+        SmeltingTask.coalOnly = false;
     }
     @Override
     protected void onStart() {
@@ -241,5 +242,6 @@ public class EarlyGameStrategy extends ManagerTick {
         gotDirt = false;
         cobble = false;
         Combat.mobKilling = true;
+        SmeltingTask.coalOnly = true;
     }
 }
