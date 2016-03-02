@@ -27,7 +27,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.chunk.Chunk;
 
 /**
@@ -39,14 +38,12 @@ public class MickeyMine extends ManagerTick {
     static boolean isGoingToMine = false;
     static boolean isMining = false;
     public static boolean tempDisable = false;
-    //static boolean seesBlock = false;
     static EnumFacing miningFacing = EnumFacing.EAST;
-    static ArrayList<Tuple<Integer, Integer>> diamondChunks = new ArrayList<Tuple<Integer, Integer>>();
-    //static BlockPos currentlyMining = null;
+    static ArrayList<IntegerTuple> diamondChunks = new ArrayList<IntegerTuple>();
     static ArrayList<BlockPos> hasBeenMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> needsToBeMined = new ArrayList<BlockPos>();
     static ArrayList<BlockPos> priorityNeedsToBeMined = new ArrayList<BlockPos>();
-    static ArrayList<Tuple<Integer, Integer>> chunkHasDiamonds = new ArrayList<Tuple<Integer, Integer>>();
+    static ArrayList<IntegerTuple> chunkHasDiamonds = new ArrayList<IntegerTuple>();
     static BlockPos branchPosition = null;
     static final String[] ores = {"diamond", "iron", "coal", "gold", "emerald"};
     static final boolean[] enabled = {true, true, false, true, true};
@@ -148,6 +145,7 @@ public class MickeyMine extends ManagerTick {
             branchPosition = new BlockPos(player.getX(), yLevel, player.getZ());
         }
         if (!Memory.blockLoaded(branchPosition)) {//if this starts before chunks load, this thing just goes on forever
+            branchPosition = null;
             return;
         }
         if (!branchPosition.equals(Minecraft.theMinecraft.thePlayer.getPosition0())) {
@@ -163,7 +161,7 @@ public class MickeyMine extends ManagerTick {
             }
         }
         int i;
-        for (i = 0; i < 6 || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
+        for (i = 0; i < 5 || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
             addNormalBlock(branchPosition.offset(miningFacing, i).up(), true);
             addNormalBlock(branchPosition.offset(miningFacing, i), true);
             System.out.println("branche" + i);
@@ -198,12 +196,13 @@ public class MickeyMine extends ManagerTick {
     }
     public static void addNearby() {
         BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
-        for (int x = playerFeet.getX() - 4; x <= playerFeet.getX() + 4; x++) {
-            for (int y = playerFeet.getY() - 4; y <= playerFeet.getY() + 4; y++) {
-                for (int z = playerFeet.getZ() - 4; z <= playerFeet.getZ() + 4; z++) {
+        int searchDist = 4;//why four? idk
+        for (int x = playerFeet.getX() - searchDist; x <= playerFeet.getX() + searchDist; x++) {
+            for (int y = playerFeet.getY() - searchDist; y <= playerFeet.getY() + searchDist; y++) {
+                for (int z = playerFeet.getZ() - searchDist; z <= playerFeet.getZ() + searchDist; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
                     if (isGoalBlock(pos)) {
-                        if (LookManager.couldIReach(pos)) {
+                        if (LookManager.couldIReach(pos)) {//crucial to only add blocks we can see because otherwise this is an x-ray and it'll get caught
                             addPriorityBlock(pos);
                         }
                     }
@@ -288,7 +287,7 @@ public class MickeyMine extends ManagerTick {
         if (priorityNeedsToBeMined.isEmpty() && !wasEmpty) {
             mightNeedToGoBackToPath = true;
             if (!chunkHasDiamonds.isEmpty()) {
-                for (Tuple<Integer, Integer> shouldAdd : chunkHasDiamonds) {
+                for (IntegerTuple shouldAdd : chunkHasDiamonds) {
                     if (!diamondChunks.contains(shouldAdd)) {
                         diamondChunks.add(shouldAdd);
                     }
@@ -358,13 +357,13 @@ public class MickeyMine extends ManagerTick {
             return true;
         }
     }
-    public static Chunk chunkFromTuple(Tuple<Integer, Integer> tuple) {
+    public static Chunk chunkFromTuple(IntegerTuple tuple) {
         return Minecraft.theMinecraft.theWorld.getChunkFromChunkCoords(tuple.getFirst(), tuple.getSecond());
     }
-    public static Tuple<Integer, Integer> tupleFromChunk(Chunk chunk) {
-        return new Tuple(chunk.xPosition, chunk.zPosition);
+    public static IntegerTuple tupleFromChunk(Chunk chunk) {
+        return new IntegerTuple(chunk.xPosition, chunk.zPosition);
     }
-    public static Tuple<Integer, Integer> tupleFromBlockPos(BlockPos blockPos) {
+    public static IntegerTuple tupleFromBlockPos(BlockPos blockPos) {
         return tupleFromChunk(Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(blockPos));
     }
     public static int yLevel = 6;
@@ -414,5 +413,35 @@ public class MickeyMine extends ManagerTick {
     @Override
     protected void onTickPre() {
         tempDisable = false;
+    }
+
+    public static class IntegerTuple {//why not use the normal net.minecraft.util.Tuple? Because it doesn't implement equals or hashCode
+        int a;
+        int b;
+        public IntegerTuple(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 73 * hash + this.a;
+            hash = 73 * hash + this.b;
+            return hash;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final IntegerTuple other = (IntegerTuple) obj;
+            if (this.a != other.a) {
+                return false;
+            }
+            return this.b == other.b;
+        }
     }
 }
