@@ -6,6 +6,7 @@
 package minebot;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import minebot.mining.MickeyMine;
 import minebot.util.Manager;
@@ -32,6 +33,7 @@ import net.minecraft.util.BlockPos;
 public class InventoryManager extends Manager {
     static HashMap<String, Integer> maximumAmounts = null;
     static HashMap<String, Integer> minimumAmounts = null;
+    static HashSet<Item> onHotbar = new HashSet();
     public static void initMax() {
         maximumAmounts = new HashMap();
         minimumAmounts = new HashMap();
@@ -136,6 +138,9 @@ public class InventoryManager extends Manager {
             array[j] = tmp;
         }
     }
+    public static void putOnHotBar(Item item) {
+        onHotbar.add(item);
+    }
     @Override
     protected void onTick() {
         if (maximumAmounts == null) {
@@ -175,19 +180,27 @@ public class InventoryManager extends Manager {
         if (putItemInSlot(slots[6], Item.getByNameOrId("minecraft:torch"))) {
             return;
         }
-        if (putItemInSlot(slots[7], Item.getByNameOrId("minecraft:crafting_table"))) {
-            return;
+        if (!onHotbar.isEmpty()) {
+            GuiScreen.sendChatMessage("Hotbar: " + onHotbar);
         }
-        if (putItemInSlot(slots[8], Item.getByNameOrId("minecraft:furnace"))) {
-            return;
+        int slotIndex = 7;
+        for (Item item : onHotbar) {
+            if (putItemInSlot(slots[slotIndex], item)) {
+                return;
+            }
+            slotIndex++;
+            if (slotIndex > 8) {
+                break;
+            }
         }
+        onHotbar.clear();
         BlockPos look = MineBot.whatAreYouLookingAt();
         boolean doThrowAway = true;
         if (look != null) {
             int xDiff = look.getX() - Minecraft.theMinecraft.thePlayer.getPosition0().getX();
             int zDiff = look.getZ() - Minecraft.theMinecraft.thePlayer.getPosition0().getZ();
             if (Math.abs(xDiff) + Math.abs(zDiff) <= 2) {
-                doThrowAway = false;
+                doThrowAway = false;//dont throw away if we are looking at a wall and we are close, because we'll probably just pick it right back up again
             }
         }
         HashMap<Item, Integer> amounts = countItems();

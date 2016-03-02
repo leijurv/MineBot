@@ -7,6 +7,7 @@ package minebot.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import minebot.InventoryManager;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
@@ -104,12 +105,6 @@ public class CraftingTask extends ManagerTick {
             return true;
         }
         return false;
-    }
-    public static CraftingTask getRequirementsFromItem(Item item) {
-        List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-        IRecipe recipe = recipes.get(0);
-        //recipe.
-        return null;
     }
     public static boolean recipeNeedsCraftingTable(IRecipe recipe) {
         return (recipe instanceof ShapelessRecipes && recipe.getRecipeSize() > 4) || (recipe instanceof ShapedRecipes && (((ShapedRecipes) recipe).recipeHeight > 2 || ((ShapedRecipes) recipe).recipeWidth > 2));
@@ -237,6 +232,11 @@ public class CraftingTask extends ManagerTick {
              MineBot.right = new Random().nextBoolean();
              MineBot.jumping = true;*/
             return true;
+        } else {
+            if (hasCraftingTableInInventory()) {
+                InventoryManager.putOnHotBar(Item.getByNameOrId("crafting_table"));
+                return true;
+            }
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
         ensureCraftingDesired(Item.getByNameOrId("crafting_table"), 1);
@@ -274,6 +274,19 @@ public class CraftingTask extends ManagerTick {
                         }
                     }
                 }
+            }
+        }
+        return false;
+    }
+    public static boolean hasCraftingTableInInventory() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        for (ItemStack item : inv) {
+            if (item == null) {
+                continue;
+            }
+            if (Item.getByNameOrId("minecraft:crafting_table").equals(item.getItem())) {
+                return true;
             }
         }
         return false;

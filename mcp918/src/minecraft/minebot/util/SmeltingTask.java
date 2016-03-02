@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import minebot.InventoryManager;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
@@ -164,6 +165,11 @@ public class SmeltingTask extends ManagerTick {
                     return true;
                 }
                 return true;
+            } else {
+                if (hasFurnaceInInventory()) {
+                    InventoryManager.putOnHotBar(Item.getByNameOrId("furnace"));
+                    return true;
+                }
             }
             return false;
         }
@@ -256,6 +262,19 @@ public class SmeltingTask extends ManagerTick {
             }
         }
         return ret;
+    }
+    public static boolean hasFurnaceInInventory() {
+        EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
+        ItemStack[] inv = p.inventory.mainInventory;
+        for (ItemStack item : inv) {
+            if (item == null) {
+                continue;
+            }
+            if (Item.getByNameOrId("minecraft:furnace").equals(item.getItem())) {
+                return true;
+            }
+        }
+        return false;
     }
     public static boolean putFurnaceOnHotBar() {//shamelessly copied from MickeyMine.torch()
         EntityPlayerSP p = Minecraft.theMinecraft.thePlayer;
