@@ -60,6 +60,7 @@ public class ChatCommand {
         addMethods(ChatCommand.class);
         addFields(MineBot.class);
         addFields(Combat.class);
+        addFields(SmeltingTask.class);
     }
     public static void addFields(Class<?> c) {
         Field[] temp = c.getFields();
