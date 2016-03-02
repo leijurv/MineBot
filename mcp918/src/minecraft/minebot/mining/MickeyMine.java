@@ -422,6 +422,12 @@ public class MickeyMine extends ManagerTick {
             this.a = a;
             this.b = b;
         }
+        public int getFirst() {
+            return a;
+        }
+        public int getSecond() {
+            return b;
+        }
         @Override
         public int hashCode() {
             int hash = 3;
