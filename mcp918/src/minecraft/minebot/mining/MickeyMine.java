@@ -262,7 +262,7 @@ public class MickeyMine extends ManagerTick {
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : needsToBeMined) {
             Block block = net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock();
-            if (block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch")) || block.equals(Blocks.bedrock)) {
+            if (isGoalBlock(isMined) || block.equals(Block.getBlockById(0)) || block.equals(Block.getBlockFromName("minecraft:torch")) || block.equals(Blocks.bedrock)) {
                 hasBeenMined.add(isMined);
                 shouldBeRemoved.add(isMined);
                 updateBlocks(isMined);
@@ -304,6 +304,7 @@ public class MickeyMine extends ManagerTick {
         for (int i = 0; i < 4; i++) {
             System.out.println(blockPos.offset(miningFacing));
         }
+        addPriorityBlock(blockPos);
         addPriorityBlock(blockPos.north());
         addPriorityBlock(blockPos.south());
         addPriorityBlock(blockPos.east());
