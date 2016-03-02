@@ -170,10 +170,17 @@ public class EarlyGameStrategy extends ManagerTick {
                 readyForMining = false;
             }
         }
-        if (readyForMining) {
-            int numDiamonds = countItem("diamond");
-            if (numDiamonds >= 3) {
-                CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_pickaxe"), 1);
+        int numDiamonds = countItem("diamond");
+        if (readyForMining && numDiamonds >= 1) {
+            if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_pickaxe"), 1)) {
+                if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_sword"), 1)) {
+                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_shovel"), 1);
+                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_axe"), 1);
+                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_boots"), 1);
+                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_leggings"), 1);
+                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_chestplate"), 1);
+                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_helmet"), 1);
+                }
             }
         }
         MickeyMine instance = (MickeyMine) Manager.getManager(MickeyMine.class);
