@@ -26,6 +26,9 @@ public class LookManager extends Manager {
     static final float MAX_PITCH_CHANGE_PER_TICK = 360 / 20;
     static float previousYaw = 0;
     static float previousPitch = 0;
+    /**
+     * Something with smoothing between ticks
+     */
     static float desiredNextYaw = 0;
     static float desiredNextPitch = 0;
     /**
@@ -62,6 +65,9 @@ public class LookManager extends Manager {
             Minecraft.theMinecraft.thePlayer.rotationYaw = (desiredNextYaw - previousYaw) * partialTicks + previousYaw;
         }
     }
+    /**
+     * Because I had to do it the janky way
+     */
     private static final double[][] BLOCK_SIDE_MULTIPLIERS = {{0, 0.5, 0.5}, {1, 0.5, 0.5}, {0.5, 0, 0.5}, {0.5, 1, 0.5}, {0.5, 0.5, 0}, {0.5, 0.5, 1}};
     /**
      * Called by our code in order to look in the direction of the center of a
@@ -79,7 +85,7 @@ public class LookManager extends Manager {
         }
         Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
         for (double[] mult : BLOCK_SIDE_MULTIPLIERS) {
-            double xDiff = b.getBlockBoundsMinX() * mult[0] + b.getBlockBoundsMaxX() * (1 - mult[0]);
+            double xDiff = b.getBlockBoundsMinX() * mult[0] + b.getBlockBoundsMaxX() * (1 - mult[0]);//lol
             double yDiff = b.getBlockBoundsMinY() * mult[1] + b.getBlockBoundsMaxY() * (1 - mult[1]);
             double zDiff = b.getBlockBoundsMinZ() * mult[2] + b.getBlockBoundsMaxZ() * (1 - mult[2]);
             double x = p.getX() + xDiff;
@@ -172,7 +178,7 @@ public class LookManager extends Manager {
         now *= SPEED;
         long prev = now - (long) SPEED;
         float frac = (System.currentTimeMillis() - prev) / ((float) SPEED);
-        Random prevR = new Random(prev);
+        Random prevR = new Random(prev);//fite me
         Random nowR = new Random(now);
         float prevFirst = prevR.nextFloat() * 10 - 5;
         float prevSecond = prevR.nextFloat() * 10 - 5;
@@ -194,7 +200,7 @@ public class LookManager extends Manager {
     }
     public static float[] pitchAndYaw(double x, double y, double z) {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        double yDiff = (thePlayer.posY + 1.62) - y;
+        double yDiff = (thePlayer.posY + 1.62) - y;//lol
         double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
         double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
         double pitch = Math.atan2(yDiff, dist);

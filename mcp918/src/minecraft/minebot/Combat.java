@@ -30,6 +30,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
+ * this entire class is sketchy i don't even know
  *
  * @author leijurv
  */

@@ -53,7 +53,15 @@ public class InventoryManager extends Manager {
         minimumAmounts.put(itemName, min);
     }
     static boolean openedInvYet = false;
-    public static boolean place(int pos, Block check, Class<?> h) {
+    /**
+     * Place the best instance of itemType in hot bar slot position
+     *
+     * @param pos hot bar slot to put in
+     * @param check what block to check break time against
+     * @param itemType the class of the item
+     * @return
+     */
+    public static boolean place(int pos, Block check, Class<?> itemType) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int itemPos = -1;
         float bestStrength = Float.MIN_VALUE;
@@ -63,7 +71,7 @@ public class InventoryManager extends Manager {
                 continue;
             }
             Item item = stack.getItem();
-            if (item.getClass() == h) {
+            if (item.getClass() == itemType) {
                 float strength = item.getStrVsBlock(stack, check);
                 if (strength > bestStrength) {
                     bestStrength = strength;
@@ -87,6 +95,12 @@ public class InventoryManager extends Manager {
         switchWithHotBar(itemPos, pos);
         return true;
     }
+    /**
+     * Find items in the player's inventory
+     *
+     * @param items
+     * @return
+     */
     public static int find(Item... items) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int bestPosition = -1;
@@ -107,6 +121,14 @@ public class InventoryManager extends Manager {
         }
         return bestPosition;
     }
+    /**
+     * Put items in the hot bar slot. If the current item in that slot matches,
+     * don't do anything
+     *
+     * @param hotbarslot
+     * @param items
+     * @return
+     */
     public static boolean putItemInSlot(int hotbarslot, Item... items) {
         int currPos = find(items);
         ItemStack curr = Minecraft.theMinecraft.thePlayer.inventory.mainInventory[hotbarslot];
@@ -130,6 +152,16 @@ public class InventoryManager extends Manager {
         switchWithHotBar(currPos, hotbarslot);
         return true;
     }
+    /**
+     * Randomize an array. You know I just kinda realized that I don't know who
+     * originally came up with this method for randomizing arrays. I copied it
+     * from something we used in Terry G's web programming class when we were
+     * making the game of 15/16 4x4 square thingy, and we used it to randomize a
+     * 16 length array. I copied it from there and have been using it ever since
+     *
+     * @param array
+     * @param random
+     */
     public static void randomize(int[] array, Random random) {
         for (int i = 0; i < array.length; i++) {
             int j = random.nextInt(array.length);

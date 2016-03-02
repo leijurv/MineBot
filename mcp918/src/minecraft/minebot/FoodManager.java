@@ -39,11 +39,10 @@ public class FoodManager extends ManagerTick {
             }
             if (item.getItem() instanceof ItemFood) {
                 int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
-                //System.out.println(item + " " + healing);
-                if (healing <= foodNeeded) {
+                if (healing <= foodNeeded) {//whatever heals the least. wait that doesn't make sense. idk
                     slotForFood = i;
                 }
-                if (anything && healing > foodNeeded && healing < worst) {
+                if (anything && healing > foodNeeded && healing < worst) {//whatever wastes the least
                     slotForFood = i;
                 }
             }
@@ -55,7 +54,7 @@ public class FoodManager extends ManagerTick {
             if (whatAreYouLookingAt() == null) {
                 isRightClick = true;
             } else {
-                if (p.isSneaking()) {
+                if (p.isSneaking()) {//if we are looking at a block, then sneak because you dont know what right click will do
                     isRightClick = true;
                 }
             }

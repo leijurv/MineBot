@@ -28,9 +28,23 @@ public class Path {
     public final BlockPos start;
     public final BlockPos end;
     public final Goal goal;
+    /**
+     * The blocks on the path. Guaranteed that path.get(0) equals start and
+     * path.get(path.size()-1) equals end
+     */
     public final ArrayList<BlockPos> path;
+    /**
+     * This stores the original blocks for when outlining the path in carpet.
+     * this is how it un-does that
+     *
+     */
     final IBlockState[] originalBlockStates;
     final ArrayList<Action> actions;
+    /**
+     * note that this ISN'T the number of nodes in this path, it's actually the
+     * number of nodes used to calculate this path. this is here for idk why
+     *
+     */
     public final int numNodes;
     Path(Node start, Node end, Goal goal, int numNodes) {
         this.numNodes = numNodes;
@@ -85,6 +99,9 @@ public class Path {
             Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalStates[i]);
         }
     }
+    /**
+     * Where are we in the path? This is an index in the actions list
+     */
     int pathPosition = 0;
     public double howFarAmIFromThePath(double x, double y, double z) {
         double best = -1;
@@ -96,7 +113,7 @@ public class Path {
         }
         return best;
     }
-    public double distance(double x, double y, double z, BlockPos pos) {
+    public static double distance(double x, double y, double z, BlockPos pos) {
         double xdiff = x - (pos.getX() + 0.5D);
         double ydiff = y - (pos.getY() + 0.5D);
         double zdiff = z - (pos.getZ() + 0.5D);
@@ -125,6 +142,9 @@ public class Path {
      * action take too long
      */
     public boolean failed = false;
+    /**
+     * Replace all the carpet and bs with the original block states
+     */
     public void clearPath() {
         if (Minecraft.theMinecraft.theWorld == null) {
             return;
@@ -137,6 +157,9 @@ public class Path {
             }
         }
     }
+    /**
+     * Outline the path in carpet
+     */
     public void outlinePath() {
         if (!MineBot.useCarpet) {
             return;
@@ -172,7 +195,7 @@ public class Path {
         BlockPos whereShouldIBe = path.get(pathPosition);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         outlinePath();
-        BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        BlockPos whereAmI = thePlayer.getPosition0();
         if (pathPosition == path.size() - 1) {
             System.out.println("On last path position");
             MineBot.clearPath();
@@ -180,7 +203,7 @@ public class Path {
         }
         if (!whereShouldIBe.equals(whereAmI)) {
             System.out.println("Should be at " + whereShouldIBe + " actually am at " + whereAmI);
-            for (int i = 0; i < pathPosition - 2 && i < path.size(); i++) {
+            for (int i = 0; i < pathPosition - 2 && i < path.size(); i++) {//this happens for example when you lag out and get teleported back a couple blocks
                 if (whereAmI.equals(path.get(i))) {
                     GuiScreen.sendChatMessage("Skipping back " + (pathPosition - i) + " steps, to " + i, true);
                     pathPosition = i;
@@ -194,11 +217,6 @@ public class Path {
                     return false;
                 }
             }
-            //it's the duty of the action to tell us when it's done, so ignore the commented code below
-            /*if (path.get(pathPosition + 1).equals(whereAmI)) {
-             System.out.println("Hey I'm on the next one");
-             pathPosition++;
-             }*/
         }
         double distanceFromPath = howFarAmIFromThePath(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (distanceFromPath > MAX_DISTANCE_FROM_PATH) {
@@ -229,7 +247,7 @@ public class Path {
                 return true;
             }
         }
-        if (pathPosition < actions.size() - 1) {
+        if (pathPosition < actions.size() - 1) {//if there are two ActionBridges in a row and they are at right angles, walk diagonally. This makes it so you walk at 45 degrees along a zigzag path instead of doing inefficient zigging and zagging
             if ((actions.get(pathPosition) instanceof ActionBridge) && (actions.get(pathPosition + 1) instanceof ActionBridge)) {
                 ActionBridge curr = (ActionBridge) actions.get(pathPosition);
                 ActionBridge next = (ActionBridge) actions.get(pathPosition + 1);

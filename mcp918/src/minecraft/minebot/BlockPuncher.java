@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
 /**
+ * yeah so just like go and punch this type of block
  *
  * @author avecowa
  * @author leijurv
