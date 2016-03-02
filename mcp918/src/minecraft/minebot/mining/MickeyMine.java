@@ -161,10 +161,14 @@ public class MickeyMine extends ManagerTick {
             }
         }
         int i;
-        for (i = 0; i < 5 || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
+        int l = 5;
+        for (i = 0; i < l || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
             addNormalBlock(branchPosition.offset(miningFacing, i).up(), true);
             addNormalBlock(branchPosition.offset(miningFacing, i), true);
             System.out.println("branche" + i);
+            if (i >= l) {
+                GuiScreen.sendChatMessage("Not mining " + branchPosition.offset(miningFacing, i) + " because it's in known diamond chunk " + tupleFromBlockPos(branchPosition.offset(miningFacing, i)));
+            }
         }
         i--;
         GuiScreen.sendChatMessage("Branch distance " + i, true);
@@ -427,6 +431,10 @@ public class MickeyMine extends ManagerTick {
         }
         public int getSecond() {
             return b;
+        }
+        @Override
+        public String toString() {
+            return a + "," + b;
         }
         @Override
         public int hashCode() {
