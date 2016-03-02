@@ -213,7 +213,7 @@ public class CraftingTask extends ManagerTick {
                 return true;
             }
             BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
-            if (MineBot.isAir(player.down()) || MineBot.isAir(player.up())) {
+            if (MineBot.isAir(player.down()) || MineBot.isAir(player.up(2))) {
                 GuiScreen.sendChatMessage("Placing down");
                 LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
                 MineBot.jumping = true;
