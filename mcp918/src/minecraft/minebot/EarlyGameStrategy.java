@@ -174,12 +174,17 @@ public class EarlyGameStrategy extends ManagerTick {
         if (readyForMining && numDiamonds >= 1) {
             if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_pickaxe"), 1)) {
                 if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_sword"), 1)) {
-                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_shovel"), 1);
-                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_axe"), 1);
-                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_boots"), 1);
-                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_leggings"), 1);
-                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_chestplate"), 1);
-                    CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_helmet"), 1);
+                    boolean shovel = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_shovel"), 1);
+                    boolean axe = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_axe"), 1);
+                    boolean boots = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_boots"), 1);
+                    boolean leg = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_leggings"), 1);
+                    boolean chest = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_chestplate"), 1);
+                    boolean helmet = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_helmet"), 1);
+                    if (shovel && axe && boots && leg && chest && helmet) {
+                        GuiScreen.sendChatMessage("My job here is done.");
+                        cancel();
+                        return false;
+                    }
                 }
             }
         }
