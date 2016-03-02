@@ -188,7 +188,7 @@ public class EarlyGameStrategy extends ManagerTick {
                 }
             }
         }
-        MickeyMine instance = (MickeyMine) Manager.getManager(MickeyMine.class);
+        Manager instance = Manager.getManager(MickeyMine.class);
         if (readyForMining) {
             MickeyMine.yLevel = miningLevel;
             if (!instance.enabled()) {
@@ -238,6 +238,7 @@ public class EarlyGameStrategy extends ManagerTick {
         cobble = false;
         Combat.mobKilling = false;
         SmeltingTask.coalOnly = false;
+        Manager.getManager(MickeyMine.class).cancel();
     }
     @Override
     protected void onStart() {
