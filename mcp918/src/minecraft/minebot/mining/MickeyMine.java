@@ -366,9 +366,6 @@ public class MickeyMine extends ManagerTick {
             return true;
         }
     }
-    public static Chunk chunkFromTuple(IntegerTuple tuple) {
-        return Minecraft.theMinecraft.theWorld.getChunkFromChunkCoords(tuple.getFirst(), tuple.getSecond());
-    }
     public static IntegerTuple tupleFromChunk(Chunk chunk) {
         return new IntegerTuple(chunk.xPosition, chunk.zPosition);
     }
@@ -425,17 +422,11 @@ public class MickeyMine extends ManagerTick {
     }
 
     public static class IntegerTuple {//why not use the normal net.minecraft.util.Tuple? Because it doesn't implement equals or hashCode
-        int a;
-        int b;
+        private final int a;
+        private final int b;
         public IntegerTuple(int a, int b) {
             this.a = a;
             this.b = b;
-        }
-        public int getFirst() {
-            return a;
-        }
-        public int getSecond() {
-            return b;
         }
         @Override
         public String toString() {
