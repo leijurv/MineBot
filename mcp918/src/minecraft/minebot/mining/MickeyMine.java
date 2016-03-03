@@ -256,9 +256,13 @@ public class MickeyMine extends ManagerTick {
             }
         }
     }
-    static int ticksSinceBlockMined = 0;
+    static double ticksSinceBlockMined = 0;
     public static void updateBlocksMined() {
-        ticksSinceBlockMined++;
+        if (MineBot.currentPath == null) {
+            ticksSinceBlockMined++;
+        } else {
+            ticksSinceBlockMined += 0.1;
+        }
         ArrayList<BlockPos> shouldBeRemoved = new ArrayList<BlockPos>();
         for (BlockPos isMined : needsToBeMined) {
             Block block = net.minecraft.client.Minecraft.theMinecraft.theWorld.getBlockState(isMined).getBlock();
