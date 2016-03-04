@@ -18,6 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -203,18 +204,20 @@ public class Path {
         }
         if (!whereShouldIBe.equals(whereAmI)) {
             System.out.println("Should be at " + whereShouldIBe + " actually am at " + whereAmI);
-            for (int i = 0; i < pathPosition - 2 && i < path.size(); i++) {//this happens for example when you lag out and get teleported back a couple blocks
-                if (whereAmI.equals(path.get(i))) {
-                    GuiScreen.sendChatMessage("Skipping back " + (pathPosition - i) + " steps, to " + i, true);
-                    pathPosition = i;
-                    return false;
+            if (!Blocks.air.equals(Minecraft.theMinecraft.theWorld.getBlockState(thePlayer.getPosition0().down()))) {//do not skip if standing on air, because our position isn't stable to skip
+                for (int i = 0; i < pathPosition - 2 && i < path.size(); i++) {//this happens for example when you lag out and get teleported back a couple blocks
+                    if (whereAmI.equals(path.get(i))) {
+                        GuiScreen.sendChatMessage("Skipping back " + (pathPosition - i) + " steps, to " + i, true);
+                        pathPosition = i;
+                        return false;
+                    }
                 }
-            }
-            for (int i = pathPosition + 2; i < path.size(); i++) {//dont check pathPosition+1
-                if (whereAmI.equals(path.get(i))) {
-                    GuiScreen.sendChatMessage("Skipping forward " + (i - pathPosition) + " steps, to " + i, true);
-                    pathPosition = i;
-                    return false;
+                for (int i = pathPosition + 2; i < path.size(); i++) {//dont check pathPosition+1
+                    if (whereAmI.equals(path.get(i))) {
+                        GuiScreen.sendChatMessage("Skipping forward " + (i - pathPosition) + " steps, to " + i, true);
+                        pathPosition = i;
+                        return false;
+                    }
                 }
             }
         }
