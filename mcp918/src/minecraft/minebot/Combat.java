@@ -11,7 +11,7 @@ import java.util.Comparator;
 import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;
-import static minebot.MineBot.what;
+import static minebot.MineBot.whatEntityAreYouLookingAt;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
 import minebot.util.ManagerTick;
@@ -68,7 +68,7 @@ public class Combat extends ManagerTick {
             switchtosword();
             System.out.println("looking");
             LookManager.lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
-            if (entity.equals(MineBot.what())) {
+            if (entity.equals(MineBot.whatEntityAreYouLookingAt())) {
                 MineBot.isLeftClick = true;
                 tickPath = false;
                 System.out.println("Doing it");
@@ -159,7 +159,7 @@ public class Combat extends ManagerTick {
                 }
             }
             double dist = distFromMe(target);
-            boolean actuallyLookingAt = target.equals(MineBot.what());
+            boolean actuallyLookingAt = target.equals(MineBot.whatEntityAreYouLookingAt());
             //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
             if (dist > 4 && MineBot.currentPath == null) {
                 MineBot.findPathInNewThread(playerFeet, true);
@@ -245,7 +245,7 @@ public class Combat extends ManagerTick {
                 }
             }
         }
-        Entity w = what();
+        Entity w = whatEntityAreYouLookingAt();
         if (w != null) {
             Combat.target = w;
             BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);

@@ -17,7 +17,6 @@ import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
-import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
@@ -33,7 +32,6 @@ import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C16PacketClientStatus;
@@ -49,8 +47,8 @@ import org.lwjgl.input.Keyboard;
 public class MineBot {
     public static boolean actuallyPutMessagesInChat = false;
     public static boolean isThereAnythingInProgress = false;
+    public static boolean fullBright = true;
     public static boolean plsCancel = false;
-    //public static boolean sketchyStealer = false;
     public static boolean useCarpet = false;
     public static int tickNumber = 0;
     public static boolean ticktimer = false;
@@ -58,6 +56,23 @@ public class MineBot {
     public static boolean hasThrowaway = true;
     public static Path currentPath = null;
     public static Path nextPath = null;
+    public static boolean wasScreen = false;
+    public static boolean calculatingNext = false;
+    public static Goal goal = null;
+    public static int leftPressTime = 0;
+    public static int rightPressTime = 0;
+    public static boolean isLeftClick = false;
+    public static boolean isRightClick = false;
+    public static boolean jumping = false;
+    public static boolean forward = false;
+    public static boolean backward = false;
+    public static boolean left = false;
+    public static boolean right = false;
+    public static boolean sneak = false;
+    static int numTicksInInventoryOrCrafting = 0;
+    public static BlockPos death;
+    public static long lastDeath = 0;
+    public static SchematicBuilder currentBuilder = null;
     public static final ArrayList<Class<? extends Manager>> managers = new ArrayList<Class<? extends Manager>>();
     static {
         managers.add(LookManager.class);
@@ -71,7 +86,6 @@ public class MineBot {
         managers.add(CraftingTask.class);
         managers.add(MickeyMine.class);
     }
-    public static SchematicBuilder currentBuilder = null;
     public static void main(String[] args) throws IOException, InterruptedException {
         String s = Autorun.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(5) + "../../autorun/runmc.command";
         if (s.contains("jar")) {
@@ -99,8 +113,6 @@ public class MineBot {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public static BlockPos death;
-    public static long lastDeath = 0;
     public static void onTick1() {
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             MineBot.cancelPath();
@@ -231,7 +243,6 @@ public class MineBot {
             Manager.tick(c, false);
         }
     }
-    static int numTicksInInventoryOrCrafting = 0;
     public static void openInventory() {
         GuiScreen.sendChatMessage("real open", true);
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
@@ -258,19 +269,6 @@ public class MineBot {
             }
         }
     }
-    public static boolean wasScreen = false;
-    public static boolean calculatingNext = false;
-    public static Goal goal = null;
-    public static int leftPressTime = 0;
-    public static int rightPressTime = 0;
-    public static boolean isLeftClick = false;
-    public static boolean isRightClick = false;
-    public static boolean jumping = false;
-    public static boolean forward = false;
-    public static boolean backward = false;
-    public static boolean left = false;
-    public static boolean right = false;
-    public static boolean sneak = false;
     /**
      * Do not question the logic. Called by Minecraft.java
      *
@@ -358,11 +356,8 @@ public class MineBot {
         }
         currentPath = null;
         letGoOfLeftClick();
-        isRightClick = false;
-        rightPressTime = 0;
         clearMovement();
     }
-    public static boolean fullBright = true;
     public static String info(BlockPos bp) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock();
         return bp + " " + block + " can walk on: " + Action.canWalkOn(bp) + " can walk through: " + Action.canWalkThrough(bp) + " is full block: " + block.isFullBlock() + " is full cube: " + block.isFullCube() + " is liquid: " + Action.isLiquid(block) + " is flow: " + Action.isFlowing(bp);
@@ -377,32 +372,6 @@ public class MineBot {
     }
     public static boolean isAir(BlockPos pos) {
         return Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock().equals(Block.getBlockById(0));
-    }
-    /**
-     * Go to the specified Y coordinate. Methods blocks via Thread.sleep until
-     * currentPath is null. Note: does NOT actually check Y coordinate at the
-     * end (so it could have been canceled)
-     *
-     * @param y
-     */
-    public static void getToY(int y) {
-        if (currentPath != null) {
-            cancelPath();
-        }
-        if (isThereAnythingInProgress) {
-            GuiScreen.sendChatMessage("Nope. I'm busy", true);
-            return;
-        }
-        EntityPlayer p = Minecraft.theMinecraft.thePlayer;
-        MineBot.goal = new GoalYLevel(y);
-        MineBot.findPathInNewThread(new BlockPos(p.posX, p.posY, p.posZ), true);
-        try {
-            do {
-                Thread.sleep(50);
-            } while (currentPath != null);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     public static void findPathInNewThread(final boolean talkAboutIt) {
         findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), talkAboutIt);
@@ -493,10 +462,6 @@ public class MineBot {
             isThereAnythingInProgress = false;
             return null;
         }
-        /* if (stone) {
-         path.showPathInStone();
-         return;
-         }*/
     }
     /**
      * calls moveTowardsCoords on the center of this block
@@ -512,15 +477,6 @@ public class MineBot {
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
         double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
-        /*System.out.println("min X: " + b.getBlockBoundsMinX());
-         System.out.println("max X: " + b.getBlockBoundsMaxX());
-         System.out.println("xdiff: " + xDiff);
-         System.out.println("min Y: " + b.getBlockBoundsMinY());
-         System.out.println("max Y: " + b.getBlockBoundsMaxY());
-         System.out.println("ydiff: " + yolo);
-         System.out.println("min Z: " + b.getBlockBoundsMinZ());
-         System.out.println("max Z: " + b.getBlockBoundsMaxZ());
-         System.out.println("zdiff: " + zDiff);*/
         double x = p.getX() + xDiff;
         double y = p.getY() + yolo;
         double z = p.getZ() + zDiff;
@@ -568,8 +524,6 @@ public class MineBot {
             LookManager.lookingYaw = true;
         }
         double t = rotate ? LookManager.ANGLE_THRESHOLD : 23;
-        //System.out.println(currentYaw + " " + yaw + " " + diff + " " + tmp + " " + desiredYaw);
-        //System.out.println(distanceToForward + " " + distanceToLeft + " " + distanceToRight + " " + distanceToBackward);
         if (distanceToForward < t || distanceToForward > 360 - t) {
             forward = true;
             return true;
@@ -637,7 +591,7 @@ public class MineBot {
     public static void switchtotool(Block b, ToolSet ts) {
         Minecraft.theMinecraft.thePlayer.inventory.currentItem = ts.getBestSlot(b);
     }
-    public static Entity what() {
+    public static Entity whatEntityAreYouLookingAt() {
         Minecraft mc = Minecraft.theMinecraft;
         if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             return mc.objectMouseOver.entityHit;
