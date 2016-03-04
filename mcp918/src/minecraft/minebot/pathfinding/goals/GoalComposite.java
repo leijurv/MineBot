@@ -14,10 +14,10 @@ import net.minecraft.util.BlockPos;
  */
 public class GoalComposite implements Goal {
     public final Goal[] goals;
-    public GoalComposite(Goal[] goals) {
+    public GoalComposite(Goal... goals) {
         this.goals = goals;
     }
-    public GoalComposite(BlockPos[] blocks) {
+    public GoalComposite(BlockPos... blocks) {
         goals = new Goal[blocks.length];
         for (int i = 0; i < blocks.length; i++) {
             goals[i] = new GoalBlock(blocks[i]);

@@ -15,6 +15,7 @@ import minebot.Memory;
 import minebot.MineBot;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import static minebot.util.CraftingTask.placeHeldBlockNearby;
 import net.minecraft.block.Block;
@@ -143,7 +144,7 @@ public class SmeltingTask extends ManagerTick {
                     double diffZ = furnaceLocation.getZ() + 0.5D - Minecraft.theMinecraft.thePlayer.posZ;
                     double distXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
                     if (distXZ < 50 && Math.abs(diffY) < 20) {
-                        MineBot.goal = new GoalBlock(furnaceLocation.up());
+                        MineBot.goal = new GoalComposite(new GoalBlock(furnaceLocation.up()), new GoalBlock(furnaceLocation.north()), new GoalBlock(furnaceLocation.south()), new GoalBlock(furnaceLocation.east()), new GoalBlock(furnaceLocation.west()), new GoalBlock(furnaceLocation.north().down()), new GoalBlock(furnaceLocation.south().down()), new GoalBlock(furnaceLocation.east().down()), new GoalBlock(furnaceLocation.west().down()));
                         if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
                             MineBot.findPathInNewThread(false);
                         }

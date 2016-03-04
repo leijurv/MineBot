@@ -13,6 +13,7 @@ import minebot.Memory;
 import minebot.MineBot;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalComposite;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.CraftingManager;
@@ -187,7 +188,7 @@ public class CraftingTask extends ManagerTick {
                 double diffZ = craftingTableLocation.getZ() + 0.5D - Minecraft.theMinecraft.thePlayer.posZ;
                 double distXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
                 if (distXZ < 50 && Math.abs(diffY) < 20) {
-                    MineBot.goal = new GoalBlock(craftingTableLocation.up());
+                    MineBot.goal = new GoalComposite(new GoalBlock(craftingTableLocation.up()), new GoalBlock(craftingTableLocation.north()), new GoalBlock(craftingTableLocation.south()), new GoalBlock(craftingTableLocation.east()), new GoalBlock(craftingTableLocation.west()), new GoalBlock(craftingTableLocation.north().down()), new GoalBlock(craftingTableLocation.south().down()), new GoalBlock(craftingTableLocation.east().down()), new GoalBlock(craftingTableLocation.west().down()));
                     if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
                         MineBot.findPathInNewThread(false);
                     }
