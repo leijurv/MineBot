@@ -133,7 +133,7 @@ public class MineBot {
         sneak = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
-        BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
+        BlockPos playerFeet = thePlayer.getPosition0();
         if (thePlayer.isDead && System.currentTimeMillis() > lastDeath + 10000) {
             death = playerFeet;
             lastDeath = System.currentTimeMillis();
