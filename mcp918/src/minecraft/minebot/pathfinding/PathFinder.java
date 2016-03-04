@@ -143,7 +143,7 @@ public class PathFinder {
         }
         return map.get(pos);
     }
-    public Action[] getConnectedPositions(BlockPos pos) {
+    private static Action[] getConnectedPositions(BlockPos pos) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -168,8 +168,8 @@ public class PathFinder {
         actions[17] = new ActionDescendTwo(pos, new BlockPos(x + 1, y - 2, z));
         return actions;
     }
-    Random random = new Random();
-    public <E> void shuffle(E[] list) {
+    private final Random random = new Random();
+    private <E> void shuffle(E[] list) {
         int len = list.length;
         for (int i = 0; i < len; i++) {
             int j = random.nextInt(len);
@@ -182,7 +182,7 @@ public class PathFinder {
     /**
      * My own implementation of a singly linked list
      */
-    public static class OpenSet {
+    private static class OpenSet {
         Node first = null;
         public Node removeLowest() {
             if (first == null) {
