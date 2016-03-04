@@ -171,6 +171,9 @@ public class InventoryManager extends Manager {
         }
     }
     public static void putOnHotBar(Item item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
         onHotbar.add(item);
     }
     @Override
