@@ -51,9 +51,16 @@ public class SmeltingTask extends ManagerTick {
     }
     @Override
     protected boolean onTick0() {
+        MineBot.clearMovement();
+        for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
+            if (task.plan != null) {
+                task.exec();
+                return true;
+            }
+        }
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
             if (task.exec()) {
-                return true;
+                return false;
             }
         }
         return false;
