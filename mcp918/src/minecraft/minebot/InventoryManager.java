@@ -41,6 +41,7 @@ public class InventoryManager extends Manager {
         addBounds("coal", 128, 64);
         //addBounds("redstone", 0, 0);//no one wants stinking redstone
         addBounds("stone", 64, 32);
+        addBounds("gravel", 64, 32);
         addBounds("dirt", 128, 64);
     }
     public static void addBounds(String itemName, int max, int min) {

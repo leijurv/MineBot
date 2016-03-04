@@ -13,7 +13,9 @@ import minebot.util.SmeltingTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 
 /**
  * goals:
@@ -97,11 +99,11 @@ public class EarlyGameStrategy extends ManagerTick {
         }
         boolean hasWooden = false;
         boolean readyForMining = true;
-        boolean hasStone = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
+        boolean hasStone = craftTool(Item.getByNameOrId("minecraft:stone_pickaxe"), 1);
         if (hasStone) {
             dontCraft(Item.getByNameOrId("minecraft:wooden_pickaxe"));
         } else {
-            hasWooden = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
+            hasWooden = craftTool(Item.getByNameOrId("minecraft:wooden_pickaxe"), 1);
         }
         readyForMining &= hasStone;
         if (hasWooden || hasStone) {
@@ -125,36 +127,36 @@ public class EarlyGameStrategy extends ManagerTick {
             readyForMining = false;
         }
         if (countCobble() > 5) {
-            boolean axe = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_axe"), 1);
+            boolean axe = craftTool(Item.getByNameOrId("minecraft:stone_axe"), 1);
             if (axe) {
                 WOOD_AMT = 64;
                 MIN_WOOD_AMT = 16;
             } else {
                 readyForMining = false;
             }
-            if (!CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_shovel"), 1)) {
+            if (!craftTool(Item.getByNameOrId("minecraft:stone_shovel"), 1)) {
                 readyForMining = false;
             }
-            if (!CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:stone_sword"), 1)) {
+            if (!craftTool(Item.getByNameOrId("minecraft:stone_sword"), 1)) {
                 readyForMining = false;
             }
         }
         if (countCobble() > 8) {
-            if (!CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:furnace"), 1)) {
+            if (!craftTool(Item.getByNameOrId("minecraft:furnace"), 1)) {
                 readyForMining = false;
             }
         }
         int miningLevel = 36;
         if (readyForMining) {
             int amtIron = 0;
-            boolean ironPick = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_pickaxe"), 1);
+            boolean ironPick = craftTool(Item.getByNameOrId("minecraft:iron_pickaxe"), 1);
             if (ironPick) {
-                boolean ironSword = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_sword"), 1);
+                boolean ironSword = craftTool(Item.getByNameOrId("minecraft:iron_sword"), 1);
                 if (ironSword) {
-                    boolean ironHelmet = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_helmet"), 1);
-                    boolean ironChestplate = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_chestplate"), 1);
-                    boolean ironLeggings = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_leggings"), 1);
-                    boolean ironBoots = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("minecraft:iron_boots"), 1);
+                    boolean ironHelmet = craftTool(Item.getByNameOrId("minecraft:iron_helmet"), 1);
+                    boolean ironChestplate = craftTool(Item.getByNameOrId("minecraft:iron_chestplate"), 1);
+                    boolean ironLeggings = craftTool(Item.getByNameOrId("minecraft:iron_leggings"), 1);
+                    boolean ironBoots = craftTool(Item.getByNameOrId("minecraft:iron_boots"), 1);
                     if (ironHelmet && ironChestplate && ironLeggings && ironBoots) {
                         miningLevel = 6;
                     } else {
@@ -179,14 +181,14 @@ public class EarlyGameStrategy extends ManagerTick {
         }
         int numDiamonds = countItem("diamond");
         if (readyForMining && numDiamonds >= 1) {
-            if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_pickaxe"), 1)) {
-                if (CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_sword"), 1)) {
-                    boolean shovel = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_shovel"), 1);
-                    boolean axe = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_axe"), 1);
-                    boolean boots = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_boots"), 1);
-                    boolean leg = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_leggings"), 1);
-                    boolean chest = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_chestplate"), 1);
-                    boolean helmet = CraftingTask.ensureCraftingDesired(Item.getByNameOrId("diamond_helmet"), 1);
+            if (craftTool(Item.getByNameOrId("diamond_pickaxe"), 1)) {
+                if (craftTool(Item.getByNameOrId("diamond_sword"), 1)) {
+                    boolean shovel = craftTool(Item.getByNameOrId("diamond_shovel"), 1);
+                    boolean axe = craftTool(Item.getByNameOrId("diamond_axe"), 1);
+                    boolean boots = craftTool(Item.getByNameOrId("diamond_boots"), 1);
+                    boolean leg = craftTool(Item.getByNameOrId("diamond_leggings"), 1);
+                    boolean chest = craftTool(Item.getByNameOrId("diamond_chestplate"), 1);
+                    boolean helmet = craftTool(Item.getByNameOrId("diamond_helmet"), 1);
                     if (shovel && axe && boots && leg && chest && helmet) {
                         GuiScreen.sendChatMessage("My job here is done.");
                         cancel();
@@ -207,6 +209,53 @@ public class EarlyGameStrategy extends ManagerTick {
             }
         }
         return false;
+    }
+    public static boolean craftTool(Item tool, int amt) {
+        if (tool instanceof ItemTool) {
+            for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
+                if (stack == null) {
+                    continue;
+                }
+                if (stack.getItem() instanceof ItemTool && stack.getItem().getClass() == tool.getClass()) {
+                    ItemTool t = (ItemTool) (stack.getItem());
+                    if (t.getToolMaterial().getEfficiencyOnProperMaterial() >= ((ItemTool) tool).getToolMaterial().getEfficiencyOnProperMaterial()) {
+                        //GuiScreen.sendChatMessage("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
+                        return true;
+                    }
+                }
+            }
+            return CraftingTask.ensureCraftingDesired(tool, amt);
+        }
+        if (tool instanceof ItemArmor) {
+            ItemArmor armor = (ItemArmor) tool;
+            for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.mainInventory) {
+                if (stack == null) {
+                    continue;
+                }
+                if (stack.getItem() instanceof ItemArmor) {
+                    ItemArmor a = (ItemArmor) (stack.getItem());
+                    if (a.armorType == armor.armorType) {
+                        if (a.damageReduceAmount >= armor.damageReduceAmount) {
+                            //GuiScreen.sendChatMessage("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
+                            return true;
+                        }
+                    }
+                }
+            }
+            for (ItemStack stack : Minecraft.theMinecraft.thePlayer.inventory.armorInventory) {
+                if (stack == null) {
+                    continue;
+                }
+                ItemArmor a = (ItemArmor) (stack.getItem());
+                if (a.armorType == armor.armorType) {
+                    if (a.damageReduceAmount >= armor.damageReduceAmount) {
+                        //GuiScreen.sendChatMessage("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
+                        return true;
+                    }
+                }
+            }
+        }
+        return CraftingTask.ensureCraftingDesired(tool, amt);
     }
     public static void dontCraft(Item item) {
         CraftingTask task = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
