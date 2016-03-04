@@ -16,7 +16,6 @@ import minebot.MineBot;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalComposite;
-import minebot.pathfinding.goals.GoalTwoBlocks;
 import static minebot.util.CraftingTask.placeHeldBlockNearby;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -256,7 +255,7 @@ public class SmeltingTask extends ManagerTick {
                         Minecraft.theMinecraft.rightClickMouse();
                     }
                 } else {
-                    MineBot.goal = new GoalTwoBlocks(furnace);
+                    MineBot.goal = new GoalComposite(new GoalBlock(furnace.up()), new GoalBlock(furnace.north()), new GoalBlock(furnace.south()), new GoalBlock(furnace.east()), new GoalBlock(furnace.west()), new GoalBlock(furnace.north().down()), new GoalBlock(furnace.south().down()), new GoalBlock(furnace.east().down()), new GoalBlock(furnace.west().down()));
                     if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
                         MineBot.findPathInNewThread(false);
                     }
