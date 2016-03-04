@@ -60,6 +60,7 @@ public class InventoryManager extends Manager {
      * @param pos hot bar slot to put in
      * @param check what block to check break time against
      * @param itemType the class of the item
+     * @param doThrowaway throw away all but the best two
      * @return
      */
     public static boolean place(int pos, Block check, Class<?> itemType, boolean doThrowaway) {
