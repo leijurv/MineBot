@@ -15,6 +15,7 @@ import minebot.pathfinding.actions.ActionFall;
 import minebot.pathfinding.actions.ActionPillar;
 import java.util.HashMap;
 import java.util.Random;
+import minebot.pathfinding.actions.ActionDescendThree;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -147,7 +148,7 @@ public class PathFinder {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
-        Action[] actions = new Action[18];
+        Action[] actions = new Action[22];
         actions[0] = new ActionPillar(pos);
         actions[1] = new ActionBridge(pos, new BlockPos(x + 1, y, z));
         actions[2] = new ActionBridge(pos, new BlockPos(x - 1, y, z));
@@ -166,6 +167,10 @@ public class PathFinder {
         actions[15] = new ActionDescendTwo(pos, new BlockPos(x, y - 2, z + 1));
         actions[16] = new ActionDescendTwo(pos, new BlockPos(x - 1, y - 2, z));
         actions[17] = new ActionDescendTwo(pos, new BlockPos(x + 1, y - 2, z));
+        actions[18] = new ActionDescendThree(pos, new BlockPos(x, y - 3, z - 1));
+        actions[19] = new ActionDescendThree(pos, new BlockPos(x, y - 3, z + 1));
+        actions[20] = new ActionDescendThree(pos, new BlockPos(x - 1, y - 3, z));
+        actions[21] = new ActionDescendThree(pos, new BlockPos(x + 1, y - 3, z));
         return actions;
     }
     private final Random random = new Random();
