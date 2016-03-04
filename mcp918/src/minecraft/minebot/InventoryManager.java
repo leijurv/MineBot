@@ -188,7 +188,19 @@ public class InventoryManager extends Manager {
             openedInvYet = false;
             return;
         }
+        BlockPos look = MineBot.whatAreYouLookingAt();
+        boolean doThrowAway = true;
+        if (look != null) {
+            int xDiff = look.getX() - Minecraft.theMinecraft.thePlayer.getPosition0().getX();
+            int zDiff = look.getZ() - Minecraft.theMinecraft.thePlayer.getPosition0().getZ();
+            if (Math.abs(xDiff) + Math.abs(zDiff) <= 2) {
+                doThrowAway = false;//dont throw away if we are looking at a wall and we are close, because we'll probably just pick it right back up again
+            }
+        }
         if (checkArmor()) {
+            return;
+        }
+        if (doThrowAway && throwAwayOldArmor()) {
             return;
         }
         Random random = new Random(Minecraft.theMinecraft.thePlayer.getName().hashCode());
@@ -229,15 +241,6 @@ public class InventoryManager extends Manager {
             }
         }
         onHotbar.clear();
-        BlockPos look = MineBot.whatAreYouLookingAt();
-        boolean doThrowAway = true;
-        if (look != null) {
-            int xDiff = look.getX() - Minecraft.theMinecraft.thePlayer.getPosition0().getX();
-            int zDiff = look.getZ() - Minecraft.theMinecraft.thePlayer.getPosition0().getZ();
-            if (Math.abs(xDiff) + Math.abs(zDiff) <= 2) {
-                doThrowAway = false;//dont throw away if we are looking at a wall and we are close, because we'll probably just pick it right back up again
-            }
-        }
         HashMap<Item, Integer> amounts = countItems();
         for (String itemName : maximumAmounts.keySet()) {
             if (!doThrowAway) {
@@ -414,13 +417,31 @@ public class InventoryManager extends Manager {
         }
         return false;
     }
+    public static boolean throwAwayOldArmor() {
+        for (int i = 0; i < 4; i++) {
+            int betterInd = bestArmor(i, true);
+            if (betterInd == -1) {
+                continue;
+            }
+            if (!openedInvYet) {
+                MineBot.slowOpenInventory();
+                openedInvYet = true;
+            }
+            if (betterInd < 9) {
+                betterInd += 36;
+            }
+            dropOne(betterInd);
+            return true;
+        }
+        return false;
+    }
     public static boolean checkArmor() {
         //helmet, inv container slot 5, armorType 0, armorInventory 3
         //chestplate, inv container slot 6, armorType 1, armorInventory 2
         //leggings, inv container slot 7, armorType 2, armorInventory 1
         //boots, inv container slot 8, armorType 3, armorInventory 0
         for (int i = 0; i < 4; i++) {
-            int betterInd = bestArmor(i);
+            int betterInd = bestArmor(i, false);
             if (betterInd == -1) {
                 continue;
             }
@@ -446,7 +467,7 @@ public class InventoryManager extends Manager {
         }
         return false;
     }
-    public static int bestArmor(int type) {
+    public static int bestArmor(int type, boolean onlyMainInv) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int bestInd = -1;
         int bestDamageReduce = Integer.MIN_VALUE;
@@ -465,6 +486,9 @@ public class InventoryManager extends Manager {
                     }
                 }
             }
+        }
+        if (onlyMainInv) {
+            return bestInd;
         }
         ItemStack currentlyInSlot = Minecraft.theMinecraft.thePlayer.inventory.armorInventory[3 - type];
         if (currentlyInSlot != null) {
