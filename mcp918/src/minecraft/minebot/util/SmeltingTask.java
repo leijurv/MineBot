@@ -124,7 +124,7 @@ public class SmeltingTask extends ManagerTick {
     int guiWaitTicks = 0;
     int shiftWaitTicks = 0;
     private boolean exec() {
-        System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks + " " + furnace);
+        System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks + " " + furnace + " " + Minecraft.theMinecraft.currentScreen == null);
         if (!didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
             BlockPos furnaceLocation = getUnusedFurnace();
             if (furnaceLocation != null) {
