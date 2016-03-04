@@ -173,18 +173,23 @@ public class LookManager extends Manager {
         return new GoalXZ((int) x, (int) z);
     }
     static double SPEED = 1000;
+    /**
+     * Smoothly moves between random pitches and yaws every second
+     *
+     * @return
+     */
     public static float[] getRandom() {
         long now = (long) Math.ceil(((double) System.currentTimeMillis()) / SPEED);
         now *= SPEED;
         long prev = now - (long) SPEED;
-        float frac = (System.currentTimeMillis() - prev) / ((float) SPEED);
+        float frac = (System.currentTimeMillis() - prev) / ((float) SPEED);//fraction between previous second and next
         Random prevR = new Random(prev);//fite me
         Random nowR = new Random(now);
         float prevFirst = prevR.nextFloat() * 10 - 5;
         float prevSecond = prevR.nextFloat() * 10 - 5;
         float nowFirst = nowR.nextFloat() * 10 - 5;
         float nowSecond = nowR.nextFloat() * 10 - 5;
-        float first = prevFirst + frac * (nowFirst - prevFirst);
+        float first = prevFirst + frac * (nowFirst - prevFirst);//smooth between previous and next second
         float second = prevSecond + frac * (nowSecond - prevSecond);
         return new float[]{first, second};
     }

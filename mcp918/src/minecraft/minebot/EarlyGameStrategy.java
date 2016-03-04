@@ -57,6 +57,13 @@ public class EarlyGameStrategy extends ManagerTick {
     static boolean cobble = false;
     @Override
     protected boolean onTick0() {
+        /*
+         TODO
+         Don't craft a pick if we already have a higher level of pick
+         Don't craft any tools in general if we already have a higher level
+         Throw away any tools where we have two higher levels. (e.g. throw away wood pick once we get both stone pick and iron pick)
+         Same thing for armor. Throw away any armor in inventory if we have better armor in armorInventory or mainInventory
+         */
         if (!gotDirt) {
             int dirt = countDirt();
             if (dirt >= DIRT_AMT) {

@@ -109,7 +109,7 @@ public class PathFinder {
             if (bestSoFar[i] == null) {
                 continue;
             }
-            double dist = dist(bestSoFar[i]);
+            double dist = distFromStart(bestSoFar[i]);
             if (dist > bestDist) {
                 bestDist = dist;
             }
@@ -128,7 +128,7 @@ public class PathFinder {
         GuiScreen.sendChatMessage("No path found =(", true);
         return null;
     }
-    private double dist(Node n) {
+    private double distFromStart(Node n) {
         int xDiff = n.pos.getX() - start.getX();
         int yDiff = n.pos.getY() - start.getY();
         int zDiff = n.pos.getZ() - start.getZ();

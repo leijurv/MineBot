@@ -53,7 +53,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         HashSet<BlockPos> toBreak = new HashSet();
         for (BlockPos positionsToBreak1 : positionsToBreak) {
             toBreak.add(positionsToBreak1);
-            if (this instanceof ActionFall) {
+            if (this instanceof ActionFall) {//if we are digging straight down, assume we have already broken the sand above us
                 continue;
             }
             BlockPos tmp = positionsToBreak1.up();
