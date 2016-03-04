@@ -56,7 +56,6 @@ public class MineBot {
     public static boolean hasThrowaway = true;
     public static Path currentPath = null;
     public static Path nextPath = null;
-    public static boolean wasScreen = false;
     public static boolean calculatingNext = false;
     public static Goal goal = null;
     public static int leftPressTime = 0;
