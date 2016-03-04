@@ -62,7 +62,7 @@ public class InventoryManager extends Manager {
      * @param itemType the class of the item
      * @return
      */
-    public static boolean place(int pos, Block check, Class<?> itemType) {
+    public static boolean place(int pos, Block check, Class<?> itemType, boolean doThrowaway) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int itemPos = -1;
         float bestStrength = Float.MIN_VALUE;
@@ -80,10 +80,57 @@ public class InventoryManager extends Manager {
                 }
             }
         }
-        if (itemPos == -1) {
+        if (itemPos == -1) {//there are none
             return false;
         }
-        if (itemPos == pos) {
+        if (itemPos == pos) {//there is one and this is the best
+            if (!doThrowaway) {
+                return false;
+            }
+            int seconditemPos = -1;
+            float secondbestStrength = Float.MIN_VALUE;
+            for (int i = 0; i < stacks.length; i++) {
+                if (i == itemPos) {
+                    continue;
+                }
+                ItemStack stack = stacks[i];
+                if (stack == null) {
+                    continue;
+                }
+                Item item = stack.getItem();
+                if (item.getClass() == itemType) {
+                    float strength = item.getStrVsBlock(stack, check);
+                    if (strength > secondbestStrength) {
+                        secondbestStrength = strength;
+                        seconditemPos = i;
+                    }
+                }
+            }
+            if (seconditemPos == -1) {
+                return false;
+            }
+            for (int i = 0; i < stacks.length; i++) {
+                if (i == itemPos || i == seconditemPos) {
+                    continue;
+                }
+                ItemStack stack = stacks[i];
+                if (stack == null) {
+                    continue;
+                }
+                Item item = stack.getItem();
+                if (item.getClass() == itemType) {
+                    int j = i;
+                    if (j < 9) {
+                        j += 36;
+                    }
+                    if (!openedInvYet) {
+                        MineBot.slowOpenInventory();
+                        openedInvYet = true;
+                    }
+                    dropOne(j);
+                    return true;
+                }
+            }
             return false;
         }
         if (itemPos < 9) {
@@ -207,19 +254,19 @@ public class InventoryManager extends Manager {
         Random random = new Random(Minecraft.theMinecraft.thePlayer.getName().hashCode());
         int[] slots = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         randomize(slots, random);
-        if (place(slots[0], Block.getBlockFromName("stone"), ItemPickaxe.class)) {
+        if (place(slots[0], Block.getBlockFromName("stone"), ItemPickaxe.class, doThrowAway)) {
             return;
         }
-        if (placeSword(slots[1])) {
+        if (placeSword(slots[1], doThrowAway)) {
             return;
         }
         if (placeFood(slots[2])) {
             return;
         }
-        if (place(slots[3], Block.getBlockFromName("log"), ItemAxe.class)) {
+        if (place(slots[3], Block.getBlockFromName("log"), ItemAxe.class, doThrowAway)) {
             return;
         }
-        if (place(slots[4], Block.getBlockFromName("dirt"), ItemSpade.class)) {
+        if (place(slots[4], Block.getBlockFromName("dirt"), ItemSpade.class, doThrowAway)) {
             return;
         }
         if (putItemInSlot(slots[5], Item.getByNameOrId("minecraft:dirt"), Item.getByNameOrId("minecraft:cobblestone"))) {
@@ -339,7 +386,7 @@ public class InventoryManager extends Manager {
         }
         return amounts;
     }
-    public static boolean placeSword(int slot) {
+    public static boolean placeSword(int slot, boolean doThrowaway) {
         ItemStack[] stacks = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         int swordPos = -1;
         float bestStrength = Float.MIN_VALUE;
@@ -362,6 +409,53 @@ public class InventoryManager extends Manager {
             return false;
         }
         if (swordPos == slot) {
+            if (!doThrowaway) {
+                return false;
+            }
+            int seconditemPos = -1;
+            float secondbestStrength = Float.MIN_VALUE;
+            for (int i = 0; i < stacks.length; i++) {
+                if (i == swordPos) {
+                    continue;
+                }
+                ItemStack stack = stacks[i];
+                if (stack == null) {
+                    continue;
+                }
+                Item item = stack.getItem();
+                if (item instanceof ItemSword) {
+                    float strength = ((ItemSword) item).getDamageVsEntity();
+                    if (strength > secondbestStrength) {
+                        secondbestStrength = strength;
+                        seconditemPos = i;
+                    }
+                }
+            }
+            if (seconditemPos == -1) {
+                return false;
+            }
+            for (int i = 0; i < stacks.length; i++) {
+                if (i == swordPos || i == seconditemPos) {
+                    continue;
+                }
+                ItemStack stack = stacks[i];
+                if (stack == null) {
+                    continue;
+                }
+                Item item = stack.getItem();
+                if (item instanceof ItemSword) {
+                    int j = i;
+                    if (j < 9) {
+                        j += 36;
+                    }
+                    if (!openedInvYet) {
+                        MineBot.slowOpenInventory();
+                        openedInvYet = true;
+                    }
+                    dropOne(j);
+                    return true;
+                }
+            }
             return false;
         }
         if (swordPos < 9) {
