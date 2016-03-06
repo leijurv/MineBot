@@ -22,6 +22,7 @@ import net.minecraft.util.Vec3;
  * @author leijurv
  */
 public class LookManager extends Manager {
+    public static boolean randomLooking = true;
     static final float MAX_YAW_CHANGE_PER_TICK = 360 / 20;
     static final float MAX_PITCH_CHANGE_PER_TICK = 360 / 20;
     static float previousYaw = 0;
@@ -253,8 +254,10 @@ public class LookManager extends Manager {
     }
     @Override
     public void onTickPost() {
-        desiredYaw += getRandom()[0];
-        desiredPitch += getRandom()[1];
+        if (randomLooking) {
+            desiredYaw += getRandom()[0];
+            desiredPitch += getRandom()[1];
+        }
         if (desiredPitch > 90) {
             desiredPitch = 90;
         }

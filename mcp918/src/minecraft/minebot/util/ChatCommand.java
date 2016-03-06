@@ -61,6 +61,7 @@ public class ChatCommand {
         addFields(MineBot.class);
         addFields(Combat.class);
         addFields(SmeltingTask.class);
+        addFields(LookManager.class);
     }
     public static void addFields(Class<?> c) {
         Field[] temp = c.getFields();
