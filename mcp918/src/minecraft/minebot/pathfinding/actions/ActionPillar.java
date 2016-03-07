@@ -24,6 +24,9 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
+        if (!MineBot.hasThrowaway) {
+            return PathFinder.COST_INF;
+        }
         double hardness = getTotalHardnessOfBlocksToBreak(ts);
         if (hardness != 0) {
             if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3)) || Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//if the block above where we want to break is not a full block, don't do it
