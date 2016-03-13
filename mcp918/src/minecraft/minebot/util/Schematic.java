@@ -50,7 +50,7 @@ public class Schematic {
             schematicBlocks.put(new BlockPos(size / 2, 0, size / 2), type);
             schematicBlocks.put(new BlockPos(size / 2 + size - 1, 0, size / 2), type);
             schematicBlocks.put(new BlockPos(size / 2 + size - 1, 0, size / 2), type);
-            schematicBlocks.put(new BlockPos(size / 2, 0, size / 2 + size + 1), type);
+            schematicBlocks.put(new BlockPos(size / 2, 0, size / 2 + size - 1), type);
         }
     }
     /**
