@@ -367,6 +367,7 @@ public class MineBot {
      */
     public static void cancelPath() {
         nextPath = null;
+        currentBuilder = null;
         clearPath();
     }
     public static boolean isAir(BlockPos pos) {

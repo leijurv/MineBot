@@ -6,11 +6,10 @@
 package minebot.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import minebot.MineBot;
-import minebot.pathfinding.actions.ActionPillar;
-import minebot.pathfinding.actions.ActionPlaceOrBreak;
-import minebot.pathfinding.goals.GoalBlock;
+import minebot.pathfinding.goals.GoalComposite;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -33,28 +32,19 @@ public class SchematicBuilder {
         }
     }
     public void tick() {
-        BlockPos goal = getFirstToPlace();
+        HashSet<BlockPos> goal = getAllBlocksToPlaceShiftedUp();
         System.out.println("Ticking " + goal);
         if (goal != null) {
-            if (MineBot.isAir(goal.up(2))) {
-                MineBot.goal = new GoalBlock(goal);
-            } else {
-                MineBot.goal = new GoalBlock(goal.up());
-            }
-            BlockPos playerCurrent = Minecraft.theMinecraft.thePlayer.getPosition0();
-            if (playerCurrent.equals(goal) || playerCurrent.equals(goal.up())) {
-                ActionPlaceOrBreak.switchtothrowaway(true);
-                new ActionPillar(goal).tick1();
-            } else {
-                if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
-                    MineBot.findPathInNewThread(false);
-                }
+            MineBot.goal = new GoalComposite(goal);
+            if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
+                MineBot.findPathInNewThread(false);
             }
         } else {
             GuiScreen.sendChatMessage("done building");
         }
     }
-    public BlockPos getFirstToPlace() {
+    public HashSet<BlockPos> getAllBlocksToPlaceShiftedUp() {
+        HashSet<BlockPos> toPlace = new HashSet<BlockPos>();
         Block air = Block.getBlockById(0);
         for (int y = 0; y < schematic.getHeight(); y++) {
             for (int x = 0; x < schematic.getWidth(); x++) {
@@ -65,14 +55,14 @@ public class SchematicBuilder {
                     Block desired = schematic.getBlockFromBlockPos(inSchematic);
                     System.out.println(inSchematic + " " + current + " " + desired);
                     boolean currentlyAir = air.equals(current);
-                    boolean shouldBeAir = air.equals(desired);
+                    boolean shouldBeAir = desired == null || air.equals(desired);
                     if (currentlyAir && !shouldBeAir) {
-                        return inWorld;
+                        toPlace.add(inWorld.up());
                     }
                 }
             }
         }
-        return null;
+        return toPlace.isEmpty() ? null : toPlace;
     }
     private BlockPos offset(BlockPos original) {
         return new BlockPos(original.getX() + offset.getX(), original.getY() + offset.getY(), original.getZ() + offset.getZ());

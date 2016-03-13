@@ -14,7 +14,9 @@ import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 /**
  *
@@ -127,8 +129,13 @@ public class ActionBridge extends ActionPlaceOrBreak {
                     double faceY = (to.getY() + against1.getY()) * 0.5D;
                     double faceZ = (to.getZ() + against1.getZ() + 1.0D) * 0.5D;
                     LookManager.lookAtCoords(faceX, faceY, faceZ, true);
+                    EnumFacing side = Minecraft.theMinecraft.objectMouseOver.sideHit;
                     if (Objects.equals(MineBot.whatAreYouLookingAt(), against1) && Minecraft.theMinecraft.thePlayer.isSneaking()) {
-                        Minecraft.theMinecraft.rightClickMouse();
+                        if (MineBot.whatAreYouLookingAt().offset(side).equals(positionsToPlace[0])) {
+                            Minecraft.theMinecraft.rightClickMouse();
+                        } else {
+                            GuiScreen.sendChatMessage("Wrong. " + side + " " + MineBot.whatAreYouLookingAt().offset(side) + " " + positionsToPlace[0]);
+                        }
                     }
                     System.out.println("Trying to look at " + against1 + ", actually looking at" + MineBot.whatAreYouLookingAt());
                     return false;
