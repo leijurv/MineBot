@@ -47,10 +47,10 @@ public class Schematic {
             schematicBlocks.put(new BlockPos(rightFacing ? x : x + size + 1, 0, width - 1), type);
         }
         if (dots) {
-            schematicBlocks.put(new BlockPos(size / 2, 0, 0), type);
-            schematicBlocks.put(new BlockPos(0, 0, size / 2), type);
-            schematicBlocks.put(new BlockPos(size / 2 + size + 1, 0, 0), type);
-            schematicBlocks.put(new BlockPos(0, 0, size / 2 + size + 1), type);
+            schematicBlocks.put(new BlockPos(size / 2, 0, size / 2), type);
+            schematicBlocks.put(new BlockPos(size / 2 + size - 1, 0, size / 2), type);
+            schematicBlocks.put(new BlockPos(size / 2 + size - 1, 0, size / 2), type);
+            schematicBlocks.put(new BlockPos(size / 2, 0, size / 2 + size + 1), type);
         }
     }
     /**
