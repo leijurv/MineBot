@@ -22,29 +22,24 @@ import net.minecraft.util.EnumFacing;
  */
 public class ActionClimb extends ActionPlaceOrBreak {
     BlockPos[] against = new BlockPos[3];
-    EnumFacing[] face = new EnumFacing[3];
     public ActionClimb(BlockPos start, BlockPos end) {
         super(start, end, new BlockPos[]{end, start.up(2), end.up()}, new BlockPos[]{end.down()});
         BlockPos placementLocation = positionsToPlace[0];//end.down()
         int i = 0;
         if (!placementLocation.north().equals(from)) {
             against[i] = placementLocation.north();
-            face[i] = EnumFacing.NORTH;
             i++;
         }
         if (!placementLocation.south().equals(from)) {
             against[i] = placementLocation.south();
-            face[i] = EnumFacing.SOUTH;
             i++;
         }
         if (!placementLocation.east().equals(from)) {
             against[i] = placementLocation.east();
-            face[i] = EnumFacing.EAST;
             i++;
         }
         if (!placementLocation.west().equals(from)) {
             against[i] = placementLocation.west();
-            face[i] = EnumFacing.WEST;
             i++;
         }
         //TODO: add ability to place against .down() as well as the cardinal directions
@@ -80,7 +75,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
                     double faceZ = (to.getZ() + against[i].getZ() + 1.0D) * 0.5D;
                     LookManager.lookAtCoords(faceX, faceY, faceZ, true);
                     EnumFacing side = Minecraft.theMinecraft.objectMouseOver.sideHit;
-                    if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i]) && side.getOpposite() == face[i]) {
+                    if (Objects.equals(MineBot.whatAreYouLookingAt(), against[i]) && MineBot.whatAreYouLookingAt().offset(side).equals(positionsToPlace[0])) {
                         ticksWithoutPlacement++;
                         MineBot.sneak = true;
                         if (Minecraft.theMinecraft.thePlayer.isSneaking()) {

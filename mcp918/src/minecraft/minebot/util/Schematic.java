@@ -27,6 +27,32 @@ public class Schematic {
         this.height = height;
         this.length = length;
     }
+    public Schematic(Block type, int desiredWidth, boolean rightFacing, boolean dots) {
+        if (type == null) {
+            throw new IllegalArgumentException();
+        }
+        int size = (desiredWidth - 1) / 2;
+        width = size * 2 + 1;
+        height = 1;
+        length = width;
+        schematicBlocks = new HashMap();
+        for (int x = 0; x < width; x++) {
+            schematicBlocks.put(new BlockPos(x, 0, size), type);
+            schematicBlocks.put(new BlockPos(size, 0, x), type);
+        }
+        for (int x = 0; x < size; x++) {
+            schematicBlocks.put(new BlockPos(rightFacing ? x + size + 1 : x, 0, 0), type);
+            schematicBlocks.put(new BlockPos(0, 0, rightFacing ? x : x + size + 1), type);
+            schematicBlocks.put(new BlockPos(width - 1, 0, rightFacing ? x + size + 1 : x), type);
+            schematicBlocks.put(new BlockPos(rightFacing ? x : x + size + 1, 0, width - 1), type);
+        }
+        if (dots) {
+            schematicBlocks.put(new BlockPos(size / 2, 0, 0), type);
+            schematicBlocks.put(new BlockPos(0, 0, size / 2), type);
+            schematicBlocks.put(new BlockPos(size / 2 + size + 1, 0, 0), type);
+            schematicBlocks.put(new BlockPos(0, 0, size / 2 + size + 1), type);
+        }
+    }
     /**
      * Tuple links the BlockPos and Block to one another.
      *

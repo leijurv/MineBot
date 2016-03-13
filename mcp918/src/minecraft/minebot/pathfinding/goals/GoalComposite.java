@@ -6,6 +6,7 @@
 package minebot.pathfinding.goals;
 
 import java.util.Arrays;
+import java.util.Collection;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -21,6 +22,14 @@ public class GoalComposite implements Goal {
         goals = new Goal[blocks.length];
         for (int i = 0; i < blocks.length; i++) {
             goals[i] = new GoalBlock(blocks[i]);
+        }
+    }
+    public GoalComposite(Collection<BlockPos> blocks) {
+        goals = new Goal[blocks.size()];
+        int i = 0;
+        for (BlockPos pos : blocks) {
+            goals[i] = new GoalBlock(pos);
+            i++;
         }
     }
     public Goal[] goals() {

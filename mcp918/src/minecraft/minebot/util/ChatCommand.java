@@ -24,6 +24,7 @@ import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalGetToBlock;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -321,6 +322,13 @@ public class ChatCommand {
         Schematic sch = SchematicLoader.getLoader().loadFromFile(new File("/Users/galdara/Downloads/schematics/Bakery.schematic"));
         MineBot.currentBuilder = new SchematicBuilder(sch, Minecraft.theMinecraft.thePlayer.getPosition0());
         return "printed schematic to console.";
+    }
+    public static String pinwheel(String message) {
+        int size = 5;
+        BlockPos pl = Minecraft.theMinecraft.thePlayer.getPosition0();
+        BlockPos center = new BlockPos(pl.getX() - size, pl.getY(), pl.getZ() - size);
+        MineBot.currentBuilder = new SchematicBuilder(new Schematic(Block.getBlockFromName("dirt"), size * 2 + 1, false, true), center);
+        return "ok";
     }
     public static String getToGoal(String message) {
         MineBot.plsCancel = false;
