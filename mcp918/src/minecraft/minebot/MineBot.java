@@ -36,6 +36,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
@@ -72,6 +73,7 @@ public class MineBot {
     public static BlockPos death;
     public static long lastDeath = 0;
     public static SchematicBuilder currentBuilder = null;
+    public static boolean parkour = false;
     public static final ArrayList<Class<? extends Manager>> managers = new ArrayList<Class<? extends Manager>>();
     static {
         managers.add(LookManager.class);
@@ -153,6 +155,9 @@ public class MineBot {
         }
         if (currentBuilder != null) {
             currentBuilder.tick();
+        }
+        if (parkour) {
+            parkour();
         }
         if (currentPath != null && ManagerTick.tickPath) {
             if (currentPath.tick()) {
@@ -241,6 +246,48 @@ public class MineBot {
         for (Class c : managers) {
             Manager.tick(c, false);
         }
+    }
+    public static void parkour() {
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        BlockPos playerFeet = thePlayer.getPosition0();
+        BlockPos down = playerFeet.down();
+        BlockPos prev = down.offset(thePlayer.getHorizontalFacing().getOpposite());
+        boolean onAir = Minecraft.theMinecraft.theWorld.getBlockState(down).getBlock().equals(Block.getBlockById(0));
+        boolean jumpAnyway = preemptivejump();
+        if (onAir || jumpAnyway) {
+            if ((thePlayer.isSprinting() && !Minecraft.theMinecraft.theWorld.getBlockState(prev).getBlock().equals(Block.getBlockById(0))) || !Minecraft.theMinecraft.theWorld.getBlockState(playerFeet.offset(thePlayer.getHorizontalFacing())).getBlock().equals(Block.getBlockById(0))) {
+                double distX = Math.abs(thePlayer.posX - (prev.getX() + 0.5D));
+                distX *= Math.abs(prev.getX() - down.getX());
+                double distZ = Math.abs(thePlayer.posZ - (prev.getZ() + 0.5D));
+                distZ *= Math.abs(prev.getZ() - down.getZ());
+                double dist = distX + distZ;
+                if (dist > 0.5) {
+                    thePlayer.rotationYaw = Math.round(thePlayer.rotationYaw / 90) * 90;
+                }
+                if (dist > 0.7) {
+                    jumping = true;
+                    GuiScreen.sendChatMessage("Parkour jumping");
+                }
+            }
+        }
+    }
+    public static boolean preemptivejump() {
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        BlockPos playerFeet = thePlayer.getPosition0();
+        EnumFacing dir = thePlayer.getHorizontalFacing();
+        for (int height = 0; height < 3; height++) {
+            BlockPos bp = playerFeet.offset(dir, 1).up(height);
+            if (!Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock().equals(Block.getBlockById(0))) {
+                return Action.canWalkOn(playerFeet.offset(dir, 1));
+            }
+        }
+        for (int height = 0; height < 3; height++) {
+            BlockPos bp = playerFeet.offset(dir, 2).up(height);
+            if (!Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock().equals(Block.getBlockById(0))) {
+                return Action.canWalkOn(playerFeet.offset(dir, 2));
+            }
+        }
+        return Action.canWalkOn(playerFeet.offset(dir, 3));
     }
     public static void openInventory() {
         GuiScreen.sendChatMessage("real open", true);
