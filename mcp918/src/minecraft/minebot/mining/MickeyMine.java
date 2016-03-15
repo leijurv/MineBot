@@ -247,6 +247,11 @@ public class MickeyMine extends ManagerTick {
                     }
                 } else {
                     System.out.println("Going to position");
+                    if (!Action.canWalkOn(Minecraft.theMinecraft.thePlayer.getPosition0().offset(Minecraft.theMinecraft.thePlayer.getHorizontalFacing()).down())) {
+                        GuiScreen.sendChatMessage("About to fall off");
+                        mightNeedToGoBackToPath = true;
+                        return;
+                    }
                     MineBot.moveTowardsBlock(branchPosition, false);
                     if (Minecraft.theMinecraft.thePlayer.getPosition0().getY() != branchPosition.getY()) {
                         GuiScreen.sendChatMessage("wrong Y coordinate", true);
