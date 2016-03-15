@@ -46,6 +46,7 @@ import org.lwjgl.input.Keyboard;
  * @author leijurv
  */
 public class MineBot {
+    public static boolean pause = false;
     public static boolean actuallyPutMessagesInChat = false;
     public static boolean isThereAnythingInProgress = false;
     public static boolean fullBright = true;
@@ -115,6 +116,9 @@ public class MineBot {
         }
     }
     public static void onTick1() {
+        if(pause){
+            return;
+        }
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
             MineBot.cancelPath();
             MineBot.plsCancel = true;
