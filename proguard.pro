@@ -39,8 +39,8 @@
 -libraryjars mcp918/jars/tempLibraries/log4j-api-2.0-beta9.jar
 -libraryjars mcp918/jars/tempLibraries/log4j-core-2.0-beta9.jar
 
-#-optimizationpasses 9
-#-overloadaggressively
+-optimizationpasses 9
+-overloadaggressively
 
 
 -keep class !minebot.** { *; }
