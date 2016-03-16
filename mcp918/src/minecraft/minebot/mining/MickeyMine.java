@@ -34,6 +34,7 @@ import net.minecraft.world.chunk.Chunk;
  * @author galdara
  */
 public class MickeyMine extends ManagerTick {
+    public static int yLevel = 13;
     static ArrayList<Block> goalBlocks = null;
     static boolean isGoingToMine = false;
     static boolean isMining = false;
@@ -151,13 +152,11 @@ public class MickeyMine extends ManagerTick {
         if (!branchPosition.equals(Minecraft.theMinecraft.thePlayer.getPosition0())) {
             GuiScreen.sendChatMessage("Should be at branch position " + branchPosition + " " + Minecraft.theMinecraft.thePlayer.getPosition0(), true);
             mightNeedToGoBackToPath = true;
-        } else {
-            if (torch()) {
-                if (LookManager.lookAtBlock(branchPosition.down(), true)) {
-                    Minecraft.theMinecraft.rightClickMouse();
-                } else {
-                    return;
-                }
+        } else if (torch()) {
+            if (LookManager.lookAtBlock(branchPosition.down(), true)) {
+                Minecraft.theMinecraft.rightClickMouse();
+            } else {
+                return;
             }
         }
         int i;
@@ -377,7 +376,6 @@ public class MickeyMine extends ManagerTick {
     public static IntegerTuple tupleFromBlockPos(BlockPos blockPos) {
         return tupleFromChunk(Minecraft.theMinecraft.theWorld.getChunkFromBlockCoords(blockPos));
     }
-    public static int yLevel = 6;
     @Override
     protected boolean onTick0() {
         if (tempDisable) {
