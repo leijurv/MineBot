@@ -137,7 +137,7 @@ public class EarlyGameStrategy extends ManagerTick {
                 readyForMining = false;
             }
         }
-        int miningLevel = 36;
+        int miningLevel = MickeyMine.Y_IRON;
         if (readyForMining) {
             int amtIron = 0;
             boolean ironPick = craftTool(Item.getByNameOrId("minecraft:iron_pickaxe"), 1);
@@ -149,7 +149,7 @@ public class EarlyGameStrategy extends ManagerTick {
                     boolean ironLeggings = craftTool(Item.getByNameOrId("minecraft:iron_leggings"), 1);
                     boolean ironBoots = craftTool(Item.getByNameOrId("minecraft:iron_boots"), 1);
                     if (ironHelmet && ironChestplate && ironLeggings && ironBoots) {
-                        miningLevel = 6;
+                        miningLevel = MickeyMine.Y_DIAMOND;
                     } else {
                         amtIron = (!ironHelmet ? 5 : 0) + (!ironChestplate ? 8 : 0) + (!ironLeggings ? 7 : 0) + (!ironBoots ? 4 : 0);
                     }
