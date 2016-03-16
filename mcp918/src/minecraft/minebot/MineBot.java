@@ -452,12 +452,12 @@ public class MineBot {
                 isThereAnythingInProgress = false;
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
                     if (talkAboutIt) {
-                        GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can", true);
+                        GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can. " + currentPath.numNodes + " nodes considered", true);
                     }
                     planAhead();
                 } else {
                     if (talkAboutIt) {
-                        GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal, true);
+                        GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal + ". " + currentPath.numNodes + " nodes considered", true);
                     }
                 }
             }
@@ -480,6 +480,7 @@ public class MineBot {
                 calculatingNext = true;
                 Path path = findPath(currentPath.end);
                 isThereAnythingInProgress = false;
+                GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + path.start + " to " + path.end, true);
                 GuiScreen.sendChatMessage("Done planning ahead " + calculatingNext, true);
                 if (calculatingNext) {
                     nextPath = path;
@@ -507,7 +508,6 @@ public class MineBot {
         try {
             PathFinder pf = new PathFinder(start, goal);
             Path path = pf.calculatePath();
-            //GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + start + " to " + path.end, true);
             return path;
         } catch (Exception e) {
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, e);
