@@ -2,7 +2,7 @@
 
 MESSAGE=$1
 if [ $# -lt 1 ]; then
-  MESSAGE="updated"
+  MESSAGE="updooted"
 fi
 if [ $# -gt 1 ]; then
   echo "Provide exactly one argument. "
