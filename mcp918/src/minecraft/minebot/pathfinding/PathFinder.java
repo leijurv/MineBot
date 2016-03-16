@@ -137,12 +137,13 @@ public class PathFinder {
     }
     private final double MIN_DIST_PATH = 5;
     private Node getNodeAtPosition(BlockPos pos) {
-        if (map.get(pos) == null) {
+        Node alr = map.get(pos);
+        if (alr == null) {
             Node node = new Node(pos, goal);
             map.put(pos, node);
             return node;
         }
-        return map.get(pos);
+        return alr;
     }
     private static Action[] getConnectedPositions(BlockPos pos) {
         int x = pos.getX();
@@ -193,19 +194,19 @@ public class PathFinder {
             if (first == null) {
                 return null;
             }
-            if (first.nextOpen == null) {
+            Node current = first.nextOpen;
+            if (current == null) {
                 Node n = first;
                 first = null;
                 return n;
             }
-            Node current = first;
-            Node previous = null;
-            double bestValue = Double.MAX_VALUE;
-            Node bestNode = null;
+            Node previous = first;
+            double bestValue = first.estimatedCostToGoal + first.cost;
+            Node bestNode = first;
             Node beforeBest = null;
             while (current != null) {
-                double comp = current.comparison();
-                if (bestNode == null || comp < bestValue) {
+                double comp = current.estimatedCostToGoal + current.cost;
+                if (comp < bestValue) {
                     bestValue = comp;
                     bestNode = current;
                     beforeBest = previous;
@@ -217,7 +218,7 @@ public class PathFinder {
                 first = first.nextOpen;
                 return bestNode;
             }
-            beforeBest.nextOpen = beforeBest.nextOpen.nextOpen;
+            beforeBest.nextOpen = bestNode.nextOpen;
             return bestNode;
         }
         public void insert(Node node) {

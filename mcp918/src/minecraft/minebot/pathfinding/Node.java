@@ -32,9 +32,6 @@ public class Node {
         this.previousAction = null;
         this.isOpen = false;
     }
-    public double comparison() {
-        return estimatedCostToGoal + cost;
-    }
     @Override
     public int hashCode() {//this is some OG code right here
         int hash = 3241;
