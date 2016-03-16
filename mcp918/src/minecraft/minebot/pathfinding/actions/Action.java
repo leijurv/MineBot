@@ -84,6 +84,9 @@ public abstract class Action {
     public static boolean isWater(Block b) {
         return waterFlowing.equals(b) || waterStill.equals(b);
     }
+    public static boolean isWater(BlockPos bp) {
+        return isWater(Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock());
+    }
     public static boolean isLiquid(Block b) {
         return b instanceof BlockLiquid;
         //return b != null && (waterFlowing.equals(b) || waterStill.equals(b) || lavaFlowing.equals(b) || lavaStill.equals(b));
