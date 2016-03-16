@@ -48,7 +48,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
-            if (!MineBot.isAir(positionsToPlace[0])) {
+            if (!MineBot.isAir(positionsToPlace[0]) && !isWater(positionsToPlace[0])) {
                 return PathFinder.COST_INF;
             }
             for (BlockPos against1 : against) {
