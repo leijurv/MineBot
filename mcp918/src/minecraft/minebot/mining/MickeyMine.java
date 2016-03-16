@@ -34,7 +34,9 @@ import net.minecraft.world.chunk.Chunk;
  * @author galdara
  */
 public class MickeyMine extends ManagerTick {
-    public static int yLevel = 13;
+    public static final int Y_DIAMOND = 13;
+    public static final int Y_IRON = 36;
+    public static int yLevel = Y_DIAMOND;
     static ArrayList<Block> goalBlocks = null;
     static boolean isGoingToMine = false;
     static boolean isMining = false;
