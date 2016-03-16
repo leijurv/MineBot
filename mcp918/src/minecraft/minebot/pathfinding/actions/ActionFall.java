@@ -38,7 +38,7 @@ public class ActionFall extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
-        if (!canWalkOn(to.down())) {
+        if (!MineBot.allowVerticalMotion || !canWalkOn(to.down())) {
             return PathFinder.COST_INF;
         }
         return FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);

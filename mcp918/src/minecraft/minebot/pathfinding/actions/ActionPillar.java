@@ -24,7 +24,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
-        if (!MineBot.hasThrowaway) {
+        if (!MineBot.hasThrowaway || !MineBot.allowVerticalMotion) {
             return PathFinder.COST_INF;
         }
         double hardness = getTotalHardnessOfBlocksToBreak(ts);
