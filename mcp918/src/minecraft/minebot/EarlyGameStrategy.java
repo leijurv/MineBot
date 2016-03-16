@@ -103,10 +103,8 @@ public class EarlyGameStrategy extends ManagerTick {
             if (!cobble) {
                 if (countCobble() > 16) {
                     cobble = true;
-                } else {
-                    if (!BlockPuncher.tick("stone")) {
-                        GuiScreen.sendChatMessage("No stone nearby =(");
-                    }
+                } else if (!BlockPuncher.tick("stone")) {
+                    GuiScreen.sendChatMessage("No stone nearby =(");
                 }
             }
         }
@@ -176,16 +174,20 @@ public class EarlyGameStrategy extends ManagerTick {
         if (readyForMining && numDiamonds >= 1) {
             if (craftTool(Item.getByNameOrId("diamond_pickaxe"), 1)) {
                 if (craftTool(Item.getByNameOrId("diamond_sword"), 1)) {
-                    boolean shovel = craftTool(Item.getByNameOrId("diamond_shovel"), 1);
-                    boolean axe = craftTool(Item.getByNameOrId("diamond_axe"), 1);
-                    boolean boots = craftTool(Item.getByNameOrId("diamond_boots"), 1);
-                    boolean leg = craftTool(Item.getByNameOrId("diamond_leggings"), 1);
-                    boolean chest = craftTool(Item.getByNameOrId("diamond_chestplate"), 1);
-                    boolean helmet = craftTool(Item.getByNameOrId("diamond_helmet"), 1);
-                    if (shovel && axe && boots && leg && chest && helmet) {
-                        GuiScreen.sendChatMessage("My job here is done.");
-                        cancel();
-                        return false;
+                    if (craftTool(Item.getByNameOrId("diamond_chestplate"), 1)) {
+                        if (craftTool(Item.getByNameOrId("diamond_leggings"), 1)) {
+                            if (craftTool(Item.getByNameOrId("diamond_helmet"), 1)) {
+                                if (craftTool(Item.getByNameOrId("diamond_boots"), 1)) {
+                                    if (craftTool(Item.getByNameOrId("diamond_axe"), 1)) {
+                                        if (craftTool(Item.getByNameOrId("diamond_shovel"), 1)) {
+                                            GuiScreen.sendChatMessage("My job here is done.");
+                                            cancel();
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -196,10 +198,8 @@ public class EarlyGameStrategy extends ManagerTick {
             if (!instance.enabled()) {
                 instance.toggle();
             }
-        } else {
-            if (instance.enabled()) {
-                instance.toggle();
-            }
+        } else if (instance.enabled()) {
+            instance.toggle();
         }
         return false;
     }
