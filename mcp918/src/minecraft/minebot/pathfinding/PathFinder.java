@@ -116,18 +116,18 @@ public class PathFinder {
                 bestDist = dist;
             }
             if (dist > MIN_DIST_PATH) {
-                GuiScreen.sendChatMessage("A* cost coefficient " + COEFFICIENTS[i], true);
+                Out.gui("A* cost coefficient " + COEFFICIENTS[i], Out.Mode.Debug);
                 if (COEFFICIENTS[i] >= 3) {
-                    GuiScreen.sendChatMessage("Warning: cost coefficient is greater than three! Probably means that", true);
-                    GuiScreen.sendChatMessage("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", true);
-                    GuiScreen.sendChatMessage("But I'm going to do it anyway, because yolo", true);
+                    Out.gui("Warning: cost coefficient is greater than three! Probably means that", Out.Mode.Debug);
+                    Out.gui("the path I found is pretty terrible (like sneak-bridging for dozens of blocks)", Out.Mode.Debug);
+                    Out.gui("But I'm going to do it anyway, because yolo", Out.Mode.Debug);
                 }
-                GuiScreen.sendChatMessage("Path goes for " + dist + " blocks", true);
+                Out.gui("Path goes for " + dist + " blocks", Out.Mode.Debug);
                 return new Path(startNode, bestSoFar[i], goal, numNodes);
             }
         }
-        GuiScreen.sendChatMessage("Even with a cost coefficient of " + COEFFICIENTS[COEFFICIENTS.length - 1] + ", I couldn't get more than " + bestDist + " blocks =(", true);
-        GuiScreen.sendChatMessage("No path found =(", true);
+        Out.gui("Even with a cost coefficient of " + COEFFICIENTS[COEFFICIENTS.length - 1] + ", I couldn't get more than " + bestDist + " blocks =(", Out.Mode.Debug);
+        Out.gui("No path found =(", Out.Mode.Standard);
         return null;
     }
     private double distFromStart(Node n) {

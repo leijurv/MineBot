@@ -10,6 +10,7 @@ import java.util.Arrays;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalTwoBlocks;
+import minebot.util.Out;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
@@ -25,7 +26,7 @@ public class BlockPuncher {
     public static boolean setGoalTo(String... block) {
         ArrayList<BlockPos> closest = Memory.closest(10, block);
         if (closest == null || closest.isEmpty()) {
-            GuiScreen.sendChatMessage("NO " + Arrays.asList(block) + " NEARBY. GOD DAMN IT");
+            Out.gui("NO " + Arrays.asList(block) + " NEARBY. GOD DAMN IT", Out.Mode.Standard);
             return false;
         }
         Goal[] goals = new Goal[closest.size()];

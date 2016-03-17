@@ -27,7 +27,6 @@ import minebot.pathfinding.goals.GoalYLevel;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -86,7 +85,8 @@ public class ChatCommand {
         String command = text.split(" ")[0];
         for (Method method : methods) {
             if (method.getName().equalsIgnoreCase(command)) {
-                GuiScreen.sendChatMessage((String) method.invoke(null, text));
+                message = (String) method.invoke(null, text);
+                Out.gui(message, Out.Mode.Minimal);
                 return true;
             }
         }
@@ -95,7 +95,7 @@ public class ChatCommand {
             if (field.getName().equalsIgnoreCase(command)) {
                 boolean value = argc == 1 ? !field.getBoolean(null) : Boolean.parseBoolean(text.split(" ")[2]);
                 field.setBoolean(null, value);
-                GuiScreen.sendChatMessage(command + " is now " + value);
+                Out.gui(command + " is now " + value, Out.Mode.Minimal);
                 return true;
             }
         }
@@ -207,7 +207,7 @@ public class ChatCommand {
     public static String random(String message) {
         double dist = Double.parseDouble(message.substring("random direction".length()).trim());
         double ang = new Random().nextDouble() * Math.PI * 2;
-        GuiScreen.sendChatMessage("Angle: " + ang, true);
+        Out.gui("Angle: " + ang, Out.Mode.Debug);
         BlockPos playerFeet = new BlockPos(thePlayer().posX, thePlayer().posY, thePlayer().posZ);
         int x = playerFeet.getX() + (int) (Math.sin(ang) * dist);
         int z = playerFeet.getZ() + (int) (Math.cos(ang) * dist);
@@ -240,12 +240,9 @@ public class ChatCommand {
         WorldClient theWorld = theWorld();
         EntityPlayerSP thePlayer = thePlayer();
         BlockPos playerFeet = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        GuiScreen.sendChatMessage(MineBot.info(playerFeet), true);
-        GuiScreen.sendChatMessage(MineBot.info(playerFeet.down()), true);
-        GuiScreen.sendChatMessage(MineBot.info(playerFeet.up()), true);
-        Out.log(theWorld.getBlockState(playerFeet).getBlock());
-        Out.log(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
-        Out.log(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
+        Out.gui(MineBot.info(playerFeet), Out.Mode.Minimal);
+        Out.gui(MineBot.info(playerFeet.down()), Out.Mode.Minimal);
+        Out.gui(MineBot.info(playerFeet.up()), Out.Mode.Minimal);
         return "";
     }
     public static String setgoal(String message) {

@@ -206,14 +206,14 @@ public class Path {
             if (!Blocks.air.equals(Minecraft.theMinecraft.theWorld.getBlockState(thePlayer.getPosition0().down()))) {//do not skip if standing on air, because our position isn't stable to skip
                 for (int i = 0; i < pathPosition - 2 && i < path.size(); i++) {//this happens for example when you lag out and get teleported back a couple blocks
                     if (whereAmI.equals(path.get(i))) {
-                        GuiScreen.sendChatMessage("Skipping back " + (pathPosition - i) + " steps, to " + i, true);
+                        Out.gui("Skipping back " + (pathPosition - i) + " steps, to " + i, Out.Mode.Debug);
                         pathPosition = i;
                         return false;
                     }
                 }
                 for (int i = pathPosition + 2; i < path.size(); i++) {//dont check pathPosition+1
                     if (whereAmI.equals(path.get(i))) {
-                        GuiScreen.sendChatMessage("Skipping forward " + (i - pathPosition) + " steps, to " + i, true);
+                        Out.gui("Skipping forward " + (i - pathPosition) + " steps, to " + i, Out.Mode.Debug);
                         pathPosition = i;
                         return false;
                     }
@@ -225,7 +225,7 @@ public class Path {
             ticksAway++;
             Out.log("FAR AWAY FROM PATH FOR " + ticksAway + " TICKS. Current distance: " + distanceFromPath + ". Threshold: " + MAX_DISTANCE_FROM_PATH);
             if (ticksAway > MAX_TICKS_AWAY) {
-                GuiScreen.sendChatMessage("Too far away from path for too long, cancelling path", true);
+                Out.gui("Too far away from path for too long, cancelling path", Out.Mode.Standard);
                 Out.log("Too many ticks");
                 pathPosition = path.size() + 3;
                 failed = true;
@@ -243,7 +243,7 @@ public class Path {
         } else {
             ticksOnCurrent++;
             if (ticksOnCurrent > actions.get(pathPosition).cost(null) + 100) {
-                GuiScreen.sendChatMessage("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost(null) + "). Cancelling.", true);
+                Out.gui("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost(null) + "). Cancelling.", Out.Mode.Standard);
                 pathPosition = path.size() + 3;
                 failed = true;
                 return true;

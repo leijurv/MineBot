@@ -107,7 +107,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         for (int i = 0; i < positionsToBreak.length; i++) {
             if (!canWalkThrough(positionsToBreak[i])) {
                 if (!MineBot.allowBreakOrPlace) {
-                    GuiScreen.sendChatMessage("BB I can't break this =(((", true);
+                    Out.gui("BB I can't break this =(((", Out.Mode.Standard);
                     return false;
                 }
                 //Out.log("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
@@ -138,7 +138,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         for (BlockPos positionsToPlace1 : positionsToPlace) {
             if (!canWalkOn(positionsToPlace1)) {
                 if (!MineBot.allowBreakOrPlace) {
-                    GuiScreen.sendChatMessage("BB I can't place this =(((", true);
+                    Out.gui("BB I can't place this =(((", Out.Mode.Standard);
                     return false;
                 }
                 //MineBot.lookAtBlock(positionsToPlace[i], true);
@@ -174,7 +174,7 @@ public abstract class ActionPlaceOrBreak extends Action {
             }
         }
         if (message) {
-            GuiScreen.sendChatMessage("bb pls get me some blocks. dirt or cobble", true);
+            Out.gui("bb pls get me some blocks. dirt or cobble", Out.Mode.Minimal);
         }
         return false;
     }
