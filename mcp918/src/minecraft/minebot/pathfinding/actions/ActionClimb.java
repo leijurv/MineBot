@@ -9,6 +9,7 @@ import java.util.Objects;
 import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
+import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -85,7 +86,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
                             MineBot.backward = true;//we might be standing in the way, move back
                         }
                     }
-                    System.out.println("Trying to look at " + against[i] + ", actually looking at" + MineBot.whatAreYouLookingAt());
+                    Out.log("Trying to look at " + against[i] + ", actually looking at" + MineBot.whatAreYouLookingAt());
                     return false;
                 }
             }
@@ -100,7 +101,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
         //also wait until we are close enough, because we might jump and hit our head on an adjacent block
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {
-            System.out.println("Done climbing to " + to);
+            Out.log("Done climbing to " + to);
             MineBot.clearMovement();
             return true;
         }

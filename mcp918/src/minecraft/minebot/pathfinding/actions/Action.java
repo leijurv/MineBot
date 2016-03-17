@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding.actions;
 
+import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -58,7 +59,7 @@ public abstract class Action {
             cost = calculateCost(ts == null ? new ToolSet() : ts);
         }
         if (cost < 1) {
-            System.out.println("Bad cost " + this + " " + cost);
+            Out.log("Bad cost " + this + " " + cost);
         }
         return cost;
     }

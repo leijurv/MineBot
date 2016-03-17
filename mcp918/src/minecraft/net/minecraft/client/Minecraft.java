@@ -37,6 +37,7 @@ import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -1193,20 +1194,20 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
     }
     private void clickMouse() {
-        //System.out.println("Click mouse called");
+        //Out.log("Click mouse called");
         if (this.leftClickCounter <= 0) {
             this.thePlayer.swingItem();
-            //System.out.println(this.objectMouseOver);
+            //Out.log(this.objectMouseOver);
             if (this.objectMouseOver == null) {
                 logger.error("Null returned as \'hitResult\', this shouldn\'t happen!");
                 if (this.playerController.isNotCreative()) {
                     this.leftClickCounter = 10;
                 }
             } else {
-                //System.out.println("Type of hit: " + this.objectMouseOver.typeOfHit);
+                //Out.log("Type of hit: " + this.objectMouseOver.typeOfHit);
                 switch (this.objectMouseOver.typeOfHit) {
                     case ENTITY:
-                        //System.out.println("Attacking entity");
+                        //Out.log("Attacking entity");
                         this.playerController.attackEntity(this.thePlayer, this.objectMouseOver.entityHit);
                         break;
                     case BLOCK:
@@ -1229,7 +1230,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      * Called when user clicked he's mouse right button (place)
      */
     public void rightClickMouse() {
-        System.out.println("Player right clicked!");
+        Out.log("Player right clicked!");
         if (!this.playerController.func_181040_m()) {
             this.rightClickDelayTimer = 4;
             boolean flag = true;
@@ -1239,7 +1240,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             } else {
                 switch (this.objectMouseOver.typeOfHit) {
                     case ENTITY:
-                        System.out.println("Player right clicked on entity!");
+                        Out.log("Player right clicked on entity!");
                         if (this.playerController.func_178894_a(this.thePlayer, this.objectMouseOver.entityHit, this.objectMouseOver)) {
                             flag = false;
                         } else if (this.playerController.interactWithEntitySendPacket(this.thePlayer, this.objectMouseOver.entityHit)) {
@@ -1255,7 +1256,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                                 this.thePlayer.swingItem();
                                 Memory.scanBlock(blockpos);
                                 Memory.scanBlock(blockpos.offset(this.objectMouseOver.sideHit));
-                                System.out.println("Player right clicked on block @ " + blockpos.offset(this.objectMouseOver.sideHit) + "");
+                                Out.log("Player right clicked on block @ " + blockpos.offset(this.objectMouseOver.sideHit) + "");
                                 if (itemstack != null) {
                                     MineBot.onPlacedBlock(itemstack, blockpos.offset(this.objectMouseOver.sideHit));
                                 }
@@ -1275,7 +1276,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 ItemStack itemstack1 = this.thePlayer.inventory.getCurrentItem();
                 if (itemstack1 != null && this.playerController.sendUseItem(this.thePlayer, this.theWorld, itemstack1)) {
                     this.entityRenderer.itemRenderer.resetEquippedProgress2();
-                    System.out.println("Player right clicked with: " + itemstack1 + " at " + this.objectMouseOver.getBlockPos());
+                    Out.log("Player right clicked with: " + itemstack1 + " at " + this.objectMouseOver.getBlockPos());
                 }
             }
         }
@@ -1602,49 +1603,47 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     this.middleClickMouse();
                 }
             }
-            //System.out.println("Counter: " + this.leftClickCounter);
+            //Out.log("Counter: " + this.leftClickCounter);
             if ((this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed()) && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
             this.sendClickBlockToController((this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus) || MineBot.getLeftIsPressed());
-        } else {
-            if (this.thePlayer != null && this.theWorld != null) {
-                if (this.leftClickCounter > 0) {
-                    --this.leftClickCounter;
+        } else if (this.thePlayer != null && this.theWorld != null) {
+            if (this.leftClickCounter > 0) {
+                --this.leftClickCounter;
+            }
+            if (MineBot.isLeftClick && leftClickCounter > 20) {
+                leftClickCounter = 0;
+            }
+            //Out.log("Counter: " + leftClickCounter);
+            //Out.log("Using? " + this.thePlayer.isUsingItem());
+            if (this.thePlayer.isUsingItem()) {
+                //Out.log("lol");
+                if (!(MineBot.getRightIsPressed())) {
+                    //Out.log("Not using item any more");
+                    this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
-                if (MineBot.isLeftClick && leftClickCounter > 20) {
-                    leftClickCounter = 0;
+                while (MineBot.leftIsPressed()) {
+                    ;
                 }
-                //System.out.println("Counter: " + leftClickCounter);
-                //System.out.println("Using? " + this.thePlayer.isUsingItem());
-                if (this.thePlayer.isUsingItem()) {
-                    //System.out.println("lol");
-                    if (!(MineBot.getRightIsPressed())) {
-                        //System.out.println("Not using item any more");
-                        this.playerController.onStoppedUsingItem(this.thePlayer);
-                    }
-                    while (MineBot.leftIsPressed()) {
-                        ;
-                    }
-                    while (MineBot.rightIsPressed()) {
-                        ;
-                    }
-                } else {
-                    //System.out.println("checking if pressed");
-                    while (MineBot.leftIsPressed()) {
-                        //System.out.println("Clck ");
-                        this.clickMouse();
-                    }
-                    while (MineBot.rightIsPressed()) {
-                        this.rightClickMouse();
-                    }
+                while (MineBot.rightIsPressed()) {
+                    ;
                 }
-                if (MineBot.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
+            } else {
+                //Out.log("checking if pressed");
+                while (MineBot.leftIsPressed()) {
+                    //Out.log("Clck ");
+                    this.clickMouse();
+                }
+                while (MineBot.rightIsPressed()) {
                     this.rightClickMouse();
                 }
-                //System.out.println("Sending " + MineBot.isLeftClick);
-                this.sendClickBlockToController(MineBot.getLeftIsPressed());
             }
+            if (MineBot.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
+                this.rightClickMouse();
+            }
+            //Out.log("Sending " + MineBot.isLeftClick);
+            this.sendClickBlockToController(MineBot.getLeftIsPressed());
         }
         if (this.theWorld != null) {
             if (this.thePlayer != null) {

@@ -16,6 +16,7 @@ import static minebot.MineBot.goal;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.util.Manager;
+import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -197,14 +198,14 @@ public class Memory extends Manager {
     }
     public static String findCommand(String block) {
         String lower = block.toLowerCase();
-        System.out.println(lower);
+        Out.log(lower);
         BlockPos best = null;
         double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
-            //System.out.println("Considering " + type);
+            //Out.log("Considering " + type);
             if (type.toString().toLowerCase().contains(lower)) {
                 BlockPos pos = blockMemory.get(type).closest();
-                System.out.println("find" + type + " " + pos);
+                Out.log("find" + type + " " + pos);
                 if (pos != null) {
                     double dist = distSq(pos);
                     if (best == null || dist < d) {
@@ -223,12 +224,12 @@ public class Memory extends Manager {
         /*BlockPos best = null;
          double d = Double.MAX_VALUE;
          for (Block type : blockMemory.keySet()) {
-         //System.out.println("Considering " + type);
+         //Out.log("Considering " + type);
          for (String b : block) {
          String lower = "block{minecraft:" + b.toLowerCase() + "}";
          if (type.toString().toLowerCase().equals(lower)) {
          BlockPos pos = blockMemory.get(type).closest();
-         System.out.println("closest" + type + " " + pos);
+         Out.log("closest" + type + " " + pos);
          if (pos != null) {
          double dist = distSq(pos);
          if (best == null || dist < d) {
@@ -249,7 +250,7 @@ public class Memory extends Manager {
     public static ArrayList<BlockPos> closest(int num, String... block) {
         ArrayList<BlockPos> result = new ArrayList();
         for (Block type : blockMemory.keySet()) {
-            //System.out.println("Considering " + type);
+            //Out.log("Considering " + type);
             for (String b : block) {
                 String lower = "block{minecraft:" + b.toLowerCase() + "}";
                 if (type.toString().toLowerCase().equals(lower)) {
@@ -276,14 +277,14 @@ public class Memory extends Manager {
     }
     public static String findGoCommand(String block) {
         String lower = block.toLowerCase();
-        System.out.println(lower);
+        Out.log(lower);
         BlockPos best = null;
         double d = Double.MAX_VALUE;
         for (Block type : blockMemory.keySet()) {
-            //System.out.println("Considering " + type);
+            //Out.log("Considering " + type);
             if (type.toString().toLowerCase().contains(lower)) {
                 BlockPos pos = blockMemory.get(type).closest();
-                System.out.println("findgo" + type + " " + pos);
+                Out.log("findgo" + type + " " + pos);
                 if (pos != null) {
                     double dist = distSq(pos);
                     if (best == null || dist < d) {

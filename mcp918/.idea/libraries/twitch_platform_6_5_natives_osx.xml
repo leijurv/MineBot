@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="twitch-platform-6.5-natives-osx">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/tv/twitch/twitch-platform/6.5/twitch-platform-6.5-natives-osx.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -62,8 +63,8 @@ public class Path {
         }
         path.add(0, start.pos);
         this.originalBlockStates = new IBlockState[path.size()];
-        System.out.println("Final path: " + path);
-        System.out.println("Final actions: " + actions);
+        Out.log("Final path: " + path);
+        Out.log("Final actions: " + actions);
         for (int i = 0; i < path.size() - 1; i++) {//print it all out
             int oldX = path.get(i).getX();
             int oldY = path.get(i).getY();
@@ -74,7 +75,7 @@ public class Path {
             int xDiff = newX - oldX;
             int yDiff = newY - oldY;
             int zDiff = newZ - oldZ;
-            System.out.println(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);//print it all out
+            Out.log(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);//print it all out
         }
     }
     /**
@@ -178,10 +179,8 @@ public class Path {
             IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
             if (!currentState.getBlock().equals(carpet)) {
                 originalBlockStates[i] = currentState;
-            } else {
-                if (originalBlockStates[i] == null) {
-                    originalBlockStates[i] = currentState;
-                }
+            } else if (originalBlockStates[i] == null) {
+                originalBlockStates[i] = currentState;
             }
             if (currentState.getBlock().equals(air)) {
                 Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), state);
@@ -198,12 +197,12 @@ public class Path {
         outlinePath();
         BlockPos whereAmI = thePlayer.getPosition0();
         if (pathPosition == path.size() - 1) {
-            System.out.println("On last path position");
+            Out.log("On last path position");
             MineBot.clearPath();
             return true;
         }
         if (!whereShouldIBe.equals(whereAmI)) {
-            System.out.println("Should be at " + whereShouldIBe + " actually am at " + whereAmI);
+            Out.log("Should be at " + whereShouldIBe + " actually am at " + whereAmI);
             if (!Blocks.air.equals(Minecraft.theMinecraft.theWorld.getBlockState(thePlayer.getPosition0().down()))) {//do not skip if standing on air, because our position isn't stable to skip
                 for (int i = 0; i < pathPosition - 2 && i < path.size(); i++) {//this happens for example when you lag out and get teleported back a couple blocks
                     if (whereAmI.equals(path.get(i))) {
@@ -224,10 +223,10 @@ public class Path {
         double distanceFromPath = howFarAmIFromThePath(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (distanceFromPath > MAX_DISTANCE_FROM_PATH) {
             ticksAway++;
-            System.out.println("FAR AWAY FROM PATH FOR " + ticksAway + " TICKS. Current distance: " + distanceFromPath + ". Threshold: " + MAX_DISTANCE_FROM_PATH);
+            Out.log("FAR AWAY FROM PATH FOR " + ticksAway + " TICKS. Current distance: " + distanceFromPath + ". Threshold: " + MAX_DISTANCE_FROM_PATH);
             if (ticksAway > MAX_TICKS_AWAY) {
                 GuiScreen.sendChatMessage("Too far away from path for too long, cancelling path", true);
-                System.out.println("Too many ticks");
+                Out.log("Too many ticks");
                 pathPosition = path.size() + 3;
                 failed = true;
                 return true;
@@ -235,10 +234,10 @@ public class Path {
         } else {
             ticksAway = 0;
         }
-        System.out.println(actions.get(pathPosition));
+        Out.log(actions.get(pathPosition));
         MineBot.clearMovement();
         if (actions.get(pathPosition).tick()) {
-            System.out.println("Action done, next path");
+            Out.log("Action done, next path");
             pathPosition++;
             ticksOnCurrent = 0;
         } else {

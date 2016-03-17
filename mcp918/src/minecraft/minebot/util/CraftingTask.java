@@ -87,7 +87,7 @@ public class CraftingTask extends ManagerTick {
                     continue;
                 }
                 if (stack.toString().toLowerCase().contains("block")) {
-                    System.out.println("Not doing " + stack);
+                    Out.log("Not doing " + stack);
                     return false;
                 }
             }
@@ -99,7 +99,7 @@ public class CraftingTask extends ManagerTick {
             }
             for (ItemStack stack : ((ShapelessRecipes) recipe).recipeItems) {
                 if (stack.toString().toLowerCase().contains("block")) {
-                    System.out.println("Not doing " + stack);
+                    Out.log("Not doing " + stack);
                     return false;
                 }
             }
@@ -127,7 +127,7 @@ public class CraftingTask extends ManagerTick {
                 int[] click = plan.get(index);
                 GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
                 contain.sketchyMouseClick(click[0], click[1], click[2]);
-                System.out.println("Ticking plan");
+                Out.log("Ticking plan");
             }
         }
         tickNumber++;
@@ -146,10 +146,10 @@ public class CraftingTask extends ManagerTick {
             return false;
         }
         if (stackSize != 0) {
-            System.out.println(currentlyCrafting() + " " + alreadyHas + " " + isDone());
+            Out.log(currentlyCrafting() + " " + alreadyHas + " " + isDone());
         }
         boolean hasMaterials = actualDoCraft(1, false, true) != null;
-        //System.out.println("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
+        //Out.log("materials " + this + " " + currentlyCrafting() + " " + hasMaterials);
         if (!hasMaterials) {
             return false;
         }
@@ -209,7 +209,7 @@ public class CraftingTask extends ManagerTick {
         if (putCraftingTableOnHotBar()) {
             MickeyMine.tempDisable = true;
             findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
-            System.out.println("Ready to place!");
+            Out.log("Ready to place!");
             if (placeHeldBlockNearby()) {
                 return true;
             }
@@ -430,7 +430,7 @@ public class CraftingTask extends ManagerTick {
         }
         if (inv) {
             if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
-                System.out.println("Opening");
+                Out.log("Opening");
                 MineBot.slowOpenInventory();
             }
             didIOpenMyInventory = true;
@@ -516,7 +516,7 @@ public class CraftingTask extends ManagerTick {
         MineBot.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
-                System.out.println(craftingTask + " " + craftingTask.currentlyCrafting() + " " + craftingTask.plan);
+                Out.log(craftingTask + " " + craftingTask.currentlyCrafting() + " " + craftingTask.plan);
                 if (!craftingTask.onTick1()) {
                     didIOpenMyInventory = true;
                 }
@@ -556,7 +556,7 @@ public class CraftingTask extends ManagerTick {
                     }
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
-                        System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
+                        Out.log("As a part of " + currentlyCrafting + ", getting " + input);
                         CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(input.getItem(), 0));
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
@@ -567,7 +567,7 @@ public class CraftingTask extends ManagerTick {
                 for (ItemStack input : shapelessRecipe.recipeItems) {
                     IRecipe inputRecipe = getRecipeFromItem(input.getItem());
                     if (!(inputRecipe == null)) {
-                        System.out.println("As a part of " + currentlyCrafting + ", getting " + input);
+                        Out.log("As a part of " + currentlyCrafting + ", getting " + input);
                         CraftingTask newTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(input.getItem(), 0));
                         subCraftingTasks.add(newTask);
                         //newTask.execute();
@@ -581,7 +581,7 @@ public class CraftingTask extends ManagerTick {
         }
     }
     public static CraftingTask findOrCreateCraftingTask(ItemStack itemStack) {
-        //System.out.println("Getting a task for " + itemStack);
+        //Out.log("Getting a task for " + itemStack);
         for (CraftingTask selectedTask : overallCraftingTasks) {
             if (selectedTask.currentlyCrafting().getItem().equals(itemStack.getItem())) {
                 if (itemStack.stackSize != 0) {
@@ -665,7 +665,7 @@ public class CraftingTask extends ManagerTick {
             throw new NullPointerException();
         }
         CraftingTask craftingTableTask = CraftingTask.findOrCreateCraftingTask(new ItemStack(item, 0));
-        //System.out.println(craftingTableTask.currentlyCrafting() + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
+        //Out.log(craftingTableTask.currentlyCrafting() + " " + quantity + " " + craftingTableTask.stackSize + " " + craftingTableTask.alreadyHas + " " + craftingTableTask.isDone());
         if (craftingTableTask.isDone() && craftingTableTask.alreadyHas >= quantity) {
             if (craftingTableTask.stackSize > 0) {
                 craftingTableTask.decreaseNeededAmount(1);

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="twitch-6.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/tv/twitch/twitch/6.5/twitch-6.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

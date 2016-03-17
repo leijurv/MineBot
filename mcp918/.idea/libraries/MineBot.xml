@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MineBot">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/MineBot.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import minebot.util.Out;
 import net.minecraft.client.main.Main;
 
 /*
@@ -17,15 +18,15 @@ import net.minecraft.client.main.Main;
  */
 public class Autorun {
     public static void start(String[] args) {
-        System.out.println(Arrays.asList(args));
-        System.out.println(System.getProperty("java.library.path"));
+        Out.log(Arrays.asList(args));
+        Out.log(System.getProperty("java.library.path"));
         //System.setProperty("java.library.path", System.getProperty("user.home") + "/Dropbox/MineBot/mcp918/jars/versions/1.8.8/1.8.8-natives/");
-        //System.out.println(System.getProperty("java.library.path"));
+        //Out.log(System.getProperty("java.library.path"));
         Main.main(concat(new String[]{"--version", "mcp", "--accessToken", "0", "--assetsDir", "assets", "--assetIndex", "1.8", "--userProperties", "{}"}, args));
     }
     public static void runprocess(String s) throws IOException {
         Process p;
-        System.out.println(p = Runtime.getRuntime().exec(s));
+        Out.log(p = Runtime.getRuntime().exec(s));
         InputStream i = p.getInputStream();
         InputStream e = p.getErrorStream();
         OutputStream o = p.getOutputStream();

@@ -81,7 +81,7 @@ public class ChatCommand {
         }
     }
     public static boolean message(String message) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        System.out.println("MSG: " + message);
+        Out.log("MSG: " + message);
         String text = (message.charAt(0) == '/' ? message.substring(1) : message).trim();
         String command = text.split(" ")[0];
         for (Method method : methods) {
@@ -144,7 +144,7 @@ public class ChatCommand {
             String item = spec.split(" ")[0];
             String amt = spec.split(" ")[1];
             ItemStack stack = new ItemStack(Item.getByNameOrId(item), Integer.parseInt(amt));
-            System.out.println(CraftingTask.findOrCreateCraftingTask(stack));
+            Out.log(CraftingTask.findOrCreateCraftingTask(stack));
         }
         return "k";
     }
@@ -243,9 +243,9 @@ public class ChatCommand {
         GuiScreen.sendChatMessage(MineBot.info(playerFeet), true);
         GuiScreen.sendChatMessage(MineBot.info(playerFeet.down()), true);
         GuiScreen.sendChatMessage(MineBot.info(playerFeet.up()), true);
-        System.out.println(theWorld.getBlockState(playerFeet).getBlock());
-        System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
-        System.out.println(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
+        Out.log(theWorld.getBlockState(playerFeet).getBlock());
+        Out.log(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 1, thePlayer.posZ)).getBlock());
+        Out.log(theWorld.getBlockState(new BlockPos(thePlayer.posX, thePlayer.posY - 2, thePlayer.posZ)).getBlock());
         return "";
     }
     public static String setgoal(String message) {
@@ -360,4 +360,41 @@ public class ChatCommand {
         }
         return "Set goal to " + MineBot.goal;
     }
+    public static String chatMode(String message) {
+        String[] args = message.split(" ");
+        if (args.length == 1) {
+            return "To what...";
+        }
+        String arg = args[1].toLowerCase();
+        switch (arg) {
+            case "none":
+            case "1":
+                Out.mode = Out.Mode.None;
+                break;
+            case "minimal":
+            case "2":
+                Out.mode = Out.Mode.Minimal;
+                break;
+            case "standard":
+            case "3":
+                Out.mode = Out.Mode.Standard;
+                break;
+            case "debug":
+            case "4":
+                Out.mode = Out.Mode.Debug;
+                break;
+            case "ludicrous":
+            case "5":
+                Out.mode = Out.Mode.Ludicrous;
+                break;
+            default:
+                return "That is note a valid mode";
+        }
+        return "ok";
+    }
+//    public static String testcode(String message) {
+//        Out.mode = Out.Mode.Debug;
+//        Out.gui("Testing", Out.Mode.Debug);
+//        return "OK";
+//    }
 }

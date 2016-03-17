@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="retroguard_src">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/docs/source/retroguard_src.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

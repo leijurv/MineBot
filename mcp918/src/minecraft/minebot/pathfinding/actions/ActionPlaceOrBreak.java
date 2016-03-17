@@ -12,6 +12,7 @@ import java.util.List;
 import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
+import minebot.util.Out;
 import minebot.util.SmeltingTask;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
@@ -109,7 +110,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                     GuiScreen.sendChatMessage("BB I can't break this =(((", true);
                     return false;
                 }
-                //System.out.println("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
+                //Out.log("Breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 boolean lookingInCorrectDirection = LookManager.lookAtBlock(positionsToBreak[i], true);
                 //TODO decide if when actuallyLookingAtTheBlock==true then should it still keep moving the look direction to the exact center of the block
                 boolean actuallyLookingAtTheBlock = positionsToBreak[i].equals(MineBot.whatAreYouLookingAt());
@@ -119,7 +120,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 /*if (!positionsToBreak[i].equals(MineBot.whatAreYouLookingAt())) {//hmmm, our crosshairs are looking at the wrong block
                  //TODO add a timer here, and if we are stuck looking at the wrong block for more than 1 second, do something
                  //(it cant take longer than twenty ticks, because the MineBot.MAX_YAW_CHANGE_PER_TICK=18, and 18*20 = 360°
-                 System.out.println("Wrong");
+                 Out.log("Wrong");
                  return false;
                  }*/
                 if (MineBot.whatAreYouLookingAt() != null) {
@@ -128,7 +129,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                 MineBot.isLeftClick = true;//hold down left click
                 if (canWalkThrough(positionsToBreak[i])) {
                     MineBot.letGoOfLeftClick();
-                    System.out.println("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
+                    Out.log("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 }
                 return false;
             }
@@ -141,7 +142,7 @@ public abstract class ActionPlaceOrBreak extends Action {
                     return false;
                 }
                 //MineBot.lookAtBlock(positionsToPlace[i], true);
-                //System.out.println("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
+                //Out.log("CANT DO IT. CANT WALK ON " + blocksToPlace[i] + " AT " + positionsToPlace[i]);
                 //one of the blocks that needs to be there isn't there
                 //so basically someone mined out our path from under us
                 //

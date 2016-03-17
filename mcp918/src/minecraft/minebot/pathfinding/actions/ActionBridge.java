@@ -10,6 +10,7 @@ import java.util.Random;
 import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
+import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -54,7 +55,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             }
             //double hardness1 = blocksToBreak[0].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[0]);
             //double hardness2 = blocksToBreak[1].getBlockHardness(Minecraft.theMinecraft.theWorld, positionsToBreak[1]);
-            //System.out.println("Can't walk through " + blocksToBreak[0] + " (hardness" + hardness1 + ") or " + blocksToBreak[1] + " (hardness " + hardness2 + ")");
+            //Out.log("Can't walk through " + blocksToBreak[0] + " (hardness" + hardness1 + ") or " + blocksToBreak[1] + " (hardness " + hardness2 + ")");
             return WC + getTotalHardnessOfBlocksToBreak(ts);
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
@@ -68,7 +69,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
             }
             return PathFinder.COST_INF;
-            //System.out.println("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
+            //Out.log("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         }
     }
     boolean wasTheBridgeBlockAlwaysThere = true;//did we have to place a bridge block or was it always there
@@ -88,11 +89,11 @@ public class ActionBridge extends ActionPlaceOrBreak {
             oneInTen = new Random().nextInt(10) == 0;
         }
         boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]);
-        //System.out.println("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
+        //Out.log("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.getY() != to.getY()) {
-            System.out.println("Wrong Y coordinate");
+            Out.log("Wrong Y coordinate");
             if (whereAmI.getY() < to.getY()) {
                 MineBot.jumping = true;
             }
@@ -112,10 +113,10 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 }
             }
             if (whereAmI.equals(to)) {//if we are there
-                System.out.println("Done walking to " + to);
+                Out.log("Done walking to " + to);
                 return true;//and we are done
             }
-            System.out.println("Trying to get to " + to + " currently at " + whereAmI);
+            Out.log("Trying to get to " + to + " currently at " + whereAmI);
             return false;//not there yet
         } else {
             wasTheBridgeBlockAlwaysThere = false;
@@ -137,14 +138,14 @@ public class ActionBridge extends ActionPlaceOrBreak {
                             GuiScreen.sendChatMessage("Wrong. " + side + " " + MineBot.whatAreYouLookingAt().offset(side) + " " + positionsToPlace[0]);
                         }
                     }
-                    System.out.println("Trying to look at " + against1 + ", actually looking at" + MineBot.whatAreYouLookingAt());
+                    Out.log("Trying to look at " + against1 + ", actually looking at" + MineBot.whatAreYouLookingAt());
                     return false;
                 }
             }
             MineBot.sneak = true;
             if (whereAmI.equals(to)) {
                 //if we are in the block that we are trying to get to, we are sneaking over air and we need to place a block beneath us against the one we just walked off of
-                //System.out.println(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
+                //Out.log(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
                 if (!switchtothrowaway(true)) {//get ready to place a throwaway block
                     return false;
                 }
@@ -158,10 +159,10 @@ public class ActionBridge extends ActionPlaceOrBreak {
                     Minecraft.theMinecraft.rightClickMouse();//wait to right click until we are able to place
                     return false;
                 }
-                System.out.println("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
+                Out.log("Trying to look at " + goalLook + ", actually looking at" + MineBot.whatAreYouLookingAt());
                 return false;
             } else {
-                System.out.println("Not there yet m9");
+                Out.log("Not there yet m9");
                 MineBot.moveTowardsBlock(to);//move towards not look at because if we are bridging for a couple blocks in a row, it is faster if we dont spin around and walk forwards then spin around and place backwards for every block
                 return false;
             }

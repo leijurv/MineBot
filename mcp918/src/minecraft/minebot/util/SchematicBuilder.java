@@ -33,7 +33,7 @@ public class SchematicBuilder {
     }
     public void tick() {
         HashSet<BlockPos> goal = getAllBlocksToPlaceShiftedUp();
-        System.out.println("Ticking " + goal);
+        Out.log("Ticking " + goal);
         if (goal != null) {
             MineBot.goal = new GoalComposite(goal);
             if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
@@ -53,7 +53,7 @@ public class SchematicBuilder {
                     BlockPos inWorld = offset(inSchematic);
                     Block current = Minecraft.theMinecraft.theWorld.getBlockState(inWorld).getBlock();
                     Block desired = schematic.getBlockFromBlockPos(inSchematic);
-                    System.out.println(inSchematic + " " + current + " " + desired);
+                    Out.log(inSchematic + " " + current + " " + desired);
                     boolean currentlyAir = air.equals(current);
                     boolean shouldBeAir = desired == null || air.equals(desired);
                     if (currentlyAir && !shouldBeAir) {

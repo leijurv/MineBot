@@ -131,7 +131,7 @@ public class SmeltingTask extends ManagerTick {
     int guiWaitTicks = 0;
     int shiftWaitTicks = 0;
     private boolean exec() {
-        System.out.println(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks + " " + furnace + " " + Minecraft.theMinecraft.currentScreen == null);
+        Out.log(didIPutItInAlreadyPhrasing + " " + isItDone + " " + numTicks + " " + burnTicks + " " + furnace + " " + Minecraft.theMinecraft.currentScreen == null);
         if (!didIPutItInAlreadyPhrasing && Minecraft.theMinecraft.currentScreen == null) {
             BlockPos furnaceLocation = getUnusedFurnace();
             if (furnaceLocation != null) {
@@ -161,7 +161,7 @@ public class SmeltingTask extends ManagerTick {
                 }
             }
             if (putFurnaceOnHotBar()) {
-                System.out.println("Ready to place!");
+                Out.log("Ready to place!");
                 if (placeHeldBlockNearby()) {
                     return true;
                 }
@@ -330,7 +330,7 @@ public class SmeltingTask extends ManagerTick {
                 int[] click = plan.get(index);
                 GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + desired);
                 contain.sketchyMouseClick(click[0], click[1], click[2]);
-                System.out.println("Ticking plan");
+                Out.log("Ticking plan");
             }
         }
         tickNumber++;
@@ -398,10 +398,10 @@ public class SmeltingTask extends ManagerTick {
             GuiScreen.sendChatMessage("lol no fuel", true);
             return false;
         }
-        System.out.println(burnableItems);
-        System.out.println(amountWeHave);
-        System.out.println(amtNeeded);
-        System.out.println(burnTimes);
+        Out.log(burnableItems);
+        Out.log(amountWeHave);
+        Out.log(amtNeeded);
+        Out.log(burnTimes);
         Item bestFuel = null;
         int fuelAmt = Integer.MAX_VALUE;
         int bestExtra = Integer.MAX_VALUE;
@@ -532,7 +532,7 @@ public class SmeltingTask extends ManagerTick {
                 int outputQuantity = output.stackSize;
                 int totalQuantity = (int) Math.ceil(((double) desiredQuantity) / (outputQuantity));
                 int inputQuantity = input.stackSize * totalQuantity;
-                System.out.println("Recipe from " + input + " to " + output + " " + desiredQuantity + " " + outputQuantity + " " + totalQuantity + " " + inputQuantity);
+                Out.log("Recipe from " + input + " to " + output + " " + desiredQuantity + " " + outputQuantity + " " + totalQuantity + " " + inputQuantity);
                 if (inputQuantity > 64) {
                     throw new IllegalStateException("lol");
                 }

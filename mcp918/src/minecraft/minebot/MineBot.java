@@ -20,6 +20,7 @@ import minebot.pathfinding.goals.GoalComposite;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
+import minebot.util.Out;
 import minebot.util.SchematicBuilder;
 import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
@@ -109,10 +110,10 @@ public class MineBot {
             long time = end - start;
             if (ticktimer && time > 3) {
                 GuiScreen.sendChatMessage("Tick took " + time + "ms", true);
-                System.out.println("Tick took " + time + "ms");
+                Out.log("Tick took " + time + "ms");
             }
         } catch (Exception ex) {
-            System.out.println("Exception");
+            Out.log("Exception");
             Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -217,7 +218,7 @@ public class MineBot {
                 if (Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
                     if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
                         //if water is deeper than one block, or we can't walk on what's below the water, or our head is in water, jump
-                        System.out.println("Jumping because in water");
+                        Out.log("Jumping because in water");
                         jumping = true;
                     }
                 }
@@ -244,7 +245,7 @@ public class MineBot {
         if (isThereAnythingInProgress && Action.isWater(theWorld.getBlockState(playerFeet).getBlock())) {
             if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
                 //if water is deeper than one block, or we can't walk on what's below the water, or our head is in water, jump
-                System.out.println("Jumping because in water and pathfinding");
+                Out.log("Jumping because in water and pathfinding");
                 jumping = true;
             }
         }
@@ -455,10 +456,8 @@ public class MineBot {
                         GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can. " + currentPath.numNodes + " nodes considered", true);
                     }
                     planAhead();
-                } else {
-                    if (talkAboutIt) {
-                        GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal + ". " + currentPath.numNodes + " nodes considered", true);
-                    }
+                } else if (talkAboutIt) {
+                    GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal + ". " + currentPath.numNodes + " nodes considered", true);
                 }
             }
         }.start();
@@ -532,7 +531,7 @@ public class MineBot {
         double x = p.getX() + xDiff;
         double y = p.getY() + yolo;
         double z = p.getZ() + zDiff;
-        //System.out.println("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
+        //Out.log("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
         return moveTowardsCoords(x, y, z, rotate);
     }
     public static boolean moveTowardsCoords(double x, double y, double z) {
