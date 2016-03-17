@@ -16,6 +16,7 @@ import minebot.pathfinding.actions.ActionPillar;
 import java.util.HashMap;
 import java.util.Random;
 import minebot.pathfinding.actions.ActionDescendThree;
+import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -68,7 +69,7 @@ public class PathFinder {
             BlockPos currentNodePos = currentNode.pos;
             numNodes++;
             if (System.currentTimeMillis() > lastPrintout + 1000) {//print once a second
-                System.out.println("searching... at " + currentNodePos + ", considered " + numNodes + " nodes so far");
+                Out.log("searching... at " + currentNodePos + ", considered " + numNodes + " nodes so far");
                 lastPrintout = System.currentTimeMillis();
             }
             if (goal.isInGoal(currentNodePos)) {

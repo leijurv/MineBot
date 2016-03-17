@@ -6,11 +6,11 @@
 package minebot;
 
 import java.util.ArrayList;
-import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalGetToBlock;
 import minebot.util.ChatCommand;
 import minebot.util.Manager;
+import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -29,9 +29,8 @@ import net.minecraft.util.BlockPos;
  *
  * @author avecowa
  */
-public class AnotherStealer extends Manager{
-
-    protected static Manager newInstance(){
+public class AnotherStealer extends Manager {
+    protected static Manager newInstance() {
         return null;
     }
     public static ArrayList<BlockPos> alreadyStolenFrom = new ArrayList<BlockPos>();
@@ -42,7 +41,6 @@ public class AnotherStealer extends Manager{
     private static boolean positionArmor = false;
     private static int positionSlot = 0;
     private static int positionStatus = 0;
-
     @Override
     public void onTick() {
         //try{
@@ -51,7 +49,7 @@ public class AnotherStealer extends Manager{
             return;
         }
         if (MineBot.isThereAnythingInProgress || MineBot.currentPath != null) {
-            System.out.println(MineBot.currentPath);
+            Out.log(MineBot.currentPath);
             return;
         }
         if (stuff) {
@@ -75,13 +73,12 @@ public class AnotherStealer extends Manager{
                 positionArmor = false;
                 return;
             }
-
-            GuiScreen.sendChatMessage("Position Armor:"+positionSlot);
+            GuiScreen.sendChatMessage("Position Armor:" + positionSlot);
             if (positionStatus == 0) {
                 Container inv = Minecraft.theMinecraft.thePlayer.inventoryContainer;
-                GuiScreen.sendChatMessage("Position Status 0:"+inv.inventorySlots.size());
+                GuiScreen.sendChatMessage("Position Status 0:" + inv.inventorySlots.size());
                 for (int i = positionSlot; i < 45; i++) {
-                    GuiScreen.sendChatMessage((inv.getSlot(i).getHasStack() ? inv.getSlot(i).getStack().getItem().toString() : "NULL STACK")+ " :"+i);
+                    GuiScreen.sendChatMessage((inv.getSlot(i).getHasStack() ? inv.getSlot(i).getStack().getItem().toString() : "NULL STACK") + " :" + i);
                     if (inv.getSlot(i).getHasStack() && inv.getSlot(i).getStack().getItem() instanceof ItemArmor) {
                         GuiScreen.sendChatMessage("ITEM IS ARMOR");
                         ItemArmor armor = (ItemArmor) inv.getSlot(i).getStack().getItem();
@@ -92,7 +89,6 @@ public class AnotherStealer extends Manager{
                             return;
                         }
                     }
-                    
                 }
                 positionArmor = false;
                 Minecraft.theMinecraft.thePlayer.closeScreen();
@@ -137,7 +133,6 @@ public class AnotherStealer extends Manager{
                 }
                 contain.shiftClick(slot.slotNumber);
                 return;
-
             }
             GuiScreen.sendChatMessage("NO CHEST STUFF");
             chestStuff = true;
@@ -148,7 +143,6 @@ public class AnotherStealer extends Manager{
         LookManager.lookAtBlock(near, true);
         return;
     }
-
     public static BlockPos getAjacentChest() {
         BlockPos[] pos = GoalGetToBlock.ajacentBlocks(Minecraft.theMinecraft.thePlayer.getPosition0());
         WorldClient w = Minecraft.theMinecraft.theWorld;
@@ -159,7 +153,6 @@ public class AnotherStealer extends Manager{
         }
         return null;
     }
-
     public static Slot getFilledSlot(GuiChest chest) {
         for (int i = 0; i < chest.lowerChestInventory.getSizeInventory(); i++) {
             if (chest.lowerChestInventory.getStackInSlot(i) != null) {
@@ -168,7 +161,6 @@ public class AnotherStealer extends Manager{
         }
         return null;
     }
-
     public static boolean invFull() {
         ItemStack[] inv = Minecraft.theMinecraft.thePlayer.inventory.mainInventory;
         for (ItemStack i : inv) {
@@ -178,12 +170,9 @@ public class AnotherStealer extends Manager{
         }
         return true;
     }
-
     @Override
     protected void onCancel() {
-        
     }
-
     @Override
     protected void onStart() {
         alreadyStolenFrom = new ArrayList<BlockPos>();

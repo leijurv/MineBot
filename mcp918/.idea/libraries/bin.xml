@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="bin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/runtime/bin/retroguard.jar!/" />
+      <root url="jar://$PROJECT_DIR$/runtime/bin/fernflower.jar!/" />
+      <root url="jar://$PROJECT_DIR$/runtime/bin/specialsource.jar!/" />
+      <root url="jar://$PROJECT_DIR$/runtime/bin/mcinjector.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

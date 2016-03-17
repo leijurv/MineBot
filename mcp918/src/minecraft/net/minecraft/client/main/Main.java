@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
+import minebot.util.Out;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 
@@ -53,7 +54,7 @@ public class Main {
         OptionSet optionset = optionparser.parse(p_main_0_);
         List<String> list = optionset.valuesOf(optionspec19);
         if (!list.isEmpty()) {
-            System.out.println("Completely ignored arguments: " + list);
+            Out.log("Completely ignored arguments: " + list);
         }
         String s = (String) optionset.valueOf(optionspec5);
         Proxy proxy = Proxy.NO_PROXY;
@@ -89,27 +90,27 @@ public class Main {
         String s5 = optionset.has(optionspec17) ? (String) optionspec17.value(optionset) : null;
         String s6 = (String) optionset.valueOf(optionspec);
         Integer integer = (Integer) optionset.valueOf(optionspec1);
-        String logFileWithToken = System.getProperty("user.home")+"/Library/Application Support/minecraft/logs/latest.log";
+        String logFileWithToken = System.getProperty("user.home") + "/Library/Application Support/minecraft/logs/latest.log";
         String lineWithToken = null;
-        String uuid=null;
+        String uuid = null;
         String lineWithUser = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(logFileWithToken));
             lineWithUser = br.readLine();
             lineWithUser = lineWithUser.substring(lineWithUser.indexOf(": ") + 2);
             lineWithUser = lineWithUser.substring(lineWithUser.indexOf(": ") + 2);
-            lineWithToken= br.readLine();
-            lineWithToken = lineWithToken.substring(lineWithToken.indexOf("token:") + 6,lineWithToken.length()-1);
+            lineWithToken = br.readLine();
+            lineWithToken = lineWithToken.substring(lineWithToken.indexOf("token:") + 6, lineWithToken.length() - 1);
             uuid = lineWithToken.substring(0, lineWithToken.indexOf(":"));
-            lineWithToken = lineWithToken.substring(lineWithToken.indexOf(":")+1);
+            lineWithToken = lineWithToken.substring(lineWithToken.indexOf(":") + 1);
             br.close();
-        }   catch (IOException ex) {
+        } catch (IOException ex) {
             lineWithToken = "THISDIDNTWORK";
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lineWithUser=lineWithUser.trim();
-        System.out.println(lineWithUser+" "+lineWithUser.length());
-        Session session = new Session(lineWithUser, lineWithToken,uuid, (String) optionspec18.value(optionset));
+        lineWithUser = lineWithUser.trim();
+        Out.log(lineWithUser + " " + lineWithUser.length());
+        Session session = new Session(lineWithUser, lineWithToken, uuid, (String) optionspec18.value(optionset));
         //Session session1 = new Session((String) optionspec9.value(optionset), s4, (String) optionspec11.value(option  set), (String) optionspec18.value(optionset));
         GameConfiguration gameconfiguration = new GameConfiguration(new GameConfiguration.UserInformation(session, propertymap, propertymap1, proxy), new GameConfiguration.DisplayInformation(i, j, flag, flag1), new GameConfiguration.FolderInformation(file1, file3, file2, s5), new GameConfiguration.GameInformation(flag2, s3), new GameConfiguration.ServerInformation(s6, integer.intValue()));
         Runtime.getRuntime().addShutdownHook(new Thread("Client Shutdown Thread") {

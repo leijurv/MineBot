@@ -18,6 +18,7 @@ import minebot.pathfinding.goals.GoalYLevel;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
+import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -112,9 +113,9 @@ public class MickeyMine extends ManagerTick {
             calculateGoal();
         }
         MineBot.clearMovement();
-        System.out.println("Goal blocks: " + goalBlocks);
-        System.out.println("priority: " + priorityNeedsToBeMined);
-        System.out.println("needs to be mined: " + needsToBeMined);
+        Out.log("Goal blocks: " + goalBlocks);
+        Out.log("priority: " + priorityNeedsToBeMined);
+        Out.log("needs to be mined: " + needsToBeMined);
         updateBlocksMined();
         if (priorityNeedsToBeMined.isEmpty() && needsToBeMined.isEmpty()) {
             doBranchMine();
@@ -166,7 +167,7 @@ public class MickeyMine extends ManagerTick {
         for (i = 0; i < l || diamondChunks.contains(tupleFromBlockPos(branchPosition.offset(miningFacing, i))); i++) {
             addNormalBlock(branchPosition.offset(miningFacing, i).up(), true);
             addNormalBlock(branchPosition.offset(miningFacing, i), true);
-            System.out.println("branche" + i);
+            Out.log("branche" + i);
             if (i >= l) {
                 GuiScreen.sendChatMessage("Not mining " + branchPosition.offset(miningFacing, i) + " because it's in known diamond chunk " + tupleFromBlockPos(branchPosition.offset(miningFacing, i)));
             }
@@ -178,7 +179,7 @@ public class MickeyMine extends ManagerTick {
             onCancel1();
             return;
         }
-        System.out.println("player reach: " + Minecraft.theMinecraft.playerController.getBlockReachDistance());
+        Out.log("player reach: " + Minecraft.theMinecraft.playerController.getBlockReachDistance());
         for (int j = 1; j <= Math.ceil(Minecraft.theMinecraft.playerController.getBlockReachDistance()); j++) {
             addNormalBlock(futureBranchPosition.offset(miningFacing.rotateY(), j).up(), false);
         }
@@ -239,15 +240,15 @@ public class MickeyMine extends ManagerTick {
             } else {
                 MineBot.switchToBestTool();
                 MineBot.isLeftClick = true;
-                System.out.println("Looking");
+                Out.log("Looking");
                 if (Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
-                    System.out.println("IN position");
+                    Out.log("IN position");
                     if (MineBot.whatAreYouLookingAt() == null) {
-                        System.out.println("Can't see, going");
+                        Out.log("Can't see, going");
                         MineBot.forward = true;
                     }
                 } else {
-                    System.out.println("Going to position");
+                    Out.log("Going to position");
                     if (!Action.canWalkOn(Minecraft.theMinecraft.thePlayer.getPosition0().offset(Minecraft.theMinecraft.thePlayer.getHorizontalFacing()).down())) {
                         GuiScreen.sendChatMessage("About to fall off");
                         mightNeedToGoBackToPath = true;
@@ -312,7 +313,7 @@ public class MickeyMine extends ManagerTick {
     }
     public static void updateBlocks(BlockPos blockPos) {
         for (int i = 0; i < 4; i++) {
-            System.out.println(blockPos.offset(miningFacing));
+            Out.log(blockPos.offset(miningFacing));
         }
         addPriorityBlock(blockPos);
         addPriorityBlock(blockPos.north());
@@ -383,7 +384,7 @@ public class MickeyMine extends ManagerTick {
         if (tempDisable) {
             return false;
         }
-        System.out.println("mickey" + isGoingToMine + " " + isMining);
+        Out.log("mickey" + isGoingToMine + " " + isMining);
         if (!isGoingToMine && !isMining) {
             MineBot.goal = new GoalYLevel(yLevel);
             if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
@@ -402,7 +403,7 @@ public class MickeyMine extends ManagerTick {
         if (!priorityNeedsToBeMined.isEmpty()) {
             doPriorityMine();
         }
-        System.out.println("mickey done");
+        Out.log("mickey done");
         return false;
     }
     @Override

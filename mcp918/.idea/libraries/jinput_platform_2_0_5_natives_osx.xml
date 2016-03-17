@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jinput-platform-2.0.5-natives-osx">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

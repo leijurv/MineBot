@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="lwjgl-platform-2.9.2-nightly-20140822-natives-osx">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/org/lwjgl/lwjgl/lwjgl-platform/2.9.2-nightly-20140822/lwjgl-platform-2.9.2-nightly-20140822-natives-osx.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

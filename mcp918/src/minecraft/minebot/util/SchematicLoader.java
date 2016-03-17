@@ -68,7 +68,7 @@ public class SchematicLoader {
                 }
             }
         }
-        System.out.println(blocksMap);
+        Out.log(blocksMap);
         Schematic schematic = new Schematic(blocksMap, width, height, length);
         cachedSchematics.put(nbtFile, schematic);
         return schematic;

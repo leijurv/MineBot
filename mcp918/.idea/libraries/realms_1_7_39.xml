@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="realms-1.7.39">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/com/mojang/realms/1.7.39/realms-1.7.39.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

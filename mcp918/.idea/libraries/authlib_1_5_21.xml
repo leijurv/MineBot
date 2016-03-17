@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="authlib-1.5.21">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/com/mojang/authlib/1.5.21/authlib-1.5.21.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

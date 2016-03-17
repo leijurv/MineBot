@@ -8,6 +8,7 @@ package minebot.pathfinding.actions;
 import minebot.LookManager;
 import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
+import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
@@ -65,19 +66,17 @@ public class ActionPillar extends ActionPlaceOrBreak {
         }
         boolean blockIsThere = canWalkOn(from);
         if (!blockIsThere) {
-            System.out.println("Block not there yet");
+            Out.log("Block not there yet");
             if (!MineBot.isAir(from)) {
                 MineBot.isLeftClick = true;
                 blockIsThere = false;
-            } else {
-                if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
-                    Minecraft.theMinecraft.rightClickMouse();//constantly right click
-                }
+            } else if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
+                Minecraft.theMinecraft.rightClickMouse();//constantly right click
             }
         }
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to) && blockIsThere) {//if we are at our goal and the block below us is placed
-            System.out.println("Done pillaring to " + to);
+            Out.log("Done pillaring to " + to);
             MineBot.jumping = false;//stop jumping
             return true;//we are done
         }

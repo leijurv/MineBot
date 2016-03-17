@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="lwjgl-2.9.2-nightly-20140822">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/org/lwjgl/lwjgl/lwjgl/2.9.2-nightly-20140822/lwjgl-2.9.2-nightly-20140822.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

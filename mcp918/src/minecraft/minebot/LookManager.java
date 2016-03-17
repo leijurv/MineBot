@@ -55,7 +55,7 @@ public class LookManager extends Manager {
      */
     static boolean lookingPitch = false;
     public static void frame(float partialTicks) {
-        //System.out.println("Part: " + partialTicks);
+        //Out.log("Part: " + partialTicks);
         if (Minecraft.theMinecraft == null || Minecraft.theMinecraft.thePlayer == null) {
             return;
         }

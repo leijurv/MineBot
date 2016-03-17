@@ -16,9 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
-import minebot.AnotherStealer;
 import minebot.MineBot;
 import minebot.util.ChatCommand;
+import minebot.util.Out;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -374,7 +374,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         boolean nm = false;
         try {
             if (ChatCommand.message(msg)) {
-                System.out.println("Not sending chat message to server: " + msg);
+                Out.log("Not sending chat message to server: " + msg);
                 return;
             }
         } catch (Exception ex) {

@@ -31,7 +31,7 @@ public class ToolSet {
         ItemStack[] inv = p.inventory.mainInventory;
         tools = new ArrayList<Item>();
         slots = new ArrayList<Byte>();
-        //System.out.println("inv: " + Arrays.toString(inv));
+        //Out.log("inv: " + Arrays.toString(inv));
         boolean fnull = false;
         for (byte i = 0; i < 9; i++) {
             if (!fnull || (inv[i] != null && inv[i].getItem().isItemTool(null))) {
@@ -46,22 +46,22 @@ public class ToolSet {
             return tools.get(cache.get(b));
         }
         byte best = 0;
-        //System.out.println("best: " + best);
+        //Out.log("best: " + best);
         float value = 0;
         for (byte i = 0; i < tools.size(); i++) {
             Item item = tools.get(i);
             if (item == null) {
                 item = Item.getByNameOrId("minecraft:apple");
             }
-            //System.out.println(inv[i]);
+            //Out.log(inv[i]);
             float v = item.getStrVsBlock(new ItemStack(item), b);
-            //System.out.println("v: " + v);
+            //Out.log("v: " + v);
             if (v > value) {
                 value = v;
                 best = i;
             }
         }
-        //System.out.println("best: " + best);
+        //Out.log("best: " + best);
         cache.put(b, best);
         return tools.get(best);
     }
@@ -70,22 +70,22 @@ public class ToolSet {
             return slots.get(cache.get(b));
         }
         byte best = 0;
-        //System.out.println("best: " + best);
+        //Out.log("best: " + best);
         float value = 0;
         for (byte i = 0; i < tools.size(); i++) {
             Item item = tools.get(i);
             if (item == null) {
                 item = Item.getByNameOrId("minecraft:apple");
             }
-            //System.out.println(inv[i]);
+            //Out.log(inv[i]);
             float v = item.getStrVsBlock(new ItemStack(item), b);
-            //System.out.println("v: " + v);
+            //Out.log("v: " + v);
             if (v > value) {
                 value = v;
                 best = i;
             }
         }
-        //System.out.println("best: " + best);
+        //Out.log("best: " + best);
         cache.put(b, best);
         return slots.get(best);
     }

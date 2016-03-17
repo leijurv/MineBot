@@ -15,6 +15,7 @@ import static minebot.MineBot.whatEntityAreYouLookingAt;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
 import minebot.util.ManagerTick;
+import minebot.util.Out;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -66,12 +67,12 @@ public class Combat extends ManagerTick {
             Entity entity = killAura.get(0);
             AxisAlignedBB lol = entity.getEntityBoundingBox();
             switchtosword();
-            System.out.println("looking");
+            Out.log("looking");
             LookManager.lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
             if (entity.equals(MineBot.whatEntityAreYouLookingAt())) {
                 MineBot.isLeftClick = true;
                 tickPath = false;
-                System.out.println("Doing it");
+                Out.log("Doing it");
             }
         }
         ArrayList<Entity> huntMobs = new ArrayList<Entity>();
@@ -131,11 +132,9 @@ public class Combat extends ManagerTick {
                 if (MineBot.currentPath == null) {
                     GuiScreen.sendChatMessage("Running away", true);
                     MineBot.findPathInNewThread(playerFeet, false);
-                } else {
-                    if (!MineBot.isThereAnythingInProgress && MineBot.tickNumber % 4 == 0) {
-                        GuiScreen.sendChatMessage("Running away", true);
-                        MineBot.findPathInNewThread(playerFeet, false);
-                    }
+                } else if (!MineBot.isThereAnythingInProgress && MineBot.tickNumber % 4 == 0) {
+                    GuiScreen.sendChatMessage("Running away", true);
+                    MineBot.findPathInNewThread(playerFeet, false);
                 }
             }
         }
