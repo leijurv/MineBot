@@ -389,6 +389,8 @@ public class MineBot {
         sneak = false;
         isRightClick = false;
         rightPressTime = 0;
+        isLeftClick = false;
+        leftPressTime = 0;
     }
     /**
      * Clears movement, clears the current path, and lets go of left click. It
