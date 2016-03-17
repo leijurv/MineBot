@@ -63,10 +63,10 @@ public class Out {
      * o.toString() will be used.
      */
     public static void log(Object o) {
-        String message = trace() + o.toString();
-        System.out.println(message);
+        String trace = trace();
+        System.out.println(trace + '\t' + o.toString());
         if (mode == Mode.Ludicrous) {
-            chatRaw(message);
+            chatRaw("§5[§dLog§5|§2" + trace + "§5]§7 " + o.toString());
         }
     }
     /**
@@ -94,10 +94,12 @@ public class Out {
             return;
         }
         String trace = trace();
-        System.out.println(trace + message);
+        System.out.println(trace + '\t' + message);
         if (req.compareTo(mode) <= 0) {
             if (Mode.Debug.compareTo(mode) <= 0) {
-                message = trace() + message;
+                message = "§5[§dMineBot§5|§2" + trace() + "§5]§7 " + message;
+            } else {
+                message = "§5[§dMineBot§5]§7 " + message;
             }
             chatRaw(message);
         }
@@ -116,6 +118,6 @@ public class Out {
                 break;
             }
         }
-        return trace.getClassName() + ":" + trace.getLineNumber() + "\t";
+        return trace.getClassName() + ":" + trace.getLineNumber();
     }
 }
