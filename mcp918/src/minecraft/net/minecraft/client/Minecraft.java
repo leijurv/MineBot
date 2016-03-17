@@ -37,6 +37,7 @@ import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.util.GuiEscMenu;
 import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -48,7 +49,6 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMemoryErrorScreen;
 import net.minecraft.client.gui.GuiScreen;
@@ -1171,7 +1171,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      */
     public void displayInGameMenu() {
         if (this.currentScreen == null) {
-            this.displayGuiScreen(new GuiIngameMenu());
+            this.displayGuiScreen(new GuiEscMenu());
             if (this.isSingleplayer() && !this.theIntegratedServer.getPublic()) {
                 this.mcSoundHandler.pauseSounds();
             }

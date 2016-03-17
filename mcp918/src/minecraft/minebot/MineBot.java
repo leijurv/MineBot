@@ -8,6 +8,7 @@ package minebot;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.mining.MickeyMine;
@@ -48,6 +49,7 @@ import org.lwjgl.input.Keyboard;
  */
 public class MineBot {
     public static boolean pause = false;
+    public static boolean overrideF3 = true;
     public static boolean allowVerticalMotion = true;
     public static boolean actuallyPutMessagesInChat = false;
     public static boolean isThereAnythingInProgress = false;
@@ -119,6 +121,7 @@ public class MineBot {
     }
     public static void onTick1() {
         if (pause) {
+            clearMovement();
             return;
         }
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
@@ -662,8 +665,20 @@ public class MineBot {
     public static boolean isKeyDown(int i) {
         return lockedKeys.get(i) == null ? Keyboard.isKeyDown(i) : lockedKeys.get(i);
     }
+    public static List<String> getDebugGui() {
+        if (!overrideF3) {
+            return null;
+        }
+        List<String> list = new ArrayList<String>();
+        list.add("§5[§dMineBot§5]§f");
+        for (Class<? extends Manager> c : managers) {
+            list.add("§r[§" + (Manager.enabled(c) ? "a" : "c") + c.getSimpleName() + "§r]");
+        }
+        return list;
+    }
     public boolean isNull() throws NullPointerException {
         NullPointerException up = new NullPointerException("You are disgusting");
         throw up;
+        //To use this surround the call to this message with a try-catch then compare the length of the NullPointerException.getMessage()
     }
 }
