@@ -109,7 +109,7 @@ public class MineBot {
             long end = System.currentTimeMillis();
             long time = end - start;
             if (ticktimer && time > 3) {
-                GuiScreen.sendChatMessage("Tick took " + time + "ms", true);
+                Out.gui("Tick took " + time + "ms", Out.Mode.Debug);
                 Out.log("Tick took " + time + "ms");
             }
         } catch (Exception ex) {
@@ -145,7 +145,7 @@ public class MineBot {
         if (thePlayer.isDead && System.currentTimeMillis() > lastDeath + 10000) {
             death = playerFeet;
             lastDeath = System.currentTimeMillis();
-            GuiScreen.sendChatMessage("Saved death position (" + death + "). do /death to set goal.", true);
+            Out.gui("Saved death position (" + death + "). do /death to set goal.", Out.Mode.Minimal);
             thePlayer.respawnPlayer();
             Minecraft.theMinecraft.displayGuiScreen(null);
         }
@@ -173,10 +173,10 @@ public class MineBot {
                 }
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
-                    GuiScreen.sendChatMessage("Recalculating because path failed", true);
+                    Out.gui("Recalculating because path failed", Out.Mode.Standard);
                     nextPath = null;
                     if (isAir(playerFeet.down())) {//sometimes we are jumping and we make a path that starts in the air and then jumps up, which is impossible
-                        GuiScreen.sendChatMessage("DOING THE JANKY THING, WARNING");
+                        Out.gui("DOING THE JANKY THING, WARNING", Out.Mode.Debug);
                         findPathInNewThread(playerFeet.down(), true);
                     } else {
                         findPathInNewThread(playerFeet, true);
@@ -187,30 +187,30 @@ public class MineBot {
                 }
                 currentPath = null;
                 if (goal.isInGoal(playerFeet)) {
-                    GuiScreen.sendChatMessage("All done. At goal", true);
+                    Out.gui("All done. At goal", Out.Mode.Standard);
                     nextPath = null;
                 } else {
-                    GuiScreen.sendChatMessage("Done with segment", true);
+                    Out.gui("Done with segment", Out.Mode.Debug);
                     if (nextPath != null || calculatingNext) {
                         if (calculatingNext) {
                             calculatingNext = false;
-                            GuiScreen.sendChatMessage("Patiently waiting to finish", true);
+                            Out.gui("Patiently waiting to finish", Out.Mode.Debug);
                         } else {
                             currentPath = nextPath;
                             nextPath = null;
                             if (!currentPath.start.equals(playerFeet)) {
-                                //GuiScreen.sendChatMessage("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
+                                //Out.gui("The next path starts at " + currentPath.start + " but I'm at " + playerFeet + ". not doing it", true);
                                 currentPath = null;
                                 findPathInNewThread(playerFeet, true);
                             } else {
-                                GuiScreen.sendChatMessage("Going onto next", true);
+                                Out.gui("Going onto next", Out.Mode.Debug);
                                 if (!currentPath.goal.isInGoal(currentPath.end)) {
                                     planAhead();
                                 }
                             }
                         }
                     } else {
-                        GuiScreen.sendChatMessage("Hmm. I'm not actually at the goal. Recalculating.", true);
+                        Out.gui("Hmm. I'm not actually at the goal. Recalculating.", Out.Mode.Debug);
                         findPathInNewThread(playerFeet, (currentPathGoal != null && goal != null) ? !(currentPathGoal instanceof GoalComposite) && currentPathGoal.toString().equals(goal.toString()) : true);
                     }
                 }
@@ -272,7 +272,7 @@ public class MineBot {
                 }
                 if (dist > 0.7) {
                     jumping = true;
-                    GuiScreen.sendChatMessage("Parkour jumping");
+                    Out.gui("Parkour jumping!!!", Out.Mode.Standard);
                 }
             }
         }
@@ -296,7 +296,7 @@ public class MineBot {
         return Action.canWalkOn(playerFeet.offset(dir, 3));
     }
     public static void openInventory() {
-        GuiScreen.sendChatMessage("real open", true);
+        Out.gui("real open", Out.Mode.Debug);
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
         GuiScreen screen = new GuiInventory(Minecraft.theMinecraft.thePlayer);
         ScaledResolution scaledresolution = new ScaledResolution(Minecraft.theMinecraft);
@@ -307,7 +307,7 @@ public class MineBot {
         Minecraft.theMinecraft.currentScreen = screen;
     }
     public static void slowOpenInventory() {
-        GuiScreen.sendChatMessage("slow open", true);
+        Out.gui("slow open", Out.Mode.Debug);
         Minecraft.theMinecraft.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
         Minecraft.theMinecraft.displayGuiScreen(new GuiInventory(Minecraft.theMinecraft.thePlayer));
     }
@@ -444,7 +444,7 @@ public class MineBot {
             @Override
             public void run() {
                 if (talkAboutIt) {
-                    GuiScreen.sendChatMessage("Starting to search for path from " + start + " to " + goal, true);
+                    Out.gui("Starting to search for path from " + start + " to " + goal, Out.Mode.Debug);
                 }
                 try {
                     currentPath = findPath(start);
@@ -453,11 +453,11 @@ public class MineBot {
                 isThereAnythingInProgress = false;
                 if (!currentPath.goal.isInGoal(currentPath.end)) {
                     if (talkAboutIt) {
-                        GuiScreen.sendChatMessage("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can. " + currentPath.numNodes + " nodes considered", true);
+                        Out.gui("I couldn't get all the way to " + goal + ", but I'm going to get as close as I can. " + currentPath.numNodes + " nodes considered", Out.Mode.Standard);
                     }
                     planAhead();
                 } else if (talkAboutIt) {
-                    GuiScreen.sendChatMessage("Finished finding a path from " + start + " to " + goal + ". " + currentPath.numNodes + " nodes considered", true);
+                    Out.gui("Finished finding a path from " + start + " to " + goal + ". " + currentPath.numNodes + " nodes considered", Out.Mode.Debug);
                 }
             }
         }.start();
@@ -475,12 +475,12 @@ public class MineBot {
         new Thread() {
             @Override
             public void run() {
-                GuiScreen.sendChatMessage("Planning ahead", true);
+                Out.gui("Planning ahead", Out.Mode.Debug);
                 calculatingNext = true;
                 Path path = findPath(currentPath.end);
                 isThereAnythingInProgress = false;
-                GuiScreen.sendChatMessage(path.numNodes + " nodes considered, calculated " + path.start + " to " + path.end, true);
-                GuiScreen.sendChatMessage("Done planning ahead " + calculatingNext, true);
+                Out.gui(path.numNodes + " nodes considered, calculated " + path.start + " to " + path.end, Out.Mode.Debug);
+                Out.gui("Done planning ahead " + calculatingNext, Out.Mode.Debug);
                 if (calculatingNext) {
                     nextPath = path;
                 } else {
@@ -501,7 +501,7 @@ public class MineBot {
      */
     private static Path findPath(BlockPos start) {
         if (goal == null) {
-            GuiScreen.sendChatMessage("babe, please. there is no goal", true);
+            Out.gui("babe, please. there is no goal", Out.Mode.Minimal);
             return null;
         }
         try {

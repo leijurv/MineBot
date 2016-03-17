@@ -114,7 +114,7 @@ public class SmeltingTask extends ManagerTick {
         toPutInTheFurnace = recipe(desired);
         if (toPutInTheFurnace == null) {
             String m = "Babe I can't smelt anyting to make " + desired;
-            GuiScreen.sendChatMessage(m, true);
+            Out.gui(m, Out.Mode.Minimal);
             throw new IllegalArgumentException(m);
         }
         burnTicks = toPutInTheFurnace.stackSize * 200;
@@ -156,7 +156,7 @@ public class SmeltingTask extends ManagerTick {
                         }
                         return true;
                     } else {
-                        GuiScreen.sendChatMessage("too far away from closest furnace (" + distXZ + " blocks), crafting another");
+                        Out.gui("too far away from closest furnace (" + distXZ + " blocks), crafting another", Out.Mode.Standard);
                     }
                 }
             }
@@ -167,7 +167,7 @@ public class SmeltingTask extends ManagerTick {
                 }
                 BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
                 if (MineBot.isAir(player.down()) || MineBot.isAir(player.up(2))) {
-                    GuiScreen.sendChatMessage("Placing down");
+                    Out.gui("Placing down", Out.Mode.Debug);
                     LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
                     MineBot.jumping = true;
                     if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
@@ -176,11 +176,9 @@ public class SmeltingTask extends ManagerTick {
                     return true;
                 }
                 return true;
-            } else {
-                if (hasFurnaceInInventory()) {
-                    InventoryManager.putOnHotBar(Item.getByNameOrId("furnace"));
-                    return true;
-                }
+            } else if (hasFurnaceInInventory()) {
+                InventoryManager.putOnHotBar(Item.getByNameOrId("furnace"));
+                return true;
             }
             return false;
         }
@@ -218,12 +216,12 @@ public class SmeltingTask extends ManagerTick {
             }
             if (isItDone && furnace.equals(MineBot.whatAreYouLookingAt())) {//if we are done, and this is our furnace
                 ret = true;
-                GuiScreen.sendChatMessage("taking it out", true);
+                Out.gui("taking it out", Out.Mode.Debug);
                 if (isEmpty(contain, 2)) {//make sure
                     if (shiftWaitTicks > 5) {
                         Minecraft.theMinecraft.thePlayer.closeScreen();//close the screen
                         inProgress.remove(this);//no longer an in progress smelting dask
-                        GuiScreen.sendChatMessage("Smelting " + desired + " totally done m9", true);
+                        Out.gui("Smelting " + desired + " totally done m9", Out.Mode.Debug);
                         return false;
                     }
                     shiftWaitTicks++;
@@ -240,14 +238,14 @@ public class SmeltingTask extends ManagerTick {
             if (Memory.blockLoaded(furnace)) {
                 Block curr = Minecraft.theMinecraft.theWorld.getBlockState(furnace).getBlock();
                 if (!Block.getBlockFromName("furnace").equals(curr) && !Block.getBlockFromName("lit_furnace").equals(curr)) {
-                    GuiScreen.sendChatMessage("Furnace at " + furnace + " is now gone. RIP. Was trying to make " + desired + ". Is now " + curr);
+                    Out.gui("Furnace at " + furnace + " is now gone. RIP. Was trying to make " + desired + ". Is now " + curr, Out.Mode.Standard);
                     inProgress.remove(this);
                     return false;
                 }
             }
             if (!isItDone && numTicks >= burnTicks) {
                 isItDone = true;
-                GuiScreen.sendChatMessage("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, true);
+                Out.gui("Hey we're done. Go to your furnace at " + furnace + " and pick up " + desired, Out.Mode.Debug);
                 furnacesInUse.put(furnace, null);
             }
             if (isItDone) {
@@ -269,7 +267,7 @@ public class SmeltingTask extends ManagerTick {
                 }
             }
             if (isItDone && (numTicks - 1) % (60 * 20) == 0) {
-                GuiScreen.sendChatMessage("DUDE. Go to your furnace at " + furnace + " and pick up " + desired + ". Do /cancelfurnace if you want these notifications to piss off.", true);
+                Out.gui("DUDE. Go to your furnace at " + furnace + " and pick up " + desired + ". Do /cancelfurnace if you want these notifications to piss off.", Out.Mode.Minimal);
             }
         }
         return ret;
@@ -317,7 +315,7 @@ public class SmeltingTask extends ManagerTick {
             int index = tickNumber / ticksBetweenClicks;
             if (index >= plan.size()) {
                 if (index >= plan.size() + 2) {
-                    GuiScreen.sendChatMessage("Plan over");
+                    Out.gui("Plan over", Out.Mode.Debug);
                     plan = null;
                     tickNumber = -40;
                     Minecraft.theMinecraft.thePlayer.closeScreen();
@@ -328,7 +326,7 @@ public class SmeltingTask extends ManagerTick {
             }
             if (index >= 0) {
                 int[] click = plan.get(index);
-                GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + desired);
+                Out.gui(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + desired, Out.Mode.Debug);
                 contain.sketchyMouseClick(click[0], click[1], click[2]);
                 Out.log("Ticking plan");
             }
@@ -351,7 +349,7 @@ public class SmeltingTask extends ManagerTick {
     private boolean generatePlan(GuiFurnace contain) {
         int desiredAmount = toPutInTheFurnace.stackSize;
         if (currentSize1(contain, 0, toPutInTheFurnace.getItem()) == -1) {
-            GuiScreen.sendChatMessage("Furnace already in use", true);
+            Out.gui("Furnace already in use", Out.Mode.Debug);
             return false;
         }
         ArrayList<Item> burnableItems = new ArrayList<Item>();
@@ -372,7 +370,7 @@ public class SmeltingTask extends ManagerTick {
             if (ind == -1) {
                 int time = TileEntityFurnace.getItemBurnTime(in);
                 if (time <= 0) {
-                    GuiScreen.sendChatMessage(in + " isn't fuel, lol", true);
+                    Out.gui(in + " isn't fuel, lol", Out.Mode.Standard);
                     continue;
                 }
                 burnableItems.add(in.getItem());
@@ -386,7 +384,7 @@ public class SmeltingTask extends ManagerTick {
         }
         for (int i = 0; i < burnableItems.size(); i++) {
             if (amountWeHave.get(i) < amtNeeded.get(i)) {
-                GuiScreen.sendChatMessage("Not using fuel " + burnableItems.get(i) + " because not enough (have " + amountWeHave.get(i) + ", need " + amtNeeded.get(i) + ")", true);
+                Out.gui("Not using fuel " + burnableItems.get(i) + " because not enough (have " + amountWeHave.get(i) + ", need " + amtNeeded.get(i) + ")", Out.Mode.Standard);
                 burnableItems.remove(i);
                 amountWeHave.remove(i);
                 amtNeeded.remove(i);
@@ -395,7 +393,7 @@ public class SmeltingTask extends ManagerTick {
             }
         }
         if (burnableItems.isEmpty()) {
-            GuiScreen.sendChatMessage("lol no fuel", true);
+            Out.gui("lol no fuel", Out.Mode.Standard);
             return false;
         }
         Out.log(burnableItems);
@@ -417,14 +415,14 @@ public class SmeltingTask extends ManagerTick {
                 bestFuel = burnableItems.get(i);
             }
         }
-        GuiScreen.sendChatMessage("Using " + fuelAmt + " items of " + bestFuel + ", which wastes " + bestExtra + " ticks of fuel.", true);
+        Out.gui("Using " + fuelAmt + " items of " + bestFuel + ", which wastes " + bestExtra + " ticks of fuel.", Out.Mode.Debug);
         int currFuelSize = 0;
         if (currentSize1(contain, 1, bestFuel) == -1) {
-            GuiScreen.sendChatMessage("Furnace already in use", true);
+            Out.gui("Furnace already in use", Out.Mode.Debug);
             return false;
         }
         if (currentSize1(contain, 0, toPutInTheFurnace.getItem()) == -1) {
-            GuiScreen.sendChatMessage("Furnace already in use", true);
+            Out.gui("Furnace already in use", Out.Mode.Debug);
             return false;
         }
         plan = new ArrayList();
@@ -479,7 +477,7 @@ public class SmeltingTask extends ManagerTick {
                         rightClick(1);
                     }
                     leftClick(i);
-                    GuiScreen.sendChatMessage("done with fuel", true);
+                    Out.gui("done with fuel", Out.Mode.Debug);
                     break;
                 }
             }

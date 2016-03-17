@@ -9,9 +9,9 @@ import minebot.mining.MickeyMine;
 import minebot.util.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
+import minebot.util.Out;
 import minebot.util.SmeltingTask;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -62,31 +62,31 @@ public class EarlyGameStrategy extends ManagerTick {
         if (!gotDirt) {
             int dirt = countDirt();
             if (dirt >= DIRT_AMT) {
-                GuiScreen.sendChatMessage("Done getting dirt");
+                Out.gui("Done getting dirt", Out.Mode.Debug);
                 gotDirt = true;
                 return false;
             }
             if (!BlockPuncher.tick("dirt", "grass")) {
-                GuiScreen.sendChatMessage("No dirt or grass nearby =(");
+                Out.gui("No dirt or grass nearby =(", Out.Mode.Debug);
             }
             return false;
         }
         int wood = countWood_PHRASING();
         if (wood >= WOOD_AMT) {
             if (!gotWood_PHRASING) {
-                GuiScreen.sendChatMessage("Done getting wood", true);
+                Out.gui("Done getting wood", Out.Mode.Debug);
             }
             gotWood_PHRASING = true;
         }
         if (wood < MIN_WOOD_AMT) {
             if (gotWood_PHRASING) {
-                GuiScreen.sendChatMessage("Getting more wood", true);
+                Out.gui("Getting more wood", Out.Mode.Debug);
             }
             gotWood_PHRASING = false;
         }
         if (!gotWood_PHRASING) {
             if (!BlockPuncher.tick("log", "log2")) {
-                GuiScreen.sendChatMessage("No wood nearby =(");
+                Out.gui("No wood nearby =(", Out.Mode.Debug);
             }
             return false;
         }
@@ -104,7 +104,7 @@ public class EarlyGameStrategy extends ManagerTick {
                 if (countCobble() > 16) {
                     cobble = true;
                 } else if (!BlockPuncher.tick("stone")) {
-                    GuiScreen.sendChatMessage("No stone nearby =(");
+                    Out.gui("No stone nearby =(", Out.Mode.Debug);
                 }
             }
         }
@@ -113,7 +113,7 @@ public class EarlyGameStrategy extends ManagerTick {
         }
         if (cobble && gotDirt && countCobble() + countDirt() < 10) {//if we have already gotten cobble and dirt, but our amounts have run low, get more
             if (!BlockPuncher.tick("dirt", "grass", "stone")) {
-                GuiScreen.sendChatMessage("No dirt, grass, or stone");
+                Out.gui("No dirt, grass, or stone", Out.Mode.Debug);
             }
             readyForMining = false;
         }
@@ -180,7 +180,7 @@ public class EarlyGameStrategy extends ManagerTick {
                                 if (craftTool(Item.getByNameOrId("diamond_boots"), 1)) {
                                     if (craftTool(Item.getByNameOrId("diamond_axe"), 1)) {
                                         if (craftTool(Item.getByNameOrId("diamond_shovel"), 1)) {
-                                            GuiScreen.sendChatMessage("My job here is done.");
+                                            Out.gui("My job here is done.", Out.Mode.Minimal);
                                             cancel();
                                             return false;
                                         }
@@ -212,7 +212,7 @@ public class EarlyGameStrategy extends ManagerTick {
                 if (stack.getItem() instanceof ItemTool && stack.getItem().getClass() == tool.getClass()) {
                     ItemTool t = (ItemTool) (stack.getItem());
                     if (t.getToolMaterial().getEfficiencyOnProperMaterial() >= ((ItemTool) tool).getToolMaterial().getEfficiencyOnProperMaterial()) {
-                        //GuiScreen.sendChatMessage("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
+                        //Out.gui("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
                         return true;
                     }
                 }
@@ -229,7 +229,7 @@ public class EarlyGameStrategy extends ManagerTick {
                     ItemArmor a = (ItemArmor) (stack.getItem());
                     if (a.armorType == armor.armorType) {
                         if (a.damageReduceAmount >= armor.damageReduceAmount) {
-                            //GuiScreen.sendChatMessage("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
+                            //Out.gui("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
                             return true;
                         }
                     }
@@ -242,7 +242,7 @@ public class EarlyGameStrategy extends ManagerTick {
                 ItemArmor a = (ItemArmor) (stack.getItem());
                 if (a.armorType == armor.armorType) {
                     if (a.damageReduceAmount >= armor.damageReduceAmount) {
-                        //GuiScreen.sendChatMessage("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
+                        //Out.gui("Saying has " + new ItemStack(tool, 0) + " because has " + stack);
                         return true;
                     }
                 }

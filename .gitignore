@@ -14,3 +14,4 @@ mcp918/temp/*
 mcp918/nbproject/private/private.xml
 /mcp918/jars/crash-reports/
 /proguarded/
+/mcp918/.idea/*

@@ -40,7 +40,7 @@ public class SchematicBuilder {
                 MineBot.findPathInNewThread(false);
             }
         } else {
-            GuiScreen.sendChatMessage("done building");
+            Out.gui("done building", Out.Mode.Standard);
         }
     }
     public HashSet<BlockPos> getAllBlocksToPlaceShiftedUp() {

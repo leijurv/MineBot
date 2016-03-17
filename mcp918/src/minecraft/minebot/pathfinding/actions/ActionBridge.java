@@ -135,7 +135,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                         if (MineBot.whatAreYouLookingAt().offset(side).equals(positionsToPlace[0])) {
                             Minecraft.theMinecraft.rightClickMouse();
                         } else {
-                            GuiScreen.sendChatMessage("Wrong. " + side + " " + MineBot.whatAreYouLookingAt().offset(side) + " " + positionsToPlace[0]);
+                            Out.gui("Wrong. " + side + " " + MineBot.whatAreYouLookingAt().offset(side) + " " + positionsToPlace[0], Out.Mode.Debug);
                         }
                     }
                     Out.log("Trying to look at " + against1 + ", actually looking at" + MineBot.whatAreYouLookingAt());

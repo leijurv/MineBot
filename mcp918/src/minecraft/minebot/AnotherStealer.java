@@ -69,18 +69,18 @@ public class AnotherStealer extends Manager {
         }
         if (positionArmor) {
             if (!(Minecraft.theMinecraft.currentScreen instanceof GuiInventory)) {
-                GuiScreen.sendChatMessage("BAD GUI");
+                Out.gui("BAD GUI", Out.Mode.Debug);
                 positionArmor = false;
                 return;
             }
-            GuiScreen.sendChatMessage("Position Armor:" + positionSlot);
+            Out.gui("Position Armor:" + positionSlot, Out.Mode.Debug);
             if (positionStatus == 0) {
                 Container inv = Minecraft.theMinecraft.thePlayer.inventoryContainer;
-                GuiScreen.sendChatMessage("Position Status 0:" + inv.inventorySlots.size());
+                Out.gui("Position Status 0:" + inv.inventorySlots.size(), Out.Mode.Debug);
                 for (int i = positionSlot; i < 45; i++) {
-                    GuiScreen.sendChatMessage((inv.getSlot(i).getHasStack() ? inv.getSlot(i).getStack().getItem().toString() : "NULL STACK") + " :" + i);
+                    Out.gui((inv.getSlot(i).getHasStack() ? inv.getSlot(i).getStack().getItem().toString() : "NULL STACK") + " :" + i, Out.Mode.Debug);
                     if (inv.getSlot(i).getHasStack() && inv.getSlot(i).getStack().getItem() instanceof ItemArmor) {
-                        GuiScreen.sendChatMessage("ITEM IS ARMOR");
+                        Out.gui("ITEM IS ARMOR", Out.Mode.Debug);
                         ItemArmor armor = (ItemArmor) inv.getSlot(i).getStack().getItem();
                         if (inv.getSlot(armor.armorType).getHasStack() && ((ItemArmor) inv.getSlot(armor.armorType).getStack().getItem()).damageReduceAmount < armor.damageReduceAmount) {
                             positionSlot = i;
@@ -107,23 +107,23 @@ public class AnotherStealer extends Manager {
         }
         if (near.equals(MineBot.whatAreYouLookingAt())) {
             if (chestStuff) {
-                GuiScreen.sendChatMessage("CHEST STUFF");
+                Out.gui("CHEST STUFF", Out.Mode.Debug);
                 EntityPlayerSP player = Minecraft.theMinecraft.thePlayer;
                 WorldClient world = Minecraft.theMinecraft.theWorld;
                 if (Minecraft.theMinecraft.currentScreen == null) {
                     chestStuff = false;
-                    GuiScreen.sendChatMessage("NULL GUI");
+                    Out.gui("NULL GUI", Out.Mode.Debug);
                     return;
                 }
                 if (!(Minecraft.theMinecraft.currentScreen instanceof GuiChest)) {
-                    GuiScreen.sendChatMessage("NOT CHEST GUI");
+                    Out.gui("NOT CHEST GUI", Out.Mode.Debug);
                     return;
                 }
                 GuiChest contain = (GuiChest) Minecraft.theMinecraft.currentScreen;
                 Slot slot = getFilledSlot(contain);
-                GuiScreen.sendChatMessage(slot == null ? "null slot" : slot.getHasStack() ? slot.getStack().getItem().toString() : "empty slot");
+                Out.gui(slot == null ? "null slot" : slot.getHasStack() ? slot.getStack().getItem().toString() : "empty slot", Out.Mode.Debug);
                 if (slot == null) {
-                    GuiScreen.sendChatMessage("CLOSING THE SCREEN");
+                    Out.gui("CLOSING THE SCREEN", Out.Mode.Debug);
                     alreadyStolenFrom.add(near);
                     positionArmor = true;
                     positionSlot = 9;
@@ -134,7 +134,7 @@ public class AnotherStealer extends Manager {
                 contain.shiftClick(slot.slotNumber);
                 return;
             }
-            GuiScreen.sendChatMessage("NO CHEST STUFF");
+            Out.gui("NO CHEST STUFF", Out.Mode.Debug);
             chestStuff = true;
             MineBot.isRightClick = true;
             current = MineBot.whatAreYouLookingAt();

@@ -90,7 +90,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
                     return false;
                 }
             }
-            GuiScreen.sendChatMessage("This is impossible", true);
+            Out.gui("This is impossible", Out.Mode.Standard);
             return false;
         }
         double flatDistToNext = Math.abs((to.getX() + 0.5D) - thePlayer.posX) + Math.abs((to.getZ() + 0.5D) - thePlayer.posZ);

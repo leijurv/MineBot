@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Random;
 import minebot.mining.MickeyMine;
 import minebot.util.Manager;
+import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -47,7 +48,7 @@ public class InventoryManager extends Manager {
     public static void addBounds(String itemName, int max, int min) {
         Item item = Item.getByNameOrId("minecraft:" + itemName);
         if (item == null) {
-            GuiScreen.sendChatMessage(itemName + " doesn't exist", true);
+            Out.gui(itemName + " doesn't exist", Out.Mode.Minimal);
             throw new NullPointerException(itemName + " doesn't exist");
         }
         maximumAmounts.put(itemName, max);
@@ -277,7 +278,7 @@ public class InventoryManager extends Manager {
             return;
         }
         if (!onHotbar.isEmpty()) {
-            GuiScreen.sendChatMessage("Hotbar: " + onHotbar);
+            Out.gui("Hotbar: " + onHotbar, Out.Mode.Debug);
         }
         int slotIndex = 7;
         for (Item item : onHotbar) {
@@ -316,7 +317,7 @@ public class InventoryManager extends Manager {
             }
             GuiContainer c = (GuiContainer) Minecraft.theMinecraft.currentScreen;
             if (Minecraft.theMinecraft.currentScreen == null) {
-                GuiScreen.sendChatMessage("Null container");
+                Out.gui("Null container", Out.Mode.Debug);
                 openedInvYet = false;
                 return;
             }

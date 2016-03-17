@@ -60,7 +60,7 @@ public class MickeyMine extends ManagerTick {
         for (int i = 0; i < ores.length; i++) {
             if (ores[i].endsWith(item)) {
                 if (enabled[i] == isFull) {
-                    GuiScreen.sendChatMessage((isFull ? "is full" : "not full") + " of " + item + " so therefore " + ores[i], true);
+                    Out.gui((isFull ? "is full" : "not full") + " of " + item + " so therefore " + ores[i], Out.Mode.Minimal);
                     enabled[i] = !isFull;
                     up = true;
                 }
@@ -74,19 +74,19 @@ public class MickeyMine extends ManagerTick {
         String lower = ore.toLowerCase();
         if (lower.trim().length() == 0) {
             for (int i = 0; i < ores.length; i++) {
-                GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i], true);
+                Out.gui(ores[i] + ": " + enabled[i], Out.Mode.Minimal);
             }
             return;
         }
         boolean m = false;
         for (int i = 0; i < ores.length; i++) {
             if (!ores[i].contains(lower)) {
-                GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i], true);
+                Out.gui(ores[i] + ": " + enabled[i], Out.Mode.Minimal);
                 continue;
             }
             m = true;
             enabled[i] = !enabled[i];
-            GuiScreen.sendChatMessage(ores[i] + ": " + enabled[i] + " (I toggled this one just now)", true);
+            Out.gui(ores[i] + ": " + enabled[i] + " (I toggled this one just now)", Out.Mode.Minimal);
         }
         if (m) {
             goalBlocks = new ArrayList<Block>();
@@ -102,7 +102,7 @@ public class MickeyMine extends ManagerTick {
             String oreName = "minecraft:" + ores[i] + "_ore";
             Block block = Block.getBlockFromName(oreName);
             if (block == null) {
-                GuiScreen.sendChatMessage(oreName + " doesn't exist bb", true);
+                Out.gui(oreName + " doesn't exist bb", Out.Mode.Minimal);
                 throw new NullPointerException(oreName + " doesn't exist bb");
             }
             goalBlocks.add(block);
@@ -123,7 +123,7 @@ public class MickeyMine extends ManagerTick {
             doNormalMine();
         }
         if (ticksSinceBlockMined > 200) {
-            GuiScreen.sendChatMessage("Mickey mine stops, its been like 10 seconds and nothing has happened");
+            Out.gui("Mickey mine stops, its been like 10 seconds and nothing has happened", Out.Mode.Debug);
             Manager.getManager(MickeyMine.class).cancel();
         }
     }
@@ -153,7 +153,7 @@ public class MickeyMine extends ManagerTick {
             return;
         }
         if (!branchPosition.equals(Minecraft.theMinecraft.thePlayer.getPosition0())) {
-            GuiScreen.sendChatMessage("Should be at branch position " + branchPosition + " " + Minecraft.theMinecraft.thePlayer.getPosition0(), true);
+            Out.gui("Should be at branch position " + branchPosition + " " + Minecraft.theMinecraft.thePlayer.getPosition0(), Out.Mode.Debug);
             mightNeedToGoBackToPath = true;
         } else if (torch()) {
             if (LookManager.lookAtBlock(branchPosition.down(), true)) {
@@ -169,11 +169,11 @@ public class MickeyMine extends ManagerTick {
             addNormalBlock(branchPosition.offset(miningFacing, i), true);
             Out.log("branche" + i);
             if (i >= l) {
-                GuiScreen.sendChatMessage("Not mining " + branchPosition.offset(miningFacing, i) + " because it's in known diamond chunk " + tupleFromBlockPos(branchPosition.offset(miningFacing, i)));
+                Out.gui("Not mining " + branchPosition.offset(miningFacing, i) + " because it's in known diamond chunk " + tupleFromBlockPos(branchPosition.offset(miningFacing, i)), Out.Mode.Debug);
             }
         }
         i--;
-        GuiScreen.sendChatMessage("Branch distance " + i, true);
+        Out.gui("Branch distance " + i, Out.Mode.Debug);
         BlockPos futureBranchPosition = branchPosition.offset(miningFacing, i);
         if (futureBranchPosition.getY() != yLevel) {
             onCancel1();
@@ -221,11 +221,11 @@ public class MickeyMine extends ManagerTick {
             MineBot.goal = new GoalBlock(branchPosition);
             if (MineBot.currentPath == null && !MineBot.isPathFinding()) {
                 MineBot.findPathInNewThread(Minecraft.theMinecraft.thePlayer.getPosition0(), false);
-                GuiScreen.sendChatMessage("Pathing back to branch", true);
+                Out.gui("Pathing back to branch", Out.Mode.Standard);
             }
             if (Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
                 mightNeedToGoBackToPath = false;
-                GuiScreen.sendChatMessage("I'm back", true);
+                Out.gui("I'm back", Out.Mode.Debug);
             }
             return;
         }
@@ -234,7 +234,7 @@ public class MickeyMine extends ManagerTick {
         if (LookManager.lookAtBlock(toMine, true)) {
             if (Action.avoidBreaking(toMine)) {
                 miningFacing = miningFacing.rotateY();
-                GuiScreen.sendChatMessage("Since I need to avoid breaking " + toMine + ", I'm rotating to " + miningFacing, true);
+                Out.gui("Since I need to avoid breaking " + toMine + ", I'm rotating to " + miningFacing, Out.Mode.Debug);
                 needsToBeMined.clear();
                 //.priorityNeedsToBeMined.clear();
             } else {
@@ -250,13 +250,13 @@ public class MickeyMine extends ManagerTick {
                 } else {
                     Out.log("Going to position");
                     if (!Action.canWalkOn(Minecraft.theMinecraft.thePlayer.getPosition0().offset(Minecraft.theMinecraft.thePlayer.getHorizontalFacing()).down())) {
-                        GuiScreen.sendChatMessage("About to fall off");
+                        Out.gui("About to fall off", Out.Mode.Debug);
                         mightNeedToGoBackToPath = true;
                         return;
                     }
                     MineBot.moveTowardsBlock(branchPosition, false);
                     if (Minecraft.theMinecraft.thePlayer.getPosition0().getY() != branchPosition.getY()) {
-                        GuiScreen.sendChatMessage("wrong Y coordinate", true);
+                        Out.gui("wrong Y coordinate", Out.Mode.Debug);
                         mightNeedToGoBackToPath = true;
                     }
                 }
@@ -326,7 +326,7 @@ public class MickeyMine extends ManagerTick {
     public static boolean addNormalBlock(BlockPos blockPos, boolean mainBranch) {
         if (!needsToBeMined.contains(blockPos)) {
             if (Action.avoidBreaking(blockPos) && mainBranch) {//who gives a crap if a side branch will hit lava? lol
-                GuiScreen.sendChatMessage("Uh oh, lava nearby", true);
+                Out.gui("Uh oh, lava nearby", Out.Mode.Debug);
                 miningFacing = miningFacing.rotateY();
                 return false;
             }
@@ -338,7 +338,7 @@ public class MickeyMine extends ManagerTick {
     public static boolean addPriorityBlock(BlockPos blockPos) {
         if (!priorityNeedsToBeMined.contains(blockPos) && isGoalBlock(blockPos)) {
             if (Action.avoidBreaking(blockPos)) {
-                GuiScreen.sendChatMessage("Can't break " + Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock() + " at " + blockPos + " because it's near lava", true);
+                Out.gui("Can't break " + Minecraft.theMinecraft.theWorld.getBlockState(blockPos).getBlock() + " at " + blockPos + " because it's near lava", Out.Mode.Debug);
                 return false;
             }
             priorityNeedsToBeMined.add(blockPos);

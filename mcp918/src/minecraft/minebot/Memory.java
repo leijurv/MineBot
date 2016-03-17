@@ -64,11 +64,11 @@ public class Memory extends Manager {
             for (BlockPos pos : new ArrayList<BlockPos>(knownPositions)) {//make duplicate to prevent concurrent modification exceptions
                 boolean loaded = blockLoaded(pos);
                 if (!loaded) {
-                    //GuiScreen.sendChatMessage("Too far away from " + pos + " to remember that it's " + block, true);
+                    //Out.gui("Too far away from " + pos + " to remember that it's " + block, true);
                 }
                 Block current = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
                 if (!current.equals(block) || !loaded) {
-                    //GuiScreen.sendChatMessage("Block at " + pos + " has changed from " + block + " to " + current + ". Removing from memory.", true);
+                    //Out.gui("Block at " + pos + " has changed from " + block + " to " + current + ". Removing from memory.", true);
                     knownPositions.remove(pos);
                     if (loaded) {
                         scanBlock(pos);//rescan to put in proper memory
@@ -169,7 +169,7 @@ public class Memory extends Manager {
                     scanThread = null;
                 }
                 public void run1() {
-                    GuiScreen.sendChatMessage("Starting passive block scan thread", true);
+                    Out.gui("Starting passive block scan thread", Out.Mode.Debug);
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException ex) {
@@ -178,11 +178,11 @@ public class Memory extends Manager {
                     }
                     while (true) {
                         if (Minecraft.theMinecraft != null && Minecraft.theMinecraft.thePlayer != null && Minecraft.theMinecraft.theWorld != null) {
-                            //GuiScreen.sendChatMessage("Beginning passive block scan", true);
+                            //Out.gui("Beginning passive block scan", true);
                             long start = System.currentTimeMillis();
                             scan();
                             long end = System.currentTimeMillis();
-                            //GuiScreen.sendChatMessage("Passive block scan over after " + (end - start) + "ms", true);
+                            //Out.gui("Passive block scan over after " + (end - start) + "ms", true);
                         }
                         try {
                             Thread.sleep(10000);
@@ -391,7 +391,7 @@ public class Memory extends Manager {
             }
         }
         for (String x : resp.split("\n")) {
-            GuiScreen.sendChatMessage(x, true);
+            Out.gui(x, Out.Mode.Minimal);
         }
         if (targetName.equals("")) {
             return "";

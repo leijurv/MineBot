@@ -18,7 +18,6 @@ import minebot.util.ManagerTick;
 import minebot.util.Out;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -101,7 +100,7 @@ public class Combat extends ManagerTick {
                 Entity entity = huntMobs.get(0);
                 if (!entity.equals(target)) {
                     if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {//if playerhunt is true, dont overwrite a player target with a non player target
-                        GuiScreen.sendChatMessage("Mobhunting=true. Killing " + entity, true);
+                        Out.gui("Mobhunting=true. Killing " + entity, Out.Mode.Minimal);
                         if (MineBot.currentPath != null) {
                             MineBot.currentPath.clearPath();
                         }
@@ -115,7 +114,7 @@ public class Combat extends ManagerTick {
         if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
             if (MineBot.currentPath != null) {
                 if (!(MineBot.currentPath.goal instanceof GoalRunAway)) {
-                    GuiScreen.sendChatMessage("Health too low, cancelling hunt", true);
+                    Out.gui("Health too low, cancelling hunt", Out.Mode.Minimal);
                     if (MineBot.currentPath != null) {
                         MineBot.currentPath.clearPath();
                     }
@@ -129,17 +128,14 @@ public class Combat extends ManagerTick {
             }
             if (away.length != 0) {
                 MineBot.goal = new GoalRunAway(35, away);
-                if (MineBot.currentPath == null) {
-                    GuiScreen.sendChatMessage("Running away", true);
-                    MineBot.findPathInNewThread(playerFeet, false);
-                } else if (!MineBot.isThereAnythingInProgress && MineBot.tickNumber % 4 == 0) {
-                    GuiScreen.sendChatMessage("Running away", true);
+                if (MineBot.currentPath == null || (!MineBot.isThereAnythingInProgress && MineBot.tickNumber % 4 == 0)) {
+                    Out.gui("Running away", Out.Mode.Minimal);
                     MineBot.findPathInNewThread(playerFeet, false);
                 }
             }
         }
         if (target != null && target.isDead) {
-            GuiScreen.sendChatMessage(target + " is dead", true);
+            Out.gui(target + " is dead", Out.Mode.Standard);
             target = null;
             if (MineBot.currentPath != null) {
                 MineBot.currentPath.clearPath();
@@ -153,13 +149,13 @@ public class Combat extends ManagerTick {
             if (MineBot.currentPath != null) {
                 double movementSince = dist(targetPos, MineBot.currentPath.end);
                 if (movementSince > 4 && !MineBot.isThereAnythingInProgress) {
-                    GuiScreen.sendChatMessage("They moved too much, " + movementSince + " blocks. recalculating", true);
+                    Out.gui("They moved too much, " + movementSince + " blocks. recalculating", Out.Mode.Standard);
                     MineBot.findPathInNewThread(playerFeet, true);//this will overwrite currentPath
                 }
             }
             double dist = distFromMe(target);
             boolean actuallyLookingAt = target.equals(MineBot.whatEntityAreYouLookingAt());
-            //GuiScreen.sendChatMessage(dist + " " + actuallyLookingAt, true);
+            //Out.gui(dist + " " + actuallyLookingAt, Out.Mode.Debug);
             if (dist > 4 && MineBot.currentPath == null) {
                 MineBot.findPathInNewThread(playerFeet, true);
             }
@@ -228,9 +224,9 @@ public class Combat extends ManagerTick {
             for (EntityPlayer pl : Minecraft.theMinecraft.theWorld.playerEntities) {
                 String blah = pl.getName().trim().toLowerCase();
                 if (!blah.equals(Minecraft.theMinecraft.thePlayer.getName().trim().toLowerCase())) {
-                    GuiScreen.sendChatMessage("Considering " + blah, true);
+                    Out.gui("Considering " + blah, Out.Mode.Debug);
                     if (Combat.couldBeInCreative(pl)) {
-                        GuiScreen.sendChatMessage("No, creative", true);
+                        Out.gui("No, creative", Out.Mode.Minimal);
                         continue;
                     }
                     if (blah.contains(name) || name.contains(blah)) {

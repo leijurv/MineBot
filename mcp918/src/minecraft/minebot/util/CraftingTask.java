@@ -118,14 +118,14 @@ public class CraftingTask extends ManagerTick {
         if (tickNumber % ticksBetweenClicks == 0) {
             int index = tickNumber / ticksBetweenClicks;
             if (index >= plan.size()) {
-                GuiScreen.sendChatMessage("Plan over");
+                Out.gui("Plan over", Out.Mode.Debug);
                 plan = null;
                 tickNumber = -40;
                 return;
             }
             if (index >= 0) {
                 int[] click = plan.get(index);
-                GuiScreen.sendChatMessage(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting());
+                Out.gui(index + " " + click[0] + " " + click[1] + " " + click[2] + " " + currentlyCrafting(), Out.Mode.Debug);
                 contain.sketchyMouseClick(click[0], click[1], click[2]);
                 Out.log("Ticking plan");
             }
@@ -194,7 +194,7 @@ public class CraftingTask extends ManagerTick {
                     }
                     return true;
                 } else {
-                    GuiScreen.sendChatMessage("too far away from closest crafting table (" + distXZ + " blocks), crafting another");
+                    Out.gui("too far away from closest crafting table (" + distXZ + " blocks), crafting another", Out.Mode.Debug);
                 }
             }
         }
@@ -215,7 +215,7 @@ public class CraftingTask extends ManagerTick {
             }
             BlockPos player = Minecraft.theMinecraft.thePlayer.getPosition0();
             if (MineBot.isAir(player.down()) || MineBot.isAir(player.up(2))) {
-                GuiScreen.sendChatMessage("Placing down");
+                Out.gui("Placing down", Out.Mode.Debug);
                 LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
                 MineBot.jumping = true;
                 MineBot.sneak = true;
@@ -233,11 +233,9 @@ public class CraftingTask extends ManagerTick {
              MineBot.right = new Random().nextBoolean();
              MineBot.jumping = true;*/
             return true;
-        } else {
-            if (hasCraftingTableInInventory()) {
-                InventoryManager.putOnHotBar(Item.getByNameOrId("crafting_table"));
-                return true;
-            }
+        } else if (hasCraftingTableInInventory()) {
+            InventoryManager.putOnHotBar(Item.getByNameOrId("crafting_table"));
+            return true;
         }
         //at this point we know that we need a crafting table and we aren't in one and there isn't one nearby and we don't have one
         ensureCraftingDesired(Item.getByNameOrId("crafting_table"), 1);
@@ -421,7 +419,7 @@ public class CraftingTask extends ManagerTick {
         }
         for (int i = 0; i < count.length; i++) {
             if (count[i] != amounts[i]) {
-                //GuiScreen.sendChatMessage("Not enough " + items[i], true);
+                //Out.gui("Not enough " + items[i], true);
                 return null;
             }
         }
@@ -434,13 +432,11 @@ public class CraftingTask extends ManagerTick {
                 MineBot.slowOpenInventory();
             }
             didIOpenMyInventory = true;
+        } else if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
+            Out.gui("Not in crafting table", Out.Mode.Debug);
+            return false;
         } else {
-            if (Minecraft.theMinecraft.currentScreen == null || !(Minecraft.theMinecraft.currentScreen instanceof GuiCrafting)) {
-                GuiScreen.sendChatMessage("Not in crafting table", true);
-                return false;
-            } else {
-                didIOpenMyInventory = true;
-            }
+            didIOpenMyInventory = true;
         }
         GuiContainer contain = (GuiContainer) Minecraft.theMinecraft.currentScreen;
         for (int i = 1; i < (inv ? 5 : 10); i++) {
@@ -448,7 +444,7 @@ public class CraftingTask extends ManagerTick {
                 return false;
             }
         }
-        GuiScreen.sendChatMessage("Crafting amount " + amount + " of " + currentlyCrafting(), true);
+        Out.gui("Crafting amount " + amount + " of " + currentlyCrafting(), Out.Mode.Debug);
         plan = new ArrayList();
         tickNumber = -10;
         for (int i = inv ? 9 : 10; i < contain.inventorySlots.inventorySlots.size(); i++) {
@@ -483,11 +479,11 @@ public class CraftingTask extends ManagerTick {
                 }
             }
         }
-        GuiScreen.sendChatMessage("shift clicking " + contain.inventorySlots.inventorySlots.get(0).getStack(), true);
+        Out.gui("shift clicking " + contain.inventorySlots.inventorySlots.get(0).getStack(), Out.Mode.Debug);
         shiftClick(0);
         for (int i = 0; i < amounts.length; i++) {
             if (amounts[i] > 0) {
-                GuiScreen.sendChatMessage("Not enough " + i + " " + amounts[i] + " " + items[i] + " " + positions[i], true);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
+                Out.gui("Not enough " + i + " " + amounts[i] + " " + items[i] + " " + positions[i], Out.Mode.Debug);//this detects if it didn't have enough, but you shouldn't call this function unless you have already made sure you have enough
             }
         }
         return true;
@@ -536,7 +532,7 @@ public class CraftingTask extends ManagerTick {
         if (waitingToClose) {
             TUC--;
             if (TUC <= 0) {
-                GuiScreen.sendChatMessage("Closing screen!!!");
+                Out.gui("Closing screen!!!", Out.Mode.Debug);
                 Minecraft.theMinecraft.thePlayer.closeScreen();
                 waitingToClose = false;
                 TUC = 3;
@@ -598,7 +594,7 @@ public class CraftingTask extends ManagerTick {
         return new ItemStack(currentlyCrafting, stackSize);
     }
     public final void increaseNeededAmount(int amount) {
-        //GuiScreen.sendChatMessage(currentlyCrafting() + " inc " + amount);
+        //Out.gui(currentlyCrafting() + " inc " + amount);
         int stackSizeBefore = stackSize;
         stackSize += amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
@@ -608,7 +604,7 @@ public class CraftingTask extends ManagerTick {
         int change = inputQuantityNew - inputQuantityBefore;
         if (change != 0) {
             /*for (CraftingTask craftingTask : subCraftingTasks) {
-             GuiScreen.sendChatMessage("> inc sub " + craftingTask.currentlyCrafting() + " " + change);
+             Out.gui("> inc sub " + craftingTask.currentlyCrafting() + " " + change);
              }*/
             for (CraftingTask craftingTask : subCraftingTasks) {
                 craftingTask.increaseNeededAmount(change);
@@ -616,7 +612,7 @@ public class CraftingTask extends ManagerTick {
         }
     }
     public void decreaseNeededAmount(int amount) {
-        //GuiScreen.sendChatMessage(currentlyCrafting() + " dec " + amount);
+        //Out.gui(currentlyCrafting() + " dec " + amount);
         int stackSizeBefore = stackSize;
         stackSize -= amount;
         IRecipe currentRecipe = getRecipeFromItem(currentlyCrafting);
@@ -626,7 +622,7 @@ public class CraftingTask extends ManagerTick {
         int change = inputQuantityBefore - inputQuantityNew;
         if (change != 0) {
             /*for (CraftingTask craftingTask : subCraftingTasks) {
-             GuiScreen.sendChatMessage("> dec sub " + craftingTask.currentlyCrafting() + " " + change);
+             Out.gui("> dec sub " + craftingTask.currentlyCrafting() + " " + change);
              }*/
             for (CraftingTask craftingTask : subCraftingTasks) {
                 craftingTask.decreaseNeededAmount(change);
