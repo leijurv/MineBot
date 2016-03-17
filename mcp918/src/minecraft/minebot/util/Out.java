@@ -66,7 +66,7 @@ public class Out {
         String trace = trace();
         System.out.println(trace + '\t' + o.toString());
         if (mode == Mode.Ludicrous) {
-            chatRaw("§5[§dLog§5|§2" + trace + "§5]§7 " + o.toString());
+            chatRaw("§5[§dLog§5|§2" + trace + "§5]§f " + o.toString());
         }
     }
     /**
@@ -97,7 +97,7 @@ public class Out {
         System.out.println(trace + '\t' + message);
         if (req.compareTo(mode) <= 0) {
             if (Mode.Debug.compareTo(mode) <= 0) {
-                message = "§5[§dMineBot§5|§2" + trace() + "§5]§7 " + message;
+                message = "§5[§dMineBot§5|§2" + trace() + "§5]§f " + message;
             } else {
                 message = "§5[§dMineBot§5]§7 " + message;
             }
