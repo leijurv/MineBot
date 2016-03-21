@@ -271,9 +271,7 @@ public class MineBot {
                 double distZ = Math.abs(thePlayer.posZ - (prev.getZ() + 0.5D));
                 distZ *= Math.abs(prev.getZ() - down.getZ());
                 double dist = distX + distZ;
-                if (dist > 0.5) {
-                    thePlayer.rotationYaw = Math.round(thePlayer.rotationYaw / 90) * 90;
-                }
+                thePlayer.rotationYaw = Math.round(thePlayer.rotationYaw / 90) * 90;
                 if (dist > 0.7) {
                     jumping = true;
                     Out.gui("Parkour jumping!!!", Out.Mode.Standard);
