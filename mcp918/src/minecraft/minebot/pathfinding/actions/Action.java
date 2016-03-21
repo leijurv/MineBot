@@ -27,6 +27,8 @@ public abstract class Action {
     public static final double JUMP_ONE_BLOCK_COST = 5;
     public static final double LADDER_UP_ONE_COST = 20 / 2.35;
     public static final double LADDER_DOWN_ONE_COST = 20 / 3;
+    public static final double SNEAK_ONE_BLOCK_COST = 20 / 1.3;
+    public static final double SPRINT_ONE_BLOCK_COST = 20 / 5.612;
     /**
      * Doesn't include walking forwards, just the falling
      *
