@@ -65,7 +65,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                         return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                     }
                 }
-                //TODO this really should replace WC with the cost of sneaking
+                WC = WC * SNEAK_ONE_BLOCK_COST / WALK_ONE_BLOCK_COST;//since we are placing, we are sneaking
                 return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
             }
             return PathFinder.COST_INF;
