@@ -24,7 +24,7 @@ public abstract class Action {
     //These costs are measured roughly in ticks btw
     public static final double WALK_ONE_BLOCK_COST = 20 / 4.317;
     public static final double WALK_ONE_IN_WATER_COST = 20 / 2.2;
-    public static final double JUMP_ONE_BLOCK_COST = 5;
+    public static final double JUMP_ONE_BLOCK_COST = 5.72854;//see below calculation for fall. 1.25 blocks
     public static final double LADDER_UP_ONE_COST = 20 / 2.35;
     public static final double LADDER_DOWN_ONE_COST = 20 / 3;
     public static final double SNEAK_ONE_BLOCK_COST = 20 / 1.3;
