@@ -10,7 +10,10 @@ import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.BlockLadder;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -25,19 +28,33 @@ public class ActionPillar extends ActionPlaceOrBreak {
     }
     @Override
     protected double calculateCost(ToolSet ts) {
-        if (!MineBot.hasThrowaway || !MineBot.allowVerticalMotion) {
+        Block fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock();
+        boolean ladder = fromDown instanceof BlockLadder;
+        if (!ladder) {
+            Block d = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
+            if (d instanceof BlockLadder) {
+                return PathFinder.COST_INF;
+            }
+        }
+        if ((!MineBot.hasThrowaway && !ladder) || !MineBot.allowVerticalMotion) {
             return PathFinder.COST_INF;
         }
         double hardness = getTotalHardnessOfBlocksToBreak(ts);
         if (hardness != 0) {
-            if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3)) || Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//if the block above where we want to break is not a full block, don't do it
+            if (Minecraft.theMinecraft.theWorld.getBlockState(from.up(2)).getBlock() instanceof BlockLadder) {
+                hardness = 0;
+            } else if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3)) || Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//if the block above where we want to break is not a full block, don't do it
                 return PathFinder.COST_INF;
             }
         }
         if (isLiquid(from) || isLiquid(from.down())) {//can't pillar on water or in water
             return PathFinder.COST_INF;
         }
-        return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + hardness;
+        if (ladder) {
+            return LADDER_UP_ONE_COST + hardness;
+        } else {
+            return JUMP_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + hardness;
+        }
     }
     int numTicks = 0;
     @Override
@@ -48,30 +65,44 @@ public class ActionPillar extends ActionPlaceOrBreak {
         return tick1();
     }
     public boolean tick1() {
-        if (!LookManager.lookAtBlock(positionsToPlace[0], true)) {
+        IBlockState fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from);
+        boolean ladder = fromDown.getBlock() instanceof BlockLadder;
+        if (!ladder && !LookManager.lookAtBlock(positionsToPlace[0], true)) {
             return false;
         }
         numTicks++;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
-        MineBot.sneak = true;
-        //otherwise jump
-        if (numTicks > 40) {
-            double diffX = thePlayer.posX - (to.getX() + 0.5);
-            double diffZ = thePlayer.posZ - (to.getZ() + 0.5);
-            double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
-            if (dist > 0.17) {//why 0.17? because it seemed like a good number, that's why
-                MineBot.forward = true;//if it's been more than forty ticks of trying to jump and we aren't done yet, go forward, maybe we are stuck
+        boolean blockIsThere = canWalkOn(from) || ladder;
+        if (ladder) {
+            BlockPos against = from.offset(fromDown.getValue(BlockLadder.FACING).getOpposite());
+            if (thePlayer.getPosition0().equals(against.up()) || thePlayer.getPosition0().equals(to)) {
+                return true;
             }
-        }
-        boolean blockIsThere = canWalkOn(from);
-        if (!blockIsThere) {
-            Out.log("Block not there yet");
-            if (!MineBot.isAir(from)) {
-                MineBot.isLeftClick = true;
-                blockIsThere = false;
-            } else if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
-                Minecraft.theMinecraft.rightClickMouse();//constantly right click
+            /*if (thePlayer.getPosition0().getX() != from.getX() || thePlayer.getPosition0().getZ() != from.getZ()) {
+             MineBot.moveTowardsBlock(from);
+             }*/
+            MineBot.moveTowardsBlock(against);
+            return false;
+        } else {
+            MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
+            MineBot.sneak = true;
+            //otherwise jump
+            if (numTicks > 40) {
+                double diffX = thePlayer.posX - (to.getX() + 0.5);
+                double diffZ = thePlayer.posZ - (to.getZ() + 0.5);
+                double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
+                if (dist > 0.17) {//why 0.17? because it seemed like a good number, that's why
+                    MineBot.forward = true;//if it's been more than forty ticks of trying to jump and we aren't done yet, go forward, maybe we are stuck
+                }
+            }
+            if (!blockIsThere) {
+                Out.log("Block not there yet");
+                if (!MineBot.isAir(from)) {
+                    MineBot.isLeftClick = true;
+                    blockIsThere = false;
+                } else if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
+                    Minecraft.theMinecraft.rightClickMouse();//constantly right click
+                }
             }
         }
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);

@@ -5,9 +5,11 @@
  */
 package minebot.pathfinding.actions;
 
+import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -21,12 +23,22 @@ import net.minecraft.util.BlockPos;
 public abstract class Action {
     //These costs are measured roughly in ticks btw
     public static final double WALK_ONE_BLOCK_COST = 20 / 4.317;
-    public static final double WALK_ONE_IN_WATER_COST = WALK_ONE_BLOCK_COST * 2;
+    public static final double WALK_ONE_IN_WATER_COST = 20 / 2.2;
     public static final double JUMP_ONE_BLOCK_COST = 5;
+    public static final double LADDER_UP_ONE_COST = 20 / 2.35;
+    public static final double LADDER_DOWN_ONE_COST = 20 / 3;
     /**
      * Doesn't include walking forwards, just the falling
+     *
+     * Based on a sketchy formula from minecraftwiki
+     *
+     * d(t) = 3.92 × (99 - 49.50×(0.98^t+1) - t)
+     *
+     * Solved in mathematica
      */
-    public static final double FALL_ONE_BLOCK_COST = 1;
+    public static final double FALL_ONE_BLOCK_COST = 5.11354;
+    public static final double FALL_TWO_BLOCK_COST = 7.28283;
+    public static final double FALL_THREE_BLOCK_COST = 8.96862;
     /**
      * It doesn't actually take ten ticks to place a block, this cost is so high
      * because we want to generally conserve blocks which might be limited
@@ -56,7 +68,7 @@ public abstract class Action {
      */
     public double cost(ToolSet ts) {
         if (cost == null) {
-            cost = calculateCost(ts == null ? new ToolSet() : ts);
+            cost = calculateCost0(ts == null ? new ToolSet() : ts);
         }
         if (cost < 1) {
             Out.log("Bad cost " + this + " " + cost);
@@ -68,8 +80,17 @@ public abstract class Action {
      *
      * @return
      */
-    protected final double calculateCost() {
-        return calculateCost(new ToolSet());
+    private final double calculateCost() {
+        return calculateCost0(new ToolSet());
+    }
+    private double calculateCost0(ToolSet ts) {
+        Block fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
+        if (fromDown instanceof BlockLadder) {
+            if (!(this instanceof ActionPillar) && !(this instanceof ActionBridge)) {
+                return PathFinder.COST_INF;
+            }
+        }
+        return calculateCost(ts);
     }
     protected abstract double calculateCost(ToolSet ts);
     static Block waterFlowing = Block.getBlockById(8);
@@ -143,6 +164,9 @@ public abstract class Action {
      */
     public static boolean canWalkOn(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        if (block instanceof BlockLadder) {
+            return true;
+        }
         if (isWater(block)) {
             return isWater(Minecraft.theMinecraft.theWorld.getBlockState(pos.up()).getBlock());
         }

@@ -13,9 +13,9 @@ import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLadder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
@@ -88,11 +88,12 @@ public class ActionBridge extends ActionPlaceOrBreak {
         if (oneInTen == null) {
             oneInTen = new Random().nextInt(10) == 0;
         }
-        boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]);
+        boolean ladder = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock() instanceof BlockLadder;
+        boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]) || ladder;
         //Out.log("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        if (whereAmI.getY() != to.getY()) {
+        if (whereAmI.getY() != to.getY() && !ladder) {
             Out.log("Wrong Y coordinate");
             if (whereAmI.getY() < to.getY()) {
                 MineBot.jumping = true;

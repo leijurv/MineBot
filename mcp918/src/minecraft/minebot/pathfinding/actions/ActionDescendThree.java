@@ -29,7 +29,7 @@ public class ActionDescendThree extends ActionPlaceOrBreak {
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
             return PathFinder.COST_INF;
         }
-        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST;
+        return WALK_ONE_BLOCK_COST + FALL_THREE_BLOCK_COST;
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
