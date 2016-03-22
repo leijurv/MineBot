@@ -78,14 +78,6 @@ public abstract class Action {
         }
         return cost;
     }
-    /**
-     * Do the cost calculation of how hard this action would be
-     *
-     * @return
-     */
-    private final double calculateCost() {
-        return calculateCost0(new ToolSet());
-    }
     private double calculateCost0(ToolSet ts) {
         Block fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
         if (fromDown instanceof BlockLadder || fromDown instanceof BlockVine) {
