@@ -11,6 +11,7 @@ import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockVine;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -87,7 +88,7 @@ public abstract class Action {
     }
     private double calculateCost0(ToolSet ts) {
         Block fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
-        if (fromDown instanceof BlockLadder) {
+        if (fromDown instanceof BlockLadder || fromDown instanceof BlockVine) {
             if (!(this instanceof ActionPillar) && !(this instanceof ActionBridge)) {
                 return PathFinder.COST_INF;
             }
@@ -166,7 +167,7 @@ public abstract class Action {
      */
     public static boolean canWalkOn(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        if (block instanceof BlockLadder) {
+        if (block instanceof BlockLadder || block instanceof BlockVine) {
             return true;
         }
         if (isWater(block)) {
