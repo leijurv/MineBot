@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.PathRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -1104,6 +1105,9 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             renderglobal.drawSelectionBox(entityplayer1, this.mc.objectMouseOver, 0, partialTicks);
             GlStateManager.enableAlpha();
         }
+        GlStateManager.disableAlpha();
+        PathRenderer.render((EntityPlayer) entity, partialTicks);
+        GlStateManager.enableAlpha();
         this.mc.mcProfiler.endStartSection("destroyProgress");
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0);
