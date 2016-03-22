@@ -350,6 +350,10 @@ public class ChatCommand {
         }
         return "Set goal to " + MineBot.goal;
     }
+    public static String debug(String message) {
+        Out.mode = Out.Mode.Debug;
+        return "Set mode to debug";
+    }
     public static String chatMode(String message) {
         String[] args = message.split(" ");
         if (args.length == 1) {
