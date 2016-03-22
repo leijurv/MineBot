@@ -19,7 +19,6 @@ import minebot.pathfinding.actions.ActionDescendThree;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.chunk.EmptyChunk;
 
@@ -38,6 +37,15 @@ public class PathFinder {
         this.map = new HashMap<BlockPos, Node>();
     }
     static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5, 10};
+    public static PathFinder currentlyRunning = null;
+    Node[] bestSoFar;
+    Node startNode;
+    public Path getTempSolution() {
+        if (startNode == null || bestSoFar[0] == null) {
+            return null;
+        }
+        return new Path(startNode, bestSoFar[0], goal, 0);
+    }
     /**
      * Do the actual path calculation. The returned path might not actually go
      * to goal, but it will get as close as I could get
@@ -46,9 +54,9 @@ public class PathFinder {
      */
     public Path calculatePath() {
         //a lot of these vars are local. that's because if someone tries to call this from multiple threads, they won't interfere (much)
-        final Node startNode = getNodeAtPosition(start);
+        startNode = getNodeAtPosition(start);
         startNode.cost = 0;
-        Node[] bestSoFar = new Node[COEFFICIENTS.length];//keep track of the best node by the metric of (estimatedCostToGoal + cost / COEFFICIENTS[i])
+        bestSoFar = new Node[COEFFICIENTS.length];//keep track of the best node by the metric of (estimatedCostToGoal + cost / COEFFICIENTS[i])
         double[] bestHeuristicSoFar = new double[COEFFICIENTS.length];
         for (int i = 0; i < bestHeuristicSoFar.length; i++) {
             bestHeuristicSoFar[i] = Double.MAX_VALUE;
@@ -56,6 +64,7 @@ public class PathFinder {
         OpenSet openSet = new OpenSet();
         startNode.isOpen = true;
         openSet.insert(startNode);
+        currentlyRunning = this;
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + 4000;
         long lastPrintout = 0;
@@ -73,6 +82,7 @@ public class PathFinder {
                 lastPrintout = System.currentTimeMillis();
             }
             if (goal.isInGoal(currentNodePos)) {
+                currentlyRunning = null;
                 return new Path(startNode, currentNode, goal, numNodes);
             }
             Action[] possibleActions = getConnectedPositions(currentNodePos);//actions that we could take that start at myPos, in random order
@@ -123,11 +133,13 @@ public class PathFinder {
                     Out.gui("But I'm going to do it anyway, because yolo", Out.Mode.Debug);
                 }
                 Out.gui("Path goes for " + dist + " blocks", Out.Mode.Debug);
+                currentlyRunning = null;
                 return new Path(startNode, bestSoFar[i], goal, numNodes);
             }
         }
         Out.gui("Even with a cost coefficient of " + COEFFICIENTS[COEFFICIENTS.length - 1] + ", I couldn't get more than " + bestDist + " blocks =(", Out.Mode.Debug);
         Out.gui("No path found =(", Out.Mode.Standard);
+        currentlyRunning = null;
         return null;
     }
     private double distFromStart(Node n) {
