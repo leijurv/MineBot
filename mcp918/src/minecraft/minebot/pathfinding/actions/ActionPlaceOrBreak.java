@@ -18,7 +18,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -106,6 +105,7 @@ public abstract class ActionPlaceOrBreak extends Action {
         //breaking first
         for (int i = 0; i < positionsToBreak.length; i++) {
             if (!canWalkThrough(positionsToBreak[i])) {
+                Out.gui("lol " + this, Out.Mode.Standard);
                 if (!MineBot.allowBreakOrPlace) {
                     Out.gui("BB I can't break this =(((", Out.Mode.Standard);
                     return false;

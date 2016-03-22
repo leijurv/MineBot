@@ -9,6 +9,9 @@ import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockVine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -42,6 +45,12 @@ public class ActionFall extends ActionPlaceOrBreak {
         if (!MineBot.allowVerticalMotion || !canWalkOn(to.down())) {
             return PathFinder.COST_INF;
         }
-        return FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
+        Block td = Minecraft.theMinecraft.theWorld.getBlockState(to).getBlock();
+        boolean ladder = td instanceof BlockLadder || td instanceof BlockVine;
+        if (ladder) {
+            return LADDER_DOWN_ONE_COST;
+        } else {
+            return FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
+        }
     }
 }
