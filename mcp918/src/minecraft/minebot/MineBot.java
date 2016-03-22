@@ -484,7 +484,6 @@ public class MineBot {
                 calculatingNext = true;
                 Path path = findPath(currentPath.end);
                 isThereAnythingInProgress = false;
-                Out.gui(path.numNodes + " nodes considered, calculated " + path.start + " to " + path.end, Out.Mode.Debug);
                 Out.gui("Done planning ahead " + calculatingNext, Out.Mode.Debug);
                 if (calculatingNext) {
                     nextPath = path;
@@ -495,6 +494,7 @@ public class MineBot {
                     }
                 }
                 calculatingNext = false;
+                Out.gui(path.numNodes + " nodes considered, calculated " + path.start + " to " + path.end, Out.Mode.Debug);
             }
         }.start();
     }
