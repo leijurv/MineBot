@@ -27,6 +27,7 @@ import minebot.util.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockVine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -532,7 +533,7 @@ public class MineBot {
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
         double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
-        if (b instanceof BlockLadder) {
+        if (b instanceof BlockLadder || b instanceof BlockVine) {
             xDiff = 0.5;
             yolo = 0.5;
             zDiff = 0.5;

@@ -13,6 +13,7 @@ import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -29,19 +30,25 @@ public class ActionPillar extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         Block fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock();
-        boolean ladder = fromDown instanceof BlockLadder;
+        boolean ladder = fromDown instanceof BlockLadder || fromDown instanceof BlockVine;
         if (!ladder) {
             Block d = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
-            if (d instanceof BlockLadder) {
+            if (d instanceof BlockLadder || d instanceof BlockVine) {
                 return PathFinder.COST_INF;
             }
         }
         if ((!MineBot.hasThrowaway && !ladder) || !MineBot.allowVerticalMotion) {
             return PathFinder.COST_INF;
         }
+        if (fromDown instanceof BlockVine) {
+            if (getAgainst(from) == null) {
+                return PathFinder.COST_INF;
+            }
+        }
         double hardness = getTotalHardnessOfBlocksToBreak(ts);
         if (hardness != 0) {
-            if (Minecraft.theMinecraft.theWorld.getBlockState(from.up(2)).getBlock() instanceof BlockLadder) {
+            Block tmp = Minecraft.theMinecraft.theWorld.getBlockState(from.up(2)).getBlock();
+            if (tmp instanceof BlockLadder || tmp instanceof BlockVine) {
                 hardness = 0;
             } else if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3)) || Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//if the block above where we want to break is not a full block, don't do it
                 return PathFinder.COST_INF;
@@ -64,9 +71,25 @@ public class ActionPillar extends ActionPlaceOrBreak {
         }
         return tick1();
     }
+    public BlockPos getAgainst(BlockPos vine) {
+        if (Minecraft.theMinecraft.theWorld.getBlockState(vine.north()).getBlock().isBlockNormalCube()) {
+            return vine.north();
+        }
+        if (Minecraft.theMinecraft.theWorld.getBlockState(vine.south()).getBlock().isBlockNormalCube()) {
+            return vine.south();
+        }
+        if (Minecraft.theMinecraft.theWorld.getBlockState(vine.east()).getBlock().isBlockNormalCube()) {
+            return vine.east();
+        }
+        if (Minecraft.theMinecraft.theWorld.getBlockState(vine.west()).getBlock().isBlockNormalCube()) {
+            return vine.west();
+        }
+        return null;
+    }
     public boolean tick1() {
         IBlockState fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from);
-        boolean ladder = fromDown.getBlock() instanceof BlockLadder;
+        boolean ladder = fromDown.getBlock() instanceof BlockLadder || fromDown.getBlock() instanceof BlockVine;
+        boolean vine = fromDown.getBlock() instanceof BlockVine;
         if (!ladder && !LookManager.lookAtBlock(positionsToPlace[0], true)) {
             return false;
         }
@@ -74,7 +97,11 @@ public class ActionPillar extends ActionPlaceOrBreak {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         boolean blockIsThere = canWalkOn(from) || ladder;
         if (ladder) {
-            BlockPos against = from.offset(fromDown.getValue(BlockLadder.FACING).getOpposite());
+            BlockPos against = vine ? getAgainst(from) : from.offset(fromDown.getValue(BlockLadder.FACING).getOpposite());
+            if (against == null) {
+                Out.gui("Unable to climb vines", Out.Mode.Standard);
+                return false;
+            }
             if (thePlayer.getPosition0().equals(against.up()) || thePlayer.getPosition0().equals(to)) {
                 return true;
             }

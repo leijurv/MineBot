@@ -14,6 +14,7 @@ import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockVine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -88,7 +89,8 @@ public class ActionBridge extends ActionPlaceOrBreak {
         if (oneInTen == null) {
             oneInTen = new Random().nextInt(10) == 0;
         }
-        boolean ladder = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock() instanceof BlockLadder;
+        Block fd = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
+        boolean ladder = fd instanceof BlockLadder || fd instanceof BlockVine;
         boolean isTheBridgeBlockThere = canWalkOn(positionsToPlace[0]) || ladder;
         //Out.log("is block there: " + isTheBridgeBlockThere + " block " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
