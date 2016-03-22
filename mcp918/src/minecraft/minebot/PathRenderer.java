@@ -43,9 +43,35 @@ public class PathRenderer {
         }
     }
     public static void drawPath(Path path, EntityPlayer player, float partialTicks, Color color) {
-        for (BlockPos pos : path.path) {
-            drawSelectionBox(player, pos, partialTicks, color);
+        /*for (BlockPos pos : path.path) {
+         drawSelectionBox(player, pos, partialTicks, color);
+         }*/
+        for (int i = 0; i < path.path.size() - 1; i++) {
+            drawLine(player, path.path.get(i), path.path.get(i + 1), partialTicks, color);
         }
+    }
+    public static void drawLine(EntityPlayer player, BlockPos bp1, BlockPos bp2, float partialTicks, Color color) {
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(color.getColorComponents(null)[0], color.getColorComponents(null)[1], color.getColorComponents(null)[2], 0.4F);
+        GL11.glLineWidth(3.0F);
+        GlStateManager.disableTexture2D();
+        GlStateManager.depthMask(false);
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) partialTicks;
+        double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) partialTicks;
+        double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double) partialTicks;
+        worldrenderer.begin(3, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(bp1.getX() + 0.5D - d0, bp1.getY() + 0.5D - d1, bp1.getZ() + 0.5D - d2).endVertex();
+        worldrenderer.pos(bp2.getX() + 0.5D - d0, bp2.getY() + 0.5D - d1, bp2.getZ() + 0.5D - d2).endVertex();
+        worldrenderer.pos(bp2.getX() + 0.5D - d0, bp2.getY() + 0.53D - d1, bp2.getZ() + 0.5D - d2).endVertex();
+        worldrenderer.pos(bp1.getX() + 0.5D - d0, bp1.getY() + 0.53D - d1, bp1.getZ() + 0.5D - d2).endVertex();
+        worldrenderer.pos(bp1.getX() + 0.5D - d0, bp1.getY() + 0.5D - d1, bp1.getZ() + 0.5D - d2).endVertex();
+        tessellator.draw();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
     public static void drawSelectionBox(EntityPlayer player, BlockPos blockpos, float partialTicks, Color color) {
         GlStateManager.enableBlend();
