@@ -9,6 +9,9 @@ import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockVine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -24,6 +27,10 @@ public class ActionDescend extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
+            return PathFinder.COST_INF;
+        }
+        Block tmp1 = Minecraft.theMinecraft.theWorld.getBlockState(to).getBlock();
+        if (tmp1 instanceof BlockLadder || tmp1 instanceof BlockVine) {
             return PathFinder.COST_INF;
         }
         return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);

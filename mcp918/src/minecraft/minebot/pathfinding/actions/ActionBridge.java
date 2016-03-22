@@ -60,6 +60,10 @@ public class ActionBridge extends ActionPlaceOrBreak {
             return WC + getTotalHardnessOfBlocksToBreak(ts);
         } else {//this is a bridge, so we need to place a block
             //return 1000000;
+            Block f = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
+            if (f instanceof BlockLadder || f instanceof BlockVine) {
+                return PathFinder.COST_INF;
+            }
             if (blocksToPlace[0].equals(Block.getBlockById(0)) || (!isWater(blocksToPlace[0]) && blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0]))) {
                 for (BlockPos against1 : against) {
                     if (Minecraft.theMinecraft.theWorld.getBlockState(against1).getBlock().isBlockNormalCube()) {
