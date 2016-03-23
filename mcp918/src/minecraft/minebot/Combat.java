@@ -101,9 +101,6 @@ public class Combat extends ManagerTick {
                 if (!entity.equals(target)) {
                     if (!(!(entity instanceof EntityPlayer) && (target instanceof EntityPlayer) && playerHunt)) {//if playerhunt is true, dont overwrite a player target with a non player target
                         Out.gui("Mobhunting=true. Killing " + entity, Out.Mode.Minimal);
-                        if (MineBot.currentPath != null) {
-                            MineBot.currentPath.clearPath();
-                        }
                         MineBot.currentPath = null;
                         target = entity;
                         wasTargetSetByMobHunt = true;
@@ -115,9 +112,6 @@ public class Combat extends ManagerTick {
             if (MineBot.currentPath != null) {
                 if (!(MineBot.currentPath.goal instanceof GoalRunAway)) {
                     Out.gui("Health too low, cancelling hunt", Out.Mode.Minimal);
-                    if (MineBot.currentPath != null) {
-                        MineBot.currentPath.clearPath();
-                    }
                     MineBot.currentPath = null;
                 }
             }
@@ -137,9 +131,6 @@ public class Combat extends ManagerTick {
         if (target != null && target.isDead) {
             Out.gui(target + " is dead", Out.Mode.Standard);
             target = null;
-            if (MineBot.currentPath != null) {
-                MineBot.currentPath.clearPath();
-            }
             MineBot.currentPath = null;
             MineBot.clearMovement();
         }

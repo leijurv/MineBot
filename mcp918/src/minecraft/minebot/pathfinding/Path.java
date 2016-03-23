@@ -18,7 +18,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 
@@ -35,12 +34,6 @@ public class Path {
      * path.get(path.size()-1) equals end
      */
     public final ArrayList<BlockPos> path;
-    /**
-     * This stores the original blocks for when outlining the path in carpet.
-     * this is how it un-does that
-     *
-     */
-    final IBlockState[] originalBlockStates;
     final ArrayList<Action> actions;
     /**
      * note that this ISN'T the number of nodes in this path, it's actually the
@@ -62,7 +55,6 @@ public class Path {
             current = current.previous;
         }
         path.add(0, start.pos);
-        this.originalBlockStates = new IBlockState[path.size()];
         Out.log("Final path: " + path);
         Out.log("Final actions: " + actions);
         for (int i = 0; i < path.size() - 1; i++) {//print it all out
@@ -115,6 +107,14 @@ public class Path {
         }
         return best;
     }
+    public void calculatePathPosition() {
+        BlockPos playerFeet = Minecraft.theMinecraft.thePlayer.getPosition0();
+        for (int i = 0; i < path.size(); i++) {
+            if (playerFeet.equals(path.get(i))) {
+                pathPosition = i;
+            }
+        }
+    }
     public static double distance(double x, double y, double z, BlockPos pos) {
         double xdiff = x - (pos.getX() + 0.5D);
         double ydiff = y - (pos.getY() + 0.5D);
@@ -144,49 +144,6 @@ public class Path {
      * action take too long
      */
     public boolean failed = false;
-    /**
-     * Replace all the carpet and bs with the original block states
-     */
-    public void clearPath() {
-        if (Minecraft.theMinecraft.theWorld == null) {
-            return;
-        }
-        Block carpet = Block.getBlockById(171);
-        for (int i = 0; i < path.size(); i++) {
-            IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
-            if (currentState.getBlock().equals(carpet) && originalBlockStates[i] != null) {
-                Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
-            }
-        }
-    }
-    /**
-     * Outline the path in carpet
-     */
-    public void outlinePath() {
-        if (!MineBot.useCarpet) {
-            return;
-        }
-        Block carpet = Block.getBlockById(171);
-        IBlockState state = carpet.getStateFromMeta(14);
-        Block air = Block.getBlockById(0);
-        for (int i = 0; i < pathPosition + 5 && i < path.size(); i++) {
-            IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
-            if (currentState.getBlock().equals(carpet) && originalBlockStates[i] != null) {
-                Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), originalBlockStates[i]);
-            }
-        }
-        for (int i = pathPosition + 5; i < Math.min(path.size(), pathPosition + 10); i++) {
-            IBlockState currentState = Minecraft.theMinecraft.theWorld.getBlockState(path.get(i));
-            if (!currentState.getBlock().equals(carpet)) {
-                originalBlockStates[i] = currentState;
-            } else if (originalBlockStates[i] == null) {
-                originalBlockStates[i] = currentState;
-            }
-            if (currentState.getBlock().equals(air)) {
-                Minecraft.theMinecraft.theWorld.setBlockState(path.get(i), state);
-            }
-        }
-    }
     public boolean tick() {
         if (pathPosition >= path.size()) {
             MineBot.clearPath();//stop bugging me, I'm done
@@ -194,7 +151,6 @@ public class Path {
         }
         BlockPos whereShouldIBe = path.get(pathPosition);
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        outlinePath();
         BlockPos whereAmI = thePlayer.getPosition0();
         if (pathPosition == path.size() - 1) {
             Out.log("On last path position");
