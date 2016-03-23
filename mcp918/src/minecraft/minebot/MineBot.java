@@ -224,7 +224,7 @@ public class MineBot {
                     //}
                 }
                 if (nextPath != null) {
-                    for (int i = 0; i < 20 && i < nextPath.path.size(); i++) {
+                    for (int i = 1; i < 20 && i < nextPath.path.size(); i++) {
                         if (playerFeet.equals(nextPath.path.get(i))) {
                             Out.gui("Jumping to position " + i + " in nextpath", Out.Mode.Debug);
                             currentPath = nextPath;
