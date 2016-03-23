@@ -52,8 +52,10 @@ public class PathRenderer {
                 if (p != null) {
                     drawPath(p, player, partialTicks, Color.BLUE);
                     Path mr = PathFinder.currentlyRunning.getMostRecentNodeConsidered();
-                    drawPath(mr, player, partialTicks, Color.CYAN);
-                    drawSelectionBox(player, mr.end, partialTicks, Color.CYAN);
+                    if (mr != null) {
+                        drawPath(mr, player, partialTicks, Color.CYAN);
+                        drawSelectionBox(player, mr.end, partialTicks, Color.CYAN);
+                    }
                 }
             }
         } catch (Exception ex) {
