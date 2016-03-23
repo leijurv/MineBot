@@ -97,11 +97,6 @@ public class EntityRenderer implements IResourceManagerReloadListener {
     private Entity pointedEntity;
     private MouseFilter mouseFilterXAxis = new MouseFilter();
     private MouseFilter mouseFilterYAxis = new MouseFilter();
-    private float thirdPersonDistance = 30.0F;
-    /**
-     * Third person distance temp
-     */
-    private float thirdPersonDistanceTemp = 4.0F;
     /**
      * Smooth cam yaw
      */
@@ -303,7 +298,6 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         this.updateFovModifierHand();
         this.updateTorchFlicker();
         this.fogColor2 = this.fogColor1;
-        this.thirdPersonDistanceTemp = this.thirdPersonDistance;
         if (this.mc.gameSettings.smoothCamera) {
             float f = this.mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
             float f1 = f * f * f * 8.0F;
@@ -547,7 +541,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                 GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, -1.0F, 0.0F, 0.0F);
             }
         } else if (this.mc.gameSettings.thirdPersonView > 0) {
-            double d3 = (double) (this.thirdPersonDistanceTemp + (this.thirdPersonDistance - this.thirdPersonDistanceTemp) * partialTicks);
+            double d3 = MineBot.farf5 ? 20 : 4;
             if (this.mc.gameSettings.debugCamEnable) {
                 GlStateManager.translate(0.0F, 0.0F, (float) (-d3));
             } else {
@@ -569,7 +563,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                     MovingObjectPosition movingobjectposition = this.mc.theWorld.rayTraceBlocks(new Vec3(d0 + (double) f3, d1 + (double) f4, d2 + (double) f5), new Vec3(d0 - d4 + (double) f3 + (double) f5, d1 - d6 + (double) f4, d2 - d5 + (double) f5));
                     if (movingobjectposition != null) {
                         double d7 = movingobjectposition.hitVec.distanceTo(new Vec3(d0, d1, d2));
-                        if (d7 < d3) {
+                        if (d7 < d3 && !MineBot.farf5) {
                             d3 = d7;
                         }
                     }
