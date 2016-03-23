@@ -9,10 +9,12 @@ import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.actions.ActionBridge;
 import minebot.pathfinding.actions.Action;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -224,5 +226,14 @@ public class Path {
             }
         }
         return false;
+    }
+    public HashSet<BlockPos> toMine() {
+        HashSet<BlockPos> tm = new HashSet<>();
+        for (int i = pathPosition; i < actions.size(); i++) {
+            if (actions.get(i) instanceof ActionPlaceOrBreak) {
+                tm.addAll(((ActionPlaceOrBreak) actions.get(i)).toMine());
+            }
+        }
+        return tm;
     }
 }

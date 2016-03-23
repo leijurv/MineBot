@@ -5,6 +5,7 @@
  */
 package minebot.pathfinding.actions;
 
+import java.util.ArrayList;
 import minebot.util.ToolSet;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -199,4 +200,13 @@ public abstract class ActionPlaceOrBreak extends Action {
      * @return
      */
     protected abstract boolean tick0();
+    public ArrayList<BlockPos> toMine() {
+        ArrayList<BlockPos> result = new ArrayList<>();
+        for (BlockPos positionsToBreak1 : positionsToBreak) {
+            if (!canWalkThrough(positionsToBreak1)) {
+                result.add(positionsToBreak1);
+            }
+        }
+        return result;
+    }
 }

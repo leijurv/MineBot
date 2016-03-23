@@ -28,9 +28,15 @@ public class PathRenderer {
     public static void render(EntityPlayer player, float partialTicks) {
         if (MineBot.currentPath != null) {
             drawPath(MineBot.currentPath, player, partialTicks, Color.RED);
+            for (BlockPos pos : MineBot.currentPath.toMine()) {
+                drawSelectionBox(player, pos, partialTicks, Color.RED);
+            }
         }
         if (MineBot.nextPath != null) {
             drawPath(MineBot.nextPath, player, partialTicks, Color.GREEN);
+            for (BlockPos pos : MineBot.nextPath.toMine()) {
+                drawSelectionBox(player, pos, partialTicks, Color.RED);
+            }
         }
         try {
             if (PathFinder.currentlyRunning != null) {
@@ -112,12 +118,15 @@ public class PathRenderer {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(color.getColorComponents(null)[0], color.getColorComponents(null)[1], color.getColorComponents(null)[2], 0.4F);
-        GL11.glLineWidth(2.0F);
+        GL11.glLineWidth(5.0F);
         GlStateManager.disableTexture2D();
         GlStateManager.depthMask(false);
         float f = 0.002F;
         //BlockPos blockpos = movingObjectPositionIn.getBlockPos();
-        Block block = Blocks.dirt;
+        Block block = Minecraft.theMinecraft.theWorld.getBlockState(blockpos).getBlock();
+        if (block.equals(Blocks.air)) {
+            block = Blocks.dirt;
+        }
         block.setBlockBoundsBasedOnState(Minecraft.theMinecraft.theWorld, blockpos);
         double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) partialTicks;
         double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) partialTicks;
