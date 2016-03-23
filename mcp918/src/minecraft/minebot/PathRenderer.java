@@ -6,6 +6,8 @@
 package minebot;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import minebot.pathfinding.Path;
 import minebot.pathfinding.PathFinder;
 import net.minecraft.block.Block;
@@ -49,9 +51,13 @@ public class PathRenderer {
                 Path p = PathFinder.currentlyRunning.getTempSolution();
                 if (p != null) {
                     drawPath(p, player, partialTicks, Color.BLUE);
+                    Path mr = PathFinder.currentlyRunning.getMostRecentNodeConsidered();
+                    drawPath(mr, player, partialTicks, Color.CYAN);
+                    drawSelectionBox(player, mr.end, partialTicks, Color.CYAN);
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            Logger.getLogger(PathRenderer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public static void drawPath(Path path, EntityPlayer player, float partialTicks, Color color) {

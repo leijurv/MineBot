@@ -51,6 +51,7 @@ import org.lwjgl.input.Keyboard;
  * @author leijurv
  */
 public class MineBot {
+    public static boolean slowPath = false;
     public static boolean pause = false;
     public static boolean overrideF3 = true;
     public static boolean allowVerticalMotion = true;
