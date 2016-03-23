@@ -173,9 +173,6 @@ public class MineBot {
         if (currentPath != null && ManagerTick.tickPath) {
             if (currentPath.tick()) {
                 Goal currentPathGoal = currentPath == null ? null : currentPath.goal;
-                if (currentPath != null) {
-                    currentPath.clearPath();
-                }
                 if (currentPath != null && currentPath.failed) {
                     clearPath();
                     Out.gui("Recalculating because path failed", Out.Mode.Standard);
@@ -226,6 +223,20 @@ public class MineBot {
                     Out.log("Jumping because in water");
                     jumping = true;
                     //}
+                }
+                if (nextPath != null) {
+                    for (int i = 0; i < 20 && i < nextPath.path.size(); i++) {
+                        if (playerFeet.equals(nextPath.path.get(i))) {
+                            Out.gui("Jumping to position " + i + " in nextpath", Out.Mode.Debug);
+                            currentPath = nextPath;
+                            currentPath.calculatePathPosition();
+                            nextPath = null;
+                            if (!currentPath.goal.isInGoal(currentPath.end)) {
+                                planAhead();
+                            }
+                            break;
+                        }
+                    }
                 }
                 if (!LookManager.lookingPitch) {
                     if (thePlayer.rotationPitch < -20) {
@@ -397,20 +408,6 @@ public class MineBot {
      * purposefully does NOT clear nextPath.
      */
     public static void clearPath() {
-        if (currentPath != null) {
-            final Path p = currentPath;
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1000);
-                        p.clearPath();
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(MineBot.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }.start();
-        }
         currentPath = null;
         letGoOfLeftClick();
         clearMovement();
