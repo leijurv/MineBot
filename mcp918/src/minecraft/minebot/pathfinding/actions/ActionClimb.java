@@ -11,9 +11,9 @@ import minebot.MineBot;
 import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
@@ -57,6 +57,9 @@ public class ActionClimb extends ActionPlaceOrBreak {
                     return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                 }
             }
+            return PathFinder.COST_INF;
+        }
+        if (Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//it would fall on us and possibly suffocate us
             return PathFinder.COST_INF;
         }
         return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
