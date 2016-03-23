@@ -97,7 +97,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
     private Entity pointedEntity;
     private MouseFilter mouseFilterXAxis = new MouseFilter();
     private MouseFilter mouseFilterYAxis = new MouseFilter();
-    private float thirdPersonDistance = 4.0F;
+    private float thirdPersonDistance = 30.0F;
     /**
      * Third person distance temp
      */
