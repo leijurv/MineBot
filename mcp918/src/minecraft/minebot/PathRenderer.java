@@ -52,12 +52,8 @@ public class PathRenderer {
         GL11.glLineWidth(3.0F);
         GlStateManager.disableTexture2D();
         GlStateManager.depthMask(false);
-        for (int i = 0; i < path.path.size() - 1; i++) {
-            BlockPos a = path.path.get(i);
-            BlockPos b = path.path.get(i + 1);
-            drawLine(player, a.getX(), a.getY(), a.getZ(), b.getX(), b.getY(), b.getZ(), partialTicks);
-        }
-        //GlStateManager.color(0.0f, 0.0f, 0.0f, 0.4f);
+        boolean[] cornerFirstHalf = new boolean[path.path.size()];
+        boolean[] cornerSecondHalf = new boolean[path.path.size()];
         for (int i = 0; i < path.path.size() - 2; i++) {
             BlockPos a = path.path.get(i);
             BlockPos b = path.path.get(i + 1);
@@ -68,12 +64,32 @@ public class PathRenderer {
             if (b.getX() - a.getX() == c.getX() - b.getX() && b.getZ() - a.getZ() == c.getZ() - b.getZ()) {
                 continue;
             }
+            cornerFirstHalf[i] = true;
+            cornerSecondHalf[i + 1] = true;
             double bp1x = (a.getX() + b.getX()) * 0.5D;
             double bp1z = (a.getZ() + b.getZ()) * 0.5D;
             double bp2x = (c.getX() + b.getX()) * 0.5D;
             double bp2z = (c.getZ() + b.getZ()) * 0.5D;
             drawLine(player, bp1x, a.getY(), bp1z, bp2x, a.getY(), bp2z, partialTicks);
         }
+        for (int i = 0; i < path.path.size() - 1; i++) {
+            BlockPos a = path.path.get(i);
+            BlockPos b = path.path.get(i + 1);
+            if (cornerFirstHalf[i] && !cornerSecondHalf[i]) {
+                drawLine(player, a.getX(), a.getY(), a.getZ(), (b.getX() + a.getX()) * 0.5D, b.getY(), (b.getZ() + a.getZ()) * 0.5D, partialTicks);
+            }
+            if (cornerSecondHalf[i] && !cornerFirstHalf[i]) {
+                drawLine(player, (a.getX() + b.getX()) * 0.5D, a.getY(), (a.getZ() + b.getZ()) * 0.5D, b.getX(), b.getY(), b.getZ(), partialTicks);
+            }
+            if (!cornerFirstHalf[i] && !cornerSecondHalf[i]) {
+                drawLine(player, a.getX(), a.getY(), a.getZ(), b.getX(), b.getY(), b.getZ(), partialTicks);
+            } else {
+                GlStateManager.color(color.getColorComponents(null)[0], color.getColorComponents(null)[1], color.getColorComponents(null)[2], 0.1F);
+                drawLine(player, a.getX(), a.getY(), a.getZ(), b.getX(), b.getY(), b.getZ(), partialTicks);
+                GlStateManager.color(color.getColorComponents(null)[0], color.getColorComponents(null)[1], color.getColorComponents(null)[2], 0.4F);
+            }
+        }
+        //GlStateManager.color(0.0f, 0.0f, 0.0f, 0.4f);
         GlStateManager.depthMask(true);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
