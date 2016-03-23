@@ -874,7 +874,9 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             }
         }
         this.mc.mcProfiler.endSection();
+        this.mc.mcProfiler.startSection("lookmanager");
         LookManager.frame(p_181560_1_);
+        this.mc.mcProfiler.endSection();
         if (!this.mc.skipRenderWorld) {
             anaglyphEnable = this.mc.gameSettings.anaglyph;
             final ScaledResolution scaledresolution = new ScaledResolution(this.mc);
@@ -1105,6 +1107,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             renderglobal.drawSelectionBox(entityplayer1, this.mc.objectMouseOver, 0, partialTicks);
             GlStateManager.enableAlpha();
         }
+        this.mc.mcProfiler.endStartSection("pathRender");
         GlStateManager.disableAlpha();
         PathRenderer.render((EntityPlayer) entity, partialTicks);
         GlStateManager.enableAlpha();
