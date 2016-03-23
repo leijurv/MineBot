@@ -236,4 +236,13 @@ public class Path {
         }
         return tm;
     }
+    public HashSet<BlockPos> toPlace() {
+        HashSet<BlockPos> tp = new HashSet<>();
+        for (int i = pathPosition; i < actions.size(); i++) {
+            if (actions.get(i) instanceof ActionPlaceOrBreak) {
+                tp.addAll(((ActionPlaceOrBreak) actions.get(i)).toPlace());
+            }
+        }
+        return tp;
+    }
 }

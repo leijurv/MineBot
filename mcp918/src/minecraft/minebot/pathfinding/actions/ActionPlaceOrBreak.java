@@ -209,4 +209,13 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         return result;
     }
+    public ArrayList<BlockPos> toPlace() {
+        ArrayList<BlockPos> result = new ArrayList<>();
+        for (BlockPos positionsToPlace1 : positionsToPlace) {
+            if (!canWalkOn(positionsToPlace1)) {
+                result.add(positionsToPlace1);
+            }
+        }
+        return result;
+    }
 }
