@@ -15,6 +15,9 @@ import minebot.pathfinding.actions.ActionFall;
 import minebot.pathfinding.actions.ActionPillar;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import minebot.MineBot;
 import minebot.pathfinding.actions.ActionDescendThree;
 import minebot.util.Out;
 import minebot.util.ToolSet;
@@ -40,11 +43,15 @@ public class PathFinder {
     public static PathFinder currentlyRunning = null;
     Node[] bestSoFar;
     Node startNode;
+    Node mostRecentConsidered;
     public Path getTempSolution() {
         if (startNode == null || bestSoFar[0] == null) {
             return null;
         }
         return new Path(startNode, bestSoFar[0], goal, 0);
+    }
+    public Path getMostRecentNodeConsidered() {
+        return mostRecentConsidered == null ? null : new Path(startNode, mostRecentConsidered, goal, 0);
     }
     /**
      * Do the actual path calculation. The returned path might not actually go
@@ -66,13 +73,21 @@ public class PathFinder {
         openSet.insert(startNode);
         currentlyRunning = this;
         long startTime = System.currentTimeMillis();
-        long timeoutTime = startTime + 4000;
+        long timeoutTime = startTime + (MineBot.slowPath ? 40000 : 4000);
         long lastPrintout = 0;
         int numNodes = 0;
         ToolSet ts = new ToolSet();
         int numEmptyChunk = 0;
         while (openSet.first != null && numEmptyChunk < 50 && System.currentTimeMillis() < timeoutTime) {
+            if (MineBot.slowPath) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(PathFinder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             Node currentNode = openSet.removeLowest();
+            mostRecentConsidered = currentNode;
             currentNode.isOpen = false;
             currentNode.nextOpen = null;
             BlockPos currentNodePos = currentNode.pos;
