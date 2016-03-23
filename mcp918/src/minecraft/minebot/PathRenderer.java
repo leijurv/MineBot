@@ -31,11 +31,17 @@ public class PathRenderer {
             for (BlockPos pos : MineBot.currentPath.toMine()) {
                 drawSelectionBox(player, pos, partialTicks, Color.RED);
             }
+            for (BlockPos pos : MineBot.currentPath.toPlace()) {
+                drawSelectionBox(player, pos, partialTicks, Color.GREEN);
+            }
         }
         if (MineBot.nextPath != null) {
             drawPath(MineBot.nextPath, player, partialTicks, Color.GREEN);
             for (BlockPos pos : MineBot.nextPath.toMine()) {
                 drawSelectionBox(player, pos, partialTicks, Color.RED);
+            }
+            for (BlockPos pos : MineBot.nextPath.toPlace()) {
+                drawSelectionBox(player, pos, partialTicks, Color.GREEN);
             }
         }
         try {
