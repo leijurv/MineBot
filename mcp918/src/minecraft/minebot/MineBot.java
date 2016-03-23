@@ -57,7 +57,6 @@ public class MineBot {
     public static boolean isThereAnythingInProgress = false;
     public static boolean fullBright = true;
     public static boolean plsCancel = false;
-    public static boolean useCarpet = false;
     public static int tickNumber = 0;
     public static boolean ticktimer = false;
     public static boolean allowBreakOrPlace = true;
