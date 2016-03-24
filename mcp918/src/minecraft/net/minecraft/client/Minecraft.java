@@ -37,6 +37,7 @@ import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.util.GuiEscMenu;
 import minebot.util.Out;
 import net.minecraft.block.Block;
@@ -1149,7 +1150,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.inGameHasFocus = true;
                 this.mouseHelper.grabMouseCursor();
                 this.displayGuiScreen((GuiScreen) null);
-                if (!MineBot.isLeftClick) {
+                if (!MovementManager.isLeftClick) {
                     this.leftClickCounter = 10000;
                 }
             }
@@ -1373,7 +1374,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         } else if (this.currentScreen != null && this.currentScreen instanceof GuiSleepMP && !this.thePlayer.isPlayerSleeping()) {
             this.displayGuiScreen((GuiScreen) null);
         }
-        if (this.currentScreen != null && !MineBot.isLeftClick) {
+        if (this.currentScreen != null && !MovementManager.isLeftClick) {
             this.leftClickCounter = 10000;
         }
         MineBot.onTick();
@@ -1580,23 +1581,23 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.displayGuiScreen(new GuiChat("/"));
             }
             if (this.thePlayer.isUsingItem()) {
-                if (!(this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed())) {
+                if (!(this.gameSettings.keyBindUseItem.isKeyDown() || MovementManager.getRightIsPressed())) {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
-                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.leftIsPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed() || MovementManager.leftIsPressed()) {
                     ;
                 }
-                while (this.gameSettings.keyBindUseItem.isPressed() || MineBot.rightIsPressed()) {
+                while (this.gameSettings.keyBindUseItem.isPressed() || MovementManager.rightIsPressed()) {
                     ;
                 }
                 while (this.gameSettings.keyBindPickBlock.isPressed()) {
                     ;
                 }
             } else {
-                while (this.gameSettings.keyBindAttack.isPressed() || MineBot.leftIsPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed() || MovementManager.leftIsPressed()) {
                     this.clickMouse();
                 }
-                while (this.gameSettings.keyBindUseItem.isPressed() || MineBot.rightIsPressed()) {
+                while (this.gameSettings.keyBindUseItem.isPressed() || MovementManager.rightIsPressed()) {
                     this.rightClickMouse();
                 }
                 while (this.gameSettings.keyBindPickBlock.isPressed()) {
@@ -1604,46 +1605,46 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 }
             }
             //Out.log("Counter: " + this.leftClickCounter);
-            if ((this.gameSettings.keyBindUseItem.isKeyDown() || MineBot.getRightIsPressed()) && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
+            if ((this.gameSettings.keyBindUseItem.isKeyDown() || MovementManager.getRightIsPressed()) && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
-            this.sendClickBlockToController((this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus) || MineBot.getLeftIsPressed());
+            this.sendClickBlockToController((this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus) || MovementManager.getLeftIsPressed());
         } else if (this.thePlayer != null && this.theWorld != null) {
             if (this.leftClickCounter > 0) {
                 --this.leftClickCounter;
             }
-            if (MineBot.isLeftClick && leftClickCounter > 20) {
+            if (MovementManager.isLeftClick && leftClickCounter > 20) {
                 leftClickCounter = 0;
             }
             //Out.log("Counter: " + leftClickCounter);
             //Out.log("Using? " + this.thePlayer.isUsingItem());
             if (this.thePlayer.isUsingItem()) {
                 //Out.log("lol");
-                if (!(MineBot.getRightIsPressed())) {
+                if (!(MovementManager.getRightIsPressed())) {
                     //Out.log("Not using item any more");
                     this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
-                while (MineBot.leftIsPressed()) {
+                while (MovementManager.leftIsPressed()) {
                     ;
                 }
-                while (MineBot.rightIsPressed()) {
+                while (MovementManager.rightIsPressed()) {
                     ;
                 }
             } else {
                 //Out.log("checking if pressed");
-                while (MineBot.leftIsPressed()) {
+                while (MovementManager.leftIsPressed()) {
                     //Out.log("Clck ");
                     this.clickMouse();
                 }
-                while (MineBot.rightIsPressed()) {
+                while (MovementManager.rightIsPressed()) {
                     this.rightClickMouse();
                 }
             }
-            if (MineBot.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
+            if (MovementManager.getRightIsPressed() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
             //Out.log("Sending " + MineBot.isLeftClick);
-            this.sendClickBlockToController(MineBot.getLeftIsPressed());
+            this.sendClickBlockToController(MovementManager.getLeftIsPressed());
         }
         if (this.theWorld != null) {
             if (this.thePlayer != null) {

@@ -6,6 +6,7 @@
 package minebot.pathfinding.actions;
 
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -28,13 +29,13 @@ public class ActionFall extends ActionPlaceOrBreak {
     protected boolean tick0() {
         numTicks++;
         if (numTicks > 10) {
-            MineBot.moveTowardsBlock(to);
+            MovementManager.moveTowardsBlock(to);
         }
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to)) {
             Out.log("Done falling to " + to);
-            MineBot.clearMovement();
+            MovementManager.clearMovement();
             return true;
         }
         return false;

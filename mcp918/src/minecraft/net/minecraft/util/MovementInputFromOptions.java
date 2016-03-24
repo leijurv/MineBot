@@ -1,6 +1,7 @@
 package net.minecraft.util;
 
 import minebot.MineBot;
+import minebot.MovementManager;
 import net.minecraft.client.settings.GameSettings;
 
 public class MovementInputFromOptions extends MovementInput {
@@ -11,20 +12,20 @@ public class MovementInputFromOptions extends MovementInput {
     public void updatePlayerMoveState() {
         this.moveStrafe = 0.0F;
         this.moveForward = 0.0F;
-        if (this.gameSettings.keyBindForward.isKeyDown() || MineBot.forward) {
+        if (this.gameSettings.keyBindForward.isKeyDown() || MovementManager.forward) {
             ++this.moveForward;
         }
-        if (this.gameSettings.keyBindBack.isKeyDown() || MineBot.backward) {
+        if (this.gameSettings.keyBindBack.isKeyDown() || MovementManager.backward) {
             --this.moveForward;
         }
-        if (this.gameSettings.keyBindLeft.isKeyDown() || MineBot.left) {
+        if (this.gameSettings.keyBindLeft.isKeyDown() || MovementManager.left) {
             ++this.moveStrafe;
         }
-        if (this.gameSettings.keyBindRight.isKeyDown() || MineBot.right) {
+        if (this.gameSettings.keyBindRight.isKeyDown() || MovementManager.right) {
             --this.moveStrafe;
         }
-        this.jump = this.gameSettings.keyBindJump.isKeyDown() || MineBot.jumping;
-        this.sneak = this.gameSettings.keyBindSneak.isKeyDown() || MineBot.sneak;
+        this.jump = this.gameSettings.keyBindJump.isKeyDown() || MovementManager.jumping;
+        this.sneak = this.gameSettings.keyBindSneak.isKeyDown() || MovementManager.sneak;
         if (this.sneak) {
             this.moveStrafe = (float) ((double) this.moveStrafe * 0.3D);
             this.moveForward = (float) ((double) this.moveForward * 0.3D);

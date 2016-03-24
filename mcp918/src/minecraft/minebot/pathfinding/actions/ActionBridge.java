@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Random;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -101,7 +102,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
         if (whereAmI.getY() != to.getY() && !ladder) {
             Out.log("Wrong Y coordinate");
             if (whereAmI.getY() < to.getY()) {
-                MineBot.jumping = true;
+                MovementManager.jumping = true;
             }
             return false;
         }
@@ -109,12 +110,12 @@ public class ActionBridge extends ActionPlaceOrBreak {
             if (oneInTen && wasTheBridgeBlockAlwaysThere) {
                 //basically one in every ten blocks we walk forwards normally without sneaking and placing, rotate to look forwards.
                 //this way we tend towards looking forwards
-                MineBot.forward = LookManager.lookAtBlock(to, false);
+                MovementManager.forward = LookManager.lookAtBlock(to, false);
             } else {
-                MineBot.moveTowardsBlock(to);
+                MovementManager.moveTowardsBlock(to);
             }
             if (wasTheBridgeBlockAlwaysThere) {
-                if (MineBot.forward && !MineBot.backward) {
+                if (MovementManager.forward && !MovementManager.backward) {
                     thePlayer.setSprinting(true);
                 }
             }
@@ -131,7 +132,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                     if (!switchtothrowaway(true)) {//get ready to place a throwaway block
                         return false;
                     }
-                    MineBot.sneak = true;
+                    MovementManager.sneak = true;
                     double faceX = (to.getX() + against1.getX() + 1.0D) * 0.5D;
                     double faceY = (to.getY() + against1.getY()) * 0.5D;
                     double faceZ = (to.getZ() + against1.getZ() + 1.0D) * 0.5D;
@@ -148,7 +149,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                     return false;
                 }
             }
-            MineBot.sneak = true;
+            MovementManager.sneak = true;
             if (whereAmI.equals(to)) {
                 //if we are in the block that we are trying to get to, we are sneaking over air and we need to place a block beneath us against the one we just walked off of
                 //Out.log(from + " " + to + " " + faceX + "," + faceY + "," + faceZ + " " + whereAmI);
@@ -160,7 +161,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 double faceZ = (to.getZ() + from.getZ() + 1.0D) * 0.5D;
                 //faceX,faceY,faceZ is the middle of the face between from and to
                 BlockPos goalLook = from.down();//this is the block we were just standing on, and the one we want to place against
-                MineBot.backward = LookManager.lookAtCoords(faceX, faceY, faceZ, true);//if we are in the block, then we are off the edge of the previous looking backward, so we should be moving backward
+                MovementManager.backward = LookManager.lookAtCoords(faceX, faceY, faceZ, true);//if we are in the block, then we are off the edge of the previous looking backward, so we should be moving backward
                 if (Objects.equals(MineBot.whatAreYouLookingAt(), goalLook)) {
                     Minecraft.theMinecraft.rightClickMouse();//wait to right click until we are able to place
                     return false;
@@ -169,7 +170,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 return false;
             } else {
                 Out.log("Not there yet m9");
-                MineBot.moveTowardsBlock(to);//move towards not look at because if we are bridging for a couple blocks in a row, it is faster if we dont spin around and walk forwards then spin around and place backwards for every block
+                MovementManager.moveTowardsBlock(to);//move towards not look at because if we are bridging for a couple blocks in a row, it is faster if we dont spin around and walk forwards then spin around and place backwards for every block
                 return false;
             }
         }
