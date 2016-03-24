@@ -128,14 +128,16 @@ public abstract class Action {
     public static boolean isLiquid(BlockPos p) {
         return isLiquid(Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock());
     }
-    public static boolean isIce(Block b) {
-        return Block.getBlockFromName("minecraft:ice").equals(b);
-    }
-    public static boolean isIce(BlockPos b) {
-        return isIce(Minecraft.theMinecraft.theWorld.getBlockState(b).getBlock());
-    }
     public static boolean avoidBreaking(BlockPos pos) {
-        return isIce(pos) || isLiquid(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())) || isLiquid(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) || isLiquid(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)) || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)) || isLiquid(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()));
+        Block b = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        Block below = Minecraft.theMinecraft.theWorld.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
+        return Block.getBlockFromName("minecraft:ice").equals(b)//ice becomes water, and water can mess up the path
+                || isLiquid(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()))//don't break anything touching liquid on any side
+                || isLiquid(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()))
+                || isLiquid(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()))
+                || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1))
+                || isLiquid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1))
+                || (!(b instanceof BlockLilyPad && isWater(below)) && isLiquid(below));//if it's a lilypad above water, it's ok to break, otherwise don't break if its liquid
     }
     /**
      * Can I walk through this block? e.g. air, saplings, torches, etc
@@ -145,14 +147,17 @@ public abstract class Action {
      */
     public static boolean canWalkThrough(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        if (block instanceof BlockLilyPad || block instanceof BlockFire) {
+        if (block instanceof BlockLilyPad || block instanceof BlockFire) {//you can't actually walk through a lilypad from the side, and you shouldn't walk through fire
             return false;
         }
-        boolean liquid = isLiquid(pos);
+        boolean liquid = isLiquid(block);
         if (liquid && isFlowing(pos)) {
-            return false;
+            return false;//don't walk through flowing liquids
         }
-        return block.isPassable(Minecraft.theMinecraft.theWorld, pos) && !isLiquid(pos.up());
+        if (isLiquid(pos.up())) {
+            return false;//you could drown
+        }
+        return block.isPassable(Minecraft.theMinecraft.theWorld, pos);
     }
     /**
      * Can I walk on this block without anything weird happening like me falling
@@ -168,7 +173,7 @@ public abstract class Action {
             return true;
         }
         if (isWater(block)) {
-            return isWater(Minecraft.theMinecraft.theWorld.getBlockState(pos.up()).getBlock());
+            return isWater(pos.up());//you can only walk on water if there is water above it
         }
         return block.isBlockNormalCube() && !isLava(block);
     }
