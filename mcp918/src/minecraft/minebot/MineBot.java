@@ -69,7 +69,6 @@ public class MineBot {
     public static BlockPos death;
     public static long lastDeath = 0;
     public static SchematicBuilder currentBuilder = null;
-    public static boolean parkour = false;
     public static final ArrayList<Class<? extends Manager>> managers = new ArrayList<Class<? extends Manager>>();
     static {
         managers.add(LookManager.class);
@@ -77,6 +76,7 @@ public class MineBot {
         managers.add(Memory.class);
         managers.add(AnotherStealer.class);
         managers.add(InventoryManager.class);
+        managers.add(Parkour.class);
         managers.add(Combat.class);
         managers.add(FoodManager.class);
         managers.add(EarlyGameStrategy.class);
@@ -156,9 +156,6 @@ public class MineBot {
         }
         if (currentBuilder != null) {
             currentBuilder.tick();
-        }
-        if (parkour) {
-            Parkour.parkour();
         }
         if (currentPath != null && ManagerTick.tickPath) {
             if (currentPath.tick()) {

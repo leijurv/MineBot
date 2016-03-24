@@ -19,6 +19,7 @@ import minebot.EarlyGameStrategy;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.Parkour;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalGetToBlock;
@@ -167,6 +168,9 @@ public class ChatCommand {
     public static String ore(String message) {
         MickeyMine.toggleOre(message.substring(3).trim());
         return "";
+    }
+    public static String parkour(String message) {
+        return "Parkour: " + Manager.toggle(Parkour.class);
     }
     public static String mine(String message) {
         return "Mreow mine: " + Manager.toggle(MickeyMine.class);

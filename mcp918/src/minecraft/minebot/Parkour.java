@@ -6,6 +6,7 @@
 package minebot;
 
 import minebot.pathfinding.actions.Action;
+import minebot.util.Manager;
 import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -17,7 +18,7 @@ import net.minecraft.util.EnumFacing;
  *
  * @author leijurv
  */
-public class Parkour {
+public class Parkour extends Manager {
     public static boolean preemptivejump() {
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         BlockPos playerFeet = thePlayer.getPosition0();
@@ -57,5 +58,15 @@ public class Parkour {
                 }
             }
         }
+    }
+    @Override
+    protected void onTick() {
+        parkour();
+    }
+    @Override
+    protected void onCancel() {
+    }
+    @Override
+    protected void onStart() {
     }
 }
