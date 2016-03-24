@@ -9,6 +9,7 @@ import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.material.Material;
@@ -143,6 +144,9 @@ public abstract class Action {
      */
     public static boolean canWalkThrough(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        if (block instanceof BlockLilyPad) {
+            return false;
+        }
         boolean liquid = isLiquid(pos);
         if (liquid && isFlowing(pos)) {
             return false;
