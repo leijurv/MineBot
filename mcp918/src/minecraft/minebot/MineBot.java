@@ -129,10 +129,11 @@ public class MineBot {
         for (Class c : managers) {
             Manager.tick(c, true);
         }
-        MovementManager.isLeftClick = false;
-        MovementManager.isRightClick = false;
-        MovementManager.jumping = false;
-        MovementManager.sneak = false;
+        /*MovementManager.isLeftClick = false;
+         MovementManager.isRightClick = false;
+         MovementManager.jumping = false;
+         MovementManager.sneak = false;*/
+        MovementManager.clearMovement();
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = thePlayer.getPosition0();
