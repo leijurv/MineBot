@@ -21,7 +21,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -510,7 +509,6 @@ public class CraftingTask extends ManagerTick {
     static int TUC = 20;
     @Override
     protected boolean onTick0() {
-        MovementManager.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
                 Out.log(craftingTask + " " + craftingTask.currentlyCrafting() + " " + craftingTask.plan);

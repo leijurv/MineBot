@@ -21,7 +21,6 @@ import static minebot.util.CraftingTask.placeHeldBlockNearby;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.inventory.Slot;
@@ -52,7 +51,6 @@ public class SmeltingTask extends ManagerTick {
     }
     @Override
     protected boolean onTick0() {
-        MovementManager.clearMovement();
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
             if (task.plan != null) {
                 task.exec();
