@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import minebot.LookManager;
 import minebot.MineBot;
-import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.SmeltingTask;
 import net.minecraft.block.Block;
@@ -65,14 +64,14 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         for (BlockPos pos : toBreak) {
             sum += getHardness(ts, Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock(), pos);
-            if (sum >= PathFinder.COST_INF) {
-                return PathFinder.COST_INF;
+            if (sum >= Action.COST_INF) {
+                return Action.COST_INF;
             }
         }
         if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
             for (int i = 0; i < blocksToPlace.length; i++) {
                 if (!canWalkOn(positionsToPlace[i])) {
-                    return PathFinder.COST_INF;
+                    return Action.COST_INF;
                 }
             }
         }
@@ -84,13 +83,13 @@ public abstract class ActionPlaceOrBreak extends Action {
     public static double getHardness(ToolSet ts, Block block, BlockPos position) {
         if (!block.equals(Block.getBlockById(0)) && !canWalkThrough(position)) {
             if (avoidBreaking(position)) {
-                return PathFinder.COST_INF;
+                return Action.COST_INF;
             }
             if (!MineBot.allowBreakOrPlace) {
-                return PathFinder.COST_INF;
+                return Action.COST_INF;
             }
             if (SmeltingTask.avoidBreaking(position)) {
-                return PathFinder.COST_INF;
+                return Action.COST_INF;
             }
             double m = Block.getBlockFromName("minecraft:crafting_table").equals(block) ? 10 : 1;
             return m / ts.getStrVsBlock(block, position) + BREAK_ONE_BLOCK_ADD;

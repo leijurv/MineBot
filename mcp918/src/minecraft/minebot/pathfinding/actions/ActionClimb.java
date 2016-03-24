@@ -8,7 +8,6 @@ package minebot.pathfinding.actions;
 import java.util.Objects;
 import minebot.LookManager;
 import minebot.MineBot;
-import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.BlockFalling;
@@ -50,17 +49,17 @@ public class ActionClimb extends ActionPlaceOrBreak {
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
             if (!MineBot.isAir(positionsToPlace[0]) && !isWater(positionsToPlace[0])) {
-                return PathFinder.COST_INF;
+                return Action.COST_INF;
             }
             for (BlockPos against1 : against) {
                 if (Minecraft.theMinecraft.theWorld.getBlockState(against1).getBlock().isBlockNormalCube()) {
                     return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                 }
             }
-            return PathFinder.COST_INF;
+            return Action.COST_INF;
         }
         if (Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//it would fall on us and possibly suffocate us
-            return PathFinder.COST_INF;
+            return Action.COST_INF;
         }
         return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }

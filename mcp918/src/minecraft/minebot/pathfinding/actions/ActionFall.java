@@ -6,7 +6,6 @@
 package minebot.pathfinding.actions;
 
 import minebot.MineBot;
-import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -43,7 +42,7 @@ public class ActionFall extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!MineBot.allowVerticalMotion || !canWalkOn(to.down())) {
-            return PathFinder.COST_INF;
+            return Action.COST_INF;
         }
         Block td = Minecraft.theMinecraft.theWorld.getBlockState(to).getBlock();
         boolean ladder = td instanceof BlockLadder || td instanceof BlockVine;

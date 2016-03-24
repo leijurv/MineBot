@@ -5,7 +5,6 @@
  */
 package minebot.pathfinding.actions;
 
-import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -54,6 +53,7 @@ public abstract class Action {
      * (e.g. looking at the block)
      */
     public static final double BREAK_ONE_BLOCK_ADD = 4;
+    public static final double COST_INF = 1000000;
     public final BlockPos from;
     public final BlockPos to;
     private Double cost;
@@ -82,7 +82,7 @@ public abstract class Action {
         Block fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
         if (fromDown instanceof BlockLadder || fromDown instanceof BlockVine) {
             if (!(this instanceof ActionPillar) && !(this instanceof ActionBridge) && !(this instanceof ActionFall)) {
-                return PathFinder.COST_INF;
+                return COST_INF;
             }
         }
         return calculateCost(ts);
