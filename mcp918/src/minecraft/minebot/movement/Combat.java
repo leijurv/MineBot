@@ -4,10 +4,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.movement;
 
+import minebot.ui.LookManager;
 import java.util.ArrayList;
 import java.util.Comparator;
+import minebot.MineBot;
 import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;

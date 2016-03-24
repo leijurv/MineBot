@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.ui;
 
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import minebot.MineBot;
 import minebot.pathfinding.Path;
 import minebot.pathfinding.PathFinder;
 import net.minecraft.block.Block;

@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.strategy;
 
+import minebot.movement.Combat;
+import minebot.util.BlockPuncher;
 import minebot.mining.MickeyMine;
-import minebot.util.CraftingTask;
+import minebot.inventory.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import minebot.util.Out;
-import minebot.util.SmeltingTask;
+import minebot.inventory.SmeltingTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;

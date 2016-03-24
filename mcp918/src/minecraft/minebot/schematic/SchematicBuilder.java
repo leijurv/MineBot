@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.util;
+package minebot.schematic;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import minebot.MineBot;
 import minebot.pathfinding.goals.GoalComposite;
+import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

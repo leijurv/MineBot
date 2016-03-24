@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.ui;
 
 import java.util.Random;
 import minebot.pathfinding.goals.GoalXZ;
@@ -212,6 +212,10 @@ public class LookManager extends Manager {
         double pitch = Math.atan2(yDiff, dist);
         return new float[]{(float) (yaw * 180 / Math.PI), (float) (pitch * 180 / Math.PI)};
     }
+    public static void setDesiredYaw(float y) {
+        desiredYaw = y;
+        lookingYaw = true;
+    }
     /**
      * Look at coordinates
      *
@@ -251,6 +255,16 @@ public class LookManager extends Manager {
         }
         lookingYaw = false;
         lookingPitch = false;
+    }
+    public static void nudgeToLevel() {
+        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
+        if (!lookingPitch) {
+            if (thePlayer.rotationPitch < -20) {
+                thePlayer.rotationPitch++;
+            } else if (thePlayer.rotationPitch > 20) {
+                thePlayer.rotationPitch--;
+            }
+        }
     }
     @Override
     public void onTickPost() {

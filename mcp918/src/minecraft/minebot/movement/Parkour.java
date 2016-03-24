@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.movement;
 
 import minebot.pathfinding.actions.Action;
 import minebot.util.Manager;

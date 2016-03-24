@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.movement;
 
+import minebot.ui.LookManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockVine;
@@ -153,8 +154,7 @@ public class MovementManager {
             tmp -= 360;
         }
         if (rotate) {
-            LookManager.desiredYaw = yaw - tmp;
-            LookManager.lookingYaw = true;
+            LookManager.setDesiredYaw(yaw - tmp);
         }
         double t = rotate ? LookManager.ANGLE_THRESHOLD : 23;
         if (distanceToForward < t || distanceToForward > 360 - t) {

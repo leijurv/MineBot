@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.util;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import minebot.MineBot;
 import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import minebot.pathfinding.goals.GoalBlock;

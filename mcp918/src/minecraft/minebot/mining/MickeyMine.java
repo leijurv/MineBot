@@ -6,17 +6,17 @@
 package minebot.mining;
 
 import java.util.ArrayList;
-import minebot.LookManager;
-import minebot.Memory;
+import minebot.ui.LookManager;
+import minebot.util.Memory;
 import minebot.MineBot;
-import minebot.MovementManager;
+import minebot.movement.MovementManager;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.pathfinding.goals.GoalYLevel;
-import minebot.util.CraftingTask;
+import minebot.inventory.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import minebot.util.Out;
