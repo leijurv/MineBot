@@ -136,7 +136,7 @@ public class AnotherStealer extends Manager {
             }
             Out.gui("NO CHEST STUFF", Out.Mode.Debug);
             chestStuff = true;
-            MineBot.isRightClick = true;
+            MovementManager.isRightClick = true;
             current = MineBot.whatAreYouLookingAt();
             return;
         }

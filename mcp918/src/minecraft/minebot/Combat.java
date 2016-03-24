@@ -69,7 +69,7 @@ public class Combat extends ManagerTick {
             Out.log("looking");
             LookManager.lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
             if (entity.equals(MineBot.whatEntityAreYouLookingAt())) {
-                MineBot.isLeftClick = true;
+                MovementManager.isLeftClick = true;
                 tickPath = false;
                 Out.log("Doing it");
             }
@@ -115,7 +115,7 @@ public class Combat extends ManagerTick {
                     MineBot.currentPath = null;
                 }
             }
-            MineBot.clearMovement();
+            MovementManager.clearMovement();
             BlockPos[] away = new BlockPos[Math.min(5, huntMobs.size())];
             for (int i = 0; i < away.length; i++) {
                 away[i] = new BlockPos(huntMobs.get(i).posX, huntMobs.get(i).posY, huntMobs.get(i).posZ);
@@ -132,7 +132,7 @@ public class Combat extends ManagerTick {
             Out.gui(target + " is dead", Out.Mode.Standard);
             target = null;
             MineBot.currentPath = null;
-            MineBot.clearMovement();
+            MovementManager.clearMovement();
         }
         if (target != null && healthOkToHunt) {
             BlockPos targetPos = new BlockPos(target.posX, target.posY, target.posZ);
@@ -159,7 +159,7 @@ public class Combat extends ManagerTick {
                 }
             }
             if (actuallyLookingAt) {
-                MineBot.isLeftClick = true;
+                MovementManager.isLeftClick = true;
                 tickPath = false;
             }
         }

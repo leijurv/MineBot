@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.util.Out;
 import net.minecraft.block.Block;
@@ -193,7 +194,7 @@ public class Path {
             ticksAway = 0;
         }
         Out.log(actions.get(pathPosition));
-        MineBot.clearMovement();
+        MovementManager.clearMovement();
         if (actions.get(pathPosition).tick()) {
             Out.log("Action done, next path");
             pathPosition++;
@@ -215,9 +216,9 @@ public class Path {
                     if (curr.amIGood() && next.amIGood()) {//nothing in the way
                         double x = (next.from.getX() + next.to.getX() + 1.0D) * 0.5D;
                         double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
-                        MineBot.clearMovement();
-                        MineBot.moveTowardsCoords(x, 0, z);
-                        if (!MineBot.forward && curr.oneInTen != null && curr.oneInTen) {
+                        MovementManager.clearMovement();
+                        MovementManager.moveTowardsCoords(x, 0, z);
+                        if (!MovementManager.forward && curr.oneInTen != null && curr.oneInTen) {
                             LookManager.lookAtCoords(x, 0, z, false);
                         }
                         return false;

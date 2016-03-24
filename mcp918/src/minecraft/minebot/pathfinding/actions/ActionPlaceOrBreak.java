@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.util.Out;
 import minebot.util.SmeltingTask;
 import net.minecraft.block.Block;
@@ -125,15 +126,15 @@ public abstract class ActionPlaceOrBreak extends Action {
                 if (MineBot.whatAreYouLookingAt() != null) {
                     MineBot.switchtotool(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock());
                 }
-                MineBot.isLeftClick = true;//hold down left click
+                MovementManager.isLeftClick = true;//hold down left click
                 if (canWalkThrough(positionsToBreak[i])) {
-                    MineBot.letGoOfLeftClick();
+                    MovementManager.letGoOfLeftClick();
                     Out.log("Done breaking " + blocksToBreak[i] + " at " + positionsToBreak[i]);
                 }
                 return false;
             }
         }
-        MineBot.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
+        MovementManager.letGoOfLeftClick();//sometimes it keeps on left clicking so we need this here (yes it scares me too)
         for (BlockPos positionsToPlace1 : positionsToPlace) {
             if (!canWalkOn(positionsToPlace1)) {
                 if (!MineBot.allowBreakOrPlace) {

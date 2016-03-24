@@ -11,6 +11,7 @@ import minebot.InventoryManager;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalComposite;
@@ -177,7 +178,7 @@ public class CraftingTask extends ManagerTick {
                 LookManager.lookAtBlock(craftingTableLocation, true);
                 if (craftingTableLocation.equals(MineBot.whatAreYouLookingAt())) {
                     MineBot.currentPath = null;
-                    MineBot.clearMovement();
+                    MovementManager.clearMovement();
                     Minecraft.theMinecraft.rightClickMouse();
                     findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
                 }
@@ -200,7 +201,7 @@ public class CraftingTask extends ManagerTick {
         }
         if (MineBot.whatAreYouLookingAt() != null && Block.getBlockFromName("crafting_table").equals(Minecraft.theMinecraft.theWorld.getBlockState(MineBot.whatAreYouLookingAt()).getBlock())) {
             MineBot.currentPath = null;
-            MineBot.clearMovement();
+            MovementManager.clearMovement();
             Minecraft.theMinecraft.rightClickMouse();
             findOrCreateCraftingTask(new ItemStack(Item.getByNameOrId("minecraft:crafting_table"), 0)).clearAll();
             return true;
@@ -217,8 +218,8 @@ public class CraftingTask extends ManagerTick {
             if (MineBot.isAir(player.down()) || MineBot.isAir(player.up(2))) {
                 Out.gui("Placing down", Out.Mode.Debug);
                 LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
-                MineBot.jumping = true;
-                MineBot.sneak = true;
+                MovementManager.jumping = true;
+                MovementManager.sneak = true;
                 if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
                     Minecraft.theMinecraft.rightClickMouse();
                 }
@@ -260,7 +261,7 @@ public class CraftingTask extends ManagerTick {
                             BlockPos placeAgainst = pos.offset(f);
                             if (!MineBot.isAir(placeAgainst) && Minecraft.theMinecraft.theWorld.getBlockState(placeAgainst).getBlock().isBlockNormalCube()) {
                                 if (LookManager.couldIReach(placeAgainst, f.getOpposite())) {
-                                    MineBot.sneak = true;
+                                    MovementManager.sneak = true;
                                     double faceX = (pos.getX() + placeAgainst.getX() + 1.0D) * 0.5D;
                                     double faceY = (pos.getY() + placeAgainst.getY()) * 0.5D;
                                     double faceZ = (pos.getZ() + placeAgainst.getZ() + 1.0D) * 0.5D;
@@ -509,7 +510,7 @@ public class CraftingTask extends ManagerTick {
     static int TUC = 20;
     @Override
     protected boolean onTick0() {
-        MineBot.clearMovement();
+        MovementManager.clearMovement();
         for (CraftingTask craftingTask : overallCraftingTasks) {
             if (craftingTask.plan != null) {
                 Out.log(craftingTask + " " + craftingTask.currentlyCrafting() + " " + craftingTask.plan);

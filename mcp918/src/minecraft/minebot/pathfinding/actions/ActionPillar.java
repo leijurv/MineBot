@@ -7,6 +7,7 @@ package minebot.pathfinding.actions;
 
 import minebot.LookManager;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -107,24 +108,24 @@ public class ActionPillar extends ActionPlaceOrBreak {
             /*if (thePlayer.getPosition0().getX() != from.getX() || thePlayer.getPosition0().getZ() != from.getZ()) {
              MineBot.moveTowardsBlock(from);
              }*/
-            MineBot.moveTowardsBlock(against);
+            MovementManager.moveTowardsBlock(against);
             return false;
         } else {
-            MineBot.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
-            MineBot.sneak = true;
+            MovementManager.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
+            MovementManager.sneak = true;
             //otherwise jump
             if (numTicks > 40) {
                 double diffX = thePlayer.posX - (to.getX() + 0.5);
                 double diffZ = thePlayer.posZ - (to.getZ() + 0.5);
                 double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
                 if (dist > 0.17) {//why 0.17? because it seemed like a good number, that's why
-                    MineBot.forward = true;//if it's been more than forty ticks of trying to jump and we aren't done yet, go forward, maybe we are stuck
+                    MovementManager.forward = true;//if it's been more than forty ticks of trying to jump and we aren't done yet, go forward, maybe we are stuck
                 }
             }
             if (!blockIsThere) {
                 Out.log("Block not there yet");
                 if (!MineBot.isAir(from)) {
-                    MineBot.isLeftClick = true;
+                    MovementManager.isLeftClick = true;
                     blockIsThere = false;
                 } else if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
                     Minecraft.theMinecraft.rightClickMouse();//constantly right click
@@ -134,7 +135,7 @@ public class ActionPillar extends ActionPlaceOrBreak {
         BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
         if (whereAmI.equals(to) && blockIsThere) {//if we are at our goal and the block below us is placed
             Out.log("Done pillaring to " + to);
-            MineBot.jumping = false;//stop jumping
+            MovementManager.jumping = false;//stop jumping
             return true;//we are done
         }
         return false;

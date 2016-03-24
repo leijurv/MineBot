@@ -68,16 +68,6 @@ public class MineBot {
     public static Path nextPath = null;
     public static boolean calculatingNext = false;
     public static Goal goal = null;
-    public static int leftPressTime = 0;
-    public static int rightPressTime = 0;
-    public static boolean isLeftClick = false;
-    public static boolean isRightClick = false;
-    public static boolean jumping = false;
-    public static boolean forward = false;
-    public static boolean backward = false;
-    public static boolean left = false;
-    public static boolean right = false;
-    public static boolean sneak = false;
     static int numTicksInInventoryOrCrafting = 0;
     public static BlockPos death;
     public static long lastDeath = 0;
@@ -125,7 +115,7 @@ public class MineBot {
     }
     public static void onTick1() {
         if (pause) {
-            clearMovement();
+            MovementManager.clearMovement();
             return;
         }
         if (Minecraft.theMinecraft.theWorld == null || Minecraft.theMinecraft.thePlayer == null) {
@@ -133,19 +123,19 @@ public class MineBot {
             MineBot.plsCancel = true;
             return;
         }
-        if (isLeftClick) {
-            leftPressTime = 5;
+        if (MovementManager.isLeftClick) {
+            MovementManager.leftPressTime = 5;
         }
-        if (isRightClick) {
-            rightPressTime = 5;
+        if (MovementManager.isRightClick) {
+            MovementManager.rightPressTime = 5;
         }
         for (Class c : managers) {
             Manager.tick(c, true);
         }
-        isLeftClick = false;
-        isRightClick = false;
-        jumping = false;
-        sneak = false;
+        MovementManager.isLeftClick = false;
+        MovementManager.isRightClick = false;
+        MovementManager.jumping = false;
+        MovementManager.sneak = false;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         World theWorld = Minecraft.theMinecraft.theWorld;
         BlockPos playerFeet = thePlayer.getPosition0();
@@ -223,7 +213,7 @@ public class MineBot {
                     //if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
                     //if water is deeper than one block, or we can't walk on what's below the water, or our head is in water, jump
                     Out.log("Jumping because in water");
-                    jumping = true;
+                    MovementManager.jumping = true;
                     //}
                 }
                 if (nextPath != null) {
@@ -250,8 +240,8 @@ public class MineBot {
             }
         }
         if (Minecraft.theMinecraft.currentScreen != null && (Minecraft.theMinecraft.currentScreen instanceof GuiCrafting || Minecraft.theMinecraft.currentScreen instanceof GuiInventory || Minecraft.theMinecraft.currentScreen instanceof GuiFurnace)) {
-            isLeftClick = false;
-            leftPressTime = -5;
+            MovementManager.isLeftClick = false;
+            MovementManager.leftPressTime = -5;
             numTicksInInventoryOrCrafting++;
             if (numTicksInInventoryOrCrafting > 20 * 20) {
                 Minecraft.theMinecraft.thePlayer.closeScreen();
@@ -264,7 +254,7 @@ public class MineBot {
             if (Action.isWater(theWorld.getBlockState(playerFeet.down()).getBlock()) || !Action.canWalkOn(playerFeet.down()) || Action.isWater(theWorld.getBlockState(playerFeet.up()).getBlock())) {
                 //if water is deeper than one block, or we can't walk on what's below the water, or our head is in water, jump
                 Out.log("Jumping because in water and pathfinding");
-                jumping = true;
+                MovementManager.jumping = true;
             }
         }
         for (Class c : managers) {
@@ -287,7 +277,7 @@ public class MineBot {
                 double dist = distX + distZ;
                 thePlayer.rotationYaw = Math.round(thePlayer.rotationYaw / 90) * 90;
                 if (dist > 0.7) {
-                    jumping = true;
+                    MovementManager.jumping = true;
                     Out.gui("Parkour jumping!!!", Out.Mode.Standard);
                 }
             }
@@ -337,73 +327,8 @@ public class MineBot {
             }
         }
     }
-    /**
-     * Do not question the logic. Called by Minecraft.java
-     *
-     * @return
-     */
-    public static boolean getLeftIsPressed() {
-        return isLeftClick /*&& Minecraft.theMinecraft.currentScreen == null*/ && leftPressTime >= -2;
-    }
-    /**
-     * Do not question the logic. Called by Minecraft.java
-     *
-     * @return
-     */
-    public static boolean leftIsPressed() {
-        if (leftPressTime <= 0) {
-            return false;
-        } else {
-            --leftPressTime;
-            return true;
-        }
-    }
-    /**
-     * Do not question the logic. Called by Minecraft.java
-     *
-     * @return
-     */
-    public static boolean getRightIsPressed() {
-        return isRightClick && rightPressTime >= -2;
-    }
     public static boolean isPathFinding() {
         return isThereAnythingInProgress;
-    }
-    /**
-     * Do not question the logic. Called by Minecraft.java
-     *
-     * @return
-     */
-    public static boolean rightIsPressed() {
-        if (rightPressTime <= 0) {
-            return false;
-        } else {
-            --rightPressTime;
-            return true;
-        }
-    }
-    /**
-     * Called by our code
-     */
-    public static void letGoOfLeftClick() {
-        leftPressTime = 0;
-        isLeftClick = false;
-    }
-    /**
-     * Clears movement, but nothing else. Includes jumping and sneaking, but not
-     * left clicking.
-     */
-    public static void clearMovement() {
-        jumping = false;
-        forward = false;
-        left = false;
-        right = false;
-        backward = false;
-        sneak = false;
-        isRightClick = false;
-        rightPressTime = 0;
-        isLeftClick = false;
-        leftPressTime = 0;
     }
     /**
      * Clears movement, clears the current path, and lets go of left click. It
@@ -411,8 +336,8 @@ public class MineBot {
      */
     public static void clearPath() {
         currentPath = null;
-        letGoOfLeftClick();
-        clearMovement();
+        MovementManager.letGoOfLeftClick();
+        MovementManager.clearMovement();
     }
     public static String info(BlockPos bp) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(bp).getBlock();
@@ -517,110 +442,6 @@ public class MineBot {
             isThereAnythingInProgress = false;
             return null;
         }
-    }
-    /**
-     * calls moveTowardsCoords on the center of this block
-     *
-     * @param p
-     * @return am I moving, or am I still rotating
-     */
-    public static boolean moveTowardsBlock(BlockPos p) {
-        return moveTowardsBlock(p, true);
-    }
-    public static boolean moveTowardsBlock(BlockPos p, boolean rotate) {
-        Block b = Minecraft.theMinecraft.theWorld.getBlockState(p).getBlock();
-        double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
-        double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
-        double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
-        if (b instanceof BlockLadder || b instanceof BlockVine) {
-            xDiff = 0.5;
-            yolo = 0.5;
-            zDiff = 0.5;
-        }
-        double x = p.getX() + xDiff;
-        double y = p.getY() + yolo;
-        double z = p.getZ() + zDiff;
-        //Out.log("Trying to look at " + p + " actually looking at " + whatAreYouLookingAt() + " xyz is " + x + "," + y + "," + z);
-        return moveTowardsCoords(x, y, z, rotate);
-    }
-    public static boolean moveTowardsCoords(double x, double y, double z) {
-        return moveTowardsCoords(x, y, z, true);
-    }
-    /**
-     * Move towards coordinates, not necesarily forwards. e.g. if coordinates
-     * are closest to being directly behind us, go backwards. This minimizes
-     * time spent waiting for rotating
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param rotate
-     * @return true if we are moving, false if we are still rotating. we will
-     * rotate until within ANGLE_THRESHOLD (currently 7°) of moving in correct
-     * direction
-     */
-    public static boolean moveTowardsCoords(double x, double y, double z, boolean rotate) {
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        float currentYaw = thePlayer.rotationYaw;
-        float yaw = (float) (Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z) * 180 / Math.PI);
-        float diff = yaw - currentYaw;
-        if (diff < 0) {
-            diff += 360;
-        }
-        float distanceToForward = Math.min(Math.abs(diff - 0), Math.abs(diff - 360)) % 360;
-        float distanceToForwardRight = Math.abs(diff - 45) % 360;
-        float distanceToRight = Math.abs(diff - 90) % 360;
-        float distanceToBackwardRight = Math.abs(diff - 135) % 360;
-        float distanceToBackward = Math.abs(diff - 180) % 360;
-        float distanceToBackwardLeft = Math.abs(diff - 225) % 360;
-        float distanceToLeft = Math.abs(diff - 270) % 360;
-        float distanceToForwardLeft = Math.abs(diff - 315) % 360;
-        float tmp = Math.round(diff / 45) * 45;
-        if (tmp > 359) {
-            tmp -= 360;
-        }
-        if (rotate) {
-            LookManager.desiredYaw = yaw - tmp;
-            LookManager.lookingYaw = true;
-        }
-        double t = rotate ? LookManager.ANGLE_THRESHOLD : 23;
-        if (distanceToForward < t || distanceToForward > 360 - t) {
-            forward = true;
-            return true;
-        }
-        if (distanceToForwardLeft < t || distanceToForwardLeft > 360 - t) {
-            forward = true;
-            left = true;
-            return true;
-        }
-        if (distanceToForwardRight < t || distanceToForwardRight > 360 - t) {
-            forward = true;
-            right = true;
-            return true;
-        }
-        if (distanceToBackward < t || distanceToBackward > 360 - t) {
-            backward = true;
-            return true;
-        }
-        if (distanceToBackwardLeft < t || distanceToBackwardLeft > 360 - t) {
-            backward = true;
-            left = true;
-            return true;
-        }
-        if (distanceToBackwardRight < t || distanceToBackwardRight > 360 - t) {
-            backward = true;
-            right = true;
-            return true;
-        }
-        if (distanceToLeft < t || distanceToLeft > 360 - t) {
-            left = true;
-            return true;
-        }
-        if (distanceToRight < t || distanceToRight > 360 - t) {
-            right = true;
-            return true;
-        }
-        return false;
     }
     /**
      * What block is the player looking at

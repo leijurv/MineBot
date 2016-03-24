@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalBlock;
@@ -112,7 +113,7 @@ public class MickeyMine extends ManagerTick {
         if (goalBlocks == null) {
             calculateGoal();
         }
-        MineBot.clearMovement();
+        MovementManager.clearMovement();
         Out.log("Goal blocks: " + goalBlocks);
         Out.log("priority: " + priorityNeedsToBeMined);
         Out.log("needs to be mined: " + needsToBeMined);
@@ -239,13 +240,13 @@ public class MickeyMine extends ManagerTick {
                 //.priorityNeedsToBeMined.clear();
             } else {
                 MineBot.switchToBestTool();
-                MineBot.isLeftClick = true;
+                MovementManager.isLeftClick = true;
                 Out.log("Looking");
                 if (Minecraft.theMinecraft.thePlayer.getPosition0().equals(branchPosition)) {
                     Out.log("IN position");
                     if (MineBot.whatAreYouLookingAt() == null) {
                         Out.log("Can't see, going");
-                        MineBot.forward = true;
+                        MovementManager.forward = true;
                     }
                 } else {
                     Out.log("Going to position");
@@ -254,7 +255,7 @@ public class MickeyMine extends ManagerTick {
                         mightNeedToGoBackToPath = true;
                         return;
                     }
-                    MineBot.moveTowardsBlock(branchPosition, false);
+                    MovementManager.moveTowardsBlock(branchPosition, false);
                     if (Minecraft.theMinecraft.thePlayer.getPosition0().getY() != branchPosition.getY()) {
                         Out.gui("wrong Y coordinate", Out.Mode.Debug);
                         mightNeedToGoBackToPath = true;

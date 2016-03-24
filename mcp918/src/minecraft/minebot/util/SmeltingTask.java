@@ -13,6 +13,7 @@ import minebot.InventoryManager;
 import minebot.LookManager;
 import minebot.Memory;
 import minebot.MineBot;
+import minebot.MovementManager;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalComposite;
@@ -51,7 +52,7 @@ public class SmeltingTask extends ManagerTick {
     }
     @Override
     protected boolean onTick0() {
-        MineBot.clearMovement();
+        MovementManager.clearMovement();
         for (SmeltingTask task : new ArrayList<SmeltingTask>(inProgress)) {//make a copy because of concurrent modification bs
             if (task.plan != null) {
                 task.exec();
@@ -140,7 +141,7 @@ public class SmeltingTask extends ManagerTick {
                     if (furnaceLocation.equals(MineBot.whatAreYouLookingAt())) {
                         furnace = furnaceLocation;
                         MineBot.currentPath = null;
-                        MineBot.clearMovement();
+                        MovementManager.clearMovement();
                         Minecraft.theMinecraft.rightClickMouse();
                     }
                     return true;
@@ -169,7 +170,7 @@ public class SmeltingTask extends ManagerTick {
                 if (MineBot.isAir(player.down()) || MineBot.isAir(player.up(2))) {
                     Out.gui("Placing down", Out.Mode.Debug);
                     LookManager.lookAtBlock(Minecraft.theMinecraft.thePlayer.getPosition0().down(), true);
-                    MineBot.jumping = true;
+                    MovementManager.jumping = true;
                     if (Minecraft.theMinecraft.thePlayer.getPosition0().down().equals(MineBot.whatAreYouLookingAt()) || Minecraft.theMinecraft.thePlayer.getPosition0().down().down().equals(MineBot.whatAreYouLookingAt())) {
                         Minecraft.theMinecraft.rightClickMouse();
                     }
@@ -254,7 +255,7 @@ public class SmeltingTask extends ManagerTick {
             if (isItDone && !guiOpen) {
                 if (LookManager.couldIReach(furnace)) {
                     MineBot.currentPath = null;
-                    MineBot.clearMovement();
+                    MovementManager.clearMovement();
                     LookManager.lookAtBlock(furnace, true);
                     if (furnace.equals(MineBot.whatAreYouLookingAt())) {
                         Minecraft.theMinecraft.rightClickMouse();

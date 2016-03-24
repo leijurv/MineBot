@@ -5,8 +5,6 @@
  */
 package minebot;
 
-import static minebot.MineBot.isRightClick;
-import static minebot.MineBot.sneak;
 import static minebot.MineBot.whatAreYouLookingAt;
 import minebot.util.ManagerTick;
 import net.minecraft.client.Minecraft;
@@ -48,14 +46,14 @@ public class FoodManager extends ManagerTick {
             }
         }
         if (slotForFood != -1) {
-            MineBot.clearMovement();
+            MovementManager.clearMovement();
             p.inventory.currentItem = slotForFood;
-            sneak = true;
+            MovementManager.sneak = true;
             if (whatAreYouLookingAt() == null) {
-                isRightClick = true;
+                MovementManager.isRightClick = true;
             } else {
                 if (p.isSneaking()) {//if we are looking at a block, then sneak because you dont know what right click will do
-                    isRightClick = true;
+                    MovementManager.isRightClick = true;
                 }
             }
             return true;
