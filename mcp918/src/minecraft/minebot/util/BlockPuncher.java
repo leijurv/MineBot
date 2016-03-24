@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import minebot.MineBot;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.util.Out;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 
 /**

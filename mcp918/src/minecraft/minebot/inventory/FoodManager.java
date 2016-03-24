@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.inventory;
 
+import minebot.movement.MovementManager;
 import static minebot.MineBot.whatAreYouLookingAt;
 import minebot.util.ManagerTick;
 import net.minecraft.client.Minecraft;

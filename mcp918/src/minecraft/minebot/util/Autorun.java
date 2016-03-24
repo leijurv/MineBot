@@ -1,4 +1,4 @@
-package minebot;
+package minebot.util;
 
 import java.io.IOException;
 import java.io.InputStream;

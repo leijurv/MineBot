@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.inventory;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
+import minebot.MineBot;
 import minebot.mining.MickeyMine;
 import minebot.util.Manager;
 import minebot.util.Out;

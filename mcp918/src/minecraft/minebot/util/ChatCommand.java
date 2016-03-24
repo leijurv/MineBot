@@ -5,6 +5,12 @@
  */
 package minebot.util;
 
+import minebot.inventory.AnotherStealer;
+import minebot.schematic.SchematicBuilder;
+import minebot.schematic.Schematic;
+import minebot.schematic.SchematicLoader;
+import minebot.inventory.SmeltingTask;
+import minebot.inventory.CraftingTask;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -13,13 +19,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Random;
-import minebot.AnotherStealer;
-import minebot.Combat;
-import minebot.EarlyGameStrategy;
-import minebot.LookManager;
-import minebot.Memory;
+import minebot.movement.Combat;
+import minebot.strategy.EarlyGameStrategy;
+import minebot.ui.LookManager;
 import minebot.MineBot;
-import minebot.Parkour;
+import minebot.movement.Parkour;
 import minebot.mining.MickeyMine;
 import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalGetToBlock;

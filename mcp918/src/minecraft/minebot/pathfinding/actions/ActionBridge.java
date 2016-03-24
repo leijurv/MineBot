@@ -7,9 +7,9 @@ package minebot.pathfinding.actions;
 
 import java.util.Objects;
 import java.util.Random;
-import minebot.LookManager;
+import minebot.ui.LookManager;
 import minebot.MineBot;
-import minebot.MovementManager;
+import minebot.movement.MovementManager;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;

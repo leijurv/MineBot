@@ -5,6 +5,16 @@
  */
 package minebot;
 
+import minebot.strategy.EarlyGameStrategy;
+import minebot.movement.MovementManager;
+import minebot.movement.Parkour;
+import minebot.movement.Combat;
+import minebot.inventory.AnotherStealer;
+import minebot.util.Autorun;
+import minebot.ui.LookManager;
+import minebot.util.Memory;
+import minebot.inventory.FoodManager;
+import minebot.inventory.InventoryManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +28,12 @@ import minebot.pathfinding.actions.Action;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.pathfinding.goals.Goal;
 import minebot.pathfinding.goals.GoalComposite;
-import minebot.util.CraftingTask;
+import minebot.inventory.CraftingTask;
 import minebot.util.Manager;
 import minebot.util.ManagerTick;
 import minebot.util.Out;
-import minebot.util.SchematicBuilder;
-import minebot.util.SmeltingTask;
+import minebot.schematic.SchematicBuilder;
+import minebot.inventory.SmeltingTask;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -225,13 +235,7 @@ public class MineBot {
                         }
                     }
                 }
-                if (!LookManager.lookingPitch) {
-                    if (thePlayer.rotationPitch < -20) {
-                        thePlayer.rotationPitch++;
-                    } else if (thePlayer.rotationPitch > 20) {
-                        thePlayer.rotationPitch--;
-                    }
-                }
+                LookManager.nudgeToLevel();
             }
         }
         if (Minecraft.theMinecraft.currentScreen != null && (Minecraft.theMinecraft.currentScreen instanceof GuiCrafting || Minecraft.theMinecraft.currentScreen instanceof GuiInventory || Minecraft.theMinecraft.currentScreen instanceof GuiFurnace)) {

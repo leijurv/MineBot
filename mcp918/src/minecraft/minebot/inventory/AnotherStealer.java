@@ -3,18 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot;
+package minebot.inventory;
 
+import minebot.ui.LookManager;
+import minebot.util.Memory;
 import java.util.ArrayList;
+import minebot.MineBot;
+import minebot.movement.MovementManager;
 import minebot.pathfinding.goals.GoalComposite;
 import minebot.pathfinding.goals.GoalGetToBlock;
+import minebot.util.Autorun;
+import minebot.util.ChatCommand;
 import minebot.util.ChatCommand;
 import minebot.util.Manager;
+import minebot.util.Manager;
+import minebot.util.Memory;
+import minebot.util.Out;
 import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -54,7 +62,7 @@ public class AnotherStealer extends Manager {
         }
         if (stuff) {
             stuff = false;
-            ArrayList<BlockPos> chests = (ArrayList<BlockPos>) (Memory.getMemory(Block.getBlockFromName("chest")).knownPositions.clone());
+            ArrayList<BlockPos> chests = Memory.closest(100, "chest");
             chests.removeAll(alreadyStolenFrom);
             if (chests.isEmpty()) {
                 return;

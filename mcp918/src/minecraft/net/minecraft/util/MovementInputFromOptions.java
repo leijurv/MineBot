@@ -1,7 +1,7 @@
 package net.minecraft.util;
 
 import minebot.MineBot;
-import minebot.MovementManager;
+import minebot.movement.MovementManager;
 import net.minecraft.client.settings.GameSettings;
 
 public class MovementInputFromOptions extends MovementInput {
