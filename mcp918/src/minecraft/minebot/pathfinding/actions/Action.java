@@ -8,6 +8,7 @@ package minebot.pathfinding.actions;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.BlockLiquid;
@@ -144,7 +145,7 @@ public abstract class Action {
      */
     public static boolean canWalkThrough(BlockPos pos) {
         Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
-        if (block instanceof BlockLilyPad) {
+        if (block instanceof BlockLilyPad || block instanceof BlockFire) {
             return false;
         }
         boolean liquid = isLiquid(pos);
