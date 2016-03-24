@@ -348,27 +348,27 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     static String chat_header = "§5[§dMineBot§5|§2";
     static String chat_header_2 = "§5]§7 ";
     /*
-    DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+     DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
      */
     public static void sendChatMessage(String msg) {
         /*
-        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
          */
         sendChatMessage(msg, true);
         /*
-        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
          */
     }
     /*
-    DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+     DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
      */
     public static void sendChatMessage(String msg, boolean addToChat) {
         /*
-        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
          */
         if (!MineBot.actuallyPutMessagesInChat) {
             /*
-            DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+             DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
              */
             try {
                 /*
@@ -384,7 +384,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
                  */
                 StackTraceElement[] trace = e.getStackTrace();
                 /*
-                DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                 DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                  */
                 for (StackTraceElement blah : trace) {
                     /*
@@ -392,11 +392,11 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
                      */
                     String cl = blah.getClassName();
                     /*
-                    DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                     DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                      */
-                    if (cl.contains("minebot.Autorun") || (cl.contains("minebot.MineBot") && blah.getMethodName().contains("main"))) {
+                    if (cl.contains("minebot.util.Autorun") || (cl.contains("minebot.MineBot") && blah.getMethodName().contains("main"))) {
                         /*
-                        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                          */
                         continue;
                         /*
@@ -404,32 +404,32 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
                          */
                     }
                     /*
-                    DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                     DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                      */
                     if (cl.contains("minebot")) {
                         /*
-                        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                          */
                         Minecraft.theMinecraft.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(chat_header + (trace[1].getClassName().contains("GuiScreen") ? trace[2].getClassName() : trace[1].getClassName()) + chat_header_2 + msg));
                         /*
-                        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                          */
                         return;
                         /*
-                        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                          */
                     }
                 }
                 /*
-                DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+                 DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
                  */
             }
             /*
-            DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+             DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
              */
         }
         /*
-        DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
+         DO NOT USE THIS COMMAND USE Out.gui(String, Out.Mode)
          */
         if (addToChat) {
             Minecraft.theMinecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
