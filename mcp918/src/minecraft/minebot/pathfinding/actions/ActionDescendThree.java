@@ -6,7 +6,6 @@
 package minebot.pathfinding.actions;
 
 import minebot.MineBot;
-import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
@@ -24,10 +23,10 @@ public class ActionDescendThree extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
-            return PathFinder.COST_INF;
+            return Action.COST_INF;
         }
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
-            return PathFinder.COST_INF;
+            return Action.COST_INF;
         }
         return WALK_ONE_BLOCK_COST + FALL_THREE_BLOCK_COST;
     }

@@ -7,7 +7,6 @@ package minebot.pathfinding.actions;
 
 import minebot.LookManager;
 import minebot.MineBot;
-import minebot.pathfinding.PathFinder;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -34,15 +33,15 @@ public class ActionPillar extends ActionPlaceOrBreak {
         if (!ladder) {
             Block d = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
             if (d instanceof BlockLadder || d instanceof BlockVine) {
-                return PathFinder.COST_INF;
+                return Action.COST_INF;
             }
         }
         if ((!MineBot.hasThrowaway && !ladder) || !MineBot.allowVerticalMotion) {
-            return PathFinder.COST_INF;
+            return Action.COST_INF;
         }
         if (fromDown instanceof BlockVine) {
             if (getAgainst(from) == null) {
-                return PathFinder.COST_INF;
+                return Action.COST_INF;
             }
         }
         double hardness = getTotalHardnessOfBlocksToBreak(ts);
@@ -51,11 +50,11 @@ public class ActionPillar extends ActionPlaceOrBreak {
             if (tmp instanceof BlockLadder || tmp instanceof BlockVine) {
                 hardness = 0;
             } else if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3)) || Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//if the block above where we want to break is not a full block, don't do it
-                return PathFinder.COST_INF;
+                return Action.COST_INF;
             }
         }
         if (isLiquid(from) || isLiquid(from.down())) {//can't pillar on water or in water
-            return PathFinder.COST_INF;
+            return Action.COST_INF;
         }
         if (ladder) {
             return LADDER_UP_ONE_COST + hardness;
