@@ -215,6 +215,9 @@ public class Path {
                             } else {
                                 MovementManager.moveTowardsCoords(x, 0, z);
                             }
+                            if (MovementManager.forward && !MovementManager.backward) {
+                                thePlayer.setSprinting(true);
+                            }
                             return false;
                         }
                     }
