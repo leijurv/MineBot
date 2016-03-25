@@ -461,6 +461,8 @@ public class MineBot {
         for (Class<? extends Manager> c : managers) {
             list.add("§r[§" + (Manager.enabled(c) ? "a" : "c") + c.getSimpleName() + "§r]");
         }
+        list.add("");
+        list.add("Current goal: " + goal);
         return list;
     }
     public boolean isNull() throws NullPointerException {
