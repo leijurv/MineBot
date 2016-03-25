@@ -194,20 +194,6 @@ public class Path {
             ticksAway = 0;
         }
         Out.log(actions.get(pathPosition));
-        MovementManager.clearMovement();
-        if (actions.get(pathPosition).tick()) {
-            Out.log("Action done, next path");
-            pathPosition++;
-            ticksOnCurrent = 0;
-        } else {
-            ticksOnCurrent++;
-            if (ticksOnCurrent > actions.get(pathPosition).cost(null) + 100) {
-                Out.gui("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost(null) + "). Cancelling.", Out.Mode.Standard);
-                pathPosition = path.size() + 3;
-                failed = true;
-                return true;
-            }
-        }
         if (pathPosition < actions.size() - 1) {//if there are two ActionBridges in a row and they are at right angles, walk diagonally. This makes it so you walk at 45 degrees along a zigzag path instead of doing inefficient zigging and zagging
             if ((actions.get(pathPosition) instanceof ActionBridge) && (actions.get(pathPosition + 1) instanceof ActionBridge)) {
                 ActionBridge curr = (ActionBridge) actions.get(pathPosition);
@@ -225,14 +211,29 @@ public class Path {
                         double x = (next.from.getX() + next.to.getX() + 1.0D) * 0.5D;
                         double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
                         MovementManager.clearMovement();
-                        MovementManager.moveTowardsCoords(x, 0, z);
                         if (!MovementManager.forward && curr.oneInTen != null && curr.oneInTen) {
                             MovementManager.clearMovement();
                             MovementManager.forward = LookManager.lookAtCoords(x, 0, z, false);
+                        } else {
+                            MovementManager.moveTowardsCoords(x, 0, z);
                         }
                         return false;
                     }
                 }
+            }
+        }
+        MovementManager.clearMovement();
+        if (actions.get(pathPosition).tick()) {
+            Out.log("Action done, next path");
+            pathPosition++;
+            ticksOnCurrent = 0;
+        } else {
+            ticksOnCurrent++;
+            if (ticksOnCurrent > actions.get(pathPosition).cost(null) + 100) {
+                Out.gui("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost(null) + "). Cancelling.", Out.Mode.Standard);
+                pathPosition = path.size() + 3;
+                failed = true;
+                return true;
             }
         }
         return false;
