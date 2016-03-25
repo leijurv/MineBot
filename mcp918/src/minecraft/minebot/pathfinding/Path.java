@@ -205,19 +205,18 @@ public class Path {
                         //Block corner1 = Minecraft.theMinecraft.theWorld.getBlockState(cornerToCut1).getBlock();
                         //Block corner2 = Minecraft.theMinecraft.theWorld.getBlockState(cornerToCut2).getBlock();
                         //Out.gui("Cutting conner " + cornerToCut1 + " " + corner1, Out.Mode.Debug);
-                        if (Action.avoidWalkingInto(cornerToCut1) || Action.avoidWalkingInto(cornerToCut2)) {
+                        if (!Action.avoidWalkingInto(cornerToCut1) && !Action.avoidWalkingInto(cornerToCut2)) {
+                            double x = (next.from.getX() + next.to.getX() + 1.0D) * 0.5D;
+                            double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
+                            MovementManager.clearMovement();
+                            if (!MovementManager.forward && curr.oneInTen != null && curr.oneInTen) {
+                                MovementManager.clearMovement();
+                                MovementManager.forward = LookManager.lookAtCoords(x, 0, z, false);
+                            } else {
+                                MovementManager.moveTowardsCoords(x, 0, z);
+                            }
                             return false;
                         }
-                        double x = (next.from.getX() + next.to.getX() + 1.0D) * 0.5D;
-                        double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
-                        MovementManager.clearMovement();
-                        if (!MovementManager.forward && curr.oneInTen != null && curr.oneInTen) {
-                            MovementManager.clearMovement();
-                            MovementManager.forward = LookManager.lookAtCoords(x, 0, z, false);
-                        } else {
-                            MovementManager.moveTowardsCoords(x, 0, z);
-                        }
-                        return false;
                     }
                 }
             }
