@@ -64,13 +64,6 @@ public class ActionPillar extends ActionPlaceOrBreak {
         }
     }
     int numTicks = 0;
-    @Override
-    protected boolean tick0() {
-        if (!switchtothrowaway(true)) {//get ready to place a throwaway block
-            return false;
-        }
-        return tick1();
-    }
     public BlockPos getAgainst(BlockPos vine) {
         if (Minecraft.theMinecraft.theWorld.getBlockState(vine.north()).getBlock().isBlockNormalCube()) {
             return vine.north();
@@ -86,14 +79,14 @@ public class ActionPillar extends ActionPlaceOrBreak {
         }
         return null;
     }
-    public boolean tick1() {
+    @Override
+    protected boolean tick0() {
         IBlockState fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from);
         boolean ladder = fromDown.getBlock() instanceof BlockLadder || fromDown.getBlock() instanceof BlockVine;
         boolean vine = fromDown.getBlock() instanceof BlockVine;
         if (!ladder && !LookManager.lookAtBlock(positionsToPlace[0], true)) {
             return false;
         }
-        numTicks++;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         boolean blockIsThere = canWalkOn(from) || ladder;
         if (ladder) {
@@ -111,6 +104,10 @@ public class ActionPillar extends ActionPlaceOrBreak {
             MovementManager.moveTowardsBlock(against);
             return false;
         } else {
+            if (!switchtothrowaway(true)) {//get ready to place a throwaway block
+                return false;
+            }
+            numTicks++;
             MovementManager.jumping = thePlayer.posY < to.getY(); //if our Y coordinate is above our goal, stop jumping
             MovementManager.sneak = true;
             //otherwise jump
