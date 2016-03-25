@@ -122,6 +122,7 @@ public class MineBot {
     }
     public static void onTick1() {
         if (pause) {
+            Manager.tick(LookManager.class, true);
             MovementManager.clearMovement();
             return;
         }
