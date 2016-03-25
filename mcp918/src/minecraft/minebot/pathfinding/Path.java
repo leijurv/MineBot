@@ -227,7 +227,13 @@ public class Path {
         }
         MovementManager.clearMovement();
         Action action = actions.get(pathPosition);
-        if (action.calculateCost0(new ToolSet()) < Action.COST_INF && action.tick()) {
+        if (action.calculateCost0(new ToolSet()) >= Action.COST_INF) {
+            Out.gui("Something has changed in the world and this action has become impossible. Cancelling.", Out.Mode.Standard);
+            pathPosition = path.size() + 3;
+            failed = true;
+            return true;
+        }
+        if (action.tick()) {
             Out.log("Action done, next path");
             pathPosition++;
             ticksOnCurrent = 0;
