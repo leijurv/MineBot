@@ -6,6 +6,8 @@
 package minebot.ui;
 
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.util.Manager;
 import net.minecraft.block.Block;
@@ -214,7 +216,11 @@ public class LookManager extends Manager {
     }
     public static void setDesiredYaw(float y) {
         if (lookingYaw) {
-            throw new IllegalStateException("Desired yaw already set!");
+            try {
+                throw new Exception("Desired yaw already set!");
+            } catch (Exception ex) {
+                Logger.getLogger(LookManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         desiredYaw = y;
         lookingYaw = true;
