@@ -81,10 +81,7 @@ public abstract class Action {
         }
         return cost;
     }
-    public void resetCost() {
-        cost = null;
-    }
-    private double calculateCost0(ToolSet ts) {
+    public double calculateCost0(ToolSet ts) {
         Block fromDown = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
         if (fromDown instanceof BlockLadder || fromDown instanceof BlockVine) {
             if (!(this instanceof ActionPillar) && !(this instanceof ActionBridge) && !(this instanceof ActionFall)) {

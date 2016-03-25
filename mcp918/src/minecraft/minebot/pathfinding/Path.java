@@ -17,6 +17,7 @@ import minebot.MineBot;
 import minebot.movement.MovementManager;
 import minebot.pathfinding.actions.ActionPlaceOrBreak;
 import minebot.util.Out;
+import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -226,8 +227,7 @@ public class Path {
         }
         MovementManager.clearMovement();
         Action action = actions.get(pathPosition);
-        action.resetCost();
-        if (action.cost(null) < Action.COST_INF && action.tick()) {
+        if (action.calculateCost0(new ToolSet()) < Action.COST_INF && action.tick()) {
             Out.log("Action done, next path");
             pathPosition++;
             ticksOnCurrent = 0;
