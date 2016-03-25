@@ -14,7 +14,6 @@ import minebot.util.Manager;
 import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.inventory.Slot;
@@ -624,6 +623,6 @@ public class InventoryManager extends Manager {
     }
     @Override
     protected boolean onEnabled(boolean enabled) {
-        return MineBot.tickNumber % 10 == 0;
+        return MineBot.tickNumber % 10 == 0 && !Minecraft.theMinecraft.thePlayer.capabilities.isCreativeMode;
     }
 }
