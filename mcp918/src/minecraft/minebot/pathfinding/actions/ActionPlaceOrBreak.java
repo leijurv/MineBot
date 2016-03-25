@@ -65,14 +65,14 @@ public abstract class ActionPlaceOrBreak extends Action {
         }
         for (BlockPos pos : toBreak) {
             sum += getHardness(ts, Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock(), pos);
-            if (sum >= Action.COST_INF) {
-                return Action.COST_INF;
+            if (sum >= COST_INF) {
+                return COST_INF;
             }
         }
         if (!MineBot.allowBreakOrPlace || !MineBot.hasThrowaway) {
             for (int i = 0; i < blocksToPlace.length; i++) {
                 if (!canWalkOn(positionsToPlace[i])) {
-                    return Action.COST_INF;
+                    return COST_INF;
                 }
             }
         }
@@ -84,13 +84,13 @@ public abstract class ActionPlaceOrBreak extends Action {
     public static double getHardness(ToolSet ts, Block block, BlockPos position) {
         if (!block.equals(Block.getBlockById(0)) && !canWalkThrough(position)) {
             if (avoidBreaking(position)) {
-                return Action.COST_INF;
+                return COST_INF;
             }
             if (!MineBot.allowBreakOrPlace) {
-                return Action.COST_INF;
+                return COST_INF;
             }
             if (SmeltingTask.avoidBreaking(position)) {
-                return Action.COST_INF;
+                return COST_INF;
             }
             double m = Block.getBlockFromName("minecraft:crafting_table").equals(block) ? 10 : 1;
             return m / ts.getStrVsBlock(block, position) + BREAK_ONE_BLOCK_ADD;

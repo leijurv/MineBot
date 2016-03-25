@@ -43,7 +43,7 @@ public class ActionFall extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!MineBot.allowVerticalMotion || !canWalkOn(to.down())) {
-            return Action.COST_INF;
+            return COST_INF;
         }
         Block td = Minecraft.theMinecraft.theWorld.getBlockState(to).getBlock();
         boolean ladder = td instanceof BlockLadder || td instanceof BlockVine;

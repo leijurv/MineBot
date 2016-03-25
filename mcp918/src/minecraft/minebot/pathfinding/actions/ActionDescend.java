@@ -27,11 +27,11 @@ public class ActionDescend extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
-            return Action.COST_INF;
+            return COST_INF;
         }
         Block tmp1 = Minecraft.theMinecraft.theWorld.getBlockState(to).getBlock();
         if (tmp1 instanceof BlockLadder || tmp1 instanceof BlockVine) {
-            return Action.COST_INF;
+            return COST_INF;
         }
         return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }

@@ -34,15 +34,15 @@ public class ActionPillar extends ActionPlaceOrBreak {
         if (!ladder) {
             Block d = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
             if (d instanceof BlockLadder || d instanceof BlockVine) {
-                return Action.COST_INF;
+                return COST_INF;
             }
         }
         if ((!MineBot.hasThrowaway && !ladder) || !MineBot.allowVerticalMotion) {
-            return Action.COST_INF;
+            return COST_INF;
         }
         if (fromDown instanceof BlockVine) {
             if (getAgainst(from) == null) {
-                return Action.COST_INF;
+                return COST_INF;
             }
         }
         double hardness = getTotalHardnessOfBlocksToBreak(ts);
@@ -51,11 +51,11 @@ public class ActionPillar extends ActionPlaceOrBreak {
             if (tmp instanceof BlockLadder || tmp instanceof BlockVine) {
                 hardness = 0;
             } else if (!canWalkOn(from.up(3)) || canWalkThrough(from.up(3)) || Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//if the block above where we want to break is not a full block, don't do it
-                return Action.COST_INF;
+                return COST_INF;
             }
         }
         if (isLiquid(from) || isLiquid(from.down())) {//can't pillar on water or in water
-            return Action.COST_INF;
+            return COST_INF;
         }
         if (ladder) {
             return LADDER_UP_ONE_COST + hardness;
