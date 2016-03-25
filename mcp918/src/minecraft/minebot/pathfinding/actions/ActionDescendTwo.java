@@ -24,10 +24,10 @@ public class ActionDescendTwo extends ActionPlaceOrBreak {
     @Override
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
-            return Action.COST_INF;
+            return COST_INF;
         }
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
-            return Action.COST_INF;
+            return COST_INF;
         }
         return WALK_ONE_BLOCK_COST + FALL_TWO_BLOCK_COST;
     }

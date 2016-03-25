@@ -50,17 +50,17 @@ public class ActionClimb extends ActionPlaceOrBreak {
     protected double calculateCost(ToolSet ts) {
         if (!canWalkOn(positionsToPlace[0])) {
             if (!MineBot.isAir(positionsToPlace[0]) && !isWater(positionsToPlace[0])) {
-                return Action.COST_INF;
+                return COST_INF;
             }
             for (BlockPos against1 : against) {
                 if (Minecraft.theMinecraft.theWorld.getBlockState(against1).getBlock().isBlockNormalCube()) {
                     return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
                 }
             }
-            return Action.COST_INF;
+            return COST_INF;
         }
         if (Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//it would fall on us and possibly suffocate us
-            return Action.COST_INF;
+            return COST_INF;
         }
         return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
     }

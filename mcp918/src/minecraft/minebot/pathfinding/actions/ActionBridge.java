@@ -62,7 +62,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
             //return 1000000;
             Block f = Minecraft.theMinecraft.theWorld.getBlockState(from.down()).getBlock();
             if (f instanceof BlockLadder || f instanceof BlockVine) {
-                return Action.COST_INF;
+                return COST_INF;
             }
             if (blocksToPlace[0].equals(Block.getBlockById(0)) || (!isWater(blocksToPlace[0]) && blocksToPlace[0].isReplaceable(Minecraft.theMinecraft.theWorld, positionsToPlace[0]))) {
                 for (BlockPos against1 : against) {
@@ -73,7 +73,7 @@ public class ActionBridge extends ActionPlaceOrBreak {
                 WC = WC * SNEAK_ONE_BLOCK_COST / WALK_ONE_BLOCK_COST;//since we are placing, we are sneaking
                 return WC + PLACE_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
             }
-            return Action.COST_INF;
+            return COST_INF;
             //Out.log("Can't walk on " + Minecraft.theMinecraft.theWorld.getBlockState(positionsToPlace[0]).getBlock());
         }
     }
