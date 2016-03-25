@@ -8,6 +8,7 @@ package minebot.pathfinding.actions;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLilyPad;
@@ -158,6 +159,16 @@ public abstract class Action {
             return false;//you could drown
         }
         return block.isPassable(Minecraft.theMinecraft.theWorld, pos);
+    }
+    public static boolean avoidWalkingInto(BlockPos pos) {
+        Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        if (isLava(block)) {
+            return true;
+        }
+        if (block instanceof BlockCactus) {
+            return true;
+        }
+        return block instanceof BlockFire;
     }
     /**
      * Can I walk on this block without anything weird happening like me falling

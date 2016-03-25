@@ -214,12 +214,21 @@ public class Path {
                 ActionBridge next = (ActionBridge) actions.get(pathPosition + 1);
                 if (curr.dx() != next.dx() || curr.dz() != next.dz()) {//two actions are not parallel, so this is a right angle
                     if (curr.amIGood() && next.amIGood()) {//nothing in the way
+                        BlockPos cornerToCut1 = new BlockPos(next.to.getX() - next.from.getX() + curr.from.getX(), next.to.getY(), next.to.getZ() - next.from.getZ() + curr.from.getZ());
+                        BlockPos cornerToCut2 = cornerToCut1.up();
+                        //Block corner1 = Minecraft.theMinecraft.theWorld.getBlockState(cornerToCut1).getBlock();
+                        //Block corner2 = Minecraft.theMinecraft.theWorld.getBlockState(cornerToCut2).getBlock();
+                        //Out.gui("Cutting conner " + cornerToCut1 + " " + corner1, Out.Mode.Debug);
+                        if (Action.avoidWalkingInto(cornerToCut1) || Action.avoidWalkingInto(cornerToCut2)) {
+                            return false;
+                        }
                         double x = (next.from.getX() + next.to.getX() + 1.0D) * 0.5D;
                         double z = (next.from.getZ() + next.to.getZ() + 1.0D) * 0.5D;
                         MovementManager.clearMovement();
                         MovementManager.moveTowardsCoords(x, 0, z);
                         if (!MovementManager.forward && curr.oneInTen != null && curr.oneInTen) {
-                            LookManager.lookAtCoords(x, 0, z, false);
+                            MovementManager.clearMovement();
+                            MovementManager.forward = LookManager.lookAtCoords(x, 0, z, false);
                         }
                         return false;
                     }

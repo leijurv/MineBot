@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import minebot.MineBot;
 import minebot.pathfinding.Path;
 import minebot.pathfinding.PathFinder;
+import minebot.pathfinding.actions.Action;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -83,6 +84,10 @@ public class PathRenderer {
                 continue;
             }
             if (b.getX() - a.getX() == c.getX() - b.getX() && b.getZ() - a.getZ() == c.getZ() - b.getZ()) {
+                continue;
+            }
+            BlockPos corner = new BlockPos(c.getX() - b.getX() + a.getX(), a.getY(), c.getZ() - b.getZ() + a.getZ());
+            if (Action.avoidWalkingInto(corner) || Action.avoidWalkingInto(corner.up())) {
                 continue;
             }
             cornerFirstHalf[i] = true;
