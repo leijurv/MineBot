@@ -225,14 +225,16 @@ public class Path {
             }
         }
         MovementManager.clearMovement();
-        if (actions.get(pathPosition).tick()) {
+        Action action = actions.get(pathPosition);
+        action.resetCost();
+        if (action.cost(null) < Action.COST_INF && action.tick()) {
             Out.log("Action done, next path");
             pathPosition++;
             ticksOnCurrent = 0;
         } else {
             ticksOnCurrent++;
-            if (ticksOnCurrent > actions.get(pathPosition).cost(null) + 100) {
-                Out.gui("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + actions.get(pathPosition).cost(null) + "). Cancelling.", Out.Mode.Standard);
+            if (ticksOnCurrent > action.cost(null) + 100) {
+                Out.gui("This action has taken too long (" + ticksOnCurrent + " ticks, expected " + action.cost(null) + "). Cancelling.", Out.Mode.Standard);
                 pathPosition = path.size() + 3;
                 failed = true;
                 return true;
