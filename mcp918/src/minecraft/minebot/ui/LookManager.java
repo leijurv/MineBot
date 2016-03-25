@@ -213,6 +213,9 @@ public class LookManager extends Manager {
         return new float[]{(float) (yaw * 180 / Math.PI), (float) (pitch * 180 / Math.PI)};
     }
     public static void setDesiredYaw(float y) {
+        if (lookingYaw) {
+            throw new IllegalStateException("Desired yaw already set!");
+        }
         desiredYaw = y;
         lookingYaw = true;
     }
@@ -233,8 +236,7 @@ public class LookManager extends Manager {
         double yaw = Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z);
         double dist = Math.sqrt((thePlayer.posX - x) * (thePlayer.posX - x) + (-thePlayer.posZ + z) * (-thePlayer.posZ + z));
         double pitch = Math.atan2(yDiff, dist);
-        desiredYaw = (float) (yaw * 180 / Math.PI);
-        lookingYaw = true;
+        setDesiredYaw((float) (yaw * 180 / Math.PI));
         float yawDist = Math.abs(desiredYaw - thePlayer.rotationYaw);
         boolean withinRange = yawDist < ANGLE_THRESHOLD || yawDist > 360 - ANGLE_THRESHOLD;
         if (alsoDoPitch) {
