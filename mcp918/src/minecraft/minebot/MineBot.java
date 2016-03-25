@@ -464,16 +464,20 @@ public class MineBot {
         list.add("");
         list.add("Current goal: " + goal);
         list.add("");
-        list.add("Current path start: " + (currentPath == null ? null : currentPath.start));
-        list.add("Current path end: " + (currentPath == null ? null : currentPath.end));
-        list.add("Current path ends in current goal: " + (currentPath == null ? null : (goal == null ? null : goal.isInGoal(currentPath.end))));
-        if (currentPath != null && !currentPath.goal.equals(goal)) {
-            list.add("Current path goal: " + currentPath.goal);
+        if (currentPath != null) {
+            list.add("Current path start: " + currentPath.start);
+            list.add("Current path end: " + currentPath.end);
+            list.add("Current path ends in current goal: " + (goal == null ? null : goal.isInGoal(currentPath.end)));
+            if (!currentPath.goal.equals(goal)) {
+                list.add("Current path goal: " + currentPath.goal);
+            }
         }
-        list.add("");
-        list.add("Next path start: " + (nextPath == null ? null : nextPath.start));
-        list.add("Next path end: " + (nextPath == null ? null : nextPath.end));
-        list.add("Next path ends in current goal: " + (nextPath == null ? null : (goal == null ? null : goal.isInGoal(nextPath.end))));
+        if (nextPath != null) {
+            list.add("");
+            list.add("Next path start: " + nextPath.start);
+            list.add("Next path end: " + nextPath.end);
+            list.add("Next path ends in current goal: " + (goal == null ? null : goal.isInGoal(nextPath.end)));
+        }
         return list;
     }
     public boolean isNull() throws NullPointerException {
