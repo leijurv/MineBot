@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.util.Manager;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
@@ -105,6 +106,9 @@ public class LookManager extends Manager {
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yDiff = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
         double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
+        if (b instanceof BlockFire) {//look at bottom of fire when putting it out
+            yDiff = 0;
+        }
         double x = p.getX() + xDiff;
         double y = p.getY() + yDiff;
         double z = p.getZ() + zDiff;
@@ -201,6 +205,9 @@ public class LookManager extends Manager {
         double xDiff = (b.getBlockBoundsMinX() + b.getBlockBoundsMaxX()) / 2;
         double yolo = (b.getBlockBoundsMinY() + b.getBlockBoundsMaxY()) / 2;
         double zDiff = (b.getBlockBoundsMinZ() + b.getBlockBoundsMaxZ()) / 2;
+        if (b instanceof BlockFire) {//look at bottom of fire when putting it out
+            yolo = 0;
+        }
         double x = p.getX() + xDiff;
         double y = p.getY() + yolo;
         double z = p.getZ() + zDiff;
