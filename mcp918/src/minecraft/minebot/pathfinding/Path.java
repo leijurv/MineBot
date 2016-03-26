@@ -59,20 +59,20 @@ public class Path {
             current = current.previous;
         }
         path.add(0, start.pos);
-        Out.log("Final path: " + path);
-        Out.log("Final actions: " + actions);
-        for (int i = 0; i < path.size() - 1; i++) {//print it all out
-            int oldX = path.get(i).getX();
-            int oldY = path.get(i).getY();
-            int oldZ = path.get(i).getZ();
-            int newX = path.get(i + 1).getX();
-            int newY = path.get(i + 1).getY();
-            int newZ = path.get(i + 1).getZ();
-            int xDiff = newX - oldX;
-            int yDiff = newY - oldY;
-            int zDiff = newZ - oldZ;
-            Out.log(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);//print it all out
-        }
+        /*Out.log("Final path: " + path);
+         Out.log("Final actions: " + actions);
+         for (int i = 0; i < path.size() - 1; i++) {//print it all out
+         int oldX = path.get(i).getX();
+         int oldY = path.get(i).getY();
+         int oldZ = path.get(i).getZ();
+         int newX = path.get(i + 1).getX();
+         int newY = path.get(i + 1).getY();
+         int newZ = path.get(i + 1).getZ();
+         int xDiff = newX - oldX;
+         int yDiff = newY - oldY;
+         int zDiff = newZ - oldZ;
+         Out.log(actions.get(i) + ": " + xDiff + "," + yDiff + "," + zDiff);//print it all out
+         }*/
     }
     /**
      * We don't really use this any more
