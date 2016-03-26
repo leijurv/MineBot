@@ -59,6 +59,7 @@ import org.lwjgl.input.Keyboard;
  * @author leijurv
  */
 public class MineBot {
+    public static boolean allowDiagonal = true;
     public static boolean farf5 = false;
     public static boolean slowPath = false;
     public static boolean pause = false;

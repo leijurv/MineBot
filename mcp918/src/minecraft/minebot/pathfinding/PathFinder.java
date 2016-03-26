@@ -19,10 +19,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import minebot.MineBot;
 import minebot.pathfinding.actions.ActionDescendThree;
+import minebot.pathfinding.actions.ActionWalkDiagonal;
 import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.chunk.EmptyChunk;
 
 /**
@@ -176,7 +178,7 @@ public class PathFinder {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
-        Action[] actions = new Action[22];
+        Action[] actions = new Action[26];
         actions[0] = new ActionPillar(pos);
         actions[1] = new ActionBridge(pos, new BlockPos(x + 1, y, z));
         actions[2] = new ActionBridge(pos, new BlockPos(x - 1, y, z));
@@ -199,6 +201,10 @@ public class PathFinder {
         actions[19] = new ActionDescendThree(pos, new BlockPos(x, y - 3, z + 1));
         actions[20] = new ActionDescendThree(pos, new BlockPos(x - 1, y - 3, z));
         actions[21] = new ActionDescendThree(pos, new BlockPos(x + 1, y - 3, z));
+        actions[22] = new ActionWalkDiagonal(pos, EnumFacing.NORTH, EnumFacing.WEST);
+        actions[23] = new ActionWalkDiagonal(pos, EnumFacing.NORTH, EnumFacing.EAST);
+        actions[24] = new ActionWalkDiagonal(pos, EnumFacing.SOUTH, EnumFacing.WEST);
+        actions[25] = new ActionWalkDiagonal(pos, EnumFacing.SOUTH, EnumFacing.EAST);
         return actions;
     }
     private final Random random = new Random();

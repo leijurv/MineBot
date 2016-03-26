@@ -86,6 +86,12 @@ public class PathRenderer {
             if (b.getX() - a.getX() == c.getX() - b.getX() && b.getZ() - a.getZ() == c.getZ() - b.getZ()) {
                 continue;
             }
+            if (a.getX() != b.getX() && a.getZ() != b.getZ()) {
+                continue;
+            }
+            if (b.getX() != c.getX() && b.getZ() != c.getZ()) {
+                continue;
+            }
             BlockPos corner = new BlockPos(c.getX() - b.getX() + a.getX(), a.getY(), c.getZ() - b.getZ() + a.getZ());
             if (Action.avoidWalkingInto(corner) || Action.avoidWalkingInto(corner.up())) {
                 continue;
