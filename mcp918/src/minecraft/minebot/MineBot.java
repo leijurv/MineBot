@@ -34,6 +34,7 @@ import minebot.util.ManagerTick;
 import minebot.util.Out;
 import minebot.schematic.SchematicBuilder;
 import minebot.inventory.SmeltingTask;
+import minebot.util.MCEdit;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -86,6 +87,7 @@ public class MineBot {
         managers.add(Memory.class);
         managers.add(AnotherStealer.class);
         managers.add(InventoryManager.class);
+        managers.add(MCEdit.class);
         managers.add(Parkour.class);
         managers.add(Combat.class);
         managers.add(FoodManager.class);

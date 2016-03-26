@@ -63,6 +63,7 @@ public class ChatCommand {
         methods = new ArrayList<Method>();
         fields = new ArrayList<Field>();
         addMethods(ChatCommand.class);
+        addMethods(MCEdit.class);
         addFields(MineBot.class);
         addFields(Combat.class);
         addFields(SmeltingTask.class);
