@@ -27,7 +27,7 @@ public class MCEdit extends Manager {
         return "Pos 2: " + (pos2 = Minecraft.theMinecraft.thePlayer.getPosition0());
     }
     public static String delete(String s) {
-        Manager.getManager(MCEdit.class).start();
+        Manager.getManager(MCEdit.class).toggle();
         return "k";
     }
     private static HashSet<BlockPos> toBreak() {
