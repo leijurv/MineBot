@@ -40,10 +40,8 @@ public class ActionWalkDiagonal extends ActionPlaceOrBreak {
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
             return COST_INF;
         }
-        for (BlockPos pl : positionsToPlace) {
-            if (!canWalkOn(pl)) {
-                return COST_INF;
-            }
+        if (!canWalkOn(positionsToPlace[0])) {
+            return COST_INF;
         }
         return Math.sqrt(2) * (isWater(from) || isWater(to) ? WALK_ONE_IN_WATER_COST : WALK_ONE_BLOCK_COST);
     }
