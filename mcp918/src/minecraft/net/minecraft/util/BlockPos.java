@@ -61,7 +61,8 @@ public class BlockPos extends Vec3i {
      */
     public BlockPos up() {
         assert this.up(1).equals(new BlockPos(x, y + 1, z));
-        return this.up(1);
+        //return this.up(1);
+        return new BlockPos(x, y + 1, z);
     }
     /**
      * Offset this BlockPos n blocks up
