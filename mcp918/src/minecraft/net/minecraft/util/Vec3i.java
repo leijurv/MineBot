@@ -10,15 +10,15 @@ public class Vec3i implements Comparable<Vec3i> {
     /**
      * X coordinate
      */
-    private final int x;
+    protected final int x;
     /**
      * Y coordinate
      */
-    private final int y;
+    protected final int y;
     /**
      * Z coordinate
      */
-    private final int z;
+    protected final int z;
     public Vec3i(int xIn, int yIn, int zIn) {
         this.x = xIn;
         this.y = yIn;
