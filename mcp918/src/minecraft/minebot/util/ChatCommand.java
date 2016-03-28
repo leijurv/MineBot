@@ -195,6 +195,10 @@ public class ChatCommand {
     }
     public static String adventure(String message) {
         return "allowBreakOrPlace: " + (MineBot.allowBreakOrPlace ^= true);
+    
+    public static String tyler(String message) {    
+         return "TYLER KAHN";
+         
     }
     public static String steal(String message) {
         return stealer(message);
