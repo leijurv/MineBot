@@ -26,7 +26,7 @@ public class ActionDescendThree extends ActionPlaceOrBreak {
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
             return COST_INF;
         }
-        return WALK_ONE_BLOCK_COST / 2 + +Math.max(FALL_THREE_BLOCK_COST, WALK_ONE_BLOCK_COST / 2);//we walk half the block to get to the edge, then we walk the other half while simultaneously falling (math.max because of how it's in parallel)
+        return WALK_ONE_BLOCK_COST * 0.8 + Math.max(FALL_THREE_BLOCK_COST, WALK_ONE_BLOCK_COST * 0.2);//we walk half the block plus 0.3 to get to the edge, then we walk the other 0.2 while simultaneously falling (math.max because of how it's in parallel)
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be

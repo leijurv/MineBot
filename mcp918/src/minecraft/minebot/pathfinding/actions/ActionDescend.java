@@ -30,7 +30,7 @@ public class ActionDescend extends ActionPlaceOrBreak {
         if (tmp1 instanceof BlockLadder || tmp1 instanceof BlockVine) {
             return COST_INF;
         }
-        return WALK_ONE_BLOCK_COST / 2 + Math.max(WALK_ONE_BLOCK_COST / 2, FALL_ONE_BLOCK_COST) + getTotalHardnessOfBlocksToBreak(ts);//we walk half the block to get to the edge, then we walk the other half while simultaneously falling (math.max because of how it's in parallel)
+        return WALK_ONE_BLOCK_COST * 0.8 + Math.max(FALL_ONE_BLOCK_COST, WALK_ONE_BLOCK_COST * 0.2) + getTotalHardnessOfBlocksToBreak(ts);//we walk half the block plus 0.3 to get to the edge, then we walk the other 0.2 while simultaneously falling (math.max because of how it's in parallel)
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
