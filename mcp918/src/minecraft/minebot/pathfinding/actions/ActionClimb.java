@@ -96,9 +96,9 @@ public class ActionClimb extends ActionPlaceOrBreak {
             Out.gui("This is impossible", Out.Mode.Standard);
             return false;
         }
-        double flatDistToNext = Math.abs((to.getX() + 0.5D) - thePlayer.posX) + Math.abs((to.getZ() + 0.5D) - thePlayer.posZ);
+        double flatDistToNext = Math.abs(to.getX() - from.getX()) * Math.abs((to.getX() + 0.5D) - thePlayer.posX) + Math.abs(to.getZ() - from.getZ()) * Math.abs((to.getZ() + 0.5D) - thePlayer.posZ);
         boolean pointingInCorrectDirection = MovementManager.moveTowardsBlock(to);
-        MovementManager.jumping = flatDistToNext < 1 && pointingInCorrectDirection;
+        MovementManager.jumping = flatDistToNext < 1.2 && pointingInCorrectDirection;
         //once we are pointing the right way and moving, start jumping
         //this is slightly more efficient because otherwise we might start jumping before moving, and fall down without moving onto the block we want to jump onto
         //also wait until we are close enough, because we might jump and hit our head on an adjacent block
