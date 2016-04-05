@@ -101,10 +101,16 @@ public class PathFinder {
                 currentlyRunning = null;
                 return new Path(startNode, currentNode, goal, numNodes);
             }
+            //long constructStart = System.nanoTime();
             Action[] possibleActions = getConnectedPositions(currentNodePos);//actions that we could take that start at myPos, in random order
             shuffle(possibleActions);
+            //long constructEnd = System.nanoTime();
+            //System.out.println(constructEnd - constructStart);
             for (Action actionToGetToNeighbor : possibleActions) {
+                //long costStart = System.nanoTime();
                 double actionCost = actionToGetToNeighbor.cost(ts);
+                //long costEnd = System.nanoTime();
+                //System.out.println(actionToGetToNeighbor.getClass() + "" + (costEnd - costStart));
                 if (actionCost >= Action.COST_INF) {
                     continue;
                 }
