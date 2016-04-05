@@ -36,7 +36,7 @@ public class FoodManager extends ManagerTick {
             if (inv[i] == null) {
                 continue;
             }
-            if (item.getItem() instanceof ItemFood) {
+            if (item.getItem() instanceof ItemFood && !item.getItem().getUnlocalizedName(item).equals("item.spiderEye")) {
                 int healing = ((ItemFood) (item.getItem())).getHealAmount(item);
                 if (healing <= foodNeeded) {//whatever heals the least. wait that doesn't make sense. idk
                     slotForFood = i;
