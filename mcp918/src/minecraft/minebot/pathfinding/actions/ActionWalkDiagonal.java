@@ -40,6 +40,9 @@ public class ActionWalkDiagonal extends ActionPlaceOrBreak {
         } else {
             MovementManager.moveTowardsBlock(to);
         }
+        if (MovementManager.forward && !MovementManager.backward) {
+            Minecraft.theMinecraft.thePlayer.setSprinting(true);
+        }
         return to.equals(Minecraft.theMinecraft.thePlayer.getPosition0());
     }
     @Override
