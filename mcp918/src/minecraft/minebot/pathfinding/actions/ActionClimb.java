@@ -62,7 +62,7 @@ public class ActionClimb extends ActionPlaceOrBreak {
         if (Minecraft.theMinecraft.theWorld.getBlockState(from.up(3)).getBlock() instanceof BlockFalling) {//it would fall on us and possibly suffocate us
             return COST_INF;
         }
-        return JUMP_ONE_BLOCK_COST + WALK_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
+        return WALK_ONE_BLOCK_COST / 2 + Math.max(JUMP_ONE_BLOCK_COST, WALK_ONE_BLOCK_COST / 2) + getTotalHardnessOfBlocksToBreak(ts);//we walk half the block to get to the edge, then we walk the other half while simultaneously jumping (math.max because of how it's in parallel)
     }
     int ticksWithoutPlacement = 0;
     @Override

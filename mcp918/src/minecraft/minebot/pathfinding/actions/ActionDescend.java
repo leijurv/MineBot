@@ -5,7 +5,6 @@
  */
 package minebot.pathfinding.actions;
 
-import minebot.MineBot;
 import minebot.movement.MovementManager;
 import minebot.util.Out;
 import minebot.util.ToolSet;
@@ -33,7 +32,7 @@ public class ActionDescend extends ActionPlaceOrBreak {
         if (tmp1 instanceof BlockLadder || tmp1 instanceof BlockVine) {
             return COST_INF;
         }
-        return WALK_ONE_BLOCK_COST + FALL_ONE_BLOCK_COST + getTotalHardnessOfBlocksToBreak(ts);
+        return WALK_ONE_BLOCK_COST / 2 + Math.max(WALK_ONE_BLOCK_COST / 2, FALL_ONE_BLOCK_COST) + getTotalHardnessOfBlocksToBreak(ts);//we walk half the block to get to the edge, then we walk the other half while simultaneously falling (math.max because of how it's in parallel)
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
