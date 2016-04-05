@@ -102,12 +102,6 @@ public class ActionClimb extends ActionPlaceOrBreak {
         //once we are pointing the right way and moving, start jumping
         //this is slightly more efficient because otherwise we might start jumping before moving, and fall down without moving onto the block we want to jump onto
         //also wait until we are close enough, because we might jump and hit our head on an adjacent block
-        BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        if (whereAmI.equals(to)) {
-            Out.log("Done climbing to " + to);
-            MovementManager.clearMovement();
-            return true;
-        }
-        return false;
+        return Minecraft.theMinecraft.thePlayer.getPosition0().equals(to);
     }
 }

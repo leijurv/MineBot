@@ -5,12 +5,9 @@
  */
 package minebot.pathfinding.actions;
 
-import minebot.MineBot;
 import minebot.movement.MovementManager;
-import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -29,18 +26,11 @@ public class ActionDescendTwo extends ActionPlaceOrBreak {
         if (getTotalHardnessOfBlocksToBreak(ts) != 0) {
             return COST_INF;
         }
-        return WALK_ONE_BLOCK_COST + FALL_TWO_BLOCK_COST;
+        return WALK_ONE_BLOCK_COST / 2 + +Math.max(FALL_TWO_BLOCK_COST, WALK_ONE_BLOCK_COST / 2);//we walk half the block to get to the edge, then we walk the other half while simultaneously falling (math.max because of how it's in parallel)
     }
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
         MovementManager.moveTowardsBlock(to);
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        if (whereAmI.equals(to)) {
-            Out.log("Done falling to " + to);
-            MovementManager.clearMovement();
-            return true;
-        }
-        return false;
+        return Minecraft.theMinecraft.thePlayer.getPosition0().equals(to);
     }
 }

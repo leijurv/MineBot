@@ -6,13 +6,11 @@
 package minebot.pathfinding.actions;
 
 import minebot.movement.MovementManager;
-import minebot.util.Out;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockVine;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
 
 /**
@@ -37,13 +35,6 @@ public class ActionDescend extends ActionPlaceOrBreak {
     @Override
     protected boolean tick0() {//basically just hold down W until we are where we want to be
         MovementManager.moveTowardsBlock(to);
-        EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
-        BlockPos whereAmI = new BlockPos(thePlayer.posX, thePlayer.posY, thePlayer.posZ);
-        if (whereAmI.equals(to)) {
-            Out.log("Done falling to " + to);
-            MovementManager.clearMovement();
-            return true;
-        }
-        return false;
+        return Minecraft.theMinecraft.thePlayer.getPosition0().equals(to);
     }
 }
