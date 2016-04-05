@@ -5,8 +5,10 @@
  */
 package minebot.pathfinding.actions;
 
+import java.util.Random;
 import minebot.MineBot;
 import minebot.movement.MovementManager;
+import minebot.ui.LookManager;
 import minebot.util.ToolSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
@@ -27,9 +29,17 @@ public class ActionWalkDiagonal extends ActionPlaceOrBreak {
     public ActionWalkDiagonal(BlockPos start, BlockPos end, BlockPos dir1, BlockPos dir2) {
         super(start, end, new BlockPos[]{dir1, dir1.up(), dir2, dir2.up(), end, end.up()}, new BlockPos[]{end.down()});
     }
+    private Boolean oneInTen = null;
     @Override
     protected boolean tick0() {
-        MovementManager.moveTowardsBlock(to);
+        if (oneInTen == null) {
+            oneInTen = new Random().nextInt(10) == 0;
+        }
+        if (oneInTen) {
+            MovementManager.forward = LookManager.lookAtBlock(to, false);
+        } else {
+            MovementManager.moveTowardsBlock(to);
+        }
         return to.equals(Minecraft.theMinecraft.thePlayer.getPosition0());
     }
     @Override
