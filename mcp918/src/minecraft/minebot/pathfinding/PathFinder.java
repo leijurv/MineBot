@@ -214,11 +214,11 @@ public class PathFinder {
         return actions;
     }
     private final Random random = new Random();
-    private <E> void shuffle(E[] list) {
+    private void shuffle(Action[] list) {
         int len = list.length;
         for (int i = 0; i < len; i++) {
             int j = random.nextInt(len);
-            E e = list[j];
+            Action e = list[j];
             list[j] = list[i];
             list[i] = e;
         }
