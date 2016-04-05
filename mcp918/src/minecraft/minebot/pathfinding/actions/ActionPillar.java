@@ -121,7 +121,8 @@ public class ActionPillar extends ActionPlaceOrBreak {
             }
             if (!blockIsThere) {
                 Out.log("Block not there yet");
-                if (!MineBot.isAir(from)) {
+                Block fr = Minecraft.theMinecraft.theWorld.getBlockState(from).getBlock();
+                if (!(MineBot.isAir(from) || fr.isReplaceable(Minecraft.theMinecraft.theWorld, from))) {
                     MovementManager.isLeftClick = true;
                     blockIsThere = false;
                 } else if (Minecraft.theMinecraft.thePlayer.isSneaking()) {
