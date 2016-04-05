@@ -5,6 +5,7 @@
  */
 package minebot.ui;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -221,13 +222,14 @@ public class LookManager extends Manager {
         double pitch = Math.atan2(yDiff, dist);
         return new float[]{(float) (yaw * 180 / Math.PI), (float) (pitch * 180 / Math.PI)};
     }
+    static ArrayList<Exception> sketchiness = new ArrayList<>();
     public static void setDesiredYaw(float y) {
+        sketchiness.add(new Exception("Desired yaw already set!"));
         if (lookingYaw) {
-            try {
-                throw new Exception("Desired yaw already set!");
-            } catch (Exception ex) {
-                Logger.getLogger(LookManager.class.getName()).log(Level.SEVERE, null, ex);
+            for (Exception ex : sketchiness) {
+                Logger.getLogger(LookManager.class.getName()).log(Level.SEVERE, null, ex);//print out everyone who has tried to set the desired yaw this tick to show the conflict
             }
+            sketchiness.clear();
         }
         desiredYaw = y;
         lookingYaw = true;
@@ -269,6 +271,7 @@ public class LookManager extends Manager {
             Minecraft.theMinecraft.thePlayer.rotationPitch = desiredNextPitch;
         }
         lookingYaw = false;
+        sketchiness.clear();
         lookingPitch = false;
     }
     public static void nudgeToLevel() {
