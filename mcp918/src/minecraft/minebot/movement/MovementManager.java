@@ -64,9 +64,9 @@ public class MovementManager {
         backward = false;
         sneak = false;
         isRightClick = false;
-        rightPressTime = 0;
+        //rightPressTime = 0;
         isLeftClick = false;
-        leftPressTime = 0;
+        //leftPressTime = 0;
     }
     /**
      * Do not question the logic. Called by Minecraft.java

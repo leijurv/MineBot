@@ -134,6 +134,8 @@ public class MineBot {
             MineBot.plsCancel = true;
             return;
         }
+        MovementManager.leftPressTime = 0;
+        MovementManager.rightPressTime = 0;
         if (MovementManager.isLeftClick) {
             MovementManager.leftPressTime = 5;
         }
