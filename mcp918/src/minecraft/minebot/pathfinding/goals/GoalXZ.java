@@ -30,15 +30,36 @@ public class GoalXZ implements Goal {
         return calculate(xDiff, zDiff);
     }
     public static double calculate(double xDiff, double zDiff) {
-        double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
-        return calculate(xDiff, zDiff, pythaDist);
+        return calculate(xDiff, zDiff, 0);
     }
+    /*
+     public static double calculate(double xDiff, double zDiff) {
+     double pythaDist = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
+     return calculate(xDiff, zDiff, pythaDist);
+     }
+     public static double calculateOld(double xDiff, double zDiff, double pythaDist) {
+     double heuristic = 0;
+     heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;//overestimate
+     heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
+     heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
+     return heuristic;
+     }
+     */
+    static final double sq = Math.sqrt(2);
     public static double calculate(double xDiff, double zDiff, double pythaDist) {
-        double heuristic = 0;
-        heuristic += Math.abs(xDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;//overestimate
-        heuristic += Math.abs(zDiff) * Action.WALK_ONE_BLOCK_COST * 1.1;
-        heuristic += pythaDist / 10 * Action.WALK_ONE_BLOCK_COST;
-        return heuristic;
+        double x = Math.abs(xDiff);
+        double z = Math.abs(zDiff);
+        double straight;
+        double diagonal;
+        if (x < z) {
+            straight = z - x;
+            diagonal = x;
+        } else {
+            straight = x - z;
+            diagonal = z;
+        }
+        diagonal *= sq;
+        return (diagonal + straight) * Action.WALK_ONE_BLOCK_COST;
     }
     @Override
     public String toString() {
