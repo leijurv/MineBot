@@ -26,7 +26,7 @@ public class BlockPuncher {
     public static boolean setGoalTo(String... block) {
         ArrayList<BlockPos> closest = Memory.closest(10, block);
         if (closest == null || closest.isEmpty()) {
-            Out.gui("NO " + Arrays.asList(block) + " NEARBY. GOD DAMN IT", Out.Mode.Standard);
+            Out.gui("NO " + Arrays.asList(block) + " NEARBY. OH MAN", Out.Mode.Standard);
             return false;
         }
         Goal[] goals = new Goal[closest.size()];
