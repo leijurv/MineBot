@@ -200,6 +200,7 @@ public class Screenshot extends Manager {
                                             if (currPixVal == null) {
                                                 continue;
                                             }
+                                            long start = System.currentTimeMillis();
                                             OutputStream o = socket.getOutputStream();
                                             int width;
                                             int height;
@@ -215,7 +216,8 @@ public class Screenshot extends Manager {
                                             new DataOutputStream(o).writeInt(height);
                                             new ObjectOutputStream(o).writeObject(pixelValues);
                                             pushInt(pixelValues);
-                                            System.out.println("Written");
+                                            long end = System.currentTimeMillis();
+                                            System.out.println("Written in " + (end - start));
                                         }
                                     } catch (IOException | InterruptedException ex) {
                                         Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
