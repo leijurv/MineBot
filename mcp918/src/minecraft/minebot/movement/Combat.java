@@ -21,6 +21,7 @@ import minebot.util.Out;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -50,7 +51,7 @@ public class Combat extends ManagerTick {
         boolean healthOkToHunt = Minecraft.theMinecraft.thePlayer.getHealth() >= 12 || (target != null && target instanceof EntityPlayer);
         ArrayList<Entity> killAura = new ArrayList<Entity>();
         for (Entity entity : theWorld.loadedEntityList) {
-            if (entity.isEntityAlive()) {
+            if (entity.isEntityAlive() && !(entity instanceof EntityEnderman)) {
                 if ((mobKilling && entity instanceof EntityMob) || ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity)))) {
                     if (distFromMe(entity) < 5) {
                         killAura.add(entity);
@@ -78,16 +79,12 @@ public class Combat extends ManagerTick {
         }
         ArrayList<Entity> huntMobs = new ArrayList<Entity>();
         for (Entity entity : theWorld.loadedEntityList) {
-            if (entity.isEntityAlive()) {
+            if (entity.isEntityAlive() && distFromMe(entity) < 30 && !(entity instanceof EntityEnderman)) {
                 if (!playerHunt && (entity instanceof EntityMob) && entity.posY > thePlayer.posY - 6) {
-                    if (distFromMe(entity) < 30) {
-                        huntMobs.add(entity);
-                    }
+                    huntMobs.add(entity);
                 }
                 if ((playerHunt && (entity instanceof EntityPlayer) && !(entity.getName().equals(thePlayer.getName())) && !couldBeInCreative((EntityPlayer) entity))) {
-                    if (distFromMe(entity) < 30) {
-                        huntMobs.add(entity);
-                    }
+                    huntMobs.add(entity);
                 }
             }
         }
@@ -110,7 +107,7 @@ public class Combat extends ManagerTick {
                 }
             }
         }
-        if (!healthOkToHunt && target != null && wasTargetSetByMobHunt) {
+        if (!healthOkToHunt && target != null && wasTargetSetByMobHunt && mobHunting) {
             if (MineBot.currentPath != null) {
                 if (!(MineBot.currentPath.goal instanceof GoalRunAway)) {
                     Out.gui("Health too low, cancelling hunt", Out.Mode.Minimal);

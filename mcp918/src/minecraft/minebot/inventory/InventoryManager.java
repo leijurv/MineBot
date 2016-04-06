@@ -480,7 +480,7 @@ public class InventoryManager extends Manager {
                 continue;
             }
             Item item = stack.getItem();
-            if (item instanceof ItemFood) {
+            if (item instanceof ItemFood && !item.getUnlocalizedName(stack).equals("item.spiderEye")) {
                 ItemFood food = (ItemFood) item;
                 float strength = food.getHealAmount(stack);
                 if (strength > bestStrength) {
