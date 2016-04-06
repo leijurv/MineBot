@@ -235,6 +235,8 @@ public class ChatCommand {
     }
     public static String cancel(String message) {
         MineBot.cancelPath();
+        Combat.mobHunting = false;
+        Combat.mobKilling = false;
         MineBot.plsCancel = true;
         for (Class c : MineBot.managers) {
             Manager.cancel(c);

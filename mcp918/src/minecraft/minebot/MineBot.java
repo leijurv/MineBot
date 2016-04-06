@@ -314,6 +314,7 @@ public class MineBot {
      */
     public static void cancelPath() {
         nextPath = null;
+        Combat.target = null;
         currentBuilder = null;
         clearPath();
     }
