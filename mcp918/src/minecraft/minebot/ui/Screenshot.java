@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -47,6 +48,11 @@ public class Screenshot extends Manager {
                 return new int[size];
             }
             if (blah.length >= size) {
+                if (blah.length > size) {
+                    if (new Random().nextInt(100) == 0) {
+                        continue;
+                    }
+                }
                 return blah;
             }
         }
@@ -79,6 +85,11 @@ public class Screenshot extends Manager {
                 return BufferUtils.createIntBuffer(size);
             }
             if (blah.capacity() >= size) {
+                if (blah.capacity() > size) {
+                    if (new Random().nextInt(100) == 0) {
+                        continue;
+                    }
+                }
                 return blah;
             }
         }
