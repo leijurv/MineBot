@@ -188,7 +188,7 @@ public class Screenshot extends Manager {
                 public void run() {
                     try {
                         while (true) {
-                            Thread.sleep(100);
+                            Thread.sleep(300);
                             synchronized (socketsLock) {
                                 if (sockets.isEmpty()) {
                                     continue;
