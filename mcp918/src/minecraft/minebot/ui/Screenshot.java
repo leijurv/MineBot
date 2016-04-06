@@ -114,16 +114,20 @@ public class Screenshot extends Manager {
         }
     }
     public static void screenshot() {
+        if (currPixVal != null) {
+            return;
+        }
         int width = Minecraft.theMinecraft.displayWidth;
         int height = Minecraft.theMinecraft.displayHeight;
         int i = width * height;
         final IntBuffer pixelBuffer = getBuf(i);
-        final int[] pixelValues = getInt(i);
         GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, 1);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glReadPixels(0, 0, width, height, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixelBuffer);
         new Thread() {
+            @Override
             public void run() {
+                int[] pixelValues = getInt(i);
                 pixelBuffer.get(pixelValues);
                 TextureUtil.processPixelValues(pixelValues, width, height);
                 /*BufferedImage bufferedimage;
@@ -163,7 +167,9 @@ public class Screenshot extends Manager {
             long bef = System.currentTimeMillis();
             screenshot();
             long aft = System.currentTimeMillis();
-            System.out.println("Took " + (aft - bef));
+            if (aft != bef) {
+                System.out.println("Took " + (aft - bef));
+            }
         }
     }
     @Override
@@ -177,6 +183,7 @@ public class Screenshot extends Manager {
         try {
             ServerSocket blah = new ServerSocket(5021);
             new Thread() {
+                @Override
                 public void run() {
                     try {
                         while (true) {
@@ -185,6 +192,7 @@ public class Screenshot extends Manager {
                                 sockets.add(socket);
                             }
                             new Thread() {
+                                @Override
                                 public void run() {
                                     try {
                                         while (true) {
@@ -205,7 +213,6 @@ public class Screenshot extends Manager {
                                             System.out.println("Write " + width + " " + height + " " + pixelValues.length);
                                             new DataOutputStream(o).writeInt(width);
                                             new DataOutputStream(o).writeInt(height);
-                                            new DataOutputStream(o).writeInt(pixelValues.length);
                                             new ObjectOutputStream(o).writeObject(pixelValues);
                                             pushInt(pixelValues);
                                             System.out.println("Written");
