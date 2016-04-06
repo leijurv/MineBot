@@ -115,6 +115,7 @@ public class Screenshot extends Manager {
     }
     public static void screenshot() {
         if (currPixVal != null) {
+            System.out.println("Skipping");
             return;
         }
         int width = Minecraft.theMinecraft.displayWidth;
