@@ -29,6 +29,7 @@ import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalGetToBlock;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
+import minebot.ui.Screenshot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -182,6 +183,9 @@ public class ChatCommand {
     }
     public static String fullauto(String message) {
         return "Full Auto: " + Manager.toggle(EarlyGameStrategy.class);
+    }
+    public static String record(String message) {
+        return "Record: " + Manager.toggle(Screenshot.class);
     }
     public static String wizard(String message) {
         return "YOURE A LIZARD HARRY " + (MineBot.isThereAnythingInProgress ^= true);

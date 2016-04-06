@@ -34,6 +34,7 @@ import minebot.util.ManagerTick;
 import minebot.util.Out;
 import minebot.schematic.SchematicBuilder;
 import minebot.inventory.SmeltingTask;
+import minebot.ui.Screenshot;
 import minebot.util.MCEdit;
 import minebot.util.ToolSet;
 import net.minecraft.block.Block;
@@ -91,6 +92,7 @@ public class MineBot {
         managers.add(MCEdit.class);
         managers.add(Parkour.class);
         managers.add(Combat.class);
+        managers.add(Screenshot.class);
         managers.add(FoodManager.class);
         managers.add(EarlyGameStrategy.class);
         managers.add(CraftingTask.class);

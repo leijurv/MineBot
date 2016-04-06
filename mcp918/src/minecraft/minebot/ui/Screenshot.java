@@ -5,13 +5,20 @@
  */
 package minebot.ui;
 
-import java.awt.image.BufferedImage;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.IntBuffer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import minebot.util.Manager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -22,52 +29,180 @@ import org.lwjgl.opengl.GL12;
  *
  * @author leijurv
  */
-public class Screenshot {
-    /**
-     * A buffer to hold pixel values returned by OpenGL.
-     */
-    private static IntBuffer pixelBuffer;
-    /**
-     * The built-up array that contains all the pixel values returned by OpenGL.
-     */
-    private static int[] pixelValues;
-    public static BufferedImage screenshot() {
+public class Screenshot extends Manager {
+    static ExecutorService lol = Executors.newCachedThreadPool();
+
+    public static class Dank<E> {
+        E curr;
+        Dank<E> next;
+    }
+    static final Object valCacheLock = new Object();
+    static Dank<int[]> valCache = null;
+    public static int[] getInt(int size) {
+        while (true) {
+            int[] blah = popInt();
+            if (blah == null) {
+                System.out.println("CREATING INT ARRAY OF SIZE " + size);
+                return new int[size];
+            }
+            if (blah.length >= size) {
+                return blah;
+            }
+        }
+    }
+    public static void pushInt(int[] blah) {
+        synchronized (valCacheLock) {
+            Dank<int[]> xd = new Dank<>();
+            xd.next = valCache;
+            xd.curr = blah;
+            valCache = xd;
+        }
+    }
+    public static int[] popInt() {
+        synchronized (valCacheLock) {
+            if (valCache == null) {
+                return null;
+            }
+            int[] result = valCache.curr;
+            valCache = valCache.next;
+            return result;
+        }
+    }
+    static final Object bufCacheLock = new Object();
+    static Dank<IntBuffer> bufCache = null;
+    public static IntBuffer getBuf(int size) {
+        while (true) {
+            IntBuffer blah = popBuf();
+            if (blah == null) {
+                System.out.println("CREATING INT BUFFER OF SIZE " + size);
+                return BufferUtils.createIntBuffer(size);
+            }
+            if (blah.capacity() >= size) {
+                return blah;
+            }
+        }
+    }
+    public static void pushBuf(IntBuffer blah) {
+        blah.clear();
+        synchronized (bufCacheLock) {
+            Dank<IntBuffer> xd = new Dank<>();
+            xd.next = bufCache;
+            xd.curr = blah;
+            bufCache = xd;
+        }
+    }
+    public static IntBuffer popBuf() {
+        synchronized (bufCacheLock) {
+            if (bufCache == null) {
+                return null;
+            }
+            IntBuffer result = bufCache.curr;
+            bufCache = bufCache.next;
+            return result;
+        }
+    }
+    public static void screenshot() {
         int width = Minecraft.theMinecraft.displayWidth;
         int height = Minecraft.theMinecraft.displayHeight;
-        Framebuffer buffer = Minecraft.theMinecraft.getFramebuffer();
-        if (OpenGlHelper.isFramebufferEnabled()) {
-            width = buffer.framebufferTextureWidth;
-            height = buffer.framebufferTextureHeight;
-        }
         int i = width * height;
-        if (pixelBuffer == null || pixelBuffer.capacity() < i) {
-            pixelBuffer = BufferUtils.createIntBuffer(i);
-            pixelValues = new int[i];
-        }
+        final IntBuffer pixelBuffer = getBuf(i);
+        final int[] pixelValues = getInt(i);
         GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, 1);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        pixelBuffer.clear();
-        if (OpenGlHelper.isFramebufferEnabled()) {
-            GlStateManager.bindTexture(buffer.framebufferTexture);
-            GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixelBuffer);
-        } else {
-            GL11.glReadPixels(0, 0, width, height, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixelBuffer);
-        }
-        pixelBuffer.get(pixelValues);
-        TextureUtil.processPixelValues(pixelValues, width, height);
-        BufferedImage bufferedimage;
-        if (OpenGlHelper.isFramebufferEnabled()) {
-            bufferedimage = new BufferedImage(buffer.framebufferWidth, buffer.framebufferHeight, 1);
-            int j = buffer.framebufferTextureHeight - buffer.framebufferHeight;
-            for (int k = j; k < buffer.framebufferTextureHeight; ++k) {
-                for (int l = 0; l < buffer.framebufferWidth; ++l) {
-                    bufferedimage.setRGB(l, k - j, pixelValues[k * buffer.framebufferTextureWidth + l]);
+        GL11.glReadPixels(0, 0, width, height, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixelBuffer);
+        new Thread() {
+            public void run() {
+                pixelBuffer.get(pixelValues);
+                TextureUtil.processPixelValues(pixelValues, width, height);
+                /*BufferedImage bufferedimage;
+                 bufferedimage = new BufferedImage(width, height, 1);
+                 bufferedimage.setRGB(0, 0, width, height, pixelValues, 0, width);*/
+                pushBuf(pixelBuffer);
+                if (toSend == null) {
+                    pushInt(pixelValues);
+                    return;
+                }
+                synchronized (currPixLock) {
+                    if (currPixVal != null) {
+                        pushInt(currPixVal);
+                    }
+                    currPixVal = pixelValues;
+                    currWidth = width;
+                    currHeight = height;
                 }
             }
-        } else {
-            bufferedimage = new BufferedImage(width, height, 1);
-            bufferedimage.setRGB(0, 0, width, height, pixelValues, 0, width);
+        }.start();
+    }
+    static final Object currPixLock = new Object();
+    static int[] currPixVal = null;
+    static int currWidth = 0;
+    static int currHeight = 0;
+    @Override
+    protected void onTick() {
+        long bef = System.currentTimeMillis();
+        screenshot();
+        long aft = System.currentTimeMillis();
+        System.out.println("Took " + (aft - bef));
+    }
+    @Override
+    protected void onCancel() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    static final Object outLock = new Object();
+    static Socket toSend = null;
+    @Override
+    protected void onStart() {
+        try {
+            ServerSocket blah = new ServerSocket(5021);
+            new Thread() {
+                public void run() {
+                    try {
+                        toSend = blah.accept();
+                        new Thread() {
+                            public void run() {
+                                while (true) {
+                                    try {
+                                        Thread.sleep(100);
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                    if (currPixVal == null) {
+                                        continue;
+                                    }
+                                    try {
+                                        OutputStream o = toSend.getOutputStream();
+                                        int width;
+                                        int height;
+                                        int[] pixelValues;
+                                        synchronized (currPixLock) {
+                                            width = currWidth;
+                                            height = currHeight;
+                                            pixelValues = currPixVal;
+                                            currPixVal = null;
+                                        }
+                                        System.out.println("Write " + width + " " + height + " " + pixelValues.length);
+                                        new DataOutputStream(o).writeInt(width);
+                                        new DataOutputStream(o).writeInt(height);
+                                        new DataOutputStream(o).writeInt(pixelValues.length);
+                                        new ObjectOutputStream(o).writeObject(pixelValues);
+                                        pushInt(pixelValues);
+                                        System.out.println("Written");
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
+                                        toSend = null;
+                                        return;
+                                    }
+                                }
+                            }
+                        }.start();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }.start();
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        } catch (IOException ex) {
+            Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return bufferedimage;
     }
 }
