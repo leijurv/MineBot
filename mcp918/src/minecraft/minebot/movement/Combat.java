@@ -14,8 +14,8 @@ import static minebot.MineBot.findPathInNewThread;
 import static minebot.MineBot.goal;
 import static minebot.MineBot.isAir;
 import static minebot.MineBot.whatEntityAreYouLookingAt;
-import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalRunAway;
+import minebot.pathfinding.goals.GoalTwoBlocks;
 import minebot.util.ManagerTick;
 import minebot.util.Out;
 import net.minecraft.client.Minecraft;
@@ -135,7 +135,7 @@ public class Combat extends ManagerTick {
         }
         if (target != null && healthOkToHunt) {
             BlockPos targetPos = new BlockPos(target.posX, target.posY, target.posZ);
-            MineBot.goal = new GoalBlock(targetPos);
+            MineBot.goal = new GoalTwoBlocks(targetPos);
             if (MineBot.currentPath != null) {
                 double movementSince = dist(targetPos, MineBot.currentPath.end);
                 if (movementSince > 4 && !MineBot.isThereAnythingInProgress) {
@@ -223,7 +223,7 @@ public class Combat extends ManagerTick {
                         Combat.target = pl;
                         Combat.wasTargetSetByMobHunt = false;
                         BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
-                        goal = new GoalBlock(pos);
+                        goal = new GoalTwoBlocks(pos);
                         findPathInNewThread(playerFeet, false);
                         return "Killing " + pl;
                     }
@@ -234,7 +234,7 @@ public class Combat extends ManagerTick {
         if (w != null) {
             Combat.target = w;
             BlockPos pos = new BlockPos(Combat.target.posX, Combat.target.posY, Combat.target.posZ);
-            goal = new GoalBlock(pos);
+            goal = new GoalTwoBlocks(pos);
             Combat.wasTargetSetByMobHunt = false;
             findPathInNewThread(playerFeet, false);
             return "Killing " + w;
