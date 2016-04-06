@@ -187,46 +187,61 @@ public class Screenshot extends Manager {
                 public void run() {
                     try {
                         while (true) {
+                            Thread.sleep(100);
+                            synchronized (socketsLock) {
+                                if (sockets.isEmpty()) {
+                                    continue;
+                                }
+                            }
+                            int width;
+                            int height;
+                            int[] pixelValues;
+                            synchronized (currPixLock) {
+                                if (currPixVal == null) {
+                                    continue;
+                                }
+                                width = currWidth;
+                                height = currHeight;
+                                pixelValues = currPixVal;
+                                currPixVal = null;
+                            }
+                            ArrayList<Socket> tmpCopy;
+                            synchronized (socketsLock) {
+                                tmpCopy = sockets;
+                            }
+                            for (Socket socket : tmpCopy) {
+                                try {
+                                    long start = System.currentTimeMillis();
+                                    OutputStream o = socket.getOutputStream();
+                                    System.out.println("Write " + width + " " + height + " " + pixelValues.length);
+                                    new DataOutputStream(o).writeInt(width);
+                                    new DataOutputStream(o).writeInt(height);
+                                    new ObjectOutputStream(o).writeObject(pixelValues);
+                                    long end = System.currentTimeMillis();
+                                    System.out.println("Written in " + (end - start));
+                                } catch (IOException ex) {
+                                    Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
+                                    synchronized (socketsLock) {
+                                        sockets.remove(socket);
+                                    }
+                                }
+                            }
+                            pushInt(pixelValues);
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }.start();
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        while (true) {
                             Socket socket = blah.accept();
                             synchronized (socketsLock) {
                                 sockets.add(socket);
                             }
-                            new Thread() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        while (true) {
-                                            Thread.sleep(100);
-                                            if (currPixVal == null) {
-                                                continue;
-                                            }
-                                            long start = System.currentTimeMillis();
-                                            OutputStream o = socket.getOutputStream();
-                                            int width;
-                                            int height;
-                                            int[] pixelValues;
-                                            synchronized (currPixLock) {
-                                                width = currWidth;
-                                                height = currHeight;
-                                                pixelValues = currPixVal;
-                                                currPixVal = null;
-                                            }
-                                            System.out.println("Write " + width + " " + height + " " + pixelValues.length);
-                                            new DataOutputStream(o).writeInt(width);
-                                            new DataOutputStream(o).writeInt(height);
-                                            new ObjectOutputStream(o).writeObject(pixelValues);
-                                            pushInt(pixelValues);
-                                            long end = System.currentTimeMillis();
-                                            System.out.println("Written in " + (end - start));
-                                        }
-                                    } catch (IOException | InterruptedException ex) {
-                                        Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
-                                        synchronized (socketsLock) {
-                                            sockets.remove(socket);
-                                        }
-                                    }
-                                }
-                            }.start();
                         }
                     } catch (IOException ex) {
                         Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
