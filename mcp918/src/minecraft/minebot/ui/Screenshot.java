@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -118,7 +119,11 @@ public class Screenshot extends Manager {
                  bufferedimage = new BufferedImage(width, height, 1);
                  bufferedimage.setRGB(0, 0, width, height, pixelValues, 0, width);*/
                 pushBuf(pixelBuffer);
-                if (toSend == null) {
+                boolean hasSockets;
+                synchronized (socketsLock) {
+                    hasSockets = !sockets.isEmpty();
+                }
+                if (!hasSockets) {
                     pushInt(pixelValues);
                     return;
                 }
@@ -139,17 +144,23 @@ public class Screenshot extends Manager {
     static int currHeight = 0;
     @Override
     protected void onTick() {
-        long bef = System.currentTimeMillis();
-        screenshot();
-        long aft = System.currentTimeMillis();
-        System.out.println("Took " + (aft - bef));
+        boolean hasSockets;
+        synchronized (socketsLock) {
+            hasSockets = !sockets.isEmpty();
+        }
+        if (hasSockets) {
+            long bef = System.currentTimeMillis();
+            screenshot();
+            long aft = System.currentTimeMillis();
+            System.out.println("Took " + (aft - bef));
+        }
     }
     @Override
     protected void onCancel() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    static final Object outLock = new Object();
-    static Socket toSend = null;
+    static final Object socketsLock = new Object();
+    static ArrayList<Socket> sockets = new ArrayList<>();
     @Override
     protected void onStart() {
         try {
@@ -157,44 +168,46 @@ public class Screenshot extends Manager {
             new Thread() {
                 public void run() {
                     try {
-                        toSend = blah.accept();
-                        new Thread() {
-                            public void run() {
-                                while (true) {
+                        while (true) {
+                            Socket socket = blah.accept();
+                            synchronized (socketsLock) {
+                                sockets.add(socket);
+                            }
+                            new Thread() {
+                                public void run() {
                                     try {
-                                        Thread.sleep(100);
-                                    } catch (InterruptedException ex) {
-                                        Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                    if (currPixVal == null) {
-                                        continue;
-                                    }
-                                    try {
-                                        OutputStream o = toSend.getOutputStream();
-                                        int width;
-                                        int height;
-                                        int[] pixelValues;
-                                        synchronized (currPixLock) {
-                                            width = currWidth;
-                                            height = currHeight;
-                                            pixelValues = currPixVal;
-                                            currPixVal = null;
+                                        while (true) {
+                                            Thread.sleep(100);
+                                            if (currPixVal == null) {
+                                                continue;
+                                            }
+                                            OutputStream o = socket.getOutputStream();
+                                            int width;
+                                            int height;
+                                            int[] pixelValues;
+                                            synchronized (currPixLock) {
+                                                width = currWidth;
+                                                height = currHeight;
+                                                pixelValues = currPixVal;
+                                                currPixVal = null;
+                                            }
+                                            System.out.println("Write " + width + " " + height + " " + pixelValues.length);
+                                            new DataOutputStream(o).writeInt(width);
+                                            new DataOutputStream(o).writeInt(height);
+                                            new DataOutputStream(o).writeInt(pixelValues.length);
+                                            new ObjectOutputStream(o).writeObject(pixelValues);
+                                            pushInt(pixelValues);
+                                            System.out.println("Written");
                                         }
-                                        System.out.println("Write " + width + " " + height + " " + pixelValues.length);
-                                        new DataOutputStream(o).writeInt(width);
-                                        new DataOutputStream(o).writeInt(height);
-                                        new DataOutputStream(o).writeInt(pixelValues.length);
-                                        new ObjectOutputStream(o).writeObject(pixelValues);
-                                        pushInt(pixelValues);
-                                        System.out.println("Written");
-                                    } catch (IOException ex) {
+                                    } catch (IOException | InterruptedException ex) {
                                         Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
-                                        toSend = null;
-                                        return;
+                                        synchronized (socketsLock) {
+                                            sockets.remove(socket);
+                                        }
                                     }
                                 }
-                            }
-                        }.start();
+                            }.start();
+                        }
                     } catch (IOException ex) {
                         Logger.getLogger(Screenshot.class.getName()).log(Level.SEVERE, null, ex);
                     }
