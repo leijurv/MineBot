@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minebot.aiming;
+package minebot.ui;
 
+import minebot.aiming.Arrow;
+import minebot.aiming.Constants;
+import minebot.aiming.Helper;
 import minebot.ui.LookManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

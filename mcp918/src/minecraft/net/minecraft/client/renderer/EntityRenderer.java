@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import minebot.ui.LookManager;
 import minebot.MineBot;
-import minebot.aiming.AimBow;
+import minebot.ui.AimBow;
 import minebot.ui.PathRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
