@@ -73,6 +73,9 @@ public class Combat extends ManagerTick {
             LookManager.lookAtCoords((lol.minX + lol.maxX) / 2, (lol.minY + lol.maxY) / 2, (lol.minZ + lol.maxZ) / 2, true);
             if (entity.equals(MineBot.whatEntityAreYouLookingAt())) {
                 MovementManager.isLeftClick = true;
+                if (MineBot.tickNumber % 10 < 3) {
+                    MovementManager.isLeftClick = false;
+                }
                 tickPath = false;
                 Out.log("Doing it");
             }
@@ -159,6 +162,9 @@ public class Combat extends ManagerTick {
             }
             if (actuallyLookingAt) {
                 MovementManager.isLeftClick = true;
+                if (MineBot.tickNumber % 10 < 3) {
+                    MovementManager.isLeftClick = false;
+                }
                 tickPath = false;
             }
         }
