@@ -10,10 +10,8 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import minebot.MineBot;
 import minebot.pathfinding.goals.GoalComposite;
-import minebot.util.Out;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Tuple;
 
@@ -34,14 +32,14 @@ public class SchematicBuilder {
     }
     public void tick() {
         HashSet<BlockPos> goal = getAllBlocksToPlaceShiftedUp();
-        Out.log("Ticking " + goal);
+        //Out.log("Ticking " + goal);
         if (goal != null) {
             MineBot.goal = new GoalComposite(goal);
             if (MineBot.currentPath == null && !MineBot.isThereAnythingInProgress) {
                 MineBot.findPathInNewThread(false);
             }
         } else {
-            Out.gui("done building", Out.Mode.Standard);
+            //Out.gui("done building", Out.Mode.Standard);
         }
     }
     public HashSet<BlockPos> getAllBlocksToPlaceShiftedUp() {
@@ -54,7 +52,7 @@ public class SchematicBuilder {
                     BlockPos inWorld = offset(inSchematic);
                     Block current = Minecraft.theMinecraft.theWorld.getBlockState(inWorld).getBlock();
                     Block desired = schematic.getBlockFromBlockPos(inSchematic);
-                    Out.log(inSchematic + " " + current + " " + desired);
+                    //Out.log(inSchematic + " " + current + " " + desired);
                     boolean currentlyAir = air.equals(current);
                     boolean shouldBeAir = desired == null || air.equals(desired);
                     if (currentlyAir && !shouldBeAir) {
