@@ -190,7 +190,7 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 public class Minecraft implements IThreadListener, IPlayerUsage {
-    public static final long TPS = 60;
+    public static final long TPS = 20;
     private static final Logger logger = LogManager.getLogger();
     private static final ResourceLocation locationMojangPng = new ResourceLocation("textures/gui/title/mojang.png");
     public static final boolean isRunningOnMac = Util.getOSType() == Util.EnumOS.OSX;
