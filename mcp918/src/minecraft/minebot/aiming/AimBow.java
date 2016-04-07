@@ -29,19 +29,15 @@ import org.lwjgl.util.ReadableColor;
  * @author galdara
  */
 public class AimBow {
-    
     public static double tick = 0;
-    
     public static boolean canHit(BlockPos target) {
         return false;
     }
-    
     public static void render(EntityPlayer player, float partialTicks) {
         if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBow) {
             drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(player.rotationPitch * -1)), Color.BLUE, Color.RED, partialTicks);
         }
     }
-    
     public static void drawArrowArc(EntityPlayer player, Arrow arrow, ReadableColor airColor, ReadableColor liquidColor, float partialTicks) {
         tick++;
         GlStateManager.enableBlend();
@@ -97,7 +93,6 @@ public class AimBow {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
     }
-    
     public static void drawLine(EntityPlayer player, double bp1x, double bp1y, double bp1z, double bp2x, double bp2y, double bp2z, float partialTicks) {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
@@ -160,7 +155,6 @@ public class AimBow {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
     }
-    
     public static void aimAtEntity(Entity entity) {
         LookManager.setDesiredYaw((float) Math.atan2(entity.posX - Minecraft.theMinecraft.thePlayer.posX, entity.posZ - Minecraft.theMinecraft.thePlayer.posZ));
     }

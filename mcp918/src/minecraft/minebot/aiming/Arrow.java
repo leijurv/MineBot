@@ -75,8 +75,7 @@ public class Arrow {
     public double getTickAtHorizontalPosition(double position) {
         double finalReturn = 0;
         finalReturn = (
-                Constants.Conversion.logOfBase(
-                    Constants.ArrowConstants.drag, 
+                Helper.logOfBase(Constants.ArrowConstants.drag, 
                     (
                         1 -
                         (
