@@ -47,9 +47,9 @@ public class AimBow {
         GlStateManager.depthMask(false);
         GlStateManager.color(airColor.getRed(), airColor.getGreen(), airColor.getBlue());
         double previousDist = 0;
-        double previousX = player.posX + previousDist - (double) (MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI) * 0.16F);
+        double previousX = player.posX + previousDist - (double) (MathHelper.cos(player.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
         double previousY = arrow.getVerticalPositionAtHorizontalPosition(previousDist) + player.posY + (double) player.getEyeHeight() - 0.10000000149011612D;;
-        double previousZ = player.posZ + previousDist + (double) (MathHelper.sin(player.rotationPitch / 180.0F * (float) Math.PI) * 0.16F);;
+        double previousZ = player.posZ + previousDist - (double) (MathHelper.sin(player.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
         for (double dist = Constants.BowConstants.renderTrajectoryIncrement; dist < Constants.BowConstants.renderTrajectoryCutoff; dist += Constants.BowConstants.renderTrajectoryIncrement) {
             BlockPos blockPos = new BlockPos(previousX, previousY, previousZ);
             IBlockState blockState = Minecraft.theMinecraft.theWorld.getBlockState(blockPos);
@@ -62,9 +62,9 @@ public class AimBow {
                     arrow.setIsInAir(true);
                     GlStateManager.color(airColor.getRed(), airColor.getGreen(), airColor.getBlue());
                 }
-                double currentX = (Math.sin(Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationYaw * -1))) * dist) + player.posX - (double) (MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI) * 0.16F);
+                double currentX = (Math.sin(Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationYaw * -1))) * dist) + player.posX - (double) (MathHelper.cos(player.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
                 double currentY = arrow.getVerticalPositionAtHorizontalPosition(dist) + player.posY + (double) player.getEyeHeight() - 0.10000000149011612D;
-                double currentZ = (Math.cos(Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationYaw * -1))) * dist) + player.posZ + (double) (MathHelper.sin(player.rotationPitch / 180.0F * (float) Math.PI) * 0.16F);
+                double currentZ = (Math.cos(Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationYaw * -1))) * dist) + player.posZ - (double) (MathHelper.sin(player.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
                 drawLine(player, previousX, previousY, previousZ, currentX, currentY, currentZ, partialTicks);
                 if (tick == 60) {
                     System.out.println("--- NEW TOTAL TICK ---");
