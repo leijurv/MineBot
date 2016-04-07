@@ -5,8 +5,6 @@
  */
 package minebot.aiming;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.Tuple;
 
 /**
@@ -17,28 +15,6 @@ public class Arrow {
     private final double initVerticalVelocity;
     private final double initHorizontalVelocity;
     public boolean isInAir = true;
-    public Arrow(EntityPlayer shooter, double velocity) {
-        float rotationYaw = shooter.rotationYaw;
-        float rotationPitch = shooter.rotationPitch;
-        double x = (double) (-MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
-        double z = (double) (MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
-        double y = (double) (-MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI));
-        float f = MathHelper.sqrt_double(x * x + y * y + z * z);
-        x = x / (double) f;
-        y = y / (double) f;
-        z = z / (double) f;
-        //x = x + this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) inaccuracy;
-        //y = y + this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) inaccuracy;
-        //z = z + this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) inaccuracy;
-        x = x * (double) velocity;
-        y = y * (double) velocity;
-        z = z * (double) velocity;
-        float f1 = MathHelper.sqrt_double(x * x + z * z);
-        rotationYaw = (float) (MathHelper.func_181159_b(x, z) * 180.0D / Math.PI);
-        rotationPitch = (float) (MathHelper.func_181159_b(y, (double) f1) * 180.0D / Math.PI);
-        this.initVerticalVelocity = y;
-        this.initHorizontalVelocity = Math.sqrt(x * x + z * z);
-    }
     public Arrow(double initialVelocity, double angleFired) {
         this.initVerticalVelocity = verticalVelocityFromTotal(initialVelocity, angleFired);
         this.initHorizontalVelocity = horizontalVelocityFromTotal(initialVelocity, angleFired);
