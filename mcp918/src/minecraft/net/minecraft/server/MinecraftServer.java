@@ -33,6 +33,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandManager;
@@ -442,7 +443,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
                     long k = getCurrentTimeMillis();
                     long j = k - this.currentTime;
                     if (j > 2000L && this.currentTime - this.timeOfLastWarning >= 15000L) {
-                        logger.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[]{Long.valueOf(j), Long.valueOf(j / 50L)});
+                        logger.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[]{Long.valueOf(j), Long.valueOf(j / (1000 / Minecraft.TPS))});
                         j = 2000L;
                         this.timeOfLastWarning = this.currentTime;
                     }
@@ -456,12 +457,12 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
                         this.tick();
                         i = 0L;
                     } else {
-                        while (i > 50L) {
-                            i -= 50L;
+                        while (i > (1000 / Minecraft.TPS)) {
+                            i -= (1000 / Minecraft.TPS);
                             this.tick();
                         }
                     }
-                    Thread.sleep(Math.max(1L, 50L - i));
+                    Thread.sleep(Math.max(1L, (1000 / Minecraft.TPS) - i));
                     this.serverIsRunning = true;
                 }
             } else {
@@ -580,7 +581,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
             if (j == 0 || this.getAllowNether()) {
                 WorldServer worldserver = this.worldServers[j];
                 this.theProfiler.startSection(worldserver.getWorldInfo().getWorldName());
-                if (this.tickCounter % 20 == 0) {
+                if (this.tickCounter % Minecraft.TPS == 0) {
                     this.theProfiler.startSection("timeSync");
                     this.serverConfigManager.sendPacketToAllPlayersInDimension(new S03PacketTimeUpdate(worldserver.getTotalWorldTime(), worldserver.getWorldTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")), worldserver.provider.getDimensionId());
                     this.theProfiler.endSection();
