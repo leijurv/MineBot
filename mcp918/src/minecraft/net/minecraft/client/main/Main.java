@@ -108,6 +108,10 @@ public class Main {
             lineWithToken = "THISDIDNTWORK";
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (lineWithUser == null) {
+            lineWithUser = "lolblazeit";
+            lineWithToken = "aoeu";
+        }
         lineWithUser = lineWithUser.trim();
         Out.log(lineWithUser + " " + lineWithUser.length());
         Session session = new Session(lineWithUser, lineWithToken, uuid, (String) optionspec18.value(optionset));
