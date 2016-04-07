@@ -62,9 +62,9 @@ public class AimBow {
                     arrow.setIsInAir(true);
                     GlStateManager.color(airColor.getRed(), airColor.getGreen(), airColor.getBlue());
                 }
-                double currentX = (Math.sin(Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationYaw * -1))) * dist) + player.posX - (double) (MathHelper.cos((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
+                double currentX = (-Math.sin(player.rotationYaw * Math.PI / 180) * dist) + player.posX - (double) (MathHelper.cos((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
                 double currentY = arrow.getVerticalPositionAtHorizontalPosition(dist) + player.posY + (double) player.getEyeHeight() - 0.10000000149011612D;
-                double currentZ = (Math.cos(Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationYaw * -1))) * dist) + player.posZ - (double) (MathHelper.sin((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
+                double currentZ = (Math.cos(player.rotationYaw * Math.PI / 180) * dist) + player.posZ - (double) (MathHelper.sin((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
                 drawLine(player, previousX, previousY, previousZ, currentX, currentY, currentZ, partialTicks);
                 if (tick == 60) {
                     System.out.println("--- NEW TOTAL TICK ---");
