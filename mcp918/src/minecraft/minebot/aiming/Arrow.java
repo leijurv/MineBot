@@ -21,8 +21,8 @@ public class Arrow {
         float rotationYaw = shooter.rotationYaw;
         float rotationPitch = shooter.rotationPitch;
         double x = (double) (-MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
-        double y = (double) (MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
-        double z = (double) (-MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI));
+        double z = (double) (MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI));
+        double y = (double) (-MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI));
         float f = MathHelper.sqrt_double(x * x + y * y + z * z);
         x = x / (double) f;
         y = y / (double) f;
