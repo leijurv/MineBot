@@ -39,18 +39,18 @@ public class AimBow {
     
     public static void render(EntityPlayer player, float partialTicks) {
         if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBow) {
-            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationPitch * -1))), Color.BLUE, partialTicks);
+            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationPitch * -1))), Color.BLUE, Color.RED, partialTicks);
         }
     }
     
-    public static void drawArrowArc(EntityPlayer player, Arrow arrow, ReadableColor color, float partialTicks) {
+    public static void drawArrowArc(EntityPlayer player, Arrow arrow, ReadableColor airColor, ReadableColor liquidColor, float partialTicks) {
         tick++;
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GL11.glLineWidth(0.5F);
         GlStateManager.disableTexture2D();
         GlStateManager.depthMask(false);
-        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue());
+        GlStateManager.color(airColor.getRed(), airColor.getGreen(), airColor.getBlue());
         double previousDist = 0;
         double previousX = player.posX + previousDist;
         double previousY = arrow.getVerticalPositionAtHorizontalPosition(previousDist) + player.posY + (double)player.getEyeHeight() - 0.10000000149011612D;;
@@ -59,14 +59,13 @@ public class AimBow {
             BlockPos blockPos = new BlockPos(previousX, previousY, previousZ);
             IBlockState blockState = Minecraft.theMinecraft.theWorld.getBlockState(blockPos);
             Block block = blockState.getBlock();
-            if(block.getMaterial() != Material.air) {
-                drawSelectionBox(player, blockPos, partialTicks, color);
-                break;
-            } else {
-                if((block.getMaterial() == Material.water || block.getMaterial() == Material.lava) && arrow.isInAir) {
+            if(Constants.BlockConstants.materialsPassable.contains(block.getMaterial())) {
+                if(Constants.BlockConstants.materialsLiquid.contains(block.getMaterial()) && arrow.isInAir) {
                     arrow.setIsInAir(false);
+                    GlStateManager.color(liquidColor.getRed(), liquidColor.getGreen(), liquidColor.getBlue()); 
                 } else if(!arrow.isInAir) {
                     arrow.setIsInAir(true);
+                    GlStateManager.color(airColor.getRed(), airColor.getGreen(), airColor.getBlue());
                 }
                 double currentX = (Math.sin(Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationYaw * -1))) * dist) + player.posX;
                 double currentY = arrow.getVerticalPositionAtHorizontalPosition(dist) + player.posY + (double)player.getEyeHeight() - 0.10000000149011612D;
@@ -87,7 +86,10 @@ public class AimBow {
                 previousX = currentX;
                 previousY = currentY;
                 previousZ = currentZ;
-            }   
+            } else {
+                drawSelectionBox(player, blockPos, partialTicks, (arrow.isInAir ? airColor : liquidColor));
+                break;
+            }
         }
         if(tick == 60) {
             tick = 0;

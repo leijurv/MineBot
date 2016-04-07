@@ -1,0 +1,82 @@
+---- Minecraft Crash Report ----
+// Hi. I'm Minecraft, and I'm a crashaholic.
+
+Time: 4/6/16 9:50 AM
+Description: Unexpected error
+
+java.lang.IllegalStateException: Angle must be within the range of -180 and 180
+	at minebot.aiming.Helper.translateHalfAngle(Helper.java:17)
+	at minebot.aiming.AimBow.drawArrowArc(AimBow.java:62)
+	at minebot.aiming.AimBow.render(AimBow.java:40)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorldPass(EntityRenderer.java:1111)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1010)
+	at net.minecraft.client.renderer.EntityRenderer.func_181560_a(EntityRenderer.java:889)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:923)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:423)
+	at net.minecraft.client.main.Main.main(Main.java:122)
+	at minebot.util.Autorun.start(Autorun.java:25)
+	at minebot.MineBot.main(MineBot.java:102)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at minebot.aiming.Helper.translateHalfAngle(Helper.java:17)
+	at minebot.aiming.AimBow.drawArrowArc(AimBow.java:62)
+	at minebot.aiming.AimBow.render(AimBow.java:40)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorldPass(EntityRenderer.java:1111)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1010)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityPlayerSP['powerpawn'/79, l='MpServer', x=3.00, y=65.00, z=-12.38]]
+	Chunk stats: MultiplayerChunkCache: 624, 624
+	Level seed: 0
+	Level generator: ID 00 - default, ver 1. Features enabled: false
+	Level generator options: 
+	Level spawn location: 8.00,64.00,-15.00 - World: (8,64,-15), Chunk: (at 8,4,1 in 0,-1; contains blocks 0,0,-16 to 15,255,-1), Region: (0,-1; contains chunks 0,-32 to 31,-1, blocks 0,0,-512 to 511,255,-1)
+	Level time: 25156 game time, 25156 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: survival (ID 0). Hardcore: false. Cheats: false
+	Forced entities: 47 total; [EntityBat['Bat'/64, l='MpServer', x=51.77, y=17.08, z=26.97], EntitySheep['Sheep'/65, l='MpServer', x=56.09, y=64.00, z=-34.88], EntitySheep['Sheep'/66, l='MpServer', x=49.81, y=64.00, z=-1.16], EntitySheep['Sheep'/67, l='MpServer', x=51.41, y=64.00, z=0.09], EntitySheep['Sheep'/68, l='MpServer', x=54.66, y=65.00, z=0.53], EntityBat['Bat'/69, l='MpServer', x=63.90, y=19.00, z=35.78], EntityBat['Bat'/70, l='MpServer', x=57.92, y=14.07, z=30.41], EntitySheep['Sheep'/21, l='MpServer', x=-76.69, y=67.00, z=-36.59], EntitySheep['Sheep'/22, l='MpServer', x=-72.88, y=64.00, z=-39.88], EntitySheep['Sheep'/23, l='MpServer', x=-69.28, y=64.00, z=-18.81], EntitySheep['Sheep'/24, l='MpServer', x=-70.00, y=67.00, z=-33.97], EntitySheep['Sheep'/26, l='MpServer', x=-73.00, y=64.00, z=-21.00], EntitySheep['Sheep'/27, l='MpServer', x=-52.44, y=66.00, z=-48.34], EntityItem['item.item.rottenFlesh'/28, l='MpServer', x=-55.84, y=65.00, z=-12.44], EntitySheep['Sheep'/29, l='MpServer', x=-41.13, y=63.00, z=-88.97], EntityPlayerSP['powerpawn'/79, l='MpServer', x=3.00, y=65.00, z=-12.38], EntitySheep['Sheep'/30, l='MpServer', x=-47.53, y=63.00, z=-80.78], EntitySheep['Sheep'/32, l='MpServer', x=-37.38, y=68.00, z=-79.47], EntitySheep['Sheep'/33, l='MpServer', x=-43.09, y=66.00, z=-68.13], EntitySheep['Sheep'/34, l='MpServer', x=-45.06, y=64.00, z=-47.06], EntitySheep['Sheep'/35, l='MpServer', x=-46.66, y=65.00, z=-29.47], EntityBat['Bat'/36, l='MpServer', x=-21.15, y=42.40, z=-87.73], EntityBat['Bat'/37, l='MpServer', x=-23.30, y=44.06, z=-90.26], EntityBat['Bat'/38, l='MpServer', x=-18.66, y=42.91, z=-85.84], EntityBat['Bat'/39, l='MpServer', x=-18.91, y=43.18, z=-84.52], EntitySheep['Sheep'/40, l='MpServer', x=-24.13, y=64.00, z=-72.97], EntitySheep['Sheep'/41, l='MpServer', x=-23.06, y=63.00, z=-41.06], EntitySheep['Sheep'/42, l='MpServer', x=2.94, y=64.00, z=-54.03], EntitySheep['Sheep'/43, l='MpServer', x=-5.53, y=64.00, z=-63.59], EntitySheep['Sheep'/44, l='MpServer', x=-4.84, y=64.00, z=-58.19], EntityItem['item.item.rottenFlesh'/45, l='MpServer', x=-5.59, y=64.00, z=-17.94], EntitySquid['Squid'/46, l='MpServer', x=-14.00, y=45.00, z=29.31], EntitySheep['Sheep'/48, l='MpServer', x=7.97, y=64.00, z=-49.13], EntityXPOrb['Experience Orb'/49, l='MpServer', x=2.75, y=65.00, z=-30.31], EntityXPOrb['Experience Orb'/50, l='MpServer', x=1.72, y=65.00, z=-27.19], EntityItem['item.item.bow'/51, l='MpServer', x=9.59, y=61.00, z=-2.00], EntityItem['item.item.arrow'/52, l='MpServer', x=12.75, y=61.00, z=-2.56], EntityItem['item.tile.dirt.default'/53, l='MpServer', x=15.97, y=61.00, z=-2.88], EntitySheep['Sheep'/55, l='MpServer', x=27.13, y=67.00, z=-21.94], EntityBat['Bat'/56, l='MpServer', x=30.75, y=41.00, z=26.47], EntitySquid['Squid'/57, l='MpServer', x=28.59, y=57.50, z=22.56], EntityBat['Bat'/58, l='MpServer', x=23.56, y=27.10, z=44.25], EntitySheep['Sheep'/59, l='MpServer', x=36.19, y=64.00, z=-40.69], EntitySheep['Sheep'/60, l='MpServer', x=47.16, y=66.00, z=-35.22], EntitySheep['Sheep'/61, l='MpServer', x=36.22, y=64.00, z=-17.19], EntitySheep['Sheep'/62, l='MpServer', x=36.13, y=63.00, z=13.84], EntityBat['Bat'/63, l='MpServer', x=39.25, y=15.88, z=19.66]]
+	Retry entities: 0 total; []
+	Server brand: vanilla
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:380)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2051)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:442)
+	at net.minecraft.client.main.Main.main(Main.java:122)
+	at minebot.util.Autorun.start(Autorun.java:25)
+	at minebot.MineBot.main(MineBot.java:102)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.8
+	Operating System: Mac OS X (x86_64) version 10.10.5
+	Java Version: 1.8.0_60, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 385649488 bytes (367 MB) / 804257792 bytes (767 MB) up to 3817865216 bytes (3641 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 4, tcache: 0, allocated: 12, tallocated: 94
+	Launched Version: mcp
+	LWJGL: 2.9.2
+	OpenGL: Intel(R) Iris(TM) Graphics 6100 GL version 2.1 INTEL-10.6.33, Intel
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because ARB_framebuffer_object is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Very likely; Jar signature invalidated
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: ~~ERROR~~ NullPointerException: null
+	Profiler Position: N/A (disabled)
+	CPU: 4x Intel(R) Core(TM) i5-5257U CPU @ 2.70GHz

@@ -1106,7 +1106,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         GlStateManager.disableAlpha();
         PathRenderer.render((EntityPlayer) entity, partialTicks);
         GlStateManager.enableAlpha();
-        this.mc.mcProfiler.endStartSection("aimBow");
+        this.mc.mcProfiler.endStartSection("arrowArc");
         GlStateManager.disableAlpha();
         AimBow.render((EntityPlayer) entity, partialTicks);
         GlStateManager.enableAlpha();
