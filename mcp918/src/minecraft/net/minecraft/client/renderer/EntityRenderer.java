@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import minebot.ui.LookManager;
 import minebot.MineBot;
+import minebot.aiming.AimBow;
 import minebot.ui.PathRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
@@ -1104,6 +1105,10 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         this.mc.mcProfiler.endStartSection("pathRender");
         GlStateManager.disableAlpha();
         PathRenderer.render((EntityPlayer) entity, partialTicks);
+        GlStateManager.enableAlpha();
+        this.mc.mcProfiler.endStartSection("aimBow");
+        GlStateManager.disableAlpha();
+        AimBow.render((EntityPlayer) entity, partialTicks);
         GlStateManager.enableAlpha();
         this.mc.mcProfiler.endStartSection("destroyProgress");
         GlStateManager.enableBlend();

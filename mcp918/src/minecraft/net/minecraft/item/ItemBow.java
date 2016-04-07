@@ -1,5 +1,6 @@
 package net.minecraft.item;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -32,7 +33,8 @@ public class ItemBow extends Item
             int i = this.getMaxItemUseDuration(stack) - timeLeft;
             float f = (float)i / 20.0F;
             f = (f * f + f * 2.0F) / 3.0F;
-
+             
+            
             if ((double)f < 0.1D)
             {
                 return;
@@ -42,7 +44,7 @@ public class ItemBow extends Item
             {
                 f = 1.0F;
             }
-
+            System.out.println("Current pitch: " + Minecraft.theMinecraft.thePlayer.rotationPitch);
             EntityArrow entityarrow = new EntityArrow(worldIn, playerIn, f * 2.0F);
 
             if (f == 1.0F)

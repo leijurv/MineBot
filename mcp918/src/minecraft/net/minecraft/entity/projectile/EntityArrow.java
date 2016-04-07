@@ -178,7 +178,6 @@ public class EntityArrow extends Entity implements IProjectile
     public void onUpdate()
     {
         super.onUpdate();
-
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -242,7 +241,6 @@ public class EntityArrow extends Entity implements IProjectile
             {
                 vec3 = new Vec3(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
             }
-
             Entity entity = null;
             List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double d0 = 0.0D;
