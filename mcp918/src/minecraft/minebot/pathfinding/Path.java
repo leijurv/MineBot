@@ -173,6 +173,13 @@ public class Path {
                 }
                 for (int i = pathPosition + 2; i < path.size(); i++) {//dont check pathPosition+1
                     if (whereAmI.equals(path.get(i))) {
+                        if (Minecraft.theMinecraft.theWorld.getBlockState(whereAmI).getBlock().equals(Blocks.air)) {
+                            if (path.get(i - 1).getY() == whereAmI.getY()) {
+                                Out.gui("Doing a sketchy skip forward", Out.Mode.Debug);
+                                pathPosition = i - 1;
+                                return false;
+                            }
+                        }
                         Out.gui("Skipping forward " + (i - pathPosition) + " steps, to " + i, Out.Mode.Debug);
                         pathPosition = i;
                         return false;
