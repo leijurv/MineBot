@@ -111,15 +111,11 @@ public abstract class Action {
         return b instanceof BlockLiquid;
         //return b != null && (waterFlowing.equals(b) || waterStill.equals(b) || lavaFlowing.equals(b) || lavaStill.equals(b));
     }
-    public static boolean isFlowing(BlockPos pos) {
-        IBlockState state = Minecraft.theMinecraft.theWorld.getBlockState(pos);
+    public static boolean isFlowing(BlockPos pos, IBlockState state) {
         Block b = state.getBlock();
         Material m = b.getMaterial();
         if (b instanceof BlockLiquid) {
-            BlockLiquid bl = (BlockLiquid) b;
-            if (BlockLiquid.getFlowDirection(Minecraft.theMinecraft.theWorld, pos, m) != -1000.0D) {
-                return true;
-            }
+            return BlockLiquid.getFlowDirection(Minecraft.theMinecraft.theWorld, pos, m) != -1000.0D;
         }
         return false;
     }
@@ -147,12 +143,12 @@ public abstract class Action {
      * @return
      */
     public static boolean canWalkThrough(BlockPos pos) {
-        Block block = Minecraft.theMinecraft.theWorld.getBlockState(pos).getBlock();
+        IBlockState state = Minecraft.theMinecraft.theWorld.getBlockState(pos);
+        Block block = state.getBlock();
         if (block instanceof BlockLilyPad || block instanceof BlockFire) {//you can't actually walk through a lilypad from the side, and you shouldn't walk through fire
             return false;
         }
-        boolean liquid = isLiquid(block);
-        if (liquid && isFlowing(pos)) {
+        if (isFlowing(pos, state)) {
             return false;//don't walk through flowing liquids
         }
         if (isLiquid(pos.up())) {
