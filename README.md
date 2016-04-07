@@ -3,7 +3,7 @@ How to run:
 
     ./r
 
-You need to have ant (`brew install ant`) and Java 1.8
+You need to have ant (`brew install ant`) and Java 8 (OpenJDK preferred) 
 
 
 
