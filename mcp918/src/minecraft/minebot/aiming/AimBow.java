@@ -35,7 +35,7 @@ public class AimBow {
     }
     public static void render(EntityPlayer player, float partialTicks) {
         if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBow) {
-            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(player.rotationPitch * -1)), Color.BLUE, Color.RED, partialTicks);
+            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(player.rotationPitch * -1)), Color.GREEN, Color.RED, partialTicks);
         }
     }
     public static void drawArrowArc(EntityPlayer player, Arrow arrow, ReadableColor airColor, ReadableColor liquidColor, float partialTicks) {
