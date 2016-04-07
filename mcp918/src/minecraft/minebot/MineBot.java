@@ -65,6 +65,7 @@ public class MineBot {
     public static boolean slowPath = false;
     public static boolean pause = false;
     public static boolean overrideF3 = true;
+    public static boolean sketchytracer = false;
     public static boolean allowVerticalMotion = true;
     public static boolean actuallyPutMessagesInChat = false;
     public static boolean isThereAnythingInProgress = false;

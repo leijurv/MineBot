@@ -12,6 +12,7 @@ import minebot.MineBot;
 import minebot.pathfinding.Path;
 import minebot.pathfinding.PathFinder;
 import minebot.pathfinding.actions.Action;
+import minebot.util.FakeArrow;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,6 +21,8 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import org.lwjgl.opengl.GL11;
@@ -63,6 +66,60 @@ public class PathRenderer {
         } catch (Exception ex) {
             Logger.getLogger(PathRenderer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (!MineBot.sketchytracer) {
+            return;
+        }
+        try {
+            ItemStack holding = Minecraft.theMinecraft.thePlayer.inventory.mainInventory[Minecraft.theMinecraft.thePlayer.inventory.currentItem];
+            if (holding != null && (holding.getItem() instanceof ItemBow)) {
+                if (Minecraft.theMinecraft.thePlayer.getItemInUse() != null) {
+                    int i = holding.getItem().getMaxItemUseDuration(holding) - Minecraft.theMinecraft.thePlayer.getItemInUseCount();
+                    float f = (float) i / 20.0F;
+                    f = (f * f + f * 2.0F) / 3.0F;
+                    if ((double) f < 0.1D) {
+                        return;
+                    }
+                    if (f > 1.0F) {
+                        f = 1.0F;
+                    }
+                    drawBowStuff(player, partialTicks, f * 2);
+                } else {
+                    drawBowStuff(player, partialTicks, 2.0F);
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PathRenderer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public static void drawBowStuff(EntityPlayer player, float partialTicks, float strength) {
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        FakeArrow ar1 = new FakeArrow(Minecraft.theMinecraft.theWorld, Minecraft.theMinecraft.thePlayer, strength, partialTicks);
+        for (int i = 0; i < 200; i++) {
+            ar1.onUpdate();
+        }
+        Color color = ar1.didIHitAnEntity ? Color.RED : Color.BLACK;
+        GlStateManager.color(color.getColorComponents(null)[0], color.getColorComponents(null)[1], color.getColorComponents(null)[2], 0.4F);
+        GL11.glLineWidth(3.0F);
+        GlStateManager.disableTexture2D();
+        GlStateManager.depthMask(false);
+        FakeArrow ar = new FakeArrow(Minecraft.theMinecraft.theWorld, Minecraft.theMinecraft.thePlayer, strength, partialTicks);
+        double prevX = ar.posX;
+        double prevY = ar.posY;
+        double prevZ = ar.posZ;
+        for (int i = 0; i < 200; i++) {
+            ar.onUpdate();
+            double currX = ar.posX;
+            double currY = ar.posY;
+            double currZ = ar.posZ;
+            drawLine(Minecraft.theMinecraft.thePlayer, prevX - 0.5, prevY - 0.5, prevZ - 0.5, currX - 0.5, currY - 0.5, currZ - 0.5, partialTicks);
+            prevX = currX;
+            prevY = currY;
+            prevZ = currZ;
+        }
+        GlStateManager.depthMask(true);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
     public static void drawPath(Path path, EntityPlayer player, float partialTicks, Color color) {
         /*for (BlockPos pos : path.path) {
