@@ -128,12 +128,13 @@ public class MovementManager {
      * @param x
      * @param y
      * @param z
-     * @param rotate
+     * @param doRotate
      * @return true if we are moving, false if we are still rotating. we will
      * rotate until within ANGLE_THRESHOLD (currently 7°) of moving in correct
      * direction
      */
-    public static boolean moveTowardsCoords(double x, double y, double z, boolean rotate) {
+    public static boolean moveTowardsCoords(double x, double y, double z, boolean doRotate) {
+        boolean rotate = doRotate;
         EntityPlayerSP thePlayer = Minecraft.theMinecraft.thePlayer;
         float currentYaw = thePlayer.rotationYaw;
         float yaw = (float) (Math.atan2(thePlayer.posX - x, -thePlayer.posZ + z) * 180 / Math.PI);
@@ -154,6 +155,9 @@ public class MovementManager {
             tmp -= 360;
         }
         if (rotate) {
+            if (LookManager.lookingYaw()) {//if something else has set the yaw, just move anyway
+                rotate = false;
+            }
             LookManager.setDesiredYaw(yaw - tmp);
         }
         double t = rotate ? LookManager.ANGLE_THRESHOLD : 23;

@@ -180,6 +180,9 @@ public class LookManager extends Manager {
         double z = Minecraft.theMinecraft.thePlayer.posZ + Math.cos(theta) * distance;
         return new GoalXZ((int) x, (int) z);
     }
+    public static boolean lookingYaw() {
+        return lookingYaw;
+    }
     static double SPEED = 1000;
     /**
      * Smoothly moves between random pitches and yaws every second
