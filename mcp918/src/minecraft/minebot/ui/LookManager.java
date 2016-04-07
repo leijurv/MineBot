@@ -7,8 +7,6 @@ package minebot.ui;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.util.Manager;
 import net.minecraft.block.Block;
@@ -229,9 +227,9 @@ public class LookManager extends Manager {
     public static void setDesiredYaw(float y) {
         sketchiness.add(new Exception("Desired yaw already set!"));
         if (lookingYaw) {
-            for (Exception ex : sketchiness) {
-                Logger.getLogger(LookManager.class.getName()).log(Level.SEVERE, null, ex);//print out everyone who has tried to set the desired yaw this tick to show the conflict
-            }
+            /*for (Exception ex : sketchiness) {
+             Logger.getLogger(LookManager.class.getName()).log(Level.SEVERE, null, ex);//print out everyone who has tried to set the desired yaw this tick to show the conflict
+             }*/
             sketchiness.clear();
             return;
         }
