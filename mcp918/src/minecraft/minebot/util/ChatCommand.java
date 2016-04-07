@@ -335,6 +335,13 @@ public class ChatCommand {
         MineBot.currentBuilder = new SchematicBuilder(sch, Minecraft.theMinecraft.thePlayer.getPosition0());
         return "printed schematic to console.";
     }
+    public static String samplebuild(String message) {
+        int size = 5;
+        BlockPos pl = Minecraft.theMinecraft.thePlayer.getPosition0();
+        BlockPos center = new BlockPos(pl.getX() - size / 2, pl.getY(), pl.getZ());
+        MineBot.currentBuilder = new SchematicBuilder(new Schematic(Block.getBlockFromName("dirt"), size), center);
+        return "ok";
+    }
     public static String getToGoal(String message) {
         MineBot.plsCancel = false;
         int ind = message.indexOf(' ') + 1;

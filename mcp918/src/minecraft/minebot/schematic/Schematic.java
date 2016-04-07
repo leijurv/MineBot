@@ -27,6 +27,20 @@ public class Schematic {
         this.height = height;
         this.length = length;
     }
+    public Schematic(Block type, int desiredWidth) {
+        if (type == null) {
+            throw new IllegalArgumentException();
+        }
+        width = desiredWidth;
+        height = desiredWidth;
+        length = 1;
+        schematicBlocks = new HashMap();
+        for (int i = 0; i < desiredWidth; i++) {
+            schematicBlocks.put(new BlockPos(i, 0, 0), type);
+            schematicBlocks.put(new BlockPos(i, desiredWidth - 1, 0), type);
+            schematicBlocks.put(new BlockPos(desiredWidth / 2, i, 0), type);
+        }
+    }
     /**
      * Tuple links the BlockPos and Block to one another.
      *

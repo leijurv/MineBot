@@ -230,6 +230,7 @@ public class LookManager extends Manager {
                 Logger.getLogger(LookManager.class.getName()).log(Level.SEVERE, null, ex);//print out everyone who has tried to set the desired yaw this tick to show the conflict
             }
             sketchiness.clear();
+            return;
         }
         desiredYaw = y;
         lookingYaw = true;
