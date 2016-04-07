@@ -72,18 +72,6 @@ public class AimBow {
                 double currentY = arrow.getVerticalPositionAtHorizontalPosition(dist) + d1 + (double) player.getEyeHeight() - 0.10000000149011612D;
                 double currentZ = (Math.cos(player.rotationYaw * Math.PI / 180) * dist) + d2 - (double) (MathHelper.sin((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
                 drawLine(player, previousX, previousY, previousZ, currentX, currentY, currentZ, partialTicks);
-                if (tick == 60) {
-                    /*System.out.println("--- NEW TOTAL TICK ---");
-                     System.out.println("Current yaw: " + player.rotationYaw);
-                     System.out.println("Current position: X" + d0 + "  #  Y" + d1 + "  #  Z" + d2);
-                     System.out.println("Previous X: " + previousX);
-                     System.out.println("Previous Y: " + previousY);
-                     System.out.println("Previous Z: " + previousZ);
-                     System.out.println("Current X: " + currentX);
-                     System.out.println("Current Y: " + currentY);
-                     System.out.println("Current Z: " + currentZ);
-                     System.out.println("---   END OF TICK  ---");*/
-                }
                 previousX = currentX;
                 previousY = currentY;
                 previousZ = currentZ;
@@ -91,9 +79,6 @@ public class AimBow {
                 drawSelectionBox(player, blockPos, partialTicks, (arrow.isInAir ? airColor : liquidColor));
                 break;
             }
-        }
-        if (tick == 60) {
-            tick = 0;
         }
         GlStateManager.depthMask(true);
         GlStateManager.enableTexture2D();
