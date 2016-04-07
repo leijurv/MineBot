@@ -39,7 +39,7 @@ public class AimBow {
     
     public static void render(EntityPlayer player, float partialTicks) {
         if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBow) {
-            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(Helper.translateHalfAngle(player.rotationPitch * -1))), Color.BLUE, Color.RED, partialTicks);
+            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(player.rotationPitch * -1)), Color.BLUE, Color.RED, partialTicks);
         }
     }
     
