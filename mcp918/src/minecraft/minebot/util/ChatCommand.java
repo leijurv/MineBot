@@ -198,7 +198,7 @@ public class ChatCommand {
     public static String allowPlaceOrBreak(String message) {
         return adventure(message);
     }
-    public static String pathaim(String message) {
+    public static String arrowPearl(String message) {
         if (AimBow.lastBlock != null) {
             MineBot.goal = new GoalXZ(AimBow.lastBlock.getX(), AimBow.lastBlock.getZ());
             MineBot.findPathInNewThread(false);
