@@ -22,7 +22,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBow;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 import org.lwjgl.util.ReadableColor;
@@ -32,17 +31,15 @@ import org.lwjgl.util.ReadableColor;
  * @author galdara
  */
 public class AimBow {
-    public static double tick = 0;
     public static boolean canHit(BlockPos target) {
         return false;
     }
     public static void render(EntityPlayer player, float partialTicks) {
         if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBow) {
-            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(player.rotationPitch * -1)), Color.GREEN, Color.RED, partialTicks);
+            drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(player.rotationPitch * -1)), Color.BLUE, Color.RED, partialTicks);
         }
     }
     public static void drawArrowArc(EntityPlayer player, Arrow arrow, ReadableColor airColor, ReadableColor liquidColor, float partialTicks) {
-        tick++;
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GL11.glLineWidth(0.5F);
@@ -53,9 +50,9 @@ public class AimBow {
         double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) partialTicks;
         double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) partialTicks;
         double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double) partialTicks;
-        double previousX = d0 + previousDist - (double) (MathHelper.cos(player.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        double previousX = d0 + previousDist - (double) (Math.cos(Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
         double previousY = arrow.getVerticalPositionAtHorizontalPosition(previousDist) + d1 + (double) player.getEyeHeight() - 0.10000000149011612D;;
-        double previousZ = d2 + previousDist - (double) (MathHelper.sin(player.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
+        double previousZ = d2 + previousDist - (double) (Math.sin(Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
         for (double dist = Constants.BowConstants.renderTrajectoryIncrement; dist < Constants.BowConstants.renderTrajectoryCutoff; dist += Constants.BowConstants.renderTrajectoryIncrement) {
             BlockPos blockPos = new BlockPos(previousX, previousY, previousZ);
             IBlockState blockState = Minecraft.theMinecraft.theWorld.getBlockState(blockPos);
@@ -68,9 +65,9 @@ public class AimBow {
                     arrow.setIsInAir(true);
                     GlStateManager.color(airColor.getRed(), airColor.getGreen(), airColor.getBlue());
                 }
-                double currentX = (-Math.sin(player.rotationYaw * Math.PI / 180) * dist) + d0 - (double) (MathHelper.cos((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
+                double currentX = (-Math.sin(Helper.degreesToRadians(player.rotationYaw)) * dist) + d0 - (double) (Math.cos((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
                 double currentY = arrow.getVerticalPositionAtHorizontalPosition(dist) + d1 + (double) player.getEyeHeight() - 0.10000000149011612D;
-                double currentZ = (Math.cos(player.rotationYaw * Math.PI / 180) * dist) + d2 - (double) (MathHelper.sin((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
+                double currentZ = (Math.cos(Helper.degreesToRadians(player.rotationYaw)) * dist) + d2 - (double) (Math.sin((float) Helper.degreesToRadians(player.rotationYaw)) * 0.16F);
                 drawLine(player, previousX, previousY, previousZ, currentX, currentY, currentZ, partialTicks);
                 previousX = currentX;
                 previousY = currentY;

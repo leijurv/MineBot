@@ -25,18 +25,18 @@ public class Arrow {
     protected static double horizontalVelocityFromTotal(double velocity, double angleFired) {
         return velocity * Math.cos(angleFired);
     }
-    public double getVerticalVelocityAtTick(int tick) {
+    public double getVerticalVelocityAtTick(double tick) {
         double finalReturn = 0;
         finalReturn = Math.pow(Constants.ArrowConstants.drag, tick) * this.initVerticalVelocity;
         finalReturn += (isInAir ? Constants.PhysicsConstants.gravityAirArrow : Constants.PhysicsConstants.gravityWaterArrow) * ((1 - Math.pow(Constants.ArrowConstants.drag, tick)) / (1 - Constants.ArrowConstants.drag));
         return finalReturn;
     }
-    public double getHorizontalVelocityAtTick(int tick) {
+    public double getHorizontalVelocityAtTick(double tick) {
         double finalReturn = 0;
         finalReturn = Math.pow(Constants.ArrowConstants.drag, tick) * this.initHorizontalVelocity;
         return finalReturn;
     }
-    public double getVerticalPositionAtTick(int tick) {
+    public double getVerticalPositionAtTick(double tick) {
         double finalReturn = 0;
         finalReturn = (((this.initVerticalVelocity - ((isInAir ? Constants.PhysicsConstants.gravityAirArrow : Constants.PhysicsConstants.gravityWaterArrow) / (1 - Constants.ArrowConstants.drag)))
                 * (1 - Math.pow(Constants.ArrowConstants.drag, tick))
@@ -44,7 +44,7 @@ public class Arrow {
                 / (1 - Constants.ArrowConstants.drag));
         return finalReturn;
     }
-    public double getHorizontalPositionAtTick(int tick) {
+    public double getHorizontalPositionAtTick(double tick) {
         double finalReturn = 0;
         finalReturn = (((1 - Math.pow(Constants.ArrowConstants.drag, tick))
                 / (1 - Constants.ArrowConstants.drag))
@@ -73,7 +73,7 @@ public class Arrow {
                 / (1 - Constants.ArrowConstants.drag));
         return finalReturn;
     }
-    public Tuple<Double, Double> getPositionAtTick(int tick) {
+    public Tuple<Double, Double> getPositionAtTick(double tick) {
         return new Tuple(getHorizontalPositionAtTick(tick), getVerticalPositionAtTick(tick));
     }
     public void setIsInAir(boolean isInAir) {
