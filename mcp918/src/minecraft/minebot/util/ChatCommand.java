@@ -29,6 +29,7 @@ import minebot.pathfinding.goals.GoalBlock;
 import minebot.pathfinding.goals.GoalGetToBlock;
 import minebot.pathfinding.goals.GoalXZ;
 import minebot.pathfinding.goals.GoalYLevel;
+import minebot.ui.AimBow;
 import minebot.ui.Screenshot;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -196,6 +197,15 @@ public class ChatCommand {
     }
     public static String allowPlaceOrBreak(String message) {
         return adventure(message);
+    }
+    public static String pathaim(String message) {
+        if (AimBow.lastBlock != null) {
+            MineBot.goal = new GoalXZ(AimBow.lastBlock.getX(), AimBow.lastBlock.getZ());
+            MineBot.findPathInNewThread(false);
+            return "Aiming: Pathing to X" + AimBow.lastBlock.getX() + ", Z" + AimBow.lastBlock.getZ();
+        } else {
+            return "Aiming: You need to be holding a bow!";
+        }
     }
     public static String adventure(String message) {
         return "allowBreakOrPlace: " + (MineBot.allowBreakOrPlace ^= true);

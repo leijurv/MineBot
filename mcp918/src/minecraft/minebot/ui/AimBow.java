@@ -31,12 +31,15 @@ import org.lwjgl.util.ReadableColor;
  * @author galdara
  */
 public class AimBow {
+    public static BlockPos lastBlock = null;
     public static boolean canHit(BlockPos target) {
         return false;
     }
     public static void render(EntityPlayer player, float partialTicks) {
         if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBow) {
             drawArrowArc(player, new Arrow(Constants.BowConstants.bowFullDraw, Helper.degreesToRadians(player.rotationPitch * -1)), Color.BLUE, Color.RED, partialTicks);
+        } else {
+            lastBlock = null;
         }
     }
     public static void drawArrowArc(EntityPlayer player, Arrow arrow, ReadableColor airColor, ReadableColor liquidColor, float partialTicks) {
@@ -74,6 +77,7 @@ public class AimBow {
                 previousZ = currentZ;
             } else {
                 drawSelectionBox(player, blockPos, partialTicks, (arrow.isInAir ? airColor : liquidColor));
+                AimBow.lastBlock = blockPos;
                 break;
             }
         }
