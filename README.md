@@ -7,6 +7,8 @@ Minecraft bot
 [Screenshots](https://docs.google.com/document/d/1qSmjlkw6jCFHCj-GUSwpBLstA1ikvw155kRncn1m5lM/edit?usp=sharing)
 
 [A* incremental cost backoff method](https://docs.google.com/document/d/1WVHHXKXFdCR1Oz__KtK8sFqyvSwJN_H4lftkHFgmzlc/edit?usp=sharing)
+
+[Avery's explanatory video](https://www.youtube.com/watch?v=tOeijsv542E)
 # Running
 How to run:
 
